@@ -1,0 +1,18 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "exmple",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "xxxx",
+          "mode": "ARRAY_CONTAINS"
+        },
+        {
+          "fieldPath": "xxxx",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ]
+}
