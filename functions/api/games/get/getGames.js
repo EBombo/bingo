@@ -16,7 +16,7 @@ exports.getGames = async (req, res, next) => {
 
     gamesRef = folderId
       ? gamesRef.where("parentId", "==", folderId)
-      : gamesRef.where("parent", "==", null);
+      : gamesRef.where("parentId", "==", null);
 
     const gamesQuery = await gamesRef.get();
 
