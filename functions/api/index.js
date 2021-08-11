@@ -13,6 +13,7 @@ const { putUpdateUser } = require("./users/put");
 const { postUser } = require("./users/post");
 const { validateAdmin } = require("./validateAdmin");
 const { getGames } = require("./games/get");
+const { postGame } = require("./games/post");
 
 const api = express();
 const router = express.Router();
@@ -41,9 +42,15 @@ router.get("/verify/:userId/resend-code", getResendVerifyCode);
 
 router.get("/manifest", getManifest);
 
+//----------------manage games---------------
+
 router.get("/games/users/:userId", getGames);
 
-//router.post("/games/users/:userId", postGames);//guardar un juego
+router.post("/games/:gameId/users/:userId", postGame);
+
+//router.put("/games/:gameId/users/:userId", putGame);//actualizar juego
+
+//---------------------------------------------
 
 router.post("/error-boundary", postError);
 
