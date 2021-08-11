@@ -43,6 +43,8 @@ router.get("/manifest", getManifest);
 
 router.get("/games/users/:userId", getGames);
 
+//router.post("/games/users/:userId", postGames);//guardar un juego
+
 router.post("/error-boundary", postError);
 
 router.get("/error-vanilla", getError);
