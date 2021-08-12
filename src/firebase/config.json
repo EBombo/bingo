@@ -9,9 +9,9 @@
       "appId": "1:270618835450:web:794bbc54b2c1f0bb920c43",
       "measurementId": "G-F5CHZW26KC"
     },
-    "serverUrlLocal": "http://localhost:5001/blank-319520/us-central1/api",
-    "serverUrl": "https://blank-319520.web.app",
-    "storageUrl": "https://storage.googleapis.com/blank-319520.appspot.com",
+    "serverUrlLocal": "http://localhost:5001/bingo-322514/us-central1/api",
+    "serverUrl": "https://bingo-322514.web.app",
+    "storageUrl": "https://storage.googleapis.com/bingo-322514.appspot.com",
     "analytics": "",
     "maxAgeCache": 86400
   },
@@ -25,9 +25,9 @@
       "appId": "1:270618835450:web:794bbc54b2c1f0bb920c43",
       "measurementId": "G-F5CHZW26KC"
     },
-    "serverUrlLocal": "http://localhost:5001/blank-319520/us-central1/api",
-    "serverUrl": "https://blank-319520.web.app",
-    "storageUrl": "https://storage.googleapis.com/blank-319520.appspot.com",
+    "serverUrlLocal": "http://localhost:5001/bingo-322514/us-central1/api",
+    "serverUrl": "https://bingo-322514.web.app",
+    "storageUrl": "https://storage.googleapis.com/bingo-322514.appspot.com",
     "analytics": "",
     "maxAgeCache": 86400
   }
