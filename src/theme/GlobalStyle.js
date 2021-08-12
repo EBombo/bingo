@@ -1,4 +1,4 @@
-import {createGlobalStyle} from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
 
@@ -6,37 +6,28 @@ export const GlobalStyle = createGlobalStyle`
     display: none;
   }
 
-  body {
-    margin: 0;
-    background-image: url(${props => props.background});
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-color: ${props => props.theme.basic.blackDarken};
-    background-blend-mode: darken;
-    /*------------efectos---------------*/
-    @keyframes throb {
-      from {
-        transform: none;
-      }
-      50% {
-        transform: scale(1.1);
-      }
-      to {
-        transform: none;
-      }
+  /*------------efectos---------------*/
+  @keyframes throb {
+    from {
+      transform: none;
     }
-
-    * {
-      transition: all 0.5s ease;
+    50% {
+      transform: scale(1.1);
     }
-
-    .un-seg {
-      transition: all 1s ease !important;
+    to {
+      transform: none;
     }
-
-    /*------------efectos---------------*/
   }
+
+  * {
+    transition: all 0.5s ease;
+  }
+
+  .un-seg {
+    transition: all 1s ease !important;
+  }
+
+  /*------------efectos---------------*/
 
 
   /*-------------- FIX SALTO DE LINEA GENERAL ----------------*/
@@ -79,14 +70,14 @@ export const GlobalStyle = createGlobalStyle`
   html {
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    background: ${(props) => props.theme.basic.blackDarken};
+    background: ${(props) => props.theme.basic.secondary};
   }
 
   body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background: ${(props) => props.theme.basic.blackDarken};
+    background: ${(props) => props.theme.basic.secondary};
     font-family: 'Encode Sans', sans-serif;
     overflow: auto !important;
   }
