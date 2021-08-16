@@ -14,9 +14,7 @@ exports.getGames = async (req, res, next) => {
       .where("usersIds", "array-contains", userId)
       .where("deleted", "==", false);
 
-    gamesRef = folderId
-      ? gamesRef.where("parentId", "==", folderId)
-      : gamesRef.where("parentId", "==", null);
+    if (folderId) gamesRef = gamesRef.where("parentId", "==", folderId);
 
     const gamesQuery = await gamesRef.get();
 
