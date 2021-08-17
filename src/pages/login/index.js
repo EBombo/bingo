@@ -21,6 +21,7 @@ const Login = (props) => {
       <Image
         src={`${config.storageUrl}/resources/white-icon-ebombo.svg`}
         width="200px"
+        margin="10px auto"
       />
       <div className="login-container">
         <Input placeholder="Pin de juego" />
@@ -31,14 +32,15 @@ const Login = (props) => {
 };
 
 const LoginContainer = styled.div`
-  margin: auto;
   padding: 10px;
   max-width: 400px;
+  margin: 10% auto auto auto;
   color: ${(props) => props.theme.basic.white};
+
   .login-container {
-    background: ${(props) => props.theme.basic.white};
     padding: 15px;
     border-radius: 4px;
+    background: ${(props) => props.theme.basic.white};
   }
 `;
 
