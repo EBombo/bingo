@@ -12,9 +12,7 @@ const UserLayout = dynamic(() => import("../src/components/UserLayout"), {
 const Init = (props) => (
   <>
     <SEOMeta {...props} />
-    <UserLayout {...props} isLanding>
-      <Lading {...props} />
-    </UserLayout>
+    <Lading {...props} />
   </>
 );
 

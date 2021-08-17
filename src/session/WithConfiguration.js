@@ -53,6 +53,7 @@ export const WithConfiguration = (props) => {
         settings: collectionToDate({ ...settingsLS, version }),
         location,
         languageCode,
+        ping: null,
         register: null,
         isLoadingUser: true,
         isLoadingCreateUser: true,
@@ -68,18 +69,6 @@ export const WithConfiguration = (props) => {
 
       moment.locale(languageCode);
       setLocale(yup[languageCode]);
-    };
-
-    const fetchCountryCode = async () => {
-      try {
-        const { response, error } = await Fetch("https://ipapi.co/json", "GET");
-        if (error) return;
-
-        await setLocation(response);
-        setLocationLocalStorage(response);
-      } catch (error) {
-        console.error(error);
-      }
     };
 
     const fetchVersion = () =>
@@ -101,7 +90,6 @@ export const WithConfiguration = (props) => {
 
     initializeConfig();
     const unsubscribeVersion = fetchVersion();
-    !get(location, "country_code") && fetchCountryCode();
     setIsLoadingConfig(false);
 
     return () => unsubscribeVersion();
