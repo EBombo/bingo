@@ -1,12 +1,4 @@
 {
-  "adminUsers": {
-    "label": "Formulario de usuarios",
-    "items": {
-      "/admin/users": "Lista de usuario",
-      "/admin/users/[userId]": "Detalles de usuarios",
-      "/admin/users/[userId]/acls": "Editar permisos de usuarios"
-    }
-  },
   "adminSettings": {
     "label": "Formulario de configuracion de la APP",
     "items": {
@@ -14,11 +6,11 @@
       "/admin/settings/templates": "Edicion de templates"
     }
   },
-  "adminSEO": {
-    "label": "Formulario de configuracion de SEO",
+  "common": {
+    "label": "Acceso común",
     "items": {
-      "/admin/seo": "Edicion de SEO",
-      "/admin/seo/[hostId]": "Edicion de SEO (rutas)"
+      "/lobby": "Lobby",
+      "/home": "Home"
     }
   }
 }
