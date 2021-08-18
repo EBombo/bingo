@@ -24,8 +24,23 @@ const Login = (props) => {
         margin="10px auto"
       />
       <div className="login-container">
-        <Input placeholder="Pin de juego" />
-        <ButtonAnt>Ingresar</ButtonAnt>
+        <Input
+          placeholder="Pin de juego"
+          border="gray"
+          padding="10px"
+          textAlign="center"
+          borderRadius="5px"
+          bgColorEvents="white"
+        />
+        <ButtonAnt
+          variant="secondary"
+          color="white"
+          border="none"
+          width="100%"
+          padding="10px"
+        >
+          Ingresar
+        </ButtonAnt>
       </div>
     </LoginContainer>
   );

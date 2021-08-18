@@ -1,72 +1,67 @@
-import React, {forwardRef, useEffect, useState} from "reactn";
+import React, { forwardRef, useEffect, useState } from "reactn";
 import styled from "styled-components";
-import {inputAutoFill, sizes} from "../../constants";
-import {EyeInvisibleOutlined, EyeOutlined} from "@ant-design/icons";
+import { inputAutoFill, sizes } from "../../constants";
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import get from "lodash/get";
 
 export const Input = forwardRef((props, ref) => {
-    const [hide, setHide] = useState(false);
+  const [hide, setHide] = useState(false);
 
-    const inputType = () => {
-        if (props.type === "password") return hide ? "password" : "text";
+  const inputType = () => {
+    if (props.type === "password") return hide ? "password" : "text";
 
-        return props.type;
-    };
+    return props.type;
+  };
 
-    useEffect(() => {
-        if (props.type === "password") setHide(true);
-    }, [props.type]);
+  useEffect(() => {
+    if (props.type === "password") setHide(true);
+  }, [props.type]);
 
-    return <InputContainer marginBottom={props.marginbottom}
-                           width={props.width}>
-        {
-            props.label
-            && <Label required={props.required}
-                      variant={props.variant}>
-                {props.label}
-            </Label>
-        }
-        <InputWrapper {...props}>
-        <span className="ant-input-wrapper ant-input-group"
-              style={{display: "table"}}>
-          {
-              props.addonBefore
-              && <span className={"ant-input-group-addon"}>{props.addonBefore}</span>
-          }
-            <StyledInput
-                hasError={props.error}
-                {...props}
-                ref={ref}
-                type={inputType()}
-                className={`ant-input ${get(props, "className", "")}`}
-            />
-            {
-                props.addonAfter
-                && <span className={"ant-input-group-addon"}>{props.addonAfter}</span>
-            }
+  return (
+    <InputContainer marginBottom={props.marginbottom} width={props.width}>
+      {props.label && (
+        <Label required={props.required} variant={props.variant}>
+          {props.label}
+        </Label>
+      )}
+      <InputWrapper {...props}>
+        <span
+          className="ant-input-wrapper ant-input-group"
+          style={{ display: "table" }}
+        >
+          {props.addonBefore && (
+            <span className={"ant-input-group-addon"}>{props.addonBefore}</span>
+          )}
+          <StyledInput
+            hasError={props.error}
+            {...props}
+            ref={ref}
+            type={inputType()}
+            className={`ant-input ${get(props, "className", "")}`}
+          />
+          {props.addonAfter && (
+            <span className={"ant-input-group-addon"}>{props.addonAfter}</span>
+          )}
         </span>
-            {
-                props.type === "password"
-                && <>
-                    {
-                        hide
-                            ? <EyeOutlinedCss onClick={() => setHide(!hide)}/>
-                            : <EyeInvisibleOutlinedCss onClick={() => setHide(!hide)}/>
-                    }
-                </>
-            }
-        </InputWrapper>
-        {
-            props.error
-            && <Error>{props.error.message}</Error>
-        }
-    </InputContainer>;
+        {props.type === "password" && (
+          <>
+            {hide ? (
+              <EyeOutlinedCss onClick={() => setHide(!hide)} />
+            ) : (
+              <EyeInvisibleOutlinedCss onClick={() => setHide(!hide)} />
+            )}
+          </>
+        )}
+      </InputWrapper>
+      {props.error && <Error>{props.error.message}</Error>}
+    </InputContainer>
+  );
 });
 
 const InputContainer = styled.div`
-  margin-bottom: ${({marginBottom = "1rem"}) => marginBottom} !important;
-  width: ${({width = "100%"}) => width};
-  margin: ${({margin = 0}) => margin};
+  margin-bottom: ${({ marginBottom = "1rem" }) => marginBottom} !important;
+  width: ${({ width = "100%" }) => width};
+  margin: ${({ margin = 0 }) => margin};
 `;
 
 const InputWrapper = styled.div`
@@ -80,19 +75,19 @@ const InputWrapper = styled.div`
       height: 30px;
       padding: 0 5px;
 
-      ${({variant = "default", theme}) =>
-    variant === "primary" &&
-    ` background: ${theme.basic.default};
+      ${({ variant = "default", theme }) =>
+        variant === "primary" &&
+        ` background: ${theme.basic.default};
                 border: 1px solid ${theme.basic.primary};`}
 
-      ${({variant = "default", theme}) =>
-    variant === "secondary" &&
-    ` background: ${theme.basic.default};
+      ${({ variant = "default", theme }) =>
+        variant === "secondary" &&
+        ` background: ${theme.basic.default};
                 border: 1px solid ${theme.basic.secondary};`}
 
-      ${({variant = "default", theme}) =>
-    variant === "default" &&
-    ` background: ${theme.basic.default};
+      ${({ variant = "default", theme }) =>
+        variant === "default" &&
+        ` background: ${theme.basic.default};
                 border: 1px solid ${theme.basic.default};`}
     }
   }
@@ -105,7 +100,7 @@ const EyeOutlinedCss = styled(EyeOutlined)`
   bottom: auto;
 
   svg {
-    color: ${props => props.theme.basic.primary} !important;
+    color: ${(props) => props.theme.basic.primary} !important;
   }
 `;
 
@@ -116,76 +111,82 @@ const EyeInvisibleOutlinedCss = styled(EyeInvisibleOutlined)`
   bottom: auto;
 
   svg {
-    color: ${props => props.theme.basic.primary} !important;
+    color: ${(props) => props.theme.basic.primary} !important;
   }
 `;
 
 const StyledInput = styled.input`
   font-size: ${sizes.font.small};
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: ${({borderRadius = 0}) => borderRadius};
+  border-radius: ${({ borderRadius = 0 }) => borderRadius} !important;
+  padding: ${(props) => props.padding || ""};
+  text-align: ${(props) => props.textAlign || ""} !important;
 
-  background: ${({variant = "default", theme}) =>
+  background: ${({ variant = "default", theme }) =>
     variant === "primary"
-        ? theme.basic.default
-        : variant === "secondary"
-        ? theme.basic.default
-        : variant === "warning"
-            ? theme.basic.default
-            : variant === "danger"
-                ? theme.basic.default
-                : "transparent"
-};
-  color: ${({variant = "default", theme}) =>
+      ? theme.basic.default
+      : variant === "secondary"
+      ? theme.basic.default
+      : variant === "warning"
+      ? theme.basic.default
+      : variant === "danger"
+      ? theme.basic.default
+      : "transparent"};
+  color: ${({ variant = "default", theme }) =>
     variant === "primary"
+      ? theme.basic.primary
+      : variant === "secondary"
+      ? theme.basic.secondary
+      : variant === "warning"
+      ? theme.basic.warning
+      : variant === "danger"
+      ? theme.basic.danger
+      : theme.basic.default};
+  border: 1px solid
+    ${({ variant = "default", theme, border }) =>
+      border
+        ? border
+        : variant === "primary"
         ? theme.basic.primary
         : variant === "secondary"
         ? theme.basic.secondary
         : variant === "warning"
-            ? theme.basic.warning
-            : variant === "danger"
-                ? theme.basic.danger
-                : theme.basic.default
-};
-  border: 1px solid ${({variant = "default", theme}) =>
-    variant === "primary"
-        ? theme.basic.primary
-        : variant === "secondary"
-        ? theme.basic.secondary
-        : variant === "warning"
-            ? theme.basic.warning
-            : variant === "danger"
-                ? theme.basic.danger
-                : theme.basic.default
-};
+        ? theme.basic.warning
+        : variant === "danger"
+        ? theme.basic.danger
+        : theme.basic.default};
 
   :hover {
-    background: ${(props) => props.bgColorEvents ? props.bgColorEvents : props.theme.basic.blackDarken};
-    color: ${({variant = "default", theme}) =>
-    variant === "primary"
+    background: ${(props) =>
+      props.bgColorEvents
+        ? props.bgColorEvents
+        : props.theme.basic.blackDarken};
+    color: ${({ variant = "default", theme }) =>
+      variant === "primary"
         ? theme.basic.primary
         : variant === "secondary"
         ? theme.basic.secondary
         : variant === "warning"
-            ? theme.basic.warning
-            : variant === "danger"
-                ? theme.basic.danger
-                : theme.basic.default
-};
-    border: 1px solid ${({variant = "default", theme}) =>
-    variant === "primary"
-        ? theme.basic.primary
-        : variant === "secondary"
-        ? theme.basic.secondary
-        : variant === "warning"
-            ? theme.basic.warning
-            : variant === "danger"
-                ? theme.basic.danger
-                : theme.basic.default
-};
+        ? theme.basic.warning
+        : variant === "danger"
+        ? theme.basic.danger
+        : theme.basic.default};
+    border: 1px solid
+      ${({ variant = "default", theme }) =>
+        variant === "primary"
+          ? theme.basic.primary
+          : variant === "secondary"
+          ? theme.basic.secondary
+          : variant === "warning"
+          ? theme.basic.warning
+          : variant === "danger"
+          ? theme.basic.danger
+          : theme.basic.default};
   }
 
-  ${props => props.hasError && `border:1px solid ${props => props.theme.basic.danger}!important;`}
+  ${(props) =>
+    props.hasError &&
+    `border:1px solid ${(props) => props.theme.basic.danger}!important;`}
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -199,24 +200,27 @@ const StyledInput = styled.input`
     outline: none;
 
     :active {
-      outline-color: ${props => props.theme.basic.primary};
+      outline-color: ${(props) => props.theme.basic.primary};
     }
 
     .ant-select-selection__placeholder {
       font-size: 10px;
-      color: ${props => props.theme.basic.whiteDarken};
+      color: ${(props) => props.theme.basic.whiteDarken};
       line-height: 24px;
     }
   }
 
   ::placeholder {
-    color: ${props => props.theme.basic.whiteDarken};
+    color: ${(props) => props.theme.basic.whiteDarken};
   }
 
   &:focus {
     outline: 0;
-    ${(props) => props.variant === "primary" ? `border: 2px solid ${props.theme.basic.primary};` : "none"};
-    box-shadow: 0 0 3px 1px ${props => props.theme.basic.whiteDarken};
+    ${(props) =>
+      props.variant === "primary"
+        ? `border: 2px solid ${props.theme.basic.primary};`
+        : "none"};
+    box-shadow: 0 0 3px 1px ${(props) => props.theme.basic.whiteDarken};
   }
 
   &[disabled] {
@@ -228,7 +232,14 @@ const StyledInput = styled.input`
     border: 1px solid ${(props) => props.theme.basic.blackLighten} !important;
   }
 
-  ${props => inputAutoFill("none", props.theme.basic.action, props.theme.basic.whiteDarken, props.theme.basic.blackLighten)} ${(props) => props.borderRadius && `border-radius: ${(props) => props.borderRadius};`}
+  ${(props) =>
+    inputAutoFill(
+      "none",
+      props.theme.basic.action,
+      props.theme.basic.whiteDarken,
+      props.theme.basic.blackLighten
+    )} ${(props) =>
+    props.borderRadius && `border-radius: ${(props) => props.borderRadius};`}
 `;
 
 const Label = styled.label`
@@ -238,10 +249,12 @@ const Label = styled.label`
   line-height: 16px;
   font-size: ${sizes.font.small};
 
-  color: ${({variant = "default", theme}) => variant === "primary" ? theme.basic.primary : theme.basic.blackLighten};
+  color: ${({ variant = "default", theme }) =>
+    variant === "primary" ? theme.basic.primary : theme.basic.blackLighten};
 
-  ${(props) => props.required
-    && `::before {
+  ${(props) =>
+    props.required &&
+    `::before {
                 display: inline-block;
                 margin-right: 4px;
                 color: ${props.theme.basic.danger};
