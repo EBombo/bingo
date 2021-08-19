@@ -13,7 +13,7 @@ export const Lobby = () => {
     if (!tokenId && !gameId) return router.push("/login");
 
     const fetchUserByToken = async (tokenId) => {
-      const authUser = authEvents.verifyIdToken(tokenId);
+      const authUser = await authEvents.verifyIdToken(tokenId);
 
       if (!authUser) return router.push("/login");
 
