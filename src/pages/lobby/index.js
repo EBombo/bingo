@@ -32,7 +32,7 @@ export const Lobby = () => {
 
   return (
     <LobbyCss>
-      Lobby {String(isLoading)} {game.name}
+      Lobby {String(isLoading)} {game?.name}
     </LobbyCss>
   );
 };
