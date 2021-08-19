@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "reactn";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { authEvents, firestoreEvents } from "../../firebase";
+import { authEvents, firestore } from "../../firebase";
 
 export const Lobby = () => {
   const router = useRouter();
@@ -17,7 +17,7 @@ export const Lobby = () => {
 
       if (!authUser) return router.push("/login");
 
-      const gameRef = await firestoreEvents.doc(`games/${gameId}`).get();
+      const gameRef = await firestore.doc(`games/${gameId}`).get();
       const game = gameRef.data();
 
       if (!game.usersIds.includes(authUser.uid)) return router.push("/login");
