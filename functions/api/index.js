@@ -49,7 +49,7 @@ router.get("/games/users/:userId", getGames);
 
 router.post("/games/:gameId/users/:userId", postGame);
 
-router.put("/games/:gameId/:gameId/users/:userId", putGame);
+router.put("/games/:gameId/users/:userId", putGame);
 
 //---------------------------------------------
 
