@@ -102,6 +102,17 @@ export const useAuth = () => {
     }
   };
 
+  const signInWithToken = async (token) => {
+    try {
+      await setIsLoadingUser(true);
+      await authEvents.signInWithCustomToken(token);
+    } catch (error) {
+      let errorMessage = authenticationErrors[error.code];
+      setError(errorMessage || "Ha ocurrido un error, intenta nuevamente");
+      await setIsLoadingUser(false);
+    }
+  };
+
   const signUp = async (user) => {
     try {
       await setIsLoadingUser(true);
@@ -231,6 +242,7 @@ export const useAuth = () => {
     signIn: (user) => signIn(user),
     signUp: (user) => signUp(user),
     createAccount: (user) => createAccount(user),
+    signInWithToken: (token) => signInWithToken(token),
     recoveryPassword: (email) => recoveryPassword(email),
     loginWithProvider: (provider) => loginWithProvider(provider),
   };

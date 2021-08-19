@@ -1,15 +1,10 @@
-import React, { useEffect, useGlobal } from "reactn";
-import { useRouter } from "next/router";
+import React from "reactn";
 import styled from "styled-components";
 import { Anchor } from "../../components/form";
+import { useRouter } from "next/router";
 
 export const Lading = () => {
   const router = useRouter();
-  const [authUser] = useGlobal("user");
-
-  useEffect(() => {
-    authUser && router.push("/home");
-  }, [authUser]);
 
   return (
     <LadingContainer>
