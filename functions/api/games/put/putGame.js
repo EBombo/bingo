@@ -3,7 +3,7 @@ const { firestore } = require("../../../config");
 
 exports.putGame = async (req, res, next) => {
   try {
-    logger.log("postGame->", req.params, req.query, req.body);
+    logger.log("getGame->", req.params, req.query, req.body);
 
     const { userId, gameId } = req.params;
     const { folderId } = req.query;

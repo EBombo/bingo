@@ -14,6 +14,7 @@ const { postUser } = require("./users/post");
 const { validateAdmin } = require("./validateAdmin");
 const { getGames } = require("./games/get");
 const { postGame } = require("./games/post");
+const { putGame } = require("./games/put");
 
 const api = express();
 const router = express.Router();
