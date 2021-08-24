@@ -35,8 +35,10 @@ export const Lobby = () => {
 
         setGame(game);
         setIsAdmin(true);
-
         setIsLoading(false);
+        await router.push({
+          pathname: router.asPath,
+        });
       } catch (error) {
         console.error(error);
       }
