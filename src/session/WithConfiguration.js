@@ -1,4 +1,3 @@
-import { useFetch } from "../hooks/useFetch";
 import React, { setGlobal, useEffect, useGlobal, useState } from "reactn";
 import {
   collectionToDate,
@@ -26,10 +25,7 @@ const UpdateVersion = dynamic(
 );
 
 export const WithConfiguration = (props) => {
-  const { Fetch } = useFetch();
-
   const [authUser] = useGlobal("user");
-  const [, setLocation] = useGlobal("location");
   const [settings, setSettings] = useGlobal("settings");
   const [, setIsVisibleLoginModal] = useGlobal("isVisibleLoginModal");
 
@@ -52,6 +48,7 @@ export const WithConfiguration = (props) => {
         user: authUserLS ? collectionToDate(authUserLS) : null,
         settings: collectionToDate({ ...settingsLS, version }),
         location,
+        audios: [],
         languageCode,
         ping: null,
         register: null,

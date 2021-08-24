@@ -1,4 +1,4 @@
-import React from "reactn";
+import React, { useEffect, useGlobal } from "reactn";
 import "antd/dist/antd.css";
 import { notification } from "antd";
 import { useUser } from "../src/hooks";
@@ -9,11 +9,27 @@ import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "../src/components/error-fallback/ErrorFallback";
 import { WithAuthentication } from "../src/session/withAuthentication";
 import { WithConfiguration } from "../src/session/WithConfiguration";
-import { config } from "../src/firebase";
+import { config, firestoreEvents } from "../src/firebase";
+import { snapshotToArray } from "../src/utils";
 import Head from "next/head";
 
 const MyApp = ({ Component, pageProps }) => {
   const [authUserLS] = useUser();
+  const [, setAudios] = useGlobal("audios");
+
+  useEffect(() => {
+    const initialize = async () => {
+      const audiosRef = await firestoreEvents
+        .collection("audios")
+        .where("deleted", "==", false)
+        .get();
+
+      console.log("snapshotToArray(audiosRef)", snapshotToArray(audiosRef));
+      setAudios(snapshotToArray(audiosRef));
+    };
+
+    initialize();
+  }, []);
 
   const showNotificationAnt = (message, description, type = "error") =>
     notification[type]({ message, description });

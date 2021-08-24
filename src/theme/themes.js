@@ -32,6 +32,11 @@ export const darkTheme = {
     color: "white",
     shadow: "#404040",
   },
+  buttonSecondary: {
+    background: "#382079",
+    color: "white",
+    shadow: "#170D33",
+  },
   inputPrimary: {
     background: "#FFFFFF",
     color: "black",
