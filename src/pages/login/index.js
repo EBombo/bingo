@@ -1,18 +1,14 @@
 import { useForm } from "react-hook-form";
-import React, { useGlobal } from "reactn";
+import React, { useState } from "reactn";
 import styled from "styled-components";
 import { object, string } from "yup";
 import { Image } from "../../components/common/Image";
 import { config } from "../../firebase";
-import {
-  ButtonAnt,
-  ButtonBingo,
-  Input,
-  InputBingo,
-} from "../../components/form";
-import { darkTheme } from "../../theme";
+import { ButtonBingo, InputBingo } from "../../components/form";
 
 const Login = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const validationSchema = object().shape({
     pin: string().required().min(6),
   });
@@ -23,7 +19,9 @@ const Login = (props) => {
   });
 
   const validatePin = async (data) => {
+    setIsLoading(true);
     console.log("data", data);
+    setIsLoading(false);
   };
 
   return (
@@ -43,9 +41,12 @@ const Login = (props) => {
             width="100%"
             margin="10px auto"
             variant="default"
+            disabled={isLoading}
             placeholder="Pin del juego"
           />
-          <ButtonBingo width="100%">Ingresar</ButtonBingo>
+          <ButtonBingo width="100%" disabled={isLoading}>
+            Ingresar
+          </ButtonBingo>
         </div>
       </form>
     </LoginContainer>
