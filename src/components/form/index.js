@@ -10,3 +10,5 @@ export * from "./Form";
 export * from "./InputGroup";
 export * from "./TextArea";
 export * from "./Anchor";
+export * from "./ButtonBingo";
+export * from "./InputBingo";

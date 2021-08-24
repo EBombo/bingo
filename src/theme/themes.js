@@ -22,6 +22,22 @@ export const darkTheme = {
     grayLighten: "#C4C4C4",
     gray: "#E4E4E4",
   },
+  buttonPrimary: {
+    background: "#F2F2F2",
+    color: "black",
+    shadow: "#979797",
+  },
+  buttonDefault: {
+    background: "#595959",
+    color: "white",
+    shadow: "#404040",
+  },
+  inputPrimary: {
+    background: "#FFFFFF",
+    color: "black",
+    border: "#C4C4C4",
+    shadow: "inset 0px 4px 10px rgba(0, 0, 0, 0.25);",
+  },
 };
 
 export const lightTheme = {};
