@@ -1,30 +1,45 @@
 import React, { useEffect, useState } from "reactn";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { authEvents, firestore } from "../../firebase";
+import { config, firestore } from "../../firebase";
+import { useFetch } from "../../hooks/useFetch";
 
 export const Lobby = () => {
+  const { Fetch } = useFetch();
   const router = useRouter();
   const { tokenId, gameId } = router.query;
   const [isLoading, setIsLoading] = useState(true);
   const [game, setGame] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!tokenId && !gameId) return router.push("/login");
 
     const fetchUserByToken = async (tokenId) => {
-      const authUser = await authEvents.verifyIdToken(tokenId);
+      try {
+        const url = `${config.serverUrlEvents}/api/tokens/${tokenId}`;
 
-      if (!authUser) return router.push("/login");
+        const { response, error } = await Fetch(url);
 
-      const gameRef = await firestore.doc(`games/${gameId}`).get();
-      const game = gameRef.data();
+        if (error) return router.push("/login");
 
-      if (!game.usersIds.includes(authUser.uid)) return router.push("/login");
+        const authUser = response.user;
 
-      setGame(game);
+        console.log("authUser", authUser);
+        if (!authUser) return router.push("/login");
 
-      setIsLoading(false);
+        const gameRef = await firestore.doc(`games/${gameId}`).get();
+        const game = gameRef.data();
+
+        if (!game.usersIds.includes(authUser.uid)) return router.push("/login");
+
+        setGame(game);
+        setIsAdmin(true);
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchUserByToken(tokenId);
