@@ -1,13 +1,13 @@
 import { DownOutlined, RightOutlined } from "@ant-design/icons";
-import { spinLoaderMin } from "../../components/common/loader";
-import { ButtonBingo, Select, Switch } from "../../components/form";
+import { spinLoaderMin } from "../../../components/common/loader";
+import { ButtonBingo, Select, Switch } from "../../../components/form";
 import React, { useEffect, useGlobal, useState } from "reactn";
-import { config, firestore } from "../../firebase";
-import { useFetch } from "../../hooks/useFetch";
+import { config, firestore } from "../../../firebase";
+import { useFetch } from "../../../hooks/useFetch";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
-export const Lobby = () => {
+export const Game = () => {
   const { Fetch } = useFetch();
   const router = useRouter();
   const [audios] = useGlobal("audios");
@@ -16,6 +16,12 @@ export const Lobby = () => {
   const [game, setGame] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+
+  useEffect(() => {
+    if (!game) return;
+
+    if (game?.startDate && game?.pin) return router.push(`/lobby/${game?.pin}`);
+  }, [game]);
 
   useEffect(() => {
     if (!tokenId || !gameId) return;
@@ -50,26 +56,39 @@ export const Lobby = () => {
     fetchUserByToken();
   }, [tokenId, gameId]);
 
+  const createLobby = async () => {
+    //crear pin y validar si no existe otro
+    await firestore.doc(`games/${gameId}`).update({ startDate: new Date() });
+  };
+
   if (isLoading) return spinLoaderMin();
 
   return (
-    <LobbyCss>
+    <gameCss>
       <div>
         <ButtonBingo variant="primary" width="100%">
           Día del padre
         </ButtonBingo>
-        <div className="container-lobby">
+        <div className="container-game">
           <div className="item">
             <div>Jugadores vs Jugadores</div>
             <div>1:1 dispositivos</div>
-            <ButtonBingo variant="secondary" padding="0 15px">
+            <ButtonBingo
+              variant="secondary"
+              padding="0 15px"
+              onClick={() => createLobby()}
+            >
               Clásico
             </ButtonBingo>
           </div>
           <div className="item">
             <div>Equipos vs Equipos</div>
             <div>1 dispositivo</div>
-            <ButtonBingo variant="primary" padding="0 15px">
+            <ButtonBingo
+              variant="primary"
+              padding="0 15px"
+              onClick={() => createLobby()}
+            >
               Modo equipo
             </ButtonBingo>
           </div>
@@ -166,18 +185,18 @@ export const Lobby = () => {
           </div>
         ) : null}
       </div>
-    </LobbyCss>
+    </gameCss>
   );
 };
 
-const LobbyCss = styled.div`
+const gameCss = styled.div`
   width: 100%;
   margin: auto;
   max-width: 500px;
   padding-top: 20px;
   color: ${(props) => props.theme.basic.white};
 
-  .container-lobby {
+  .container-game {
     grid-gap: 5px;
     padding: 10px 5px 5px 5px;
     display: grid;
