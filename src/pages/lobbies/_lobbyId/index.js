@@ -32,8 +32,8 @@ export const Lobby = (props) => {
     <LobbyCss>
       <div className="item-pin">
         <div className="label">Entra a www.ebombo.it</div>
-        <div>Pin del juego:</div>
-        <div>{pin}</div>
+        <div className="pin-label">Pin del juego:</div>
+        <div className="pin">{pin}</div>
       </div>
     </LobbyCss>
   );
@@ -42,14 +42,23 @@ export const Lobby = (props) => {
 const LobbyCss = styled.div`
   .item-pin {
     width: 100%;
-    margin: auto;
-    height: 200px;
+    height: 370px;
     font-size: 20px;
     max-width: 400px;
-    text-align: center;
-    color: ${(props) => props.theme.basic.white};
-    box-shadow: 0 7px 0 ${(props) => props.theme.basic.black};
     border-radius: 50%;
+    padding-top: 175px;
+    text-align: center;
+    margin: -175px auto auto auto;
+    color: ${(props) => props.theme.basic.white};
+    box-shadow: 0 25px 0 ${(props) => props.theme.basic.secondaryDark};
+
+    .pin-label {
+      font-size: 2rem;
+    }
+
+    .pin {
+      font-size: 2rem;
+    }
 
     .label {
       background: ${(props) => props.theme.basic.white};
