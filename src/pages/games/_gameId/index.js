@@ -1,6 +1,6 @@
-import { DownOutlined, RightOutlined } from "@ant-design/icons";
-import { spinLoaderMin } from "../../../components/common/loader";
 import { ButtonBingo, Select, Switch } from "../../../components/form";
+import { spinLoaderMin } from "../../../components/common/loader";
+import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { config, firestore } from "../../../firebase";
 import { useFetch } from "../../../hooks/useFetch";
@@ -40,6 +40,8 @@ export const Game = () => {
         const gameRef = await firestore.doc(`games/${gameId}`).get();
         const game = gameRef.data();
 
+        //redirect to lobby if there is a PIN
+
         if (!game.usersIds.includes(authUser.uid)) return router.push("/login");
 
         setGame(game);
@@ -56,15 +58,36 @@ export const Game = () => {
     fetchUserByToken();
   }, [tokenId, gameId]);
 
-  const createLobby = async () => {
-    //crear pin y validar si no existe otro
-    await firestore.doc(`games/${gameId}`).update({ startDate: new Date() });
+  const createLobby = async (typeOfGame) => {
+    const pin = await generatePin();
+
+    await firestore
+      .doc(`games/${gameId}`)
+      .update({ pin, typeOfGame, startDate: new Date(), updateAt: new Date() });
+
+    //redirect to lobby
+  };
+
+  const generatePin = async () => {
+    const pin = Math.floor(1000 + Math.random() * 900000);
+    const isValid = await validatePin(pin);
+
+    return isValid ? pin : await generatePin();
+  };
+
+  const validatePin = async (pin) => {
+    const gamesRef = await firestore
+      .collection("games")
+      .where("pin", "==", pin)
+      .get();
+
+    return gamesRef.empty;
   };
 
   if (isLoading) return spinLoaderMin();
 
   return (
-    <gameCss>
+    <GameCss>
       <div>
         <ButtonBingo variant="primary" width="100%">
           Día del padre
@@ -76,7 +99,7 @@ export const Game = () => {
             <ButtonBingo
               variant="secondary"
               padding="0 15px"
-              onClick={() => createLobby()}
+              onClick={() => createLobby("individual")}
             >
               Clásico
             </ButtonBingo>
@@ -87,7 +110,7 @@ export const Game = () => {
             <ButtonBingo
               variant="primary"
               padding="0 15px"
-              onClick={() => createLobby()}
+              onClick={() => createLobby("team")}
             >
               Modo equipo
             </ButtonBingo>
@@ -185,11 +208,11 @@ export const Game = () => {
           </div>
         ) : null}
       </div>
-    </gameCss>
+    </GameCss>
   );
 };
 
-const gameCss = styled.div`
+const GameCss = styled.div`
   width: 100%;
   margin: auto;
   max-width: 500px;
