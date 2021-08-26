@@ -24,7 +24,6 @@ const MyApp = ({ Component, pageProps }) => {
         .where("deleted", "==", false)
         .get();
 
-      console.log("snapshotToArray(audiosRef)", snapshotToArray(audiosRef));
       setAudios(snapshotToArray(audiosRef));
     };
 

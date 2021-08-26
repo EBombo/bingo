@@ -26,22 +26,33 @@ export const Game = () => {
   useEffect(() => {
     if (!tokenId || !gameId) return;
 
-    const fetchUserByToken = async () => {
+    const verifyUser = async () => {
       try {
         const url = `${config.serverUrlEvents}/api/tokens`;
         const { response, error } = await Fetch(url, "POST", { tokenId });
 
         if (error) return router.push("/login");
 
-        const authUser = response.user;
+        return response.user;
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const fetchGame = async () => {
+      const gameRef = await firestore.doc(`games/${gameId}`).get();
+      return gameRef.data();
+    };
+
+    const fetchUserByToken = async () => {
+      try {
+        const authUser = await verifyUser();
 
         if (!authUser) return router.push("/login");
 
-        const gameRef = await firestore.doc(`games/${gameId}`).get();
-        const game = gameRef.data();
+        const game = await fetchGame();
 
-        //redirect to lobby if there is a PIN
-
+        if (game?.pin) return router.push(`/lobby/${game.pin}`);
         if (!game.usersIds.includes(authUser.uid)) return router.push("/login");
 
         setGame(game);
@@ -65,7 +76,7 @@ export const Game = () => {
       .doc(`games/${gameId}`)
       .update({ pin, typeOfGame, startDate: new Date(), updateAt: new Date() });
 
-    //redirect to lobby
+    return router.push(`/lobby/${pin}`);
   };
 
   const generatePin = async () => {
