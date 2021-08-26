@@ -47,6 +47,14 @@ const MyApp = ({ Component, pageProps }) => {
           content="width=device-width, initial-scale=1, maximum-scale=1.0,user-scalable=0, shrink-to-fit=no"
         />
         <link rel="manifest" href={`${config.serverUrl}/api/manifest`} />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap"
+          rel="stylesheet"
+        />
       </Head>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <WithConfiguration>

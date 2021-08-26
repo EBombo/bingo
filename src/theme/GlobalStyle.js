@@ -264,7 +264,6 @@ export const GlobalStyle = createGlobalStyle`
   /*-------------- MODAL CONFIRM ---------------*/
   .ant-modal-content {
     background: ${(props) => props.theme.basic.blackDarken};
-    border: 1px solid ${(props) => props.theme.basic.primary};
 
     .ant-modal-body {
       .ant-modal-confirm-body-wrapper {
