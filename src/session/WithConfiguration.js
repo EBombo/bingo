@@ -60,6 +60,7 @@ export const WithConfiguration = (props) => {
         openLeftDrawer: false,
         serverTime: new Date(),
         currentCurrency: "s/.",
+        isAdmin: false,
         theme:
           get(authUserLS, "theme") === "lightTheme" ? lightTheme : darkTheme,
       });

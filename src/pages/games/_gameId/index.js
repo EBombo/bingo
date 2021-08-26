@@ -14,7 +14,7 @@ export const Game = () => {
   const { tokenId, gameId } = router.query;
   const [isLoading, setIsLoading] = useState(true);
   const [game, setGame] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [, setIsAdmin] = useGlobal("isAdmin");
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
@@ -52,11 +52,12 @@ export const Game = () => {
 
         const game = await fetchGame();
 
-        if (game?.pin) return router.push(`/lobby/${game.pin}`);
         if (!game.usersIds.includes(authUser.uid)) return router.push("/login");
+        await setIsAdmin(true);
 
         setGame(game);
-        setIsAdmin(true);
+        if (game?.pin) return router.push(`/lobby/${game.pin}`);
+
         setIsLoading(false);
         await router.push({
           pathname: router.asPath.split("?")[0],
