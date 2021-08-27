@@ -1,8 +1,9 @@
 import firebase from "firebase/app";
-import "firebase/auth";
 import "firebase/firestore";
-import "firebase/storage";
 import "firebase/analytics";
+import "firebase/storage";
+import "firebase/database";
+import "firebase/auth";
 import configJson from "./config.json";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
@@ -16,6 +17,7 @@ let firestore;
 let storage;
 let auth;
 let analytics;
+let database;
 
 let analyticsEvents;
 let firestoreEvents;
@@ -50,6 +52,7 @@ if (isEmpty(firebase.apps)) {
     firebase.initializeApp(config.firebase);
 
     firestore = firebase.firestore();
+    database = firebase.database();
     storage = firebase.storage();
     auth = firebase.auth();
 
@@ -59,6 +62,7 @@ if (isEmpty(firebase.apps)) {
   } catch (error) {
     console.error("error initializeApp", error);
   }
+  // Allow connection with events firebase
   try {
     firebase.initializeApp(config.firebaseEvents, "events");
     firestoreEvents = firebase.app("events").firestore();
@@ -88,6 +92,7 @@ export {
   authEvents,
   firestore,
   analytics,
+  database,
   firebase,
   hostName,
   version,

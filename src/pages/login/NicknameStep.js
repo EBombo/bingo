@@ -18,7 +18,6 @@ export const NicknameStep = (props) => {
 
   const nicknameSubmit = async (data) => {
     props.setIsLoading(true);
-    console.log("submit nickname", data);
     props.setNickname(data.nickname);
     props.setIsLoading(false);
   };

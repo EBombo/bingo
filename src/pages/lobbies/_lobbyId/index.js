@@ -12,7 +12,7 @@ export const Lobby = (props) => {
   const [isAdmin] = useGlobal("isAdmin");
 
   useEffect(() => {
-    if (!pin) return;
+    if (!pin) return router.push("/login");
 
     const fetchGameByPin = async () => {
       const gameRef = await firestore

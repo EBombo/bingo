@@ -1,19 +1,22 @@
+import { ButtonBingo, InputBingo } from "../../components/form";
+import { Image } from "../../components/common/Image";
+import { config, firestore } from "../../firebase";
+import { NicknameStep } from "./NicknameStep";
+import { snapshotToArray } from "../../utils";
 import { useForm } from "react-hook-form";
-import React, { useState } from "reactn";
+import React, { useGlobal, useState } from "reactn";
+import { EmailStep } from "./EmailStep";
 import styled from "styled-components";
 import { object, string } from "yup";
-import { Image } from "../../components/common/Image";
-import { config } from "../../firebase";
-import { ButtonBingo, InputBingo } from "../../components/form";
-import { NicknameStep } from "./NicknameStep";
-import { EmailStep } from "./EmailStep";
-import { mediaQuery } from "../../constants";
+import { Lobby } from "./Lobby";
 
 const Login = (props) => {
+  const [authUser] = useGlobal("user");
+
   const [isLoading, setIsLoading] = useState(false);
-  const [game, setGame] = useState(null);
-  const [emailVerification, setEmailVerification] = useState(null);
-  const [nickname, setNickname] = useState(null);
+  const [game, setGame] = useState(authUser?.game ?? null);
+  const [email, setEmail] = useState(authUser?.email ?? null);
+  const [nickname, setNickname] = useState(authUser?.nickname ?? null);
 
   const validationSchema = object().shape({
     pin: string().required().min(6),
@@ -26,11 +29,23 @@ const Login = (props) => {
 
   const validatePin = async (data) => {
     setIsLoading(true);
-    console.log("fetch the game if the game exist set the game", data);
-    setGame({
-      verification: true,
-      name: "bingo",
-    });
+
+    const gameRef = await firestore
+      .collection("games")
+      .where("pin", "==", +data.pin)
+      .limit(1)
+      .get();
+
+    if (gameRef.empty) {
+      props.showNotification(
+        "UPS",
+        "No encontramos tu juego, intenta nuevamente",
+        "warning"
+      );
+      return setIsLoading(false);
+    }
+
+    setGame(snapshotToArray(gameRef)[0]);
     setIsLoading(false);
   };
 
@@ -62,16 +77,17 @@ const Login = (props) => {
             </div>
           </form>
         )}
-        {game && game.verification && !emailVerification && (
+        {game && game.userIdentity && !email && (
           <EmailStep
             game={game}
             setIsLoading={setIsLoading}
             isLoading={isLoading}
-            setEmailVerification={setEmailVerification}
+            setEmailVerification={setEmail}
             {...props}
           />
         )}
-        {game && emailVerification && !nickname && (
+        {((game && game.userIdentity && email && !nickname) ||
+          (game && !game.userIdentity && !nickname)) && (
           <NicknameStep
             game={game}
             nickname={nickname}
@@ -82,17 +98,9 @@ const Login = (props) => {
           />
         )}
       </LoginContainer>
-      {game && emailVerification && nickname && (
-        <SuccessInscriptionContainer>
-          <Image
-            src={`${config.storageUrl}/resources/white-icon-ebombo.svg`}
-            width="180px"
-            margin="10px auto"
-          />
-          <div className="message">Ya estas adentro :)</div>
-          <div className="message">¿Vez tu nombre en pantalla?</div>
-          <div className="nickname">{nickname}</div>
-        </SuccessInscriptionContainer>
+      {((game && game.userIdentity && email && nickname) ||
+        (game && !game.userIdentity && nickname)) && (
+        <Lobby {...props} game={game} email={email} nickname={nickname} />
       )}
     </>
   );
@@ -108,47 +116,6 @@ const LoginContainer = styled.div`
     padding: 15px;
     border-radius: 4px;
     background: ${(props) => props.theme.basic.white};
-  }
-`;
-
-const SuccessInscriptionContainer = styled.div`
-  width: 100%;
-
-  .message {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 25px;
-    line-height: 30px;
-    margin: 1rem auto;
-    color: ${(props) => props.theme.basic.white};
-    text-align: center;
-  }
-
-  .nickname {
-    margin-top: 50px;
-    background: ${(props) => props.theme.basic.whiteLight};
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 20px;
-    line-height: 24px;
-    height: 63px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  ${mediaQuery.afterTablet} {
-    .message {
-      font-size: 34px;
-      line-height: 41px;
-    }
-
-    .nickname {
-      font-size: 28px;
-      line-height: 34px;
-    }
   }
 `;
 

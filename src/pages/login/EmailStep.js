@@ -8,8 +8,7 @@ import { useForm } from "react-hook-form";
 import { ModalVerification } from "./ModalVerification";
 
 export const EmailStep = (props) => {
-  const [isVisibleModalVerification, setIsVisibleModalVerification] =
-    useState(false);
+  const [email, setEmail] = useState(null);
 
   const validationSchema = object().shape({
     email: string().required().email(),
@@ -20,17 +19,17 @@ export const EmailStep = (props) => {
     reValidateMode: "onSubmit",
   });
 
-  const emailVerification = async (data) => {
-    console.log("submit email", data);
-    setIsVisibleModalVerification(true);
-  };
+  const emailVerification = async (data) => setEmail(data.email);
 
   return (
     <EmailForm onSubmit={handleSubmit(emailVerification)}>
-      {isVisibleModalVerification && (
+      {email && (
         <ModalVerification
-          isVisibleModalVerification={isVisibleModalVerification}
-          setIsVisibleModalVerification={setIsVisibleModalVerification}
+          email={email}
+          isVisibleModalVerification={!!email}
+          setIsVisibleModalVerification={(email) =>
+            props.setEmailVerification(email)
+          }
           {...props}
         />
       )}
