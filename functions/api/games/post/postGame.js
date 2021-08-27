@@ -13,6 +13,7 @@ exports.postGame = async (req, res, next) => {
 
     await gamesRef.doc(gameId).set({
       ...game,
+      id: gameId,
       usersIds: [userId],
       parentId: folderId || null,
       createAt: new Date(),

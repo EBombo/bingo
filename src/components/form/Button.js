@@ -2,131 +2,214 @@ import React, { forwardRef } from "reactn";
 import styled from "styled-components";
 import Button from "antd/lib/button";
 
+// Variant="outlined".
+// Variant="contained".
+
 export const ButtonAnt = forwardRef((props, ref) => (
-  <ButtonAntCss ref={ref} {...props} />
+  <ButtonAntCss
+    ref={ref}
+    size={props.size ? props.size : "medium"}
+    width={props.width ? props.width : "auto"}
+    {...props}
+  />
 ));
 
 const ButtonAntCss = styled(Button)`
-  background: ${({ variant = "default", theme }) =>
-    variant === "primary"
-      ? theme.basic.primary
-      : variant === "secondary"
-      ? theme.basic.default
-      : variant === "warning"
-      ? theme.basic.default
-      : variant === "danger"
-      ? theme.basic.default
-      : "transparent"};
-  color: ${({ variant = "default", theme, color }) =>
-    color
-      ? color
-      : variant === "primary"
-      ? theme.basic.black
-      : variant === "secondary"
-      ? theme.basic.secondary
-      : variant === "warning"
-      ? theme.basic.warning
-      : variant === "danger"
-      ? theme.basic.danger
-      : theme.basic.primary};
-  border: 2px solid
-    ${({ variant = "default", theme, border }) =>
-      border
-        ? border
-        : variant === "primary"
-        ? theme.basic.primary
-        : variant === "secondary"
-        ? theme.basic.secondary
-        : variant === "warning"
-        ? theme.basic.warning
-        : variant === "danger"
-        ? theme.basic.danger
-        : theme.basic.primary};
-
-  cursor: pointer;
+  padding: ${(props) =>
+    props.size === "small"
+      ? "10px"
+      : props.size === "medium"
+      ? "6px 20px"
+      : props.size === "big"
+      ? "10px 30px"
+      : ""};
+  margin: ${(props) => props.margin || 0};
   border-radius: ${(props) =>
-    props["border-radius"] ? props["border-radius"] : "5px"};
-  width: ${(props) => (props.width ? props.width : "auto")};
+    props.borderRadius ? props.borderRadius : "4px"};
+  cursor: pointer;
+  width: ${(props) => props.width};
   height: ${(props) => (props.height ? props.height : "auto")};
-  display: ${(props) => (props.display ? props.display : "block")};
-  text-align: ${(props) => (props.textAlign ? props.textAlign : "center")};
-  font-size: ${(props) => (props.fontSize ? props.fontSize : "12px")};
-  line-height: ${(props) => (props.lineheight ? props.lineheight : "27px")};
-  font-weight: ${(props) => (props.fontWeight ? props.fontWeight : "bold")};
-  box-shadow: ${(props) =>
-    props.boxShadow ? props.boxShadow : "0 4px 4px rgba(0, 0, 0, 0.25)"};
-  margin: ${(props) => (props.margin ? props.margin : "0px auto")};
-  font-style: ${(props) => (props.fontStyle ? props.fontStyle : "normal")};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  ${(props) =>
-    props.justifyContent ? `justify-content: ${props.justifyContent};` : ""}
-  ${(props) => (props.padding ? `padding:${props.padding};` : "")}
-  ${(props) => (props.alignItems ? `align-items: ${props.alignItems};` : "")}
-  :before {
-    background: ${(props) => (props.bgColorBefore ? "-" : "none")}:;
-  }
-
-  :hover {
-    background: ${({ variant = "default", theme }) =>
-      variant === "primary"
-        ? theme.basic.primary
-        : variant === "secondary"
-        ? theme.basic.default
-        : variant === "warning"
-        ? theme.basic.default
-        : variant === "danger"
-        ? theme.basic.default
-        : "transparent"};
-    color: ${({ variant = "default", theme }) =>
-      variant === "primary"
-        ? theme.basic.black
-        : variant === "secondary"
-        ? theme.basic.secondary
-        : variant === "warning"
-        ? theme.basic.warning
-        : variant === "danger"
-        ? theme.basic.danger
-        : theme.basic.primary};
-    border: 2px solid
-      ${({ variant = "default", theme }) =>
-        variant === "primary"
+  ${({ variant = "contained", theme, color = "primary" }) =>
+    variant === "contained"
+      ? `
+      background: ${
+        color === "primary"
           ? theme.basic.primary
-          : variant === "secondary"
+          : color === "secondary"
           ? theme.basic.secondary
-          : variant === "warning"
+          : color === "warning"
           ? theme.basic.warning
-          : variant === "danger"
+          : color === "danger"
           ? theme.basic.danger
-          : theme.basic.primary};
-    box-shadow: 0 0 10px
-      ${({ variant = "default", theme }) =>
-        variant === "primary"
+          : color === "default"
+          ? theme.basic.whiteDark
+          : color
+      };
+        color: ${
+          color === "white"
+            ? theme.basic.secondaryLight
+            : color === "default"
+            ? theme.basic.blackDarken
+            : theme.basic.white
+        };
+      border: none;
+      box-shadow: 0 4px ${
+        color === "primary"
+          ? theme.basic.primaryDark
+          : color === "secondary"
+          ? theme.basic.secondaryDark
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? "#979797"
+          : color
+      };
+      `
+      : variant === "outlined"
+      ? `
+      background: transparent;
+      color: ${
+        color === "primary"
           ? theme.basic.primary
-          : variant === "secondary"
+          : color === "secondary"
           ? theme.basic.secondary
-          : variant === "warning"
+          : color === "warning"
           ? theme.basic.warning
-          : variant === "danger"
+          : color === "danger"
           ? theme.basic.danger
-          : theme.basic.primary};
+          : color === "default"
+          ? theme.basic.blackDarken
+          : color
+      };
+      border: 1px solid ${
+        color === "primary"
+          ? theme.basic.primary
+          : color === "secondary"
+          ? theme.basic.secondary
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? theme.basic.whiteDark
+          : color
+      };
+      `
+      : `
+      background: transparent;
+      color: ${
+        color === "primary"
+          ? theme.basic.primary
+          : color === "secondary"
+          ? theme.basic.secondary
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? theme.basic.blackDarken
+          : color
+      };  
+      border: none;
+      `}
+
+  &:hover {
+    ${({ variant = "contained", theme = darkTheme, color = "primary" }) =>
+      variant === "contained"
+        ? `
+      background: ${
+        color === "primary"
+          ? theme.basic.primaryLight
+          : color === "secondary"
+          ? theme.basic.secondaryLight
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? theme.basic.whiteDark
+          : `${color}90`
+      };
+      color: ${
+        color === "white"
+          ? theme.basic.secondaryLight
+          : color === "default"
+          ? theme.basic.blackDarken
+          : theme.basic.white
+      };
+      border: none;
+      `
+        : variant === "outlined"
+        ? `
+      background: transparent;
+      color: ${
+        color === "primary"
+          ? theme.basic.primaryLight
+          : color === "secondary"
+          ? theme.basic.secondaryLight
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? theme.basic.whiteDark
+          : `${color}CC`
+      };
+      border: 1px solid ${
+        color === "primary"
+          ? theme.basic.primaryLight
+          : color === "secondary"
+          ? theme.basic.secondaryLight
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? theme.basic.whiteDark
+          : `${color}CC`
+      };
+      `
+        : `
+      background: transparent;
+      color: ${
+        color === "primary"
+          ? theme.basic.primaryLight
+          : color === "secondary"
+          ? theme.basic.secondaryLight
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? theme.basic.blackDarken
+          : `${color}CC`
+      };  
+      border: none;
+      `}
   }
 
-  :focus {
-    background: ${(props) =>
-      props.background ? props.background : "transparent"};
-    color: ${(props) =>
-      props.color ? props.color : props.theme.basic.primary};
-    border: ${(props) =>
-      props.border ? props.border : `1px solid ${props.theme.basic.primary}`};
-    outline: none !important;
-  }
-
-  &[disabled] {
-    cursor: not-allowed;
-    filter: grayscale(1);
-    pointer-events: none;
-    background: ${(props) => props.theme.basic.default} !important;
-    color: ${(props) => props.theme.basic.blackLighten} !important;
-    border: 1px solid ${(props) => props.theme.basic.blackLighten} !important;
-  }
+  &:active {
+    ${({ variant = "contained", theme = darkTheme, color = "primary" }) =>
+      variant === "contained" &&
+      `
+        box-shadow: 0 2px ${
+          color === "primary"
+            ? theme.basic.primary
+            : color === "secondary"
+            ? theme.basic.secondary
+            : color === "warning"
+            ? theme.basic.warning
+            : color === "danger"
+            ? theme.basic.danger
+            : color === "default"
+            ? "#979797"
+            : color
+        } !important;
+        transform: translateY(2px);`}
 `;
