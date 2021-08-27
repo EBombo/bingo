@@ -15,7 +15,9 @@ export const Lobby = (props) => {
 
   const [, setAuthUserLs] = useUser();
 
-  const userStatusDatabaseRef = database.ref(`/status/${userId}`);
+  const userStatusDatabaseRef = database.ref(
+    `games/${game.id}/users/${userId}`
+  );
   const user = {
     email,
     userId,

@@ -1,6 +1,6 @@
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { useRouter } from "next/router";
-import { firestore } from "../../../firebase";
+import { database, firestore } from "../../../firebase";
 import { snapshotToArray } from "../../../utils";
 import styled from "styled-components";
 
@@ -8,6 +8,7 @@ export const Lobby = (props) => {
   const router = useRouter();
   const { lobbyId: pin } = router.query;
   const [game, setGame] = useState(null);
+  const [users, setUsers] = useState([]);
   const [isLoading, setIdLoading] = useState(true);
   const [isAdmin] = useGlobal("isAdmin");
 
@@ -17,16 +18,30 @@ export const Lobby = (props) => {
     const fetchGameByPin = async () => {
       const gameRef = await firestore
         .collection("games")
-        .where("isClosed", "==", false)
-        .where("pin", "==", pin)
+        //.where("isClosed", "==", false)
+        .where("pin", "==", +pin)
+        .limit(1)
         .get();
 
-      setGame(snapshotToArray(gameRef));
+      setGame(snapshotToArray(gameRef)[0]);
       setIdLoading(false);
     };
 
     fetchGameByPin();
   }, [pin]);
+
+  useEffect(() => {
+    if (!game) return;
+
+    const fetchUsers = async () => {
+      const userStatusDatabaseRef = database.ref(`games/${game.id}/users`);
+      userStatusDatabaseRef.on("value", (snapshot) =>
+        setUsers(Object.values(snapshot.val()))
+      );
+    };
+
+    fetchUsers();
+  }, [game]);
 
   return (
     <LobbyCss>
@@ -34,6 +49,13 @@ export const Lobby = (props) => {
         <div className="label">Entra a www.ebombo.it</div>
         <div className="pin-label">Pin del juego:</div>
         <div className="pin">{pin}</div>
+      </div>
+      <div className="list-users">
+        {users.map((user) => (
+          <div key={user.userId}>
+            {user.nickname}-{user.state}
+          </div>
+        ))}
       </div>
     </LobbyCss>
   );
