@@ -1,10 +1,10 @@
 import { ButtonBingo, InputBingo } from "../../components/form";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import { Image } from "../../components/common/Image";
 import { config, firestore } from "../../firebase";
 import { NicknameStep } from "./NicknameStep";
 import { snapshotToArray } from "../../utils";
 import { useForm } from "react-hook-form";
-import React, { useGlobal, useState } from "reactn";
 import { EmailStep } from "./EmailStep";
 import styled from "styled-components";
 import { object, string } from "yup";
@@ -13,8 +13,8 @@ import { Lobby } from "./Lobby";
 const Login = (props) => {
   const [authUser] = useGlobal("user");
 
+  const [game, setGame] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [game, setGame] = useState(authUser?.game ?? null);
   const [email, setEmail] = useState(authUser?.email ?? null);
   const [nickname, setNickname] = useState(authUser?.nickname ?? null);
 
@@ -27,12 +27,10 @@ const Login = (props) => {
     reValidateMode: "onSubmit",
   });
 
-  const validatePin = async (data) => {
-    setIsLoading(true);
-
+  const fetchGame = async (pin, callback) => {
     const gameRef = await firestore
       .collection("games")
-      .where("pin", "==", +data.pin)
+      .where("pin", "==", +pin)
       .limit(1)
       .get();
 
@@ -44,9 +42,23 @@ const Login = (props) => {
       );
       return setIsLoading(false);
     }
+    const currentGame = snapshotToArray(gameRef)[0];
+    //if the current game is isClosed:true [return and notification]
+    setGame(currentGame);
+    callback && callback(false);
+  };
 
-    setGame(snapshotToArray(gameRef)[0]);
-    setIsLoading(false);
+  useEffect(() => {
+    if (game || !authUser?.game?.pin) return;
+
+    setIsLoading(true);
+    fetchGame(authUser.game.pin, setIsLoading);
+  }, [authUser?.game?.pin]);
+
+  const validatePin = async (data) => {
+    setIsLoading(true);
+
+    await fetchGame(data.pin, setIsLoading);
   };
 
   return (

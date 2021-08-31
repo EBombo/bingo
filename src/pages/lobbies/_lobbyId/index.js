@@ -1,18 +1,23 @@
 import React, { useEffect, useGlobal, useState } from "reactn";
-import { useRouter } from "next/router";
+import { Divider } from "../../../components/common/Divider";
 import { database, firestore } from "../../../firebase";
+import { UnlockOutlined, UserOutlined } from "@ant-design/icons";
 import { snapshotToArray } from "../../../utils";
+import { useRouter } from "next/router";
 import styled from "styled-components";
+import { mediaQuery } from "../../../constants";
+import { ButtonBingo } from "../../../components/form";
 
 export const Lobby = (props) => {
   const router = useRouter();
   const { lobbyId: pin } = router.query;
   const [game, setGame] = useState(null);
   const [users, setUsers] = useState([]);
-  const [isLoading, setIdLoading] = useState(true);
   const [isAdmin] = useGlobal("isAdmin");
+  const [isLoading, setIdLoading] = useState(true);
 
   useEffect(() => {
+    console.log("pin", pin);
     if (!pin) return router.push("/login");
 
     const fetchGameByPin = async () => {
@@ -35,9 +40,11 @@ export const Lobby = (props) => {
 
     const fetchUsers = async () => {
       const userStatusDatabaseRef = database.ref(`games/${game.id}/users`);
-      userStatusDatabaseRef.on("value", (snapshot) =>
-        setUsers(Object.values(snapshot.val()))
-      );
+      userStatusDatabaseRef.on("value", (snapshot) => {
+        let users_ = Object.values(snapshot.val());
+        users_ = users_.filter((user) => user.state.includes("online"));
+        setUsers(users_);
+      });
     };
 
     fetchUsers();
@@ -45,46 +52,109 @@ export const Lobby = (props) => {
 
   return (
     <LobbyCss>
-      <div className="item-pin">
-        <div className="label">Entra a www.ebombo.it</div>
-        <div className="pin-label">Pin del juego:</div>
-        <div className="pin">{pin}</div>
+      <div className="header">
+        <div className="left-menus" />
+        <div className="item-pin">
+          <div className="label">Entra a www.ebombo.it</div>
+          <div className="pin-label">Pin del juego:</div>
+          <div className="pin">{pin}</div>
+        </div>
+        <div className="right-menus">
+          <ButtonBingo variant="primary" margin="10px 20px">
+            <UnlockOutlined />
+          </ButtonBingo>
+          <ButtonBingo variant="primary" margin="10px 20px" padding="10px 20px">
+            EMPEZAR
+          </ButtonBingo>
+        </div>
       </div>
-      <div className="list-users">
-        {users.map((user) => (
-          <div key={user.userId}>
-            {user.nickname}-{user.state}
-          </div>
-        ))}
+
+      <Divider />
+      <div className="container-users">
+        <div className="all-users">
+          {users?.length ?? 0} <UserOutlined />
+        </div>
+        <div className="list-users">
+          {users.map((user) => (
+            <div key={user.userId} className="item-user">
+              {user.nickname}
+            </div>
+          ))}
+        </div>
       </div>
     </LobbyCss>
   );
 };
 
 const LobbyCss = styled.div`
-  .item-pin {
-    width: 100%;
-    height: 370px;
-    font-size: 20px;
-    max-width: 400px;
-    border-radius: 50%;
-    padding-top: 175px;
-    text-align: center;
-    margin: -175px auto auto auto;
-    color: ${(props) => props.theme.basic.white};
-    box-shadow: 0 25px 0 ${(props) => props.theme.basic.secondaryDark};
+  .header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 
-    .pin-label {
-      font-size: 2rem;
+    .right-menus,
+    .left-menus {
+      text-align: center;
     }
 
-    .pin {
-      font-size: 2rem;
+    .item-pin {
+      width: 100%;
+      height: 370px;
+      font-size: 20px;
+      max-width: 400px;
+      border-radius: 50%;
+      padding-top: 175px;
+      text-align: center;
+      margin: -175px auto 2rem auto;
+      color: ${(props) => props.theme.basic.white};
+      box-shadow: 0 25px 0 ${(props) => props.theme.basic.secondaryDark};
+
+      .pin-label {
+        font-size: 2rem;
+      }
+
+      .pin {
+        font-size: 2rem;
+      }
+
+      .label {
+        background: ${(props) => props.theme.basic.white};
+        color: ${(props) => props.theme.basic.black};
+      }
+    }
+  }
+
+  .container-users {
+    padding: 10px 15px;
+
+    ${mediaQuery.afterTablet} {
+      padding: 10px 5rem;
     }
 
-    .label {
-      background: ${(props) => props.theme.basic.white};
-      color: ${(props) => props.theme.basic.black};
+    .all-users {
+      padding: 5px 10px;
+      width: fit-content;
+      border-radius: 3px;
+      margin-bottom: 2rem;
+      color: ${(props) => props.theme.basic.white};
+      background: ${(props) => props.theme.basic.primaryDark};
+    }
+
+    .list-users {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+
+      ${mediaQuery.afterTablet} {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-gap: 10px;
+      }
+
+      .item-user {
+        padding: 5px 10px;
+        text-align: center;
+        border-radius: 5px;
+        color: ${(props) => props.theme.basic.white};
+        background: ${(props) => props.theme.basic.primary};
+      }
     }
   }
 `;

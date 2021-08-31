@@ -1,10 +1,10 @@
-import React from "reactn";
-import styled from "styled-components";
-import { Image } from "../../components/common/Image";
-import { config } from "../../firebase";
 import { ButtonBingo, InputBingo } from "../../components/form";
-import { object, string } from "yup";
+import { Image } from "../../components/common/Image";
 import { useForm } from "react-hook-form";
+import { config } from "../../firebase";
+import styled from "styled-components";
+import { object, string } from "yup";
+import React from "reactn";
 
 export const NicknameStep = (props) => {
   const validationSchema = object().shape({

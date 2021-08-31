@@ -17,12 +17,13 @@ const ButtonCss = styled.button`
   border: none;
   cursor: pointer;
   border-radius: 4px;
-  text-align: ${(props) => props.align ?? "center"};
-  padding: ${(props) => props.padding ?? "10px 10px"};
   color: ${(props) => props.theme.color};
   width: ${(props) => props.width ?? "auto"};
+  margin: ${(props) => props.margin ?? "auto"};
   background: ${(props) => props.theme.background};
+  text-align: ${(props) => props.align ?? "center"};
   box-shadow: 0 4px 0 ${(props) => props.theme.shadow};
+  padding: ${(props) => props.padding ?? "10px 10px"};
 
   &[disabled] {
     cursor: not-allowed;

@@ -18,6 +18,7 @@ export const Lobby = (props) => {
   const userStatusDatabaseRef = database.ref(
     `games/${game.id}/users/${userId}`
   );
+
   const user = {
     email,
     userId,
