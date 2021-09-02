@@ -1,4 +1,10 @@
-import { ButtonBingo, Select, Switch } from "../../../components/form";
+import {
+  ButtonAnt,
+  ButtonBingo,
+  Input,
+  Select,
+  Switch,
+} from "../../../components/form";
 import { spinLoaderMin } from "../../../components/common/loader";
 import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
@@ -6,6 +12,7 @@ import { config, firestore } from "../../../firebase";
 import { useFetch } from "../../../hooks/useFetch";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+import defaultTo from "lodash/defaultTo";
 
 export const Game = (props) => {
   const { Fetch } = useFetch();
@@ -16,6 +23,30 @@ export const Game = (props) => {
   const [, setIsAdmin] = useGlobal("isAdmin");
   const [isLoading, setIsLoading] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+
+  const [showMainCard, setShowMainCard] = useState(true);
+  const [userIdentity, setUserIdentity] = useState(false);
+  const [showAllCards, setShowAllCards] = useState(false);
+  const [cardAutofill, setCardAutofill] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [showParticipants, setShowParticipants] = useState(false);
+  const [awards, setAwards] = useState([
+    {
+      name: "",
+      order: 1,
+    },
+  ]);
+  const [showAwards, setShowAwards] = useState(false);
+
+  useEffect(() => {
+    if (!game) return;
+
+    if (game?.startDate && game?.pin) return router.push(`/lobby/${game?.pin}`);
+  }, [game]);
+
+  useEffect(() => {
+    console.log("awards", awards);
+  }, [awards]);
 
   useEffect(() => {
     if (!tokenId || !gameId) return;
@@ -67,9 +98,21 @@ export const Game = (props) => {
   const createLobby = async (typeOfGame) => {
     const pin = await generatePin();
 
-    await firestore
-      .doc(`games/${gameId}`)
-      .update({ pin, typeOfGame, startDate: new Date(), updateAt: new Date() });
+    await firestore.doc(`games/${gameId}`).update({
+      pin,
+      typeOfGame,
+      startDate: new Date(),
+      updateAt: new Date(),
+      settings: {
+        showMainCard,
+        userIdentity,
+        showAllCards,
+        cardAutofill,
+        showChat,
+        showParticipants,
+        awards: showAwards ? awards : null,
+      },
+    });
 
     return router.push(`/lobby/${pin}`);
   };
@@ -96,7 +139,7 @@ export const Game = (props) => {
     <GameCss>
       <div>
         <ButtonBingo variant="primary" width="100%">
-          Día del padre
+          {game.name}
         </ButtonBingo>
         <div className="container-game">
           <div className="item">
@@ -141,7 +184,10 @@ export const Game = (props) => {
                 <div className="title-opt">Identificador de jugador</div>
                 <div>Conoce el nombre de la persona atrás del nickname</div>
               </div>
-              <Switch />
+              <Switch
+                defaultChecked={userIdentity}
+                onChange={() => setUserIdentity(!userIdentity)}
+              />
             </div>
 
             <div className="title">General</div>
@@ -153,7 +199,10 @@ export const Game = (props) => {
                 </div>
                 <div>Para videoconferencias y mejorar accesibilidad</div>
               </div>
-              <Switch />
+              <Switch
+                defaultChecked={showMainCard}
+                onChange={() => setShowMainCard(!showMainCard)}
+              />
             </div>
 
             <div className="option">
@@ -176,7 +225,10 @@ export const Game = (props) => {
                   Los jugadores pueden ver cartillas de otros jug.
                 </div>
               </div>
-              <Switch />
+              <Switch
+                defaultChecked={showAllCards}
+                onChange={() => setShowAllCards(!showAllCards)}
+              />
             </div>
 
             <div className="option">
@@ -186,14 +238,20 @@ export const Game = (props) => {
                 </div>
                 <div>Los jugadores tienen que estar atentos al juego</div>
               </div>
-              <Switch />
+              <Switch
+                defaultChecked={cardAutofill}
+                onChange={() => setCardAutofill(!cardAutofill)}
+              />
             </div>
 
             <div className="option">
               <div>
                 <div className="title-opt">Chat dentro del juego</div>
               </div>
-              <Switch />
+              <Switch
+                defaultChecked={showChat}
+                onChange={() => setShowChat(!showChat)}
+              />
             </div>
 
             <div className="option">
@@ -202,15 +260,55 @@ export const Game = (props) => {
                   El jug. puede ver a los demás participantes
                 </div>
               </div>
-              <Switch />
+              <Switch
+                defaultChecked={showParticipants}
+                onChange={() => setShowParticipants(!showParticipants)}
+              />
             </div>
 
             <div className="option">
               <div>
                 <div className="title-opt">Premio</div>
               </div>
-              <Switch />
+              <Switch
+                defaultChecked={showAwards}
+                onChange={() => setShowAwards(!showAwards)}
+              />
             </div>
+            {showAwards && (
+              <div className="awards-container" id={awards.length}>
+                {defaultTo(awards, []).map((award, index) => (
+                  <div className="input-container" key={`award-${index + 1}`}>
+                    <Input
+                      type="text"
+                      defaultValue={award.name}
+                      onBlur={(e) => {
+                        let newAwards = awards;
+                        newAwards[index].name = e.target.value;
+                        setAwards([...newAwards]);
+                      }}
+                      placeholder={`Premio ${award.order}`}
+                      className={"input-award"}
+                    />
+                  </div>
+                ))}
+                <ButtonAnt
+                  color="secondary"
+                  margin="0.5rem 0 0.5rem auto"
+                  onClick={() => {
+                    setAwards([
+                      ...awards,
+                      {
+                        name: "",
+                        order: awards.length + 1,
+                      },
+                    ]);
+                  }}
+                >
+                  Agregar
+                </ButtonAnt>
+              </div>
+            )}
           </div>
         ) : null}
       </div>
@@ -267,6 +365,24 @@ const GameCss = styled.div`
 
       display: grid;
       grid-template-columns: 5fr 1fr;
+    }
+  }
+
+  .awards-container {
+    background: ${(props) => props.theme.basic.primary};
+    padding: 0.5rem;
+
+    .input-award {
+      width: 100%;
+      height: 32px;
+      background: ${(props) => props.theme.basic.secondary};
+      border-radius: 4px !important;
+      font-family: Lato;
+      font-style: normal;
+      font-weight: 300;
+      font-size: 13px;
+      line-height: 16px;
+      border: none !important;
     }
   }
 `;
