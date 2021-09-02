@@ -22,7 +22,14 @@ export const Lobby = (props) => {
     const fetchLobby = async () => {
       const lobbyRef = await firestore.collection("lobbies").doc(lobbyId).get();
 
-      if (!lobbyRef.exists) return router.push("/login");
+      if (!lobbyRef.exists) {
+        props.showNotification(
+          "UPS",
+          "No encontramos tu sala, intenta nuevamente",
+          "warning"
+        );
+        return router.push("/login");
+      }
 
       setLobby(lobbyRef.data());
       setLoading(false);
