@@ -7,21 +7,15 @@ import { useFetch } from "../../../hooks/useFetch";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
-export const Game = () => {
+export const Game = (props) => {
   const { Fetch } = useFetch();
   const router = useRouter();
   const [audios] = useGlobal("audios");
-  const { tokenId, gameId } = router.query;
-  const [isLoading, setIsLoading] = useState(true);
   const [game, setGame] = useState(null);
+  const { tokenId, gameId } = router.query;
   const [, setIsAdmin] = useGlobal("isAdmin");
+  const [isLoading, setIsLoading] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
-
-  useEffect(() => {
-    if (!game) return;
-
-    if (game?.startDate && game?.pin) return router.push(`/lobby/${game?.pin}`);
-  }, [game]);
 
   useEffect(() => {
     if (!tokenId || !gameId) return;
@@ -31,7 +25,10 @@ export const Game = () => {
         const url = `${config.serverUrlEvents}/api/tokens`;
         const { response, error } = await Fetch(url, "POST", { tokenId });
 
-        if (error) return router.push("/login");
+        if (error) {
+          props.showNotificationAnt("ERROR", "Error al validar la cuenta");
+          return router.push("/login");
+        }
 
         return response.user;
       } catch (error) {
@@ -46,22 +43,19 @@ export const Game = () => {
 
     const fetchUserByToken = async () => {
       try {
-        const authUser = await verifyUser();
+        const promiseUser = verifyUser();
+        const promiseGame = fetchGame();
 
-        if (!authUser) return router.push("/login");
+        const response = await Promise.all([promiseUser, promiseGame]);
 
-        const game = await fetchGame();
+        const authUser = response[0];
+        const game = response[1];
 
         if (!game.usersIds.includes(authUser.uid)) return router.push("/login");
+
         await setIsAdmin(true);
-
         setGame(game);
-        if (game?.pin) return router.push(`/lobby/${game.pin}`);
-
         setIsLoading(false);
-        await router.push({
-          pathname: router.asPath.split("?")[0],
-        });
       } catch (error) {
         console.error(error);
       }

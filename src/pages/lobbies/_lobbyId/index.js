@@ -1,7 +1,7 @@
+import { LockOutlined, UnlockOutlined, UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
 import { database, firestore } from "../../../firebase";
-import { UnlockOutlined, UserOutlined } from "@ant-design/icons";
 import { snapshotToArray } from "../../../utils";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -14,7 +14,8 @@ export const Lobby = (props) => {
   const [game, setGame] = useState(null);
   const [users, setUsers] = useState([]);
   const [isAdmin] = useGlobal("isAdmin");
-  const [isLoading, setIdLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isClosed, setIsClosed] = useState(false);
 
   useEffect(() => {
     console.log("pin", pin);
@@ -29,7 +30,7 @@ export const Lobby = (props) => {
         .get();
 
       setGame(snapshotToArray(gameRef)[0]);
-      setIdLoading(false);
+      setIsLoading(false);
     };
 
     fetchGameByPin();
@@ -60,8 +61,12 @@ export const Lobby = (props) => {
           <div className="pin">{pin}</div>
         </div>
         <div className="right-menus">
-          <ButtonBingo variant="primary" margin="10px 20px">
-            <UnlockOutlined />
+          <ButtonBingo
+            variant="primary"
+            margin="10px 20px"
+            onClick={setIsClosed(!isClosed)}
+          >
+            {isClosed ? <LockOutlined /> : <UnlockOutlined />}
           </ButtonBingo>
           <ButtonBingo variant="primary" margin="10px 20px" padding="10px 20px">
             EMPEZAR
@@ -70,6 +75,7 @@ export const Lobby = (props) => {
       </div>
 
       <Divider />
+
       <div className="container-users">
         <div className="all-users">
           {users?.length ?? 0} <UserOutlined />
