@@ -1,55 +1,52 @@
 import { LockOutlined, UnlockOutlined, UserOutlined } from "@ant-design/icons";
-import React, { useEffect, useGlobal, useState } from "reactn";
+import { spinLoaderMin } from "../../../components/common/loader";
+import React, { useEffect, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
 import { database, firestore } from "../../../firebase";
-import { snapshotToArray } from "../../../utils";
+import { ButtonBingo } from "../../../components/form";
+import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { mediaQuery } from "../../../constants";
-import { ButtonBingo } from "../../../components/form";
 
 export const Lobby = (props) => {
   const router = useRouter();
-  const { lobbyId: pin } = router.query;
-  const [game, setGame] = useState(null);
+  const { lobbyId } = router.query;
   const [users, setUsers] = useState([]);
-  const [isAdmin] = useGlobal("isAdmin");
-  const [isLoading, setIsLoading] = useState(true);
+  const [lobby, setLobby] = useState(null);
+  const [isLoading, setLoading] = useState(true);
   const [isClosed, setIsClosed] = useState(false);
 
   useEffect(() => {
-    console.log("pin", pin);
-    if (!pin) return router.push("/login");
+    if (!lobbyId) return;
 
-    const fetchGameByPin = async () => {
-      const gameRef = await firestore
-        .collection("games")
-        //.where("isClosed", "==", false)
-        .where("pin", "==", +pin)
-        .limit(1)
-        .get();
+    const fetchLobby = async () => {
+      const lobbyRef = await firestore.collection("lobbies").doc(lobbyId).get();
 
-      setGame(snapshotToArray(gameRef)[0]);
-      setIsLoading(false);
+      if (!lobbyRef.exists) return router.push("/login");
+
+      setLobby(lobbyRef.data());
+      setLoading(false);
     };
 
-    fetchGameByPin();
-  }, [pin]);
+    fetchLobby();
+  }, [lobbyId]);
 
   useEffect(() => {
-    if (!game) return;
+    if (!lobby) return;
 
     const fetchUsers = async () => {
-      const userStatusDatabaseRef = database.ref(`games/${game.id}/users`);
+      const userStatusDatabaseRef = database.ref(`lobbies/${lobbyId}/users`);
       userStatusDatabaseRef.on("value", (snapshot) => {
-        let users_ = Object.values(snapshot.val());
+        let users_ = Object.values(snapshot.val() ?? {});
         users_ = users_.filter((user) => user.state.includes("online"));
         setUsers(users_);
       });
     };
 
     fetchUsers();
-  }, [game]);
+  }, [lobby]);
+
+  if (isLoading) return spinLoaderMin();
 
   return (
     <LobbyCss>
@@ -58,13 +55,14 @@ export const Lobby = (props) => {
         <div className="item-pin">
           <div className="label">Entra a www.ebombo.it</div>
           <div className="pin-label">Pin del juego:</div>
-          <div className="pin">{pin}</div>
+          <div className="pin">{lobby?.pin}</div>
         </div>
+
         <div className="right-menus">
           <ButtonBingo
             variant="primary"
             margin="10px 20px"
-            onClick={setIsClosed(!isClosed)}
+            onClick={() => setIsClosed(!isClosed)}
           >
             {isClosed ? <LockOutlined /> : <UnlockOutlined />}
           </ButtonBingo>

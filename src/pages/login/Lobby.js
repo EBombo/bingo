@@ -9,30 +9,30 @@ export const Lobby = (props) => {
   const [authUser] = useGlobal("user");
   const [userId] = useState(authUser.id);
 
-  const [game] = useState(props.game);
+  const [lobby] = useState(props.lobby);
   const [nickname] = useState(props.nickname);
   const [email] = useState(props.email ?? null);
 
   const [, setAuthUserLs] = useUser();
 
   const userStatusDatabaseRef = database.ref(
-    `games/${game.id}/users/${userId}`
+    `lobbies/${lobby.id}/users/${userId}`
   );
 
   const user = {
     email,
     userId,
     nickname,
-    gameId: game.id,
+    lobbyId: lobby.id,
   };
 
   useEffect(() => {
-    if (!game) return;
-    if (!game.userIdentity && !props.nickname) return;
-    if (game.userIdentity && (!props.email || !props.nickname)) return;
+    if (!lobby) return;
+    if (!lobby.userIdentity && !props.nickname) return;
+    if (lobby.userIdentity && (!props.email || !props.nickname)) return;
 
     const createPresence = async () => {
-      setAuthUserLs({ ...authUser, nickname, email, game: game });
+      setAuthUserLs({ ...authUser, nickname, email, lobby: lobby });
 
       const isOfflineForDatabase = {
         ...user,
@@ -63,7 +63,7 @@ export const Lobby = (props) => {
         state: "offline",
         last_changed: firebase.database.ServerValue.TIMESTAMP,
       });
-  }, [props.game]);
+  }, [props.lobby]);
 
   return (
     <SuccessInscriptionContainer>

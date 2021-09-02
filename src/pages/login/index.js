@@ -13,7 +13,7 @@ import { Lobby } from "./Lobby";
 const Login = (props) => {
   const [authUser] = useGlobal("user");
 
-  const [game, setGame] = useState(null);
+  const [lobby, setLobby] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState(authUser?.email ?? null);
   const [nickname, setNickname] = useState(authUser?.nickname ?? null);
@@ -27,44 +27,44 @@ const Login = (props) => {
     reValidateMode: "onSubmit",
   });
 
-  const fetchGame = async (pin, callback) => {
-    const gameRef = await firestore
-      .collection("games")
+  const fetchLobby = async (pin, callback) => {
+    const lobbyRef = await firestore
+      .collection("lobbies")
       .where("pin", "==", +pin)
       .limit(1)
       .get();
 
-    if (gameRef.empty) {
+    if (lobbyRef.empty) {
       props.showNotification(
         "UPS",
-        "No encontramos tu juego, intenta nuevamente",
+        "No encontramos tu sala, intenta nuevamente",
         "warning"
       );
       return setIsLoading(false);
     }
-    const currentGame = snapshotToArray(gameRef)[0];
-    //if the current game is isClosed:true [return and notification]
-    setGame(currentGame);
+    const currentLobby = snapshotToArray(lobbyRef)[0];
+    //if the current lobby is isClosed:true [return and notification]
+    setLobby(currentLobby);
     callback && callback(false);
   };
 
   useEffect(() => {
-    if (game || !authUser?.game?.pin) return;
+    if (lobby || !authUser?.lobby?.pin) return;
 
     setIsLoading(true);
-    fetchGame(authUser.game.pin, setIsLoading);
-  }, [authUser?.game?.pin]);
+    fetchLobby(authUser.lobby.pin, setIsLoading);
+  }, [authUser?.lobby?.pin]);
 
   const validatePin = async (data) => {
     setIsLoading(true);
 
-    await fetchGame(data.pin, setIsLoading);
+    await fetchLobby(data.pin, setIsLoading);
   };
 
   return (
     <>
       <LoginContainer>
-        {!game && (
+        {!lobby && (
           <form onSubmit={handleSubmit(validatePin)}>
             <Image
               src={`${config.storageUrl}/resources/white-icon-ebombo.svg`}
@@ -89,19 +89,19 @@ const Login = (props) => {
             </div>
           </form>
         )}
-        {game && game.userIdentity && !email && (
+        {lobby && lobby.userIdentity && !email && (
           <EmailStep
-            game={game}
+            lobby={lobby}
             setIsLoading={setIsLoading}
             isLoading={isLoading}
             setEmailVerification={setEmail}
             {...props}
           />
         )}
-        {((game && game.userIdentity && email && !nickname) ||
-          (game && !game.userIdentity && !nickname)) && (
+        {((lobby && lobby.userIdentity && email && !nickname) ||
+          (lobby && !lobby.userIdentity && !nickname)) && (
           <NicknameStep
-            game={game}
+            lobby={lobby}
             nickname={nickname}
             setNickname={setNickname}
             setIsLoading={setIsLoading}
@@ -110,9 +110,9 @@ const Login = (props) => {
           />
         )}
       </LoginContainer>
-      {((game && game.userIdentity && email && nickname) ||
-        (game && !game.userIdentity && nickname)) && (
-        <Lobby {...props} game={game} email={email} nickname={nickname} />
+      {((lobby && lobby.userIdentity && email && nickname) ||
+        (lobby && !lobby.userIdentity && nickname)) && (
+        <Lobby {...props} lobby={lobby} email={email} nickname={nickname} />
       )}
     </>
   );

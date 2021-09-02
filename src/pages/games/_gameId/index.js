@@ -1,3 +1,11 @@
+import { spinLoaderMin } from "../../../components/common/loader";
+import { DownOutlined, RightOutlined } from "@ant-design/icons";
+import React, { useEffect, useGlobal, useState } from "reactn";
+import { config, firestore } from "../../../firebase";
+import { useFetch } from "../../../hooks/useFetch";
+import defaultTo from "lodash/defaultTo";
+import { useRouter } from "next/router";
+import styled from "styled-components";
 import {
   ButtonAnt,
   ButtonBingo,
@@ -5,18 +13,10 @@ import {
   Select,
   Switch,
 } from "../../../components/form";
-import { spinLoaderMin } from "../../../components/common/loader";
-import { DownOutlined, RightOutlined } from "@ant-design/icons";
-import React, { useEffect, useGlobal, useState } from "reactn";
-import { config, firestore } from "../../../firebase";
-import { useFetch } from "../../../hooks/useFetch";
-import { useRouter } from "next/router";
-import styled from "styled-components";
-import defaultTo from "lodash/defaultTo";
 
 export const Game = (props) => {
-  const { Fetch } = useFetch();
   const router = useRouter();
+  const { Fetch } = useFetch();
   const [audios] = useGlobal("audios");
   const [game, setGame] = useState(null);
   const { tokenId, gameId } = router.query;
@@ -37,16 +37,6 @@ export const Game = (props) => {
     },
   ]);
   const [showAwards, setShowAwards] = useState(false);
-
-  useEffect(() => {
-    if (!game) return;
-
-    if (game?.startDate && game?.pin) return router.push(`/lobby/${game?.pin}`);
-  }, [game]);
-
-  useEffect(() => {
-    console.log("awards", awards);
-  }, [awards]);
 
   useEffect(() => {
     if (!tokenId || !gameId) return;
@@ -98,11 +88,16 @@ export const Game = (props) => {
   const createLobby = async (typeOfGame) => {
     const pin = await generatePin();
 
-    await firestore.doc(`games/${gameId}`).update({
+    const lobbiesRef = firestore.collection("lobbies");
+    const lobbyId = lobbiesRef.doc().id;
+
+    await lobbiesRef.doc(lobbyId).set({
       pin,
+      game,
       typeOfGame,
-      startDate: new Date(),
+      id: lobbyId,
       updateAt: new Date(),
+      createAt: new Date(),
       settings: {
         showMainCard,
         userIdentity,
@@ -114,7 +109,7 @@ export const Game = (props) => {
       },
     });
 
-    return router.push(`/lobby/${pin}`);
+    return router.push(`/lobbies/${lobbyId}`);
   };
 
   const generatePin = async () => {
