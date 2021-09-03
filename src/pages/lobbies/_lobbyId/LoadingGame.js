@@ -128,9 +128,6 @@ const LoadingGameContainer = styled.div`
         font-size: 140px;
         color: ${(props) => props.theme.basic.grayDark};
         line-height: 300px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         position: relative;
         width: 100%;
         height: 100%;
@@ -139,6 +136,7 @@ const LoadingGameContainer = styled.div`
 
       span {
         opacity: 1;
+        position: absolute;
       }
 
       .num3,
@@ -148,39 +146,18 @@ const LoadingGameContainer = styled.div`
       }
 
       .num1 {
-        animation: time 10s infinite;
-        animation-delay: (10-1 * 2) + s;
+        animation: time 3s infinite;
+        animation-delay: (6-1 * 2) + s;
       }
 
       .num2 {
-        animation: time 10s infinite;
-        animation-delay: (20-2 * 2) + s;
+        animation: time 3s infinite;
+        animation-delay: (6-2 * 2) + s;
       }
 
       .num3 {
-        animation: time 10s infinite;
-        animation-delay: (20-3 * 2) + s;
-      }
-
-      @-webkit-keyframes time {
-        0% {
-          opacity: 0;
-          transform: scale(1);
-        }
-        10% {
-          opacity: 0;
-          transform: scale(1);
-        }
-
-        100% {
-          opacity: 0;
-          transform: scale(1);
-        }
-
-        5% {
-          opacity: 0.8;
-          transform: scale(1.2);
-        }
+        animation: time 3s infinite;
+        animation-delay: (6-3 * 2) + s;
       }
 
       ${mediaQuery.afterTablet} {
@@ -188,7 +165,29 @@ const LoadingGameContainer = styled.div`
         height: 180px;
       }
     }
-  }
+
+
+    @keyframes time {
+      0% {
+        opacity: 0;
+        transform: scale(1);
+      }
+    
+      5% {
+        opacity: 0.8;
+        transform: scale(1.2);
+      }
+    
+      10% {
+        opacity: 0;
+        transform: scale(1);
+      }
+    
+      100% {
+        opacity: 0;
+        transform: scale(1);
+      }
+    }
 
   @keyframes move-right {
     0% {
