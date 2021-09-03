@@ -7,6 +7,7 @@ import { ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+import { LoadingGame } from "./LoadingGame";
 
 export const Lobby = (props) => {
   const router = useRouter();
@@ -15,6 +16,7 @@ export const Lobby = (props) => {
   const [lobby, setLobby] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [isClosed, setIsClosed] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
     if (!lobbyId) return;
@@ -55,6 +57,12 @@ export const Lobby = (props) => {
 
   if (isLoading) return spinLoaderMin();
 
+  const startGame = () => {
+    setGameStarted(true);
+  };
+
+  if (gameStarted) return <LoadingGame lobby={lobby} {...props} />;
+
   return (
     <LobbyCss>
       <div className="header">
@@ -73,7 +81,12 @@ export const Lobby = (props) => {
           >
             {isClosed ? <LockOutlined /> : <UnlockOutlined />}
           </ButtonBingo>
-          <ButtonBingo variant="primary" margin="10px 20px" padding="10px 20px">
+          <ButtonBingo
+            variant="primary"
+            margin="10px 20px"
+            padding="10px 20px"
+            onClick={() => startGame()}
+          >
             EMPEZAR
           </ButtonBingo>
         </div>
