@@ -371,6 +371,7 @@ const GameCss = styled.div`
       width: 100%;
       height: 32px;
       background: ${(props) => props.theme.basic.secondary};
+      color: ${props => props.theme.basic.whiteLight};
       border-radius: 4px !important;
       font-family: Lato;
       font-style: normal;
