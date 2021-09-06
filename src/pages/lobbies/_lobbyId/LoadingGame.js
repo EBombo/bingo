@@ -6,39 +6,85 @@ import get from "lodash/get";
 import { mediaQuery } from "../../../constants";
 
 export const LoadingGame = (props) => {
-  const [step, setStep] = useState(true);
-
-  useEffect(() => {}, []);
+  const [authUser] = useState("user");
 
   return (
     <LoadingGameContainer>
-      <div className="step-one">
-        <Image
-          src={`${config.storageUrl}/resources/white-icon-ebombo.svg`}
-          height="58px"
-          width="222px"
-          desktopHeight="92px"
-          desktopWidth="350px"
-          size="contain"
-          margin="0 auto"
-          className="step-one-logo"
-        />
-        <div className="step-one-description">Entra a www.ebombo.it</div>
-      </div>
-      <div className="step-two">
-        <div className="step-two-name">{get(props, "lobby.game.name", "")}</div>
-      </div>
-      <div className="step-three">
-        <div className="main-container">
-          <div className="page">
-            <div className="number">
-              <span className="num3">3</span>
-              <span className="num2">2</span>
-              <span className="num1">1</span>
+      {get(authUser, "id", null) === get(props, "lobby.game.user.id", "") && (
+        <>
+          <div className="step-one">
+            <Image
+              src={`${config.storageUrl}/resources/white-icon-ebombo.svg`}
+              height="58px"
+              width="222px"
+              desktopHeight="92px"
+              desktopWidth="350px"
+              size="contain"
+              margin="0 auto"
+              className="step-one-logo"
+            />
+            <div className="step-one-description">Entra a www.ebombo.it</div>
+          </div>
+          <div className="step-two">
+            <div className="step-two-name">
+              {get(props, "lobby.game.name", "")}
             </div>
           </div>
-        </div>
-      </div>
+          <div className="step-three">
+            <div className="main-container">
+              <div className="page">
+                <div className="number">
+                  <span className="num3">3</span>
+                  <span className="num2">2</span>
+                  <span className="num1">1</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="step-four">
+            <div className="step-four-image">
+              <Image
+                src={`${config.storageUrl}/resources/amount.svg`}
+                height="35px"
+                width="35px"
+                desktopHeight="55px"
+                desktopWidth="55px"
+                size="contain"
+                margin="0"
+                className="amount-logo"
+              />
+            </div>
+            <div className="step-four-description">BINGO</div>
+            <div className="step-four-bar" />
+          </div>
+        </>
+      )}
+
+      {get(authUser, "id", null) !== get(props, "lobby.game.user.id", "") && (
+        <>
+          <div className="step-one">
+              <div className="step-one-title">
+                  ¡Prepárate!
+              </div>
+          </div>
+          <div className="step-four">
+            <div className="step-four-image">
+              <Image
+                src={`${config.storageUrl}/resources/amount.svg`}
+                height="35px"
+                width="35px"
+                desktopHeight="55px"
+                desktopWidth="55px"
+                size="contain"
+                margin="0"
+                className="amount-logo"
+              />
+            </div>
+            <div className="step-four-description">BINGO</div>
+            <div className="step-four-bar" />
+          </div>
+        </>
+      )}
     </LoadingGameContainer>
   );
 };
@@ -57,6 +103,17 @@ const LoadingGameContainer = styled.div`
       animation: move-up 2s forwards;
       -webkit-animation-delay: 2s;
       -o-animation-delay: 2s;
+    }
+    
+    &-title{
+      font-family: Lato;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 50px;
+      line-height: 60px;
+      margin: 3rem 0;
+      text-align: center;
+      color: ${props => props.theme.basic.white};
     }
 
     &-description {
@@ -117,7 +174,7 @@ const LoadingGameContainer = styled.div`
     .main-container {
       width: 115px;
       height: 115px;
-      background: ${(props) => props.theme.basic.secondaryDark};
+    };
 
       .page {
         width: 100%;
@@ -125,18 +182,23 @@ const LoadingGameContainer = styled.div`
       }
 
       .number {
-        font-size: 140px;
+        font-size: 80px;
         color: ${(props) => props.theme.basic.grayDark};
-        line-height: 300px;
-        position: relative;
         width: 100%;
         height: 100%;
-        text-align: center;
+        position: relative;
       }
 
       span {
-        opacity: 1;
+        opacity: 0;
         position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .num3,
@@ -146,18 +208,18 @@ const LoadingGameContainer = styled.div`
       }
 
       .num1 {
-        animation: time 3s infinite;
-        animation-delay: (6-1 * 2) + s;
+        animation: time 20s forwards;
+        animation-delay: 9s;
       }
 
       .num2 {
-        animation: time 3s infinite;
-        animation-delay: (6-2 * 2) + s;
+        animation: time 20s forwards;
+        animation-delay: 8s;
       }
 
       .num3 {
-        animation: time 3s infinite;
-        animation-delay: (6-3 * 2) + s;
+        animation: time 20s forwards;
+        animation-delay: 7s;
       }
 
       ${mediaQuery.afterTablet} {
@@ -165,29 +227,95 @@ const LoadingGameContainer = styled.div`
         height: 180px;
       }
     }
+  }
 
-
-    @keyframes time {
-      0% {
-        opacity: 0;
-        transform: scale(1);
-      }
+  .step-four {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    right: 0;
+    animation: fadein 20s forwards;
+    -webkit-animation: fadein 20s forwards;
     
-      5% {
-        opacity: 0.8;
-        transform: scale(1.2);
+    &-image {
+      background: ${(props) => props.theme.basic.primary};
+      width: 65px;
+      height: 65px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      transform: translateY(20%) rotate(45deg);
+      
+      .amount-logo {
+        transform: rotate(-45deg);
       }
-    
-      10% {
-        opacity: 0;
-        transform: scale(1);
-      }
-    
-      100% {
-        opacity: 0;
-        transform: scale(1);
+      
+      ${mediaQuery.afterTablet} {
+        width: 105px;
+        height: 105px;
       }
     }
+
+    &-description {
+      height: 50px;
+      position: relative;
+      z-index: 1;
+      background: ${(props) => props.theme.basic.whiteLight};
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      font-family: Lato;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 30px;
+      line-height: 36px;
+      color: ${(props) => props.theme.basic.blackDarken};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      ${mediaQuery.afterTablet} {
+        font-size: 48px;
+        line-height: 58px;
+      }
+    }
+    
+    &-bar {
+      width: 80%;
+      margin: 1rem auto;
+      height: 20px;
+      border-radius: 40px;
+      background: ${(props) => props.theme.basic.grayLighten};
+
+      ${mediaQuery.afterTablet} {
+        height: 31px;
+      }
+    }
+  }
+
+  @keyframes time {
+    0% {
+      opacity: 0;
+      transform: scale(1);
+    }
+
+    5% {
+      opacity: 0.8;
+      transform: scale(1.2);
+    }
+
+    10% {
+      opacity: 0;
+      transform: scale(1);
+    }
+
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
 
   @keyframes move-right {
     0% {
