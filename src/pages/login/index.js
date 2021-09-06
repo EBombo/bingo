@@ -31,6 +31,7 @@ const Login = (props) => {
     const lobbyRef = await firestore
       .collection("lobbies")
       .where("pin", "==", +pin)
+      .where("isLocked", "==", false)
       .limit(1)
       .get();
 

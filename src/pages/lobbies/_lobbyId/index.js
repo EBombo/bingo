@@ -1,4 +1,9 @@
-import { LockOutlined, UnlockOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  LockOutlined,
+  SoundOutlined,
+  UnlockOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { spinLoaderMin } from "../../../components/common/loader";
 import React, { useEffect, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
@@ -8,6 +13,7 @@ import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { LoadingGame } from "./LoadingGame";
+import { Popover, Slider } from "antd";
 
 export const Lobby = (props) => {
   const router = useRouter();
@@ -15,8 +21,9 @@ export const Lobby = (props) => {
   const [users, setUsers] = useState([]);
   const [lobby, setLobby] = useState(null);
   const [isLoading, setLoading] = useState(true);
-  const [isClosed, setIsClosed] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [audio, setAudio] = useState(null);
 
   useEffect(() => {
     if (!lobbyId) return;
@@ -41,6 +48,18 @@ export const Lobby = (props) => {
   }, [lobbyId]);
 
   useEffect(() => {
+    if (!lobbyId) return;
+
+    const updateLobby = async () =>
+      await firestore
+        .collection("lobbies")
+        .doc(lobbyId)
+        .update({ isLocked, updateAt: new Date() });
+
+    updateLobby();
+  }, [isLocked]);
+
+  useEffect(() => {
     if (!lobby) return;
 
     const fetchUsers = async () => {
@@ -57,16 +76,61 @@ export const Lobby = (props) => {
 
   if (isLoading) return spinLoaderMin();
 
-  const startGame = () => {
-    setGameStarted(true);
-  };
+  const startGame = () => setGameStarted(true);
 
   if (gameStarted) return <LoadingGame lobby={lobby} {...props} />;
 
   return (
     <LobbyCss>
       <div className="header">
-        <div className="left-menus" />
+        <div className="left-menus">
+          <Popover
+            content={
+              <div style={{ width: 100 }}>
+                <div>musica1</div>
+                <div>musica2</div>
+                <div>musica3</div>
+              </div>
+            }
+          >
+            <ButtonBingo
+              variant="primary"
+              margin="10px 20px"
+              onClick={() => {
+                if (!lobby?.game?.audio?.audioUrl || (audio && !audio?.paused))
+                  return;
+
+                const audio_ = new Audio(lobby?.game.audio.audioUrl);
+                setAudio(audio_);
+                audio_.play();
+              }}
+            >
+              {audio?.paused || !audio ? "►" : "♫"}
+            </ButtonBingo>
+          </Popover>
+          <Popover
+            content={
+              <div style={{ width: 100 }}>
+                <Slider
+                  defaultValue={30}
+                  onChange={(event) => {
+                    if (!audio) return;
+                    audio.volume = event / 100;
+                  }}
+                />
+              </div>
+            }
+          >
+            <ButtonBingo
+              variant="primary"
+              margin="10px 20px"
+              disabled={!audio || audio?.paused}
+            >
+              <SoundOutlined />
+            </ButtonBingo>
+          </Popover>
+        </div>
+
         <div className="item-pin">
           <div className="label">Entra a www.ebombo.it</div>
           <div className="pin-label">Pin del juego:</div>
@@ -77,14 +141,15 @@ export const Lobby = (props) => {
           <ButtonBingo
             variant="primary"
             margin="10px 20px"
-            onClick={() => setIsClosed(!isClosed)}
+            onClick={() => setIsLocked(!isLocked)}
           >
-            {isClosed ? <LockOutlined /> : <UnlockOutlined />}
+            {isLocked ? <LockOutlined /> : <UnlockOutlined />}
           </ButtonBingo>
           <ButtonBingo
             variant="primary"
             margin="10px 20px"
             padding="10px 20px"
+            disabled={!users?.length}
             onClick={() => startGame()}
           >
             EMPEZAR

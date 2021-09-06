@@ -17,6 +17,7 @@ const ButtonCss = styled.button`
   border: none;
   cursor: pointer;
   border-radius: 4px;
+  font-size: ${(props) => props.fontSize ?? "14px"};
   color: ${(props) => props.theme.color};
   width: ${(props) => props.width ?? "auto"};
   margin: ${(props) => props.margin ?? "auto"};
