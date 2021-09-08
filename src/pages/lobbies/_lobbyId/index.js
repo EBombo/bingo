@@ -134,7 +134,7 @@ export const Lobby = (props) => {
         <div className="item-pin">
           <div className="label">Entra a www.ebombo.it</div>
           <div className="pin-label">Pin del juego:</div>
-          <div className="pin">{lobby?.pin}</div>
+          <div className="pin">{isLocked ? <LockOutlined /> : lobby?.pin}</div>
         </div>
 
         <div className="right-menus">
