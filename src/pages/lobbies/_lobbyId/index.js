@@ -27,24 +27,37 @@ export const Lobby = (props) => {
 
   useEffect(() => {
     if (!lobbyId) return;
+    //const userStatusDatabaseRef = database.ref(`lobbies/${lobbyId}`);
 
-    const fetchLobby = async () => {
-      const lobbyRef = await firestore.collection("lobbies").doc(lobbyId).get();
+    const fetchLobby = () =>
+      firestore
+        .collection("lobbies")
+        .doc(lobbyId)
+        .onSnapshot((lobbyRef) => {
+          const currentLobby = lobbyRef.data();
+          if (!currentLobby || currentLobby.isClosed) {
+            props.showNotification(
+              "UPS",
+              "No encontramos tu sala, intenta nuevamente",
+              "warning"
+            );
+            return router.push("/login");
+          }
 
-      if (!lobbyRef.exists) {
-        props.showNotification(
-          "UPS",
-          "No encontramos tu sala, intenta nuevamente",
-          "warning"
-        );
-        return router.push("/login");
-      }
+          setLobby(currentLobby);
+          setLoading(false);
+        });
 
-      setLobby(lobbyRef.data());
-      setLoading(false);
+    const sub = fetchLobby();
+    return async () => {
+      /*
+      await userStatusDatabaseRef.set({
+        isClosed: true,
+      });
+      */
+      await firestore.doc(`lobbies/${lobbyId}`).update({ isClosed: true });
+      sub && sub();
     };
-
-    fetchLobby();
   }, [lobbyId]);
 
   useEffect(() => {

@@ -11,7 +11,7 @@ import { object, string } from "yup";
 import { Lobby } from "./Lobby";
 
 const Login = (props) => {
-  const [authUser] = useGlobal("user");
+  const [authUser, setAuthUser] = useGlobal("user");
 
   const [lobby, setLobby] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,17 @@ const Login = (props) => {
       return setIsLoading(false);
     }
     const currentLobby = snapshotToArray(lobbyRef)[0];
-    //if the current lobby is isClosed:true [return and notification]
+
+    console.log("currentLobby.isClosed", currentLobby.isClosed);
+
+    if (currentLobby.isClosed) {
+      await setAuthUser({ id: firestore.collection("users").doc().id });
+      setLobby(null);
+      setEmail(null);
+      setNickname(null);
+      return callback && callback(false);
+    }
+
     setLobby(currentLobby);
     callback && callback(false);
   };

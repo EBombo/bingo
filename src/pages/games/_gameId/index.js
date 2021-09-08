@@ -99,6 +99,7 @@ export const Game = (props) => {
       updateAt: new Date(),
       createAt: new Date(),
       isLocked: false,
+      isClosed: false,
       settings: {
         showMainCard,
         userIdentity,
