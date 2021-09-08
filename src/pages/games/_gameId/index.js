@@ -336,6 +336,7 @@ const GameCss = styled.div`
   }
 
   .anticon {
+    margin: 5px;
     float: right;
   }
 

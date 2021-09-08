@@ -185,6 +185,14 @@ const LobbyCss = styled.div`
       text-align: center;
     }
 
+    .left-menus {
+      button {
+        width: 45px;
+        box-shadow: none;
+        border-radius: 50px;
+      }
+    }
+
     .item-pin {
       width: 100%;
       height: 370px;
