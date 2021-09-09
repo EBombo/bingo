@@ -1,12 +1,25 @@
-import React, { useState } from "reactn";
+import React, { useState, useGlobal, useEffect } from "reactn";
 import styled from "styled-components";
 import { Image } from "../../../components/common/Image";
-import { config } from "../../../firebase";
+import { config, firestore } from "../../../firebase";
 import get from "lodash/get";
 import { mediaQuery } from "../../../constants";
 
 export const LoadingGame = (props) => {
-  const [authUser] = useState("user");
+  const [authUser] = useGlobal("user");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const updateLobby = async () =>
+        await firestore.doc(`lobbies/${props.lobby.id}`).update({
+          bingoCardsDistributed: true,
+        });
+
+      updateLobby();
+    }, 15000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <LoadingGameContainer>

@@ -4,6 +4,7 @@ import { Chat } from "../../../components/chat";
 import { mediaQuery, Tablet, Desktop } from "../../../constants";
 import { BingoBoard } from "./BingoBoard";
 import { RoundsLastNumber } from "./RoundsLastNumber";
+
 export const BingoGame = (props) => {
   return (
     <BingoGameContainer>

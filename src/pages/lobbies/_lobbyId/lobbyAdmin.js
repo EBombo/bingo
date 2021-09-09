@@ -12,6 +12,7 @@ import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
+import { BingoGame } from "./BingoGame";
 
 export const LobbyAdmin = (props) => {
   const router = useRouter();
@@ -123,7 +124,7 @@ export const LobbyAdmin = (props) => {
             variant="primary"
             margin="10px 20px"
             padding="10px 20px"
-            disabled={!users?.length}
+            // disabled={!users?.length}
             onClick={() => setGameStarted(new Date())}
           >
             EMPEZAR
@@ -190,6 +191,9 @@ const LobbyCss = styled.div`
       .label {
         background: ${(props) => props.theme.basic.white};
         color: ${(props) => props.theme.basic.black};
+        font-family: Gloria Hallelujah;
+        font-style: normal;
+        font-weight: normal;
       }
     }
   }
