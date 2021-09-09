@@ -1,4 +1,4 @@
-import React, { useState, useGlobal, useEffect } from "reactn";
+import React, { useState } from "reactn";
 import styled from "styled-components";
 import { Image } from "../../../components/common/Image";
 import { config } from "../../../firebase";
@@ -6,22 +6,11 @@ import get from "lodash/get";
 import { mediaQuery } from "../../../constants";
 
 export const LoadingGame = (props) => {
-  const [authUser] = useGlobal("user");
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      console.log("This will run after 15 seconds!");
-      props.setLoadingGame(false);
-      props.setGameStarted(true);
-    }, 15000);
-
-    console.log(authUser, get(props, "lobby.game.user.id", "no lobby user id"));
-    return () => clearTimeout(timer);
-  }, []);
+  const [authUser] = useState("user");
 
   return (
     <LoadingGameContainer>
-      {get(authUser, "id", null) === get(props, "lobby.game.user.id", "") && (
+      {authUser.isAdmin ? (
         <>
           <div className="step-one">
             <Image
@@ -69,9 +58,7 @@ export const LoadingGame = (props) => {
             <div className="step-four-bar" />
           </div>
         </>
-      )}
-
-      {get(authUser, "id", null) !== get(props, "lobby.game.user.id", "") && (
+      ) : (
         <>
           <div className="step-one">
             <div className="step-one-title">¡Prepárate!</div>
@@ -121,8 +108,8 @@ const LoadingGameContainer = styled.div`
       -webkit-animation-delay: 2s;
       -o-animation-delay: 2s;
     }
-    
-    &-title{
+
+    &-title {
       font-family: Lato;
       font-style: normal;
       font-weight: bold;

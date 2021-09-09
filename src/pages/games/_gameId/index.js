@@ -13,14 +13,16 @@ import {
   Select,
   Switch,
 } from "../../../components/form";
+import { useUser } from "../../../hooks";
 
 export const Game = (props) => {
   const router = useRouter();
   const { Fetch } = useFetch();
+  const [, setLSAuthUser] = useUser();
   const [audios] = useGlobal("audios");
   const [game, setGame] = useState(null);
   const { tokenId, gameId } = router.query;
-  const [, setIsAdmin] = useGlobal("isAdmin");
+  const [, setAuthUser] = useGlobal("user");
   const [isLoading, setIsLoading] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
 
@@ -72,9 +74,17 @@ export const Game = (props) => {
         const authUser = response[0];
         const game = response[1];
 
-        if (!game.usersIds.includes(authUser.uid)) return router.push("/login");
+        const formatUser = {
+          id: authUser.uid,
+          email: authUser.email,
+          isAdmin: true,
+        };
 
-        await setIsAdmin(true);
+        if (!game.usersIds.includes(formatUser.id))
+          return router.push("/login");
+
+        await setAuthUser(formatUser);
+        setLSAuthUser(formatUser);
         setGame(game);
         setIsLoading(false);
       } catch (error) {
@@ -98,6 +108,9 @@ export const Game = (props) => {
       id: lobbyId,
       updateAt: new Date(),
       createAt: new Date(),
+      isLocked: false,
+      isClosed: false,
+      startAt: null,
       settings: {
         showMainCard,
         userIdentity,
@@ -335,6 +348,7 @@ const GameCss = styled.div`
   }
 
   .anticon {
+    margin: 5px;
     float: right;
   }
 
@@ -371,7 +385,7 @@ const GameCss = styled.div`
       width: 100%;
       height: 32px;
       background: ${(props) => props.theme.basic.secondary};
-      color: ${props => props.theme.basic.whiteLight};
+      color: ${(props) => props.theme.basic.whiteLight};
       border-radius: 4px !important;
       font-family: Lato;
       font-style: normal;

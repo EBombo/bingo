@@ -8,10 +8,13 @@ import { useForm } from "react-hook-form";
 import { EmailStep } from "./EmailStep";
 import styled from "styled-components";
 import { object, string } from "yup";
-import { Lobby } from "./Lobby";
+import { useRouter } from "next/router";
+import { useUser } from "../../hooks";
 
 const Login = (props) => {
-  const [authUser] = useGlobal("user");
+  const router = useRouter();
+  const [, setAuthUserLs] = useUser();
+  const [authUser, setAuthUser] = useGlobal("user");
 
   const [lobby, setLobby] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,10 +30,28 @@ const Login = (props) => {
     reValidateMode: "onSubmit",
   });
 
+  useEffect(() => {
+    if (!lobby) return;
+    if (!nickname) return;
+    if (lobby.userIdentity && !email) return;
+
+    const currentUser = {
+      ...authUser,
+      nickname,
+      email: email ?? null,
+      lobby: lobby,
+    };
+
+    setAuthUserLs(currentUser);
+    setAuthUser(currentUser);
+    router.push(`/lobbies/${lobby.id}`);
+  }, [lobby, nickname, email]);
+
   const fetchLobby = async (pin, callback) => {
     const lobbyRef = await firestore
       .collection("lobbies")
       .where("pin", "==", +pin)
+      .where("isLocked", "==", false)
       .limit(1)
       .get();
 
@@ -43,7 +64,17 @@ const Login = (props) => {
       return setIsLoading(false);
     }
     const currentLobby = snapshotToArray(lobbyRef)[0];
-    //if the current lobby is isClosed:true [return and notification]
+
+    console.log("currentLobby.isClosed", currentLobby.isClosed);
+
+    if (currentLobby.isClosed) {
+      await setAuthUser({ id: firestore.collection("users").doc().id });
+      setLobby(null);
+      setEmail(null);
+      setNickname(null);
+      return callback && callback(false);
+    }
+
     setLobby(currentLobby);
     callback && callback(false);
   };
@@ -110,10 +141,6 @@ const Login = (props) => {
           />
         )}
       </LoginContainer>
-      {((lobby && lobby.userIdentity && email && nickname) ||
-        (lobby && !lobby.userIdentity && nickname)) && (
-        <Lobby {...props} lobby={lobby} email={email} nickname={nickname} />
-      )}
     </>
   );
 };

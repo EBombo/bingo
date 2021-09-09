@@ -225,33 +225,6 @@ export const GlobalStyle = createGlobalStyle`
 
   /*-------------- CONTAINER ---------------*/
 
-  /*-------------- POPOVER ---------------*/
-  .ant-popover-placement-right {
-    .ant-popover-content {
-      .ant-popover-arrow {
-        border-bottom-color: ${(props) => props.theme.basic.blackDarken};
-        border-left-color: ${(props) => props.theme.basic.blackDarken};
-      }
-    }
-  }
-
-  .ant-popover {
-    .ant-popover-content {
-      .ant-popover-inner {
-        background: ${(props) => props.theme.basic.blackDarken};
-
-        .ant-popover-title {
-          color: ${(props) => props.theme.basic.white};
-        }
-
-        .ant-popover-inner-content {
-          color: ${(props) => props.theme.basic.white};
-        }
-      }
-    }
-  }
-
-  /*-------------- POPOVER ---------------*/
 
   /*-------------- DISABLED ---------------*/
   .disabled {

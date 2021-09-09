@@ -1,39 +1,28 @@
-import { Image } from "../../components/common/Image";
-import React, { useEffect, useGlobal, useState } from "reactn";
-import { config, database, firebase } from "../../firebase";
-import { mediaQuery } from "../../constants";
+import React, { useEffect, useGlobal } from "reactn";
+import { config, database, firebase } from "../../../firebase";
+import { Image } from "../../../components/common/Image";
+import { mediaQuery } from "../../../constants";
 import styled from "styled-components";
-import { useUser } from "../../hooks";
 
-export const Lobby = (props) => {
+export const LobbyUser = (props) => {
   const [authUser] = useGlobal("user");
-  const [userId] = useState(authUser.id);
-
-  const [lobby] = useState(props.lobby);
-  const [nickname] = useState(props.nickname);
-  const [email] = useState(props.email ?? null);
-
-  const [, setAuthUserLs] = useUser();
-
-  const userStatusDatabaseRef = database.ref(
-    `lobbies/${lobby.id}/users/${userId}`
-  );
-
-  const user = {
-    email,
-    userId,
-    nickname,
-    lobbyId: lobby.id,
-  };
 
   useEffect(() => {
-    if (!lobby) return;
-    if (!lobby.userIdentity && !props.nickname) return;
-    if (lobby.userIdentity && (!props.email || !props.nickname)) return;
+    if (!props.lobby) return;
+    if (!authUser) return;
+
+    const userStatusDatabaseRef = database.ref(
+      `lobbies/${props.lobby.id}/users/${authUser.id}`
+    );
+
+    const user = {
+      email: authUser.email ?? null,
+      userId: authUser.id,
+      nickname: authUser.nickname,
+      lobbyId: props.lobby.id,
+    };
 
     const createPresence = async () => {
-      setAuthUserLs({ ...authUser, nickname, email, lobby: lobby });
-
       const isOfflineForDatabase = {
         ...user,
         state: "offline",
@@ -49,6 +38,7 @@ export const Lobby = (props) => {
       database.ref(".info/connected").on("value", async (snapshot) => {
         if (!snapshot.val()) return;
 
+        console.log("isOfflineForDatabase", isOfflineForDatabase);
         await userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase);
 
         userStatusDatabaseRef.set(isOnlineForDatabase);
@@ -63,7 +53,7 @@ export const Lobby = (props) => {
         state: "offline",
         last_changed: firebase.database.ServerValue.TIMESTAMP,
       });
-  }, [props.lobby]);
+  }, [props.lobby, authUser]);
 
   return (
     <SuccessInscriptionContainer>
@@ -74,7 +64,7 @@ export const Lobby = (props) => {
       />
       <div className="message">Ya estas adentro :)</div>
       <div className="message">¿Vez tu nombre en pantalla?</div>
-      <div className="nickname">{nickname}</div>
+      <div className="nickname">{authUser.nickname}</div>
     </SuccessInscriptionContainer>
   );
 };

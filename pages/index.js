@@ -1,11 +1,11 @@
 import React from "reactn";
-import { Lading } from "../src/pages/lading";
 import { SEOMeta } from "../src/components/common/seo";
+import Login from "../src/pages/login";
 
 const Init = (props) => (
   <>
     <SEOMeta {...props} />
-    <Lading {...props} />
+    <Login {...props} />
   </>
 );
 
