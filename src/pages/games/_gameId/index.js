@@ -110,6 +110,7 @@ export const Game = (props) => {
       createAt: new Date(),
       isLocked: false,
       isClosed: false,
+      startAt: null,
       settings: {
         showMainCard,
         userIdentity,

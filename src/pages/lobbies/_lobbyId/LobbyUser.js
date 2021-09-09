@@ -1,19 +1,16 @@
-import { Image } from "../../components/common/Image";
 import React, { useEffect, useGlobal, useState } from "reactn";
-import { config, database, firebase } from "../../firebase";
-import { mediaQuery } from "../../constants";
+import { config, database, firebase } from "../../../firebase";
+import { Image } from "../../../components/common/Image";
+import { mediaQuery } from "../../../constants";
 import styled from "styled-components";
-import { useUser } from "../../hooks";
 
-export const Lobby = (props) => {
+export const LobbyUser = (props) => {
   const [authUser] = useGlobal("user");
   const [userId] = useState(authUser.id);
 
   const [lobby] = useState(props.lobby);
-  const [nickname] = useState(props.nickname);
-  const [email] = useState(props.email ?? null);
-
-  const [, setAuthUserLs] = useUser();
+  const [nickname] = useState(authUser.nickname);
+  const [email] = useState(authUser.email ?? null);
 
   const userStatusDatabaseRef = database.ref(
     `lobbies/${lobby.id}/users/${userId}`
@@ -28,12 +25,10 @@ export const Lobby = (props) => {
 
   useEffect(() => {
     if (!lobby) return;
-    if (!lobby.userIdentity && !props.nickname) return;
-    if (lobby.userIdentity && (!props.email || !props.nickname)) return;
+    if (!lobby.userIdentity && !nickname) return;
+    if (lobby.userIdentity && (!email || !nickname)) return;
 
     const createPresence = async () => {
-      setAuthUserLs({ ...authUser, nickname, email, lobby: lobby });
-
       const isOfflineForDatabase = {
         ...user,
         state: "offline",
@@ -74,7 +69,7 @@ export const Lobby = (props) => {
       />
       <div className="message">Ya estas adentro :)</div>
       <div className="message">¿Vez tu nombre en pantalla?</div>
-      <div className="nickname">{nickname}</div>
+      <div className="nickname">{authUser.nickname}</div>
     </SuccessInscriptionContainer>
   );
 };

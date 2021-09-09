@@ -8,9 +8,12 @@ import { useForm } from "react-hook-form";
 import { EmailStep } from "./EmailStep";
 import styled from "styled-components";
 import { object, string } from "yup";
-import { Lobby } from "./Lobby";
+import { useRouter } from "next/router";
+import { useUser } from "../../hooks";
 
 const Login = (props) => {
+  const router = useRouter();
+  const [, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
 
   const [lobby, setLobby] = useState(null);
@@ -26,6 +29,20 @@ const Login = (props) => {
     validationSchema,
     reValidateMode: "onSubmit",
   });
+
+  useEffect(() => {
+    if (!lobby) return;
+    if (!nickname) return;
+    if (lobby.userIdentity && !email) return;
+
+    setAuthUserLs({
+      ...authUser,
+      nickname,
+      email: email ?? null,
+      lobby: lobby,
+    });
+    router.push(`/lobbies/${lobby.id}`);
+  }, [lobby, nickname, email]);
 
   const fetchLobby = async (pin, callback) => {
     const lobbyRef = await firestore
@@ -121,10 +138,6 @@ const Login = (props) => {
           />
         )}
       </LoginContainer>
-      {((lobby && lobby.userIdentity && email && nickname) ||
-        (lobby && !lobby.userIdentity && nickname)) && (
-        <Lobby {...props} lobby={lobby} email={email} nickname={nickname} />
-      )}
     </>
   );
 };
