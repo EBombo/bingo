@@ -58,7 +58,7 @@ export const LobbyUser = (props) => {
         state: "offline",
         last_changed: firebase.database.ServerValue.TIMESTAMP,
       });
-  }, [props.lobby]);
+  }, [props.lobby, authUser]);
 
   return (
     <SuccessInscriptionContainer>
