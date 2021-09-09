@@ -8,6 +8,7 @@ import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { LoadingGame } from "./LoadingGame";
+import { BingoGame } from "./BingoGame";
 
 export const Lobby = (props) => {
   const router = useRouter();
@@ -16,6 +17,7 @@ export const Lobby = (props) => {
   const [lobby, setLobby] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [isClosed, setIsClosed] = useState(false);
+  const [loadingGame, setLoadingGame] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
@@ -58,10 +60,30 @@ export const Lobby = (props) => {
   if (isLoading) return spinLoaderMin();
 
   const startGame = () => {
-    setGameStarted(true);
+    setLoadingGame(true);
   };
 
-  if (gameStarted) return <LoadingGame lobby={lobby} {...props} />;
+  if (loadingGame)
+    return (
+      <LoadingGame
+        lobby={lobby}
+        loadingGame={loadingGame}
+        setLoadingGame={setLoadingGame}
+        gameStarted={gameStarted}
+        setGameStarted={setGameStarted}
+        {...props}
+      />
+    );
+
+  if (gameStarted)
+    return (
+      <BingoGame
+        lobby={lobby}
+        gameStarted={gameStarted}
+        setGameStarted={setGameStarted}
+        {...props}
+      />
+    );
 
   return (
     <LobbyCss>

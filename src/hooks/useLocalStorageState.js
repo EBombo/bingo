@@ -18,6 +18,8 @@ export const useLanguageCode = createLocalStorageStateHook(
   "es"
 );
 
+export const useChats = createLocalStorageStateHook("chats", []);
+
 export const useEnvironment = createLocalStorageStateHook("environment", "");
 
 export const timeToString = (collection) =>

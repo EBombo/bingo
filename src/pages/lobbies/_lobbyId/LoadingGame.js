@@ -6,7 +6,18 @@ import get from "lodash/get";
 import { mediaQuery } from "../../../constants";
 
 export const LoadingGame = (props) => {
-  const [authUser] = useState("user");
+  const [authUser] = useGlobal("user");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log("This will run after 15 seconds!");
+      props.setLoadingGame(false);
+      props.setGameStarted(true);
+    }, 15000);
+
+    console.log(authUser, get(props, "lobby.game.user.id", "no lobby user id"));
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <LoadingGameContainer>
@@ -63,9 +74,15 @@ export const LoadingGame = (props) => {
       {get(authUser, "id", null) !== get(props, "lobby.game.user.id", "") && (
         <>
           <div className="step-one">
-              <div className="step-one-title">
-                  ¡Prepárate!
-              </div>
+            <div className="step-one-title">¡Prepárate!</div>
+
+            <Image
+              src={`${config.storageUrl}/resources/pacman.gif`}
+              height="75px"
+              width="75px"
+              size="contain"
+              margin="1rem auto"
+            />
           </div>
           <div className="step-four">
             <div className="step-four-image">
@@ -113,7 +130,7 @@ const LoadingGameContainer = styled.div`
       line-height: 60px;
       margin: 3rem 0;
       text-align: center;
-      color: ${props => props.theme.basic.white};
+      color: ${(props) => props.theme.basic.white};
     }
 
     &-description {

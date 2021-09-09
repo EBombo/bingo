@@ -17,7 +17,7 @@ export const darkTheme = {
     blackLighten: "#404040",
     blackDarken: "#242424",
     grayDarken: "#585858",
-    grayDark: "#858585",
+    grayDark: "#A3A3A3",
     grayLight: "#666666",
     grayLighten: "#C4C4C4",
     gray: "#E4E4E4",

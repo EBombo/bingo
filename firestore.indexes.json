@@ -1,16 +1,16 @@
 {
   "indexes": [
     {
-      "collectionGroup": "exmple",
+      "collectionGroup": "messages",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "xxxx",
-          "mode": "ARRAY_CONTAINS"
+          "fieldPath": "lobbyId",
+          "order": "ASCENDING"
         },
         {
-          "fieldPath": "xxxx",
-          "order": "ASCENDING"
+          "fieldPath": "createAt",
+          "order": "DESCENDING"
         }
       ]
     }

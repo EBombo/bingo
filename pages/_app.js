@@ -56,6 +56,10 @@ const MyApp = ({ Component, pageProps }) => {
           rel="stylesheet"
         />
         <link
+          href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@700&display=swap"
+          rel="stylesheet"
+        />
+        <link
           href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap"
           rel="stylesheet"
         />

@@ -15,6 +15,7 @@ const { validateAdmin } = require("./validateAdmin");
 const { getGames } = require("./games/get");
 const { postGame } = require("./games/post");
 const { putGame } = require("./games/put");
+const { postMessage } = require("./messages/post");
 
 const api = express();
 const router = express.Router();
@@ -52,6 +53,8 @@ router.post("/games/:gameId/users/:userId", postGame);
 router.put("/games/:gameId/users/:userId", putGame);
 
 //---------------------------------------------
+
+router.post("/messages", postMessage);
 
 router.post("/error-boundary", postError);
 
