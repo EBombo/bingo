@@ -1,4 +1,4 @@
-import React, { useState, useGlobal, useEffect } from "reactn";
+import React, { useState } from "reactn";
 import styled from "styled-components";
 import { Image } from "../../../components/common/Image";
 import { config } from "../../../firebase";
@@ -10,7 +10,7 @@ export const LoadingGame = (props) => {
 
   return (
     <LoadingGameContainer>
-      {get(authUser, "id", null) === get(props, "lobby.game.user.id", "") && (
+      {authUser.isAdmin ? (
         <>
           <div className="step-one">
             <Image
@@ -58,14 +58,10 @@ export const LoadingGame = (props) => {
             <div className="step-four-bar" />
           </div>
         </>
-      )}
-
-      {get(authUser, "id", null) !== get(props, "lobby.game.user.id", "") && (
+      ) : (
         <>
           <div className="step-one">
-              <div className="step-one-title">
-                  ¡Prepárate!
-              </div>
+            <div className="step-one-title">¡Prepárate!</div>
           </div>
           <div className="step-four">
             <div className="step-four-image">
@@ -104,8 +100,8 @@ const LoadingGameContainer = styled.div`
       -webkit-animation-delay: 2s;
       -o-animation-delay: 2s;
     }
-    
-    &-title{
+
+    &-title {
       font-family: Lato;
       font-style: normal;
       font-weight: bold;
@@ -113,7 +109,7 @@ const LoadingGameContainer = styled.div`
       line-height: 60px;
       margin: 3rem 0;
       text-align: center;
-      color: ${props => props.theme.basic.white};
+      color: ${(props) => props.theme.basic.white};
     }
 
     &-description {
