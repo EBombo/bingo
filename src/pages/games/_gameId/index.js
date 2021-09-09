@@ -13,14 +13,16 @@ import {
   Select,
   Switch,
 } from "../../../components/form";
+import { useUser } from "../../../hooks";
 
 export const Game = (props) => {
   const router = useRouter();
   const { Fetch } = useFetch();
+  const [, setLSAuthUser] = useUser();
   const [audios] = useGlobal("audios");
   const [game, setGame] = useState(null);
   const { tokenId, gameId } = router.query;
-  const [, setIsAdmin] = useGlobal("isAdmin");
+  const [, setAuthUser] = useGlobal("user");
   const [isLoading, setIsLoading] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
 
@@ -72,9 +74,17 @@ export const Game = (props) => {
         const authUser = response[0];
         const game = response[1];
 
-        if (!game.usersIds.includes(authUser.uid)) return router.push("/login");
+        const formatUser = {
+          id: authUser.uid,
+          email: authUser.email,
+          isAdmin: true,
+        };
 
-        await setIsAdmin(true);
+        if (!game.usersIds.includes(formatUser.id))
+          return router.push("/login");
+
+        await setAuthUser(formatUser);
+        setLSAuthUser(formatUser);
         setGame(game);
         setIsLoading(false);
       } catch (error) {

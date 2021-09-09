@@ -5,7 +5,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { spinLoaderMin } from "../../../components/common/loader";
-import React, { useEffect, useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
 import { database, firestore } from "../../../firebase";
 import { ButtonBingo } from "../../../components/form";
@@ -18,6 +18,7 @@ import { Popover, Slider } from "antd";
 export const Lobby = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
+  const [authUser] = useGlobal("user");
   const [users, setUsers] = useState([]);
   const [lobby, setLobby] = useState(null);
   const [isLoading, setLoading] = useState(true);
@@ -27,37 +28,30 @@ export const Lobby = (props) => {
 
   useEffect(() => {
     if (!lobbyId) return;
-    //const userStatusDatabaseRef = database.ref(`lobbies/${lobbyId}`);
 
     const fetchLobby = () =>
-      firestore
-        .collection("lobbies")
-        .doc(lobbyId)
-        .onSnapshot((lobbyRef) => {
-          const currentLobby = lobbyRef.data();
-          if (!currentLobby || currentLobby.isClosed) {
-            props.showNotification(
-              "UPS",
-              "No encontramos tu sala, intenta nuevamente",
-              "warning"
-            );
-            return router.push("/login");
-          }
+      firestore.doc(`lobbies/${lobbyId}`).onSnapshot((lobbyRef) => {
+        const currentLobby = lobbyRef.data();
 
-          setLobby(currentLobby);
-          setLoading(false);
-        });
+        if (
+          !currentLobby ||
+          currentLobby.isClosed ||
+          !currentLobby?.game?.usersIds?.includes(authUser.id)
+        ) {
+          props.showNotification(
+            "UPS",
+            "No encontramos tu sala, intenta nuevamente",
+            "warning"
+          );
+          return router.push("/login");
+        }
+
+        setLobby(currentLobby);
+        setLoading(false);
+      });
 
     const sub = fetchLobby();
-    return async () => {
-      /*
-      await userStatusDatabaseRef.set({
-        isClosed: true,
-      });
-      */
-      await firestore.doc(`lobbies/${lobbyId}`).update({ isClosed: true });
-      sub && sub();
-    };
+    return () => sub && sub();
   }, [lobbyId]);
 
   useEffect(() => {
@@ -65,8 +59,7 @@ export const Lobby = (props) => {
 
     const updateLobby = async () =>
       await firestore
-        .collection("lobbies")
-        .doc(lobbyId)
+        .doc(`lobbies/${lobbyId}`)
         .update({ isLocked, updateAt: new Date() });
 
     updateLobby();
