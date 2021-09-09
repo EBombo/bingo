@@ -14,17 +14,17 @@ export const Lobby = (props) => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!authUser) return router.push("/");
+  }, [authUser]);
+
+  useEffect(() => {
     if (!lobbyId) return;
 
     const fetchLobby = () =>
       firestore.doc(`lobbies/${lobbyId}`).onSnapshot((lobbyRef) => {
         const currentLobby = lobbyRef.data();
 
-        if (
-          !currentLobby ||
-          currentLobby.isClosed
-          //|| !currentLobby?.game?.usersIds?.includes(authUser.id)
-        ) {
+        if (!currentLobby || currentLobby.isClosed) {
           props.showNotification(
             "UPS",
             "No encontramos tu sala, intenta nuevamente",

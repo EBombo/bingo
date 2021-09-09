@@ -9,24 +9,22 @@ export const LobbyUser = (props) => {
   const [userId] = useState(authUser.id);
 
   const [lobby] = useState(props.lobby);
-  const [nickname] = useState(authUser.nickname);
-  const [email] = useState(authUser.email ?? null);
 
   const userStatusDatabaseRef = database.ref(
     `lobbies/${lobby.id}/users/${userId}`
   );
 
   const user = {
-    email,
+    email: authUser.email ?? null,
     userId,
-    nickname,
+    nickname: authUser.nickname,
     lobbyId: lobby.id,
   };
 
   useEffect(() => {
     if (!lobby) return;
-    if (!lobby.userIdentity && !nickname) return;
-    if (lobby.userIdentity && (!email || !nickname)) return;
+    if (!lobby.userIdentity && !authUser.nickname) return;
+    if (lobby.userIdentity && (!authUser.email || !authUser.nickname)) return;
 
     const createPresence = async () => {
       const isOfflineForDatabase = {
