@@ -41,7 +41,7 @@ export const Lobby = (props) => {
     return () => sub && sub();
   }, [lobbyId]);
 
-  if (isLoading) return spinLoaderMin();
+  if (isLoading || !authUser || !lobby) return spinLoaderMin();
 
   if (lobby.startAt) return <LoadingGame lobby={lobby} {...props} />;
 

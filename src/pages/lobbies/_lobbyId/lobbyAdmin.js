@@ -4,7 +4,7 @@ import {
   UnlockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useEffect, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
 import { database, firestore } from "../../../firebase";
 import { ButtonBingo } from "../../../components/form";
@@ -16,7 +16,6 @@ import { Popover, Slider } from "antd";
 export const LobbyAdmin = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
-  const [authUser] = useGlobal("user");
   const [users, setUsers] = useState([]);
   const [isLocked, setIsLocked] = useState(false);
   const [gameStarted, setGameStarted] = useState(null);

@@ -35,12 +35,15 @@ const Login = (props) => {
     if (!nickname) return;
     if (lobby.userIdentity && !email) return;
 
-    setAuthUserLs({
+    const currentUser = {
       ...authUser,
       nickname,
       email: email ?? null,
       lobby: lobby,
-    });
+    };
+
+    setAuthUserLs(currentUser);
+    setAuthUser(currentUser);
     router.push(`/lobbies/${lobby.id}`);
   }, [lobby, nickname, email]);
 

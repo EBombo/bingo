@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal } from "reactn";
 import { config, database, firebase } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
 import { mediaQuery } from "../../../constants";
@@ -6,25 +6,21 @@ import styled from "styled-components";
 
 export const LobbyUser = (props) => {
   const [authUser] = useGlobal("user");
-  const [userId] = useState(authUser.id);
-
-  const [lobby] = useState(props.lobby);
-
-  const userStatusDatabaseRef = database.ref(
-    `lobbies/${lobby.id}/users/${userId}`
-  );
-
-  const user = {
-    email: authUser.email ?? null,
-    userId,
-    nickname: authUser.nickname,
-    lobbyId: lobby.id,
-  };
 
   useEffect(() => {
-    if (!lobby) return;
-    if (!lobby.userIdentity && !authUser.nickname) return;
-    if (lobby.userIdentity && (!authUser.email || !authUser.nickname)) return;
+    if (!props.lobby) return;
+    if (!authUser) return;
+
+    const userStatusDatabaseRef = database.ref(
+      `lobbies/${props.lobby.id}/users/${authUser.id}`
+    );
+
+    const user = {
+      email: authUser.email ?? null,
+      userId: authUser.id,
+      nickname: authUser.nickname,
+      lobbyId: props.lobby.id,
+    };
 
     const createPresence = async () => {
       const isOfflineForDatabase = {
@@ -42,6 +38,7 @@ export const LobbyUser = (props) => {
       database.ref(".info/connected").on("value", async (snapshot) => {
         if (!snapshot.val()) return;
 
+        console.log("isOfflineForDatabase", isOfflineForDatabase);
         await userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase);
 
         userStatusDatabaseRef.set(isOnlineForDatabase);
