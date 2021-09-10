@@ -25,7 +25,7 @@ const Container = styled.div`
   background: ${(props) => props.theme.basic.blackDarken};
   padding: 0.5rem 0;
   border-radius: 5px;
-  max-width: 125px;
+  width: 125px;
 
   .item {
     display: flex;
