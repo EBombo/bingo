@@ -17,19 +17,23 @@ export const LobbyAdmin = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
   const [users, setUsers] = useState([]);
+  const [audio, setAudio] = useState(null);
+  const [isLoading, setLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [gameStarted, setGameStarted] = useState(null);
-  const [audio, setAudio] = useState(null);
 
   useEffect(() => {
     if (!lobbyId) return;
 
-    const updateLobby = async () =>
+    const updateLobby = async () => {
+      setLoading(true);
       await firestore.doc(`lobbies/${lobbyId}`).update({
         isLocked,
         startAt: gameStarted,
         updateAt: new Date(),
       });
+      setLoading(false);
+    };
 
     updateLobby();
   }, [isLocked, gameStarted]);
@@ -123,7 +127,8 @@ export const LobbyAdmin = (props) => {
             variant="primary"
             margin="10px 20px"
             padding="10px 30px"
-            disabled={!users?.length}
+            loading={isLoading}
+            disabled={!users?.length || isLoading}
             onClick={() => setGameStarted(new Date())}
           >
             EMPEZAR

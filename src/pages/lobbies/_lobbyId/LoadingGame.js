@@ -6,7 +6,7 @@ import get from "lodash/get";
 import { mediaQuery } from "../../../constants";
 
 export const LoadingGame = (props) => {
-    const [authUser] = useGlobal("user");
+  const [authUser] = useGlobal("user");
 
   return (
     <LoadingGameContainer>
