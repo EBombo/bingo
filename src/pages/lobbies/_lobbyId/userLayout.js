@@ -22,7 +22,9 @@ export const UserLayout = (props) => {
         <Popover
           content={
             <div>
-              <div onClick={logout}>Salir</div>
+              <div onClick={logout} style={{ cursor: "pointer" }}>
+                Salir
+              </div>
             </div>
           }
         >
