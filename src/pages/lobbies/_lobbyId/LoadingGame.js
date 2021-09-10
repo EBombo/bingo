@@ -10,7 +10,6 @@ export const LoadingGame = (props) => {
 
   return (
     <LoadingGameContainer>
-      {String(authUser.isAdmin)}
       {authUser.isAdmin ? (
         <>
           <div className="step-one">
