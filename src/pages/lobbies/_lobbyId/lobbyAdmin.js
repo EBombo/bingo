@@ -119,6 +119,8 @@ export const LobbyAdmin = (props) => {
           <ButtonBingo
             variant="primary"
             margin="10px 20px"
+            disabled={isLoading}
+            loading={isLoading}
             onClick={() => setIsLocked(!isLocked)}
           >
             {isLocked ? <LockOutlined /> : <UnlockOutlined />}

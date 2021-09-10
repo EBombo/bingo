@@ -41,6 +41,13 @@ export const Lobby = (props) => {
     return () => sub && sub();
   }, [lobbyId]);
 
+  useEffect(() => {
+    if (!lobby || !lobby?.startAt) return;
+
+    //generar cartilla para los usuarios
+    console.log("generar cartilla para los usuarios");
+  }, [lobby]);
+
   if (isLoading || !authUser || !lobby) return spinLoaderMin();
 
   if (lobby.startAt) return <LoadingGame lobby={lobby} {...props} />;

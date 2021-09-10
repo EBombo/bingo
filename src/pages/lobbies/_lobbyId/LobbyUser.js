@@ -38,7 +38,6 @@ export const LobbyUser = (props) => {
       database.ref(".info/connected").on("value", async (snapshot) => {
         if (!snapshot.val()) return;
 
-        console.log("isOfflineForDatabase", isOfflineForDatabase);
         await userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase);
 
         userStatusDatabaseRef.set(isOnlineForDatabase);
