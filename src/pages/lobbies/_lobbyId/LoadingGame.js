@@ -1,4 +1,4 @@
-import React, { useState } from "reactn";
+import React, { useGlobal } from "reactn";
 import styled from "styled-components";
 import { Image } from "../../../components/common/Image";
 import { config } from "../../../firebase";
@@ -6,10 +6,11 @@ import get from "lodash/get";
 import { mediaQuery } from "../../../constants";
 
 export const LoadingGame = (props) => {
-  const [authUser] = useState("user");
+    const [authUser] = useGlobal("user");
 
   return (
     <LoadingGameContainer>
+      {String(authUser.isAdmin)}
       {authUser.isAdmin ? (
         <>
           <div className="step-one">

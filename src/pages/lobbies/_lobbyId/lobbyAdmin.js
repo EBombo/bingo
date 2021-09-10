@@ -150,6 +150,12 @@ export const LobbyAdmin = (props) => {
 };
 
 const LobbyCss = styled.div`
+  width: fit-content;
+
+  ${mediaQuery.afterTablet} {
+    width: auto;
+  }
+
   .header {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -227,6 +233,10 @@ const LobbyCss = styled.div`
         border-radius: 5px;
         color: ${(props) => props.theme.basic.white};
         background: ${(props) => props.theme.basic.primary};
+
+        ${mediaQuery.afterTablet} {
+          padding: 15px 10px;
+        }
       }
     }
   }
