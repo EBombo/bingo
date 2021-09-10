@@ -188,6 +188,8 @@ const LobbyCss = styled.div`
       }
 
       .label {
+        font-style: normal;
+        font-family: Gloria Hallelujah;
         background: ${(props) => props.theme.basic.white};
         color: ${(props) => props.theme.basic.black};
       }
