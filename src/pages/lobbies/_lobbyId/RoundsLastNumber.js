@@ -50,7 +50,7 @@ const Container = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
-    max-width: 275px;
+    width: 275px;
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;

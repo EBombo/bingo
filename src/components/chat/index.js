@@ -205,7 +205,7 @@ const Content = styled.div`
       text-align: center;
       font-weight: 500;
       font-size: 1rem;
-      color: ${props => props.theme.basic.blackDarken};
+      color: ${(props) => props.theme.basic.blackDarken};
     }
   }
 
