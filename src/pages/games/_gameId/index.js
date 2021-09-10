@@ -25,6 +25,7 @@ export const Game = (props) => {
   const [, setAuthUser] = useGlobal("user");
   const [isLoading, setIsLoading] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const [isLoadingSave, setIsLoadingSave] = useState(false);
 
   const [showMainCard, setShowMainCard] = useState(true);
   const [userIdentity, setUserIdentity] = useState(false);
@@ -49,7 +50,7 @@ export const Game = (props) => {
         const { response, error } = await Fetch(url, "POST", { tokenId });
 
         if (error) {
-          props.showNotificationAnt("ERROR", "Error al validar la cuenta");
+          props.showNotification("ERROR", "Error al validar la cuenta");
           return router.push("/login");
         }
 
@@ -96,33 +97,39 @@ export const Game = (props) => {
   }, [tokenId, gameId]);
 
   const createLobby = async (typeOfGame) => {
-    const pin = await generatePin();
+    setIsLoadingSave(true);
+    try {
+      const pin = await generatePin();
 
-    const lobbiesRef = firestore.collection("lobbies");
-    const lobbyId = lobbiesRef.doc().id;
+      const lobbiesRef = firestore.collection("lobbies");
+      const lobbyId = lobbiesRef.doc().id;
 
-    await lobbiesRef.doc(lobbyId).set({
-      pin,
-      game,
-      typeOfGame,
-      id: lobbyId,
-      updateAt: new Date(),
-      createAt: new Date(),
-      isLocked: false,
-      isClosed: false,
-      startAt: null,
-      settings: {
-        showMainCard,
-        userIdentity,
-        showAllCards,
-        cardAutofill,
-        showChat,
-        showParticipants,
-        awards: showAwards ? awards : null,
-      },
-    });
+      await lobbiesRef.doc(lobbyId).set({
+        pin,
+        game,
+        typeOfGame,
+        id: lobbyId,
+        updateAt: new Date(),
+        createAt: new Date(),
+        isLocked: false,
+        isClosed: false,
+        startAt: null,
+        settings: {
+          showMainCard,
+          userIdentity,
+          showAllCards,
+          cardAutofill,
+          showChat,
+          showParticipants,
+          awards: showAwards ? awards : null,
+        },
+      });
 
-    return router.push(`/lobbies/${lobbyId}`);
+      return router.push(`/lobbies/${lobbyId}`);
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoadingSave(false);
   };
 
   const generatePin = async () => {
@@ -156,6 +163,8 @@ export const Game = (props) => {
             <ButtonBingo
               variant="secondary"
               padding="0 15px"
+              loading={isLoadingSave}
+              disabled={isLoadingSave}
               onClick={() => createLobby("individual")}
             >
               Clásico
@@ -167,6 +176,8 @@ export const Game = (props) => {
             <ButtonBingo
               variant="primary"
               padding="0 15px"
+              loading={isLoadingSave}
+              disabled={isLoadingSave}
               onClick={() => createLobby("team")}
             >
               Modo equipo
@@ -175,6 +186,7 @@ export const Game = (props) => {
         </div>
         <ButtonBingo
           variant="primary"
+          className="btn-large"
           width="100%"
           align="left"
           onClick={() => setShowSettings(!showSettings)}
@@ -347,9 +359,13 @@ const GameCss = styled.div`
     }
   }
 
-  .anticon {
-    margin: 5px;
-    float: right;
+  .btn-large {
+    display: block;
+
+    .anticon {
+      margin: 5px !important;
+      float: right !important;
+    }
   }
 
   .options {
