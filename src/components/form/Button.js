@@ -31,7 +31,7 @@ const ButtonAntCss = styled(Button)`
   height: ${(props) => (props.height ? props.height : "auto")};
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 
   ${({ variant = "contained", theme, color = "primary" }) =>
     variant === "contained"

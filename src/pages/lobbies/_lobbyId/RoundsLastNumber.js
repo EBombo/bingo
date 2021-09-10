@@ -1,5 +1,6 @@
 import React from "reactn";
 import styled from "styled-components";
+import { mediaQuery } from "../../../constants";
 
 export const RoundsLastNumber = (props) => {
   return (
@@ -17,12 +18,14 @@ export const RoundsLastNumber = (props) => {
 };
 
 const Container = styled.div`
-  width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   background: ${(props) => props.theme.basic.blackDarken};
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0;
+  border-radius: 5px;
+  max-width: 125px;
 
   .item {
     display: flex;
@@ -31,8 +34,8 @@ const Container = styled.div`
     justify-content: space-evenly;
 
     .number {
-      font-size: 70px;
-      line-height: 85px;
+      font-size: 60px;
+      line-height: 75px;
       color: ${(props) => props.theme.basic.primary};
     }
 
@@ -40,9 +43,27 @@ const Container = styled.div`
       font-family: Lato;
       font-style: normal;
       font-weight: bold;
-      font-size: 13px;
-      line-height: 16px;
+      font-size: 12px;
+      line-height: 15px;
       color: ${(props) => props.theme.basic.whiteLight};
+    }
+  }
+
+  ${mediaQuery.afterTablet} {
+    max-width: 275px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    .item {
+      .number {
+        font-size: 70px;
+        line-height: 85px;
+      }
+
+      .description {
+        font-size: 13px;
+        line-height: 16px;
+      }
     }
   }
 `;
