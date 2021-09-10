@@ -17,7 +17,7 @@ export const UserLayout = (props) => {
   return (
     <UserLayoutCss>
       <div />
-      <div>{props.lobby.game.title}</div>
+      <div className="title">{props.lobby.game.title}</div>
       <div className="icon-menu">
         <Popover
           content={
@@ -41,6 +41,10 @@ const UserLayoutCss = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   background: ${(props) => props.theme.basic.white};
   padding: 5px 0;
+
+  .title {
+    text-align: center;
+  }
 
   .icon-menu {
     text-align: right;
