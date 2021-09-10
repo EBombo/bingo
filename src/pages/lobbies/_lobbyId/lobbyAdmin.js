@@ -122,7 +122,7 @@ export const LobbyAdmin = (props) => {
           <ButtonBingo
             variant="primary"
             margin="10px 20px"
-            padding="10px 20px"
+            padding="10px 30px"
             disabled={!users?.length}
             onClick={() => setGameStarted(new Date())}
           >
@@ -168,7 +168,7 @@ const LobbyCss = styled.div`
     }
 
     .item-pin {
-      width: 100%;
+      width: 370px;
       height: 370px;
       font-size: 20px;
       max-width: 400px;

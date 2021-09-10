@@ -1,3 +1,4 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import React, { forwardRef } from "reactn";
 import { darkTheme } from "../../theme";
 import styled from "styled-components";
@@ -10,12 +11,19 @@ export const ButtonBingo = forwardRef((props, ref) => {
       ? darkTheme.buttonSecondary
       : darkTheme.buttonDefault;
 
-  return <ButtonCss theme={theme} ref={ref} {...props} />;
+  return (
+    <ButtonCss theme={theme} ref={ref} {...props}>
+      {props.loading && <LoadingOutlined />}
+      {props.children}
+    </ButtonCss>
+  );
 });
 
 const ButtonCss = styled.button`
   border: none;
   cursor: pointer;
+  font-weight: 700;
+  font-family: Lato;
   border-radius: 4px;
   font-size: ${(props) => props.fontSize ?? "14px"};
   color: ${(props) => props.theme.color};
@@ -26,9 +34,13 @@ const ButtonCss = styled.button`
   box-shadow: 0 4px 0 ${(props) => props.theme.shadow};
   padding: ${(props) => props.padding ?? "10px 10px"};
 
+  .anticon {
+    margin: auto 5px !important;
+  }
+
   &[disabled] {
     cursor: not-allowed;
-    filter: grayscale(1);
-    pointer-events: none;
+    filter: contrast(0.5);
+    pointer-events: all;
   }
 `;
