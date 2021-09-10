@@ -14,7 +14,7 @@ export const Lobby = (props) => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!authUser) return router.push("/");
+    if (!authUser?.nickname && !authUser.isAdmin) return router.push("/");
   }, [authUser]);
 
   useEffect(() => {
@@ -48,7 +48,8 @@ export const Lobby = (props) => {
     console.log("generar cartilla para los usuarios");
   }, [lobby]);
 
-  if (isLoading || !authUser || !lobby) return spinLoaderMin();
+  if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby)
+    return spinLoaderMin();
 
   if (lobby.startAt) return <LoadingGame lobby={lobby} {...props} />;
 
