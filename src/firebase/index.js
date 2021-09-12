@@ -40,7 +40,7 @@ try {
 
 if (hostName.includes("-dev") || hostName.includes("localhost")) {
   config = configJson.development;
-  console.log("dev");
+  console.log("dev", version);
 } else {
   config = configJson.production;
   console.log("prod");
