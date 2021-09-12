@@ -62,8 +62,8 @@ if (isEmpty(firebase.apps)) {
   } catch (error) {
     console.error("error initializeApp", error);
   }
-  // Allow connection with events firebase
 
+  // Allow connection with events firebase
   try {
     firebase.initializeApp(config.firebaseEvents, "events");
     firestoreEvents = firebase.app("events").firestore();
