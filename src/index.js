@@ -27,7 +27,6 @@ serverExpress
             await server.prepare();
 
             await nextHandle(req, res);
-
         } catch (error) {
             logger.log("error", error);
             next(error);
