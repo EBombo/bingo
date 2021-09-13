@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev && cross-env NODE_ENV=development",
     "build": "next build && cross-env NODE_ENV=production",
-    "start": "next start",
+    "start": "next start -p ${PORT:-5000}",
     "analyze": "cross-env ANALYZE=true next build",
     "deployDev": "npm run build && cross-env NODE_ENV=development firebase deploy --only functions,hosting -P dev",
     "deployFrontDev": "npm run build && cross-env NODE_ENV=development firebase deploy --only functions:next,hosting -P dev",
