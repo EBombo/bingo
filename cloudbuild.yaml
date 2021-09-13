@@ -1,5 +1,5 @@
 steps:
-  - name: ubuntu
-    args:
-      - echo
-      - hello world
+  # Install dependencies
+  - name: node
+    entrypoint: npm
+    args: [ 'install' ]
