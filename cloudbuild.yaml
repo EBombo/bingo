@@ -1,2 +1,5 @@
 steps:
-  - name: 'gcr.io/cloud-builders/gcloud'
+  # Install dependencies
+  - name: node
+    entrypoint: npm
+    args: [ 'install' ]
