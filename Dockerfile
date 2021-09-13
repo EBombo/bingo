@@ -11,7 +11,6 @@ RUN npm install --force
 COPY . /app
 
 ARG SERVER_PORT=5000
-EXPOSE $SERVER_PORT
 
 RUN npm run build
 # start app
