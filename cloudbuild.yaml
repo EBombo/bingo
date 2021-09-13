@@ -1,8 +1,2 @@
 steps:
-  # Install dependencies
   - name: 'gcr.io/cloud-builders/docker'
-      args: [ 'build', '-t', 'gcr.io/bingo-322514/myimage', '.' ]
-  # Install dependencies
-  - name: node
-    entrypoint: npm
-    args: [ 'install' ]
