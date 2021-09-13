@@ -1,5 +1,10 @@
 steps:
-  # Install dependencies
-  - name: node
-    entrypoint: npm
-    args: [ 'install' ]
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - gcloud
+      - functions
+      - deploy
+      - api
+      - --region=us-central1
+      - --source=.
+      - --trigger-http
