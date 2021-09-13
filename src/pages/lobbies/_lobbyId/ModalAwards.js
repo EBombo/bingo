@@ -1,4 +1,4 @@
-import React from "reactn";
+import React, { useGlobal } from "reactn";
 import styled from "styled-components";
 import { ModalContainer } from "../../../components/common/ModalContainer";
 import get from "lodash/get";
@@ -7,6 +7,8 @@ import { mediaQuery } from "../../../constants";
 import { Input } from "antd";
 
 export const ModalAwards = (props) => {
+  const [authUser] = useGlobal("user");
+
   return (
     <ModalContainer
       background="#FAFAFA"
@@ -25,29 +27,33 @@ export const ModalAwards = (props) => {
                 defaultValue={get(award, "name", "")}
                 placeholder={`Premio ${index + 1}`}
               />
-              <ButtonAnt color="danger">Borrar</ButtonAnt>
+              {authUser.isAdmin && <ButtonAnt color="danger">Borrar</ButtonAnt>}
             </div>
           </div>
         ))}
-        <div className="label">Agregar premio</div>
-        <form action="">
-          <Input placeholder="Premio" />
-          <ButtonAnt
-            color="secondary"
-            onClick={() => props.setIsVisibleModalAwards(false)}
-          >
-            Agregar
-          </ButtonAnt>
-        </form>
-        <div className="btns-container">
-          <ButtonAnt
-            color="default"
-            onClick={() => props.setIsVisibleModalAwards(false)}
-          >
-            Volver
-          </ButtonAnt>
-          <ButtonAnt>Guardar</ButtonAnt>
-        </div>
+        {authUser.isAdmin && (
+          <>
+            <div className="label">Agregar premio</div>
+            <form action="">
+              <Input placeholder="Premio" />
+              <ButtonAnt
+                color="secondary"
+                onClick={() => props.setIsVisibleModalAwards(false)}
+              >
+                Agregar
+              </ButtonAnt>
+            </form>
+            <div className="btns-container">
+              <ButtonAnt
+                color="default"
+                onClick={() => props.setIsVisibleModalAwards(false)}
+              >
+                Volver
+              </ButtonAnt>
+              <ButtonAnt>Guardar</ButtonAnt>
+            </div>
+          </>
+        )}
       </AwardsContainer>
     </ModalContainer>
   );
