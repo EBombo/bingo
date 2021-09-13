@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "reactn";
+import React, { useEffect, useState, useGlobal } from "reactn";
 import styled from "styled-components";
 import { Chat } from "../../../components/chat";
 import { mediaQuery, Tablet, Desktop } from "../../../constants";
@@ -11,11 +11,15 @@ import { ModalAwards } from "./ModalAwards";
 import { UsersTabs } from "./UsersTabs";
 import { database } from "../../../firebase";
 import { useRouter } from "next/router";
+import { LastPlays } from "./LastPlays";
+import { BingoCard } from "./BingoCard";
+import { ButtonAnt } from "../../../components/form";
 
 export const BingoGame = (props) => {
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(true);
   const [isVisibleModalAwards, setIsVisibleModalAwards] = useState(false);
   const [users, setUsers] = useState([]);
+  const [authUser] = useGlobal("user");
   const [tabletTab, setTabletTab] = useState("bingo");
   const router = useRouter();
   const { lobbyId } = router.query;
@@ -53,30 +57,64 @@ export const BingoGame = (props) => {
       )}
       <Desktop>
         <div className="main-container">
-          <div className="bingo">
-            <div className="left-container">
-              <RoundsLastNumber lastNumber={35} round={6} {...props} />
-              <CardPattern caption={"Patrón que se debe llenar"} {...props} />
-            </div>
-            <div className="right-container">
-              <div className="board-container">
-                <BingoBoard numbers={[1, 15, 45, 68, 23, 32]} {...props} />
+          {authUser.isAdmin && (
+            <div className="bingo">
+              <div className="left-container">
+                <RoundsLastNumber lastNumber={35} round={6} {...props} />
+                <CardPattern caption={"Patrón que se debe llenar"} {...props} />
               </div>
-              <div className="bottom-section">
-                <div className="left">
-                  <GameOptions lastNumber={30} lastLetter={"I"} {...props} />
+              <div className="right-container">
+                <div className="board-container">
+                  <BingoBoard numbers={[1, 15, 45, 68, 23, 32]} {...props} />
                 </div>
-                <div className="right">
-                  <div
-                    className="awards"
-                    onClick={() => setIsVisibleModalAwards(true)}
-                  >
-                    Premios
+                <div className="bottom-section">
+                  <div className="left">
+                    <GameOptions lastNumber={30} lastLetter={"I"} {...props} />
+                  </div>
+                  <div className="right">
+                    <div
+                      className="awards"
+                      onClick={() => setIsVisibleModalAwards(true)}
+                    >
+                      Premios
+                    </div>
+                    <div className="last-plays-container">
+                      <LastPlays lastNumbers={[1, 34, 65, 26, 73]} {...props} />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
+          {!authUser.isAdmin && (
+            <div className="user-content">
+              <div className="left-user-content">
+                <BingoCard user={authUser} {...props} />
+              </div>
+              <div className="right-user-content">
+                <div className="top-content">
+                  <CardPattern
+                    caption={"Patrón que se debe llenar"}
+                    hiddenOptions
+                    {...props}
+                  />
+                  <GameOptions
+                    lastNumber={30}
+                    lastLetter={"I"}
+                    hiddenOptions
+                    {...props}
+                  />
+                </div>
+                <div className="buttons-container">
+                  <ButtonAnt>Bingo</ButtonAnt>
+                  <ButtonAnt color="default">Ver premios</ButtonAnt>
+                </div>
+                <div className="last-plays-container">
+                  <LastPlays lastNumbers={[1, 34, 65, 26, 73]} {...props} />
+                </div>
+              </div>
+            </div>
+          )}
           <div className="subtitle">Participantes</div>
           <UsersTabs
             users={[
@@ -109,7 +147,7 @@ export const BingoGame = (props) => {
               Participantes
             </div>
           </div>
-          {tabletTab === "bingo" && (
+          {tabletTab === "bingo" && authUser.isAdmin && (
             <>
               <div className="bingo-board">
                 <BingoBoard numbers={[1, 15, 45, 68, 23, 32]} {...props} />
@@ -126,6 +164,34 @@ export const BingoGame = (props) => {
                 onClick={() => setIsVisibleModalAwards(true)}
               >
                 Premios
+              </div>
+              <div className="chat-container">
+                <Chat title={"CHAT DEL BINGO"} />
+              </div>
+            </>
+          )}
+          {tabletTab === "bingo" && !authUser.isAdmin && (
+            <>
+              <div className="top-container-user">
+                <BingoCard user={authUser} {...props} />
+                <div className="right-container">
+                  <GameOptions
+                    lastNumber={30}
+                    lastLetter={"I"}
+                    hiddenOptions
+                    {...props}
+                  />
+                  <CardPattern
+                    caption={"Patrón que se debe llenar"}
+                    hiddenOptions
+                    {...props}
+                  />
+                </div>
+              </div>
+
+              <div className="buttons-container">
+                <ButtonAnt>Bingo</ButtonAnt>
+                <ButtonAnt color="default">Ver premios</ButtonAnt>
               </div>
               <div className="chat-container">
                 <Chat title={"CHAT DEL BINGO"} />
@@ -156,6 +222,27 @@ const BingoGameContainer = styled.div`
   height: 100vh;
 
   .main-container {
+    .top-container-user {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0;
+      
+      .right-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+    }
+    .buttons-container {
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+    }
+
     .tablet-tabs {
       height: 32px;
       background: ${(props) => props.theme.basic.primary};
@@ -233,6 +320,38 @@ const BingoGameContainer = styled.div`
 
     .main-container {
       padding: 0;
+
+      .user-content {
+        display: grid;
+        align-items: center;
+        grid-template-columns: repeat(2, 1fr);
+
+        .left-user-content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
+
+        .right-user-content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+
+          .top-content {
+            display: flex;
+            align-items: center;
+          }
+          .buttons-container {
+            width: 100%;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+          }
+        }
+      }
     }
 
     .chat-container {
@@ -242,8 +361,9 @@ const BingoGameContainer = styled.div`
     .bingo {
       padding: 0.5rem 0.5rem 2rem 0.5rem;
       display: grid;
-      grid-template-columns: 300px auto;
+      grid-template-columns: 1fr 2fr;
       border-bottom: 10px solid ${(props) => props.theme.basic.primary};
+      justify-content: center;
     }
 
     .left-container {
@@ -263,6 +383,10 @@ const BingoGameContainer = styled.div`
         margin-top: 1rem;
         display: grid;
         grid-template-columns: 335px auto;
+
+        .last-plays-container {
+          margin: 1rem 0;
+        }
       }
     }
 

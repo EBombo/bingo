@@ -43,6 +43,13 @@ export const darkTheme = {
     border: "#C4C4C4",
     shadow: "inset 0px 4px 10px rgba(0, 0, 0, 0.25);",
   },
+  ballsColors: {
+    b: "#81D574",
+    i: "#195D8B",
+    n: "#FD8E4D",
+    g: "#DBCD24",
+    o: "#E25D55",
+  },
 };
 
 export const lightTheme = {};

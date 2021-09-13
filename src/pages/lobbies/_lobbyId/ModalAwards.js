@@ -18,7 +18,7 @@ export const ModalAwards = (props) => {
       visible={props.isVisibleModalAwards}
     >
       <AwardsContainer>
-        <div className="title">Editar Premios</div>
+        <div className="title">{authUser.isAdmin ? "Editar " : ""} Premios</div>
         {props.awards.map((award, index) => (
           <div className="award">
             <div className="label">Premio {index + 1}</div>

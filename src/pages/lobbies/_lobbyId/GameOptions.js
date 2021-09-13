@@ -1,4 +1,4 @@
-import React, { useState, useGlobal } from "reactn";
+import React from "reactn";
 import styled from "styled-components";
 import { ButtonAnt } from "../../../components/form";
 import { Image } from "../../../components/common/Image";
@@ -6,43 +6,45 @@ import { config } from "../../../firebase";
 
 export const GameOptions = (props) => {
   return (
-    <GameOptionsContainer>
+    <GameOptionsContainer hiddenOptions={props.hiddenOptions}>
       <div className="out">
         <div className="in">
           <p>{props.lastLetter}</p>
           <p>{props.lastNumber}</p>
         </div>
       </div>
-      <div className="options">
-        <div className="btn-container">
-          <ButtonAnt width="100%">
-            Iniciar Juego
-            <Image
-              src={`${config.storageUrl}/resources/white-play.svg`}
-              height="15px"
-              width="15px"
-              size="contain"
-              margin="0"
-            />
-          </ButtonAnt>
+      {!props.hiddenOptions && (
+        <div className="options">
+          <div className="btn-container">
+            <ButtonAnt width="100%">
+              Iniciar Juego
+              <Image
+                src={`${config.storageUrl}/resources/white-play.svg`}
+                height="15px"
+                width="15px"
+                size="contain"
+                margin="0"
+              />
+            </ButtonAnt>
+          </div>
+          <div className="btn-container">
+            <ButtonAnt color="default" width="100%" className="btn-automatic">
+              Reproducción automática
+            </ButtonAnt>
+          </div>
+          <div className="btn-container">
+            <ButtonAnt variant="contained" color="default" width="100%">
+              Reiniciar tablero
+            </ButtonAnt>
+          </div>
         </div>
-        <div className="btn-container">
-          <ButtonAnt color="default" width="100%" className="btn-automatic">
-            Reproducción automática
-          </ButtonAnt>
-        </div>
-        <div className="btn-container">
-          <ButtonAnt variant="contained" color="default" width="100%">
-            Reiniciar tablero
-          </ButtonAnt>
-        </div>
-      </div>
+      )}
     </GameOptionsContainer>
   );
 };
 
 const GameOptionsContainer = styled.div`
-  width: 325px;
+  width: ${(props) => (props.hiddenOptions ? "105px" : "325px")};
   display: grid;
   grid-template-columns: 85px 220px;
   align-items: center;

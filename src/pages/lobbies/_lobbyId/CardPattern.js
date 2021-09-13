@@ -1,4 +1,4 @@
-import React, { useState } from "reactn";
+import React, { useState, useGlobal } from "reactn";
 import styled from "styled-components";
 import get from "lodash/get";
 import { ButtonAnt } from "../../../components/form";
@@ -7,13 +7,14 @@ import { ModalPattern } from "./ModalPattern";
 
 export const CardPattern = (props) => {
   const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
+  const [authUser] = useGlobal("user");
 
   const savePattern = () => {
     console.log("guardando");
   };
 
   return (
-    <PatternContainer>
+    <PatternContainer user={authUser}>
       {isVisibleModalPattern && (
         <ModalPattern
           isVisibleModalPattern={isVisibleModalPattern}
@@ -105,7 +106,7 @@ export const CardPattern = (props) => {
           </tr>
         </table>
       </div>
-      {!props.isEdit && (
+      {!props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
           <ButtonAnt>Apágon</ButtonAnt>
           <ButtonAnt
@@ -116,7 +117,7 @@ export const CardPattern = (props) => {
           </ButtonAnt>
         </div>
       )}
-      {props.isEdit && (
+      {props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
           <ButtonAnt color="default" onClick={() => props.cancelAction()}>
             Cancelar
@@ -140,6 +141,7 @@ const PatternContainer = styled.div`
     font-size: 12px;
     line-height: 14px;
     color: ${(props) => props.theme.basic.white};
+    text-align: center;
   }
 
   .table-container {
@@ -149,23 +151,31 @@ const PatternContainer = styled.div`
       border-collapse: separate;
       border-spacing: 5px;
       margin: auto;
+      background: ${(props) =>
+        !props.user.isAdmin ? props.theme.basic.primaryLight : "transparent"};
+      border-radius: 5px;
+      
+      
       
       th {
         font-family: Encode Sans;
         font-style: normal;
         font-weight: bold;
-        width: 25px;
-        height: 25px;
-        font-size: 14px;
-        line-height: 18px;
-        background: ${(props) => props.theme.basic.primaryLight};
+        width: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
+        height: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
+        font-size: ${(props) => (!props.user.isAdmin ? "11px" : "14px;")};
+        line-height: ${(props) => (!props.user.isAdmin ? "13px" : "18px")};
+        background: ${(props) =>
+          props.user.isAdmin
+            ? props.theme.basic.primaryLight
+            : props.theme.basic.secondary};
         color: ${(props) => props.theme.basic.white};
         border-radius: 3px;
       }
 
       td {
-        width: 25px;
-        height: 25px;
+        width: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
+        height: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
         background: ${(props) => props.theme.basic.primary};
         border-radius: 3px;
         position: relative;
@@ -175,8 +185,8 @@ const PatternContainer = styled.div`
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 15px;
-          height: 15px;
+          width: ${(props) => (!props.user.isAdmin ? "10px" : "15px")};
+          height: ${(props) => (!props.user.isAdmin ? "10px" : "15px")};
           border-radius: 50%;
           background: ${(props) => props.theme.basic.secondary};
         }
@@ -208,21 +218,21 @@ const PatternContainer = styled.div`
         border-spacing: 5px;
 
         th {
-          width: 35px;
-          height: 35px;
-          font-size: 26px;
-          line-height: 32px;
+          width: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
+          height: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
+          font-size: ${(props) => (!props.user.isAdmin ? "11px" : "26px;")};
+          line-height: ${(props) => (!props.user.isAdmin ? "13px" : "32px")};
         }
 
         td {
-          width: 35px;
-          height: 35px;
+          width: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
+          height: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
           font-size: 26px;
           line-height: 32px;
 
           .selected {
-            width: 20px;
-            height: 20px;
+            width: ${(props) => (!props.user.isAdmin ? "10px" : "20px")};
+            height: ${(props) => (!props.user.isAdmin ? "10px" : "20px")};
           }
         }
       }
