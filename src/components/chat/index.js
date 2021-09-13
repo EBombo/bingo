@@ -68,7 +68,6 @@ export const Chat = (props) => {
       .limit(limit)
       .onSnapshot((messagesSnapshot) => {
         setMessages(snapshotToArray(messagesSnapshot));
-        console.log(snapshotToArray(messagesSnapshot));
         setLoading(false);
       });
 

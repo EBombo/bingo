@@ -22,7 +22,6 @@ export const ModalWinner = (props) => {
             color="default"
             onClick={() => props.setIsVisibleModalWinner(false)}
           >
-            {" "}
             Cerrar
           </ButtonAnt>
         </div>
