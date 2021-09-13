@@ -9,6 +9,6 @@ COPY package.json /app/
 RUN npm install
 # copy app files and build
 COPY . /app
-RUN npm build
+RUN npm run build
 # start app
 CMD [ "npm", "start" ]
