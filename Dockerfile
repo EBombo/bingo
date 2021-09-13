@@ -10,7 +10,7 @@ RUN npm install --force
 # copy app files and build
 COPY . /app
 
-ARG SERVER_PORT=5000
+#ARG SERVER_PORT=5000
 
 RUN npm run build
 # start app
