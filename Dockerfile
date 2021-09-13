@@ -6,9 +6,13 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 # install and cache app dependencies
 COPY package.json /app/
-RUN npm install
+RUN npm install --force
 # copy app files and build
 COPY . /app
+
+ARG SERVER_PORT=5000
+EXPOSE $SERVER_PORT
+
 RUN npm run build
 # start app
-CMD [ "npm", "start" ]
+CMD ["npm", "run", "start"]
