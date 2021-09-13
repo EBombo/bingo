@@ -17,7 +17,7 @@ export const ModalUserCard = (props) => {
       visible={props.isVisibleModalUserCard}
     >
       <Content>
-        <div className="title-card">Cartilla{" "}{props.user.nickname}</div>
+        <div className="title-card">Cartilla {props.user.nickname}</div>
         <div className="card-container">
           <BingoCard user={props.user} {...props} />
         </div>
@@ -44,20 +44,27 @@ const Content = styled.div`
     font-size: 24px;
     line-height: 33px;
     margin: 1rem;
-    color: ${props => props.theme.basic.secondary};
+    color: ${(props) => props.theme.basic.secondary};
     text-align: center;
   }
-  
-  .card-container{
+
+  .card-container {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  
-  .btn-container{
+
+  .btn-container {
     margin: 1rem 0;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  ${mediaQuery.afterTablet} {
+    .title-card {
+      font-size: 30px;
+      line-height: 41px;
+    }
   }
 `;

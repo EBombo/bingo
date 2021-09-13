@@ -1,12 +1,26 @@
-import React from "reactn";
+import React, { useState } from "reactn";
 import styled from "styled-components";
 import get from "lodash/get";
 import { ButtonAnt } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
+import { ModalPattern } from "./ModalPattern";
 
 export const CardPattern = (props) => {
+  const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
+
+  const savePattern = () => {
+    console.log("guardando");
+  };
+
   return (
     <PatternContainer>
+      {isVisibleModalPattern && (
+        <ModalPattern
+          isVisibleModalPattern={isVisibleModalPattern}
+          setIsVisibleModalPattern={setIsVisibleModalPattern}
+          {...props}
+        />
+      )}
       <div className="caption">{props.caption}</div>
       <div className="table-container">
         <table>
@@ -91,10 +105,27 @@ export const CardPattern = (props) => {
           </tr>
         </table>
       </div>
-      <div className="btns-container">
-        <ButtonAnt>Apágon</ButtonAnt>
-        <ButtonAnt color="default">Limpiar</ButtonAnt>
-      </div>
+      {!props.isEdit && (
+        <div className="btns-container">
+          <ButtonAnt>Apágon</ButtonAnt>
+          <ButtonAnt
+            color="default"
+            onClick={() => setIsVisibleModalPattern(true)}
+          >
+            Limpiar
+          </ButtonAnt>
+        </div>
+      )}
+      {props.isEdit && (
+        <div className="btns-container">
+          <ButtonAnt color="default" onClick={() => props.cancelAction()}>
+            Cancelar
+          </ButtonAnt>
+          <ButtonAnt color="warning" onClick={() => savePattern()}>
+            Guardar
+          </ButtonAnt>
+        </div>
+      )}
     </PatternContainer>
   );
 };
