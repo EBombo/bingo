@@ -136,10 +136,10 @@ export const Game = (props) => {
   };
 
   const generatePin = async () => {
-    const pin = Math.floor(1000 + Math.random() * 900000);
+    const pin = Math.floor(100000 + Math.random() * 900000);
     const isValid = await validatePin(pin);
 
-    return isValid ? pin : await generatePin();
+    return isValid && pin > 99999 ? pin.toString() : await generatePin();
   };
 
   const validatePin = async (pin) => {

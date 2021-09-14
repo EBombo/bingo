@@ -50,7 +50,7 @@ const Login = (props) => {
   const fetchLobby = async (pin, callback) => {
     const lobbyRef = await firestore
       .collection("lobbies")
-      .where("pin", "==", +pin)
+      .where("pin", "==", pin.toString())
       .where("isLocked", "==", false)
       .limit(1)
       .get();
@@ -106,6 +106,7 @@ const Login = (props) => {
               <InputBingo
                 ref={register}
                 error={errors.pin}
+                type="number"
                 name="pin"
                 align="center"
                 width="100%"
@@ -155,6 +156,12 @@ const LoginContainer = styled.div`
     padding: 15px;
     border-radius: 4px;
     background: ${(props) => props.theme.basic.white};
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 `;
 
