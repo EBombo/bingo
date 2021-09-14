@@ -1,23 +1,23 @@
-# base image
 FROM node:15.2.1-alpine
 
-# working directory
+WORKDIR /build
+
+COPY package.json yarn.lock ./
+RUN yarn --frozen-lockfile
+
+COPY . .
+RUN yarn build && rm -rf .next/cache
+
+###
+# Exec Stage
+###
+FROM node:12-alpine
 WORKDIR /app
 
-# add binaries to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json yarn.lock ./
+RUN yarn --frozen-lockfile --production
 
-# install and cache app dependencies
-COPY package.json /app/
+COPY --from=builder /build/.next .next
+RUN mkdir pages
 
-RUN npm install
-
-# copy app files and build
-COPY . /app
-
-#ARG SERVER_PORT=5000
-
-RUN npm run build
-
-# start app
-CMD ["npm", "run", "start"]
+CMD ["yarn", "start:production"]
