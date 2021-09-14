@@ -18,5 +18,6 @@ COPY . /app
 #ARG SERVER_PORT=5000
 
 RUN npm run build
+
 # start app
 CMD ["npm", "run", "start"]
