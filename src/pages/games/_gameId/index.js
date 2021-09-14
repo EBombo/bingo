@@ -14,6 +14,7 @@ import {
   Switch,
 } from "../../../components/form";
 import { useUser } from "../../../hooks";
+import { Image } from "../../../components/common/Image";
 
 export const Game = (props) => {
   const router = useRouter();
@@ -33,6 +34,7 @@ export const Game = (props) => {
   const [cardAutofill, setCardAutofill] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
+  const [showBoardToUser, setShowBoardToUser] = useState(false);
   const [awards, setAwards] = useState([
     {
       name: "",
@@ -121,6 +123,7 @@ export const Game = (props) => {
           cardAutofill,
           showChat,
           showParticipants,
+          showBoardToUser,
           awards: showAwards ? awards : null,
         },
       });
@@ -288,6 +291,18 @@ export const Game = (props) => {
 
             <div className="option">
               <div>
+                <div className="title-opt">
+                  El usuario tiene la tabla general en su pantalla
+                </div>
+              </div>
+              <Switch
+                defaultChecked={showBoardToUser}
+                onChange={() => setShowBoardToUser(!showBoardToUser)}
+              />
+            </div>
+
+            <div className="option">
+              <div>
                 <div className="title-opt">Premio</div>
               </div>
               <Switch
@@ -295,21 +310,42 @@ export const Game = (props) => {
                 onChange={() => setShowAwards(!showAwards)}
               />
             </div>
+
             {showAwards && (
               <div className="awards-container" id={awards.length}>
                 {defaultTo(awards, []).map((award, index) => (
-                  <div className="input-container" key={`award-${index + 1}`}>
+                  <div className="input-container" key={`award-${index}`}>
                     <Input
                       type="text"
+                      name={`award-${index}`}
                       defaultValue={award.name}
                       onBlur={(e) => {
                         let newAwards = awards;
                         newAwards[index].name = e.target.value;
                         setAwards([...newAwards]);
                       }}
-                      placeholder={`Premio ${award.order}`}
+                      placeholder={`Premio ${index + 1}`}
                       className={"input-award"}
+                      key={`award-${index}-${award.order}`}
                     />
+                    <button
+                      className="btn-delete"
+                      onClick={() => {
+                        let newAwards = awards.filter(
+                          (award, idx) => idx !== index
+                        );
+
+                        setAwards([...newAwards]);
+                      }}
+                    >
+                      <Image
+                        src={`${config.storageUrl}/resources/close.svg`}
+                        height="15px"
+                        width="15px"
+                        size="contain"
+                        margin="0"
+                      />
+                    </button>
                   </div>
                 ))}
                 <ButtonAnt
@@ -396,6 +432,23 @@ const GameCss = styled.div`
   .awards-container {
     background: ${(props) => props.theme.basic.primary};
     padding: 0.5rem;
+
+    .input-container {
+      margin: 0.5rem 0;
+      position: relative;
+
+      .btn-delete {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        z-index: 999;
+        width: 15px;
+        height: 15px;
+      }
+    }
 
     .input-award {
       width: 100%;
