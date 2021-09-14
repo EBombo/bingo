@@ -8,8 +8,12 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package*.json /app/
 RUN npm install --force --only=production
 
+ENTRYPOINT ["npm", "run", "server:deploy"]
+
 ARG SERVER_PORT=5000
+ENV SERVER_PORT=$SERVER_PORT
 EXPOSE $SERVER_PORT
+
 # copy app files and build
 COPY . /app
 RUN npm build
