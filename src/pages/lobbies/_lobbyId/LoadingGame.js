@@ -27,7 +27,7 @@ export const LoadingGame = (props) => {
         <>
           <div className="step-one">
             <Image
-              src={`${config.storageUrl}/resources/white-icon-ebombo.svg`}
+              src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
               height="58px"
               width="222px"
               desktopHeight="92px"

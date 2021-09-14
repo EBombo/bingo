@@ -25,7 +25,7 @@ export const NicknameStep = (props) => {
   return (
     <NicknameForm onSubmit={handleSubmit(nicknameSubmit)}>
       <Image
-        src={`${config.storageUrl}/resources/white-icon-ebombo.svg`}
+        src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
         width="180px"
         margin="10px auto"
       />

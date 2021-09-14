@@ -98,7 +98,7 @@ const Login = (props) => {
         {!lobby && (
           <form onSubmit={handleSubmit(validatePin)}>
             <Image
-              src={`${config.storageUrl}/resources/white-icon-ebombo.svg`}
+              src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
               width="180px"
               margin="10px auto"
             />
