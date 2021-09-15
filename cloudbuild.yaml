@@ -3,3 +3,5 @@ steps:
     args: [ 'build', '-t', 'us-central1-docker.pkg.dev/bingo-322514/bingo-docker-repo/bingo-image:tag1', '.' ]
 images:
   - 'us-central1-docker.pkg.dev/bingo-322514/bingo-docker-repo/bingo-image:tag1'
+  - options:
+    logging: CLOUD_LOGGING_ONLY
