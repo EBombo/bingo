@@ -8,6 +8,8 @@ steps:
   - name: 'gcr.io/cloud-builders/gcloud'
     args: [ 'run', 'deploy', 'bingo', '--image', 'us-central1-docker.pkg.dev/bingo-322514/bingo-docker-repo/bingo-image:latest', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated' ]
   images:
-    - "us-central1-docker.pkg.dev/bingo-322514/bingo-docker-repo/bingo-image:latest"
+    - 'us-central1-docker.pkg.dev/bingo-322514/bingo-docker-repo/bingo-image:latest'
+
+  # options
   options:
     logging: CLOUD_LOGGING_ONLY
