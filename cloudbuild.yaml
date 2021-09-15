@@ -9,3 +9,6 @@ images:
   - 'us-central1-docker.pkg.dev/bingo-322514/bingo-docker-repo/bingo-image:latest'
 options:
   logging: CLOUD_LOGGING_ONLY
+  # TODO: Solicitar confirmacion de build y deploy de una nueva version.
+  # TODO: Enviar correo donde se informa la actualizacion.
+  # TODO: Notigicar que el envio fallo.
