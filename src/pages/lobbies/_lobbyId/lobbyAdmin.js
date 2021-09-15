@@ -4,7 +4,7 @@ import {
   UnlockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import React, { useEffect, useState } from "reactn";
+import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
 import { database, firestore } from "../../../firebase";
 import { ButtonBingo } from "../../../components/form";
@@ -17,20 +17,27 @@ import { BingoGame } from "./BingoGame";
 export const LobbyAdmin = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
+  const [audios] = useGlobal("audios");
   const [users, setUsers] = useState([]);
+  const [isPlay, setIsPlay] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [gameStarted, setGameStarted] = useState(null);
-  const [audio, setAudio] = useState(null);
+
+  const audioRef = useRef(null);
 
   useEffect(() => {
     if (!lobbyId) return;
 
-    const updateLobby = async () =>
+    const updateLobby = async () => {
+      setLoading(true);
       await firestore.doc(`lobbies/${lobbyId}`).update({
         isLocked,
         startAt: gameStarted,
         updateAt: new Date(),
       });
+      setLoading(false);
+    };
 
     updateLobby();
   }, [isLocked, gameStarted]);
@@ -56,29 +63,47 @@ export const LobbyAdmin = (props) => {
         <div className="left-menus">
           <Popover
             content={
-              <div style={{ width: 100 }}>
-                <div>musica1</div>
-                <div>musica2</div>
-                <div>musica3</div>
-              </div>
+              <AudioStyled>
+                {audios.map((audio_) => (
+                  <div
+                    key={audio_.id}
+                    className="item-audio"
+                    onClick={() => {
+                      if (audioRef.current) audioRef.current.pause();
+
+                      const currentAudio = new Audio(audio_.audioUrl);
+
+                      audioRef.current = currentAudio;
+                      audioRef.current.play();
+                      setIsPlay(true);
+                    }}
+                  >
+                    {audio_.title}
+                  </div>
+                ))}
+              </AudioStyled>
             }
           >
             <ButtonBingo
               variant="primary"
+              key={audioRef.current?.paused}
               margin="10px 20px"
               onClick={() => {
-                if (
-                  !props.lobby?.game?.audio?.audioUrl ||
-                  (audio && !audio?.paused)
-                )
-                  return;
+                if (audioRef.current && !audioRef.current?.paused) {
+                  audioRef.current.pause();
+                  return setIsPlay(false);
+                }
 
-                const audio_ = new Audio(props.lobby?.game.audio.audioUrl);
-                setAudio(audio_);
-                audio_.play();
+                const currentAudio =
+                  audioRef.current ??
+                  new Audio(props.lobby?.game.audio.audioUrl);
+
+                audioRef.current = currentAudio;
+                audioRef.current.play();
+                setIsPlay(true);
               }}
             >
-              {audio?.paused || !audio ? "►" : "♫"}
+              {isPlay ? "♫" : "►"}
             </ButtonBingo>
           </Popover>
           <Popover
@@ -87,8 +112,8 @@ export const LobbyAdmin = (props) => {
                 <Slider
                   defaultValue={30}
                   onChange={(event) => {
-                    if (!audio) return;
-                    audio.volume = event / 100;
+                    if (!audioRef.current) return;
+                    audioRef.current.volume = event / 100;
                   }}
                 />
               </div>
@@ -97,7 +122,7 @@ export const LobbyAdmin = (props) => {
             <ButtonBingo
               variant="primary"
               margin="10px 20px"
-              disabled={!audio || audio?.paused}
+              disabled={!isPlay}
             >
               <SoundOutlined />
             </ButtonBingo>
@@ -116,6 +141,8 @@ export const LobbyAdmin = (props) => {
           <ButtonBingo
             variant="primary"
             margin="10px 20px"
+            disabled={isLoading}
+            loading={isLoading}
             onClick={() => setIsLocked(!isLocked)}
           >
             {isLocked ? <LockOutlined /> : <UnlockOutlined />}
@@ -124,7 +151,8 @@ export const LobbyAdmin = (props) => {
             variant="primary"
             margin="10px 20px"
             padding="10px 30px"
-            disabled={!users?.length}
+            loading={isLoading}
+            disabled={!users?.length || isLoading}
             onClick={() => setGameStarted(new Date())}
           >
             EMPEZAR
@@ -150,7 +178,27 @@ export const LobbyAdmin = (props) => {
   );
 };
 
+const AudioStyled = styled.div`
+  width: 100%;
+
+  .item-audio {
+    cursor: pointer;
+    padding: 0 10px;
+
+    &:hover {
+      color: ${(props) => props.theme.basic.secondary};
+      background: ${(props) => props.theme.basic.primaryLight};
+    }
+  }
+`;
+
 const LobbyCss = styled.div`
+  width: fit-content;
+
+  ${mediaQuery.afterTablet} {
+    width: auto;
+  }
+
   .header {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -229,6 +277,10 @@ const LobbyCss = styled.div`
         border-radius: 5px;
         color: ${(props) => props.theme.basic.white};
         background: ${(props) => props.theme.basic.primary};
+
+        ${mediaQuery.afterTablet} {
+          padding: 15px 10px;
+        }
       }
     }
   }

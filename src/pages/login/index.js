@@ -115,7 +115,12 @@ const Login = (props) => {
                 disabled={isLoading}
                 placeholder="Pin del juego"
               />
-              <ButtonBingo width="100%" disabled={isLoading} htmlType="submit">
+              <ButtonBingo
+                width="100%"
+                disabled={isLoading}
+                loading={isLoading}
+                htmlType="submit"
+              >
                 Ingresar
               </ButtonBingo>
             </div>

@@ -1,10 +1,13 @@
-import React, { useEffect, useGlobal } from "reactn";
 import { config, database, firebase } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
+import React, { useEffect, useGlobal } from "reactn";
 import { mediaQuery } from "../../../constants";
 import styled from "styled-components";
+import { UserLayout } from "./userLayout";
+import { useRouter } from "next/router";
 
 export const LobbyUser = (props) => {
+  const router = useRouter();
   const [authUser] = useGlobal("user");
 
   useEffect(() => {
@@ -16,9 +19,9 @@ export const LobbyUser = (props) => {
     );
 
     const user = {
-      email: authUser.email ?? null,
-      userId: authUser.id,
-      nickname: authUser.nickname,
+      email: authUser?.email ?? null,
+      userId: authUser?.id ?? null,
+      nickname: authUser?.nickname ?? null,
       lobbyId: props.lobby.id,
     };
 
@@ -38,7 +41,6 @@ export const LobbyUser = (props) => {
       database.ref(".info/connected").on("value", async (snapshot) => {
         if (!snapshot.val()) return;
 
-        console.log("isOfflineForDatabase", isOfflineForDatabase);
         await userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase);
 
         userStatusDatabaseRef.set(isOnlineForDatabase);
@@ -57,6 +59,7 @@ export const LobbyUser = (props) => {
 
   return (
     <SuccessInscriptionContainer>
+      <UserLayout {...props} />
       <Image
         src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
         width="180px"
@@ -64,7 +67,7 @@ export const LobbyUser = (props) => {
       />
       <div className="message">Ya estas adentro :)</div>
       <div className="message">¿Vez tu nombre en pantalla?</div>
-      <div className="nickname">{authUser.nickname}</div>
+      <div className="nickname">{authUser?.nickname}</div>
     </SuccessInscriptionContainer>
   );
 };
