@@ -4,7 +4,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build', '-t', 'us-central1-docker.pkg.dev/bingo-322514/bingo-docker-repo/bingo-image:latest', '.' ]
   images:
-    - us-central1-docker.pkg.dev/bingo-322514/bingo-docker-repo/bingo-image:latest
+    - "us-central1-docker.pkg.dev/bingo-322514/bingo-docker-repo/bingo-image:latest"
 
     # Deploy container image to Cloud Run
     - name: 'gcr.io/cloud-builders/gcloud'
