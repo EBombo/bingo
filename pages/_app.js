@@ -7,7 +7,7 @@ import { darkTheme, GlobalStyle, lightTheme } from "../src/theme";
 import { ThemeProvider } from "styled-components";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallback } from "../src/components/error-fallback/ErrorFallback";
-import { WithAuthentication } from "../src/session/withAuthentication";
+import { WithAuthentication } from "../src/session/WithAuthentication";
 import { WithConfiguration } from "../src/session/WithConfiguration";
 import { config, firestoreEvents } from "../src/firebase";
 import { snapshotToArray } from "../src/utils";
