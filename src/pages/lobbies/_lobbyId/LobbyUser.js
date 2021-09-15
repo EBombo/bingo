@@ -63,7 +63,7 @@ export const LobbyUser = (props) => {
       <Image
         src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
         width="180px"
-        margin="10px auto"
+        margin="3rem auto 1rem auto"
       />
       <div className="message">Ya estas adentro :)</div>
       <div className="message">¿Vez tu nombre en pantalla?</div>

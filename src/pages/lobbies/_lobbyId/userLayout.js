@@ -1,9 +1,9 @@
-import { MoreOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import React, { useGlobal } from "reactn";
 import { Popover } from "antd";
 import { firestore } from "../../../firebase";
 import { useUser } from "../../../hooks";
+import { mediaQuery } from "../../../constants";
 
 export const UserLayout = (props) => {
   const [, setAuthUserLs] = useUser();
@@ -18,7 +18,7 @@ export const UserLayout = (props) => {
     <UserLayoutCss>
       <div />
       <div className="title">{props.lobby.game.title}</div>
-      <div className="icon-menu">
+      <div className="right-content">
         <Popover
           content={
             <div>
@@ -28,7 +28,11 @@ export const UserLayout = (props) => {
             </div>
           }
         >
-          <MoreOutlined />
+          <div className="icon-menu">
+            <span />
+            <span />
+            <span />
+          </div>
         </Popover>
       </div>
     </UserLayoutCss>
@@ -39,14 +43,36 @@ const UserLayoutCss = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
   background: ${(props) => props.theme.basic.white};
-  padding: 5px 0;
+  padding: 0.5rem;
+  height: 50px;
 
   .title {
     text-align: center;
   }
 
-  .icon-menu {
-    text-align: right;
+  .right-content {
+    display: flex;
+    justify-content: flex-end;
+
+    .icon-menu {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      flex-direction: column;
+      height: 30px;
+
+      span {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: ${(props) => props.theme.basic.blackDarken};
+      }
+    }
+  }
+
+  ${mediaQuery.afterTablet} {
+    padding: 0.5rem 1rem;
   }
 `;
