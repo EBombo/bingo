@@ -14,4 +14,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
   # TODO: Solicitar confirmacion de build y deploy de una nueva version.
   # TODO: Enviar correo donde se informa la actualizacion.
-  # TODO: Notigicar que el envio fallo.
+  # TODO: Notificar que el envio fallo.
