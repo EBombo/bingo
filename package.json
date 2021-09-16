@@ -2,6 +2,7 @@
   "name": "bingo-322514",
   "version": "0.1.0",
   "private": true,
+  "main": "functions/index.js",
   "scripts": {
     "dev": "next dev && cross-env NODE_ENV=development",
     "build:prod": "next build && cross-env NODE_ENV=production",
