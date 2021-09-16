@@ -6,6 +6,7 @@ import "firebase/database";
 import "firebase/auth";
 import configJson from "./config.json";
 import isEmpty from "lodash/isEmpty";
+import get from "lodash/get";
 
 const version = "0.0.1";
 
