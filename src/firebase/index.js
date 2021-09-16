@@ -23,7 +23,19 @@ let firestoreEvents;
 let storageEvents;
 let authEvents;
 
-hostName = window?.location?.hostname;
+try {
+  hostName =
+    process.env.NODE_ENV === "development"
+      ? "localhost"
+      : get(process, "env.GCLOUD_PROJECT", "");
+
+  if (typeof window !== "undefined")
+    hostName = window.location.hostname.replace("subdomain.", "");
+
+  console.log("projectId", hostName, process.env.NODE_ENV);
+} catch (error) {
+  console.log("Error environment", error);
+}
 
 if (hostName.includes("-dev") || hostName.includes("localhost")) {
   config = configJson.development;
