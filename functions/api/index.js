@@ -62,8 +62,8 @@ router.get("/error-vanilla", getError);
 
 api.use("/api", router);
 
-routerSeo.all("*", getSeo);
+//routerSeo.all("*", getSeo);
 
-api.use("/api/seo", routerSeo);
+//api.use("/api/seo", routerSeo);
 
 module.exports = { api };
