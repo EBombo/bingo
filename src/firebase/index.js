@@ -25,11 +25,7 @@ let authEvents;
 
 const hostName = window?.location?.hostname;
 
-if (
-  hostName.includes("-dev") ||
-  hostName.includes("localhost") ||
-  hostName.includes("run.app")
-) {
+if (hostName.includes("-dev") || hostName.includes("localhost")) {
   config = configJson.development;
 
   console.log("dev", version);
