@@ -23,7 +23,7 @@ let firestoreEvents;
 let storageEvents;
 let authEvents;
 
-const hostName = window?.location?.hostname;
+hostName = window?.location?.hostname;
 
 if (hostName.includes("-dev") || hostName.includes("localhost")) {
   config = configJson.development;
