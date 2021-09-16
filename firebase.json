@@ -12,10 +12,6 @@
         "function": "api"
       },
       {
-        "source": "/sw.js",
-        "destination": "/sw.js"
-      },
-      {
         "source": "**",
         "run": {
           "serviceId": "bingo",
