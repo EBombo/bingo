@@ -5,7 +5,6 @@ import "firebase/storage";
 import "firebase/database";
 import "firebase/auth";
 import configJson from "./config.json";
-import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 
 const version = "0.0.1";
@@ -24,26 +23,20 @@ let firestoreEvents;
 let storageEvents;
 let authEvents;
 
-try {
-  hostName =
-    process.env.NODE_ENV === "development"
-      ? "localhost"
-      : get(process, "env.GCLOUD_PROJECT", "");
+const hostName = window?.location?.hostname;
 
-  if (typeof window !== "undefined")
-    hostName = window.location.hostname.replace("subdomain.", "");
-
-  console.log("projectId", hostName);
-} catch (error) {
-  console.log("Error environment", error);
-}
-
-if (hostName.includes("-dev") || hostName.includes("localhost")) {
+if (
+  hostName.includes("-dev") ||
+  hostName.includes("localhost") ||
+  hostName.includes("run.app")
+) {
   config = configJson.development;
-  console.log("dev");
+
+  console.log("dev", version);
 } else {
   config = configJson.production;
-  console.log("prod");
+
+  console.log("prod", version);
 }
 
 if (isEmpty(firebase.apps)) {
