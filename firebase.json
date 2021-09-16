@@ -62,19 +62,6 @@
       }
     ]
   },
-  "functions": {
-    "source": ".",
-    "runtime": "nodejs10",
-    "ignore": [
-      ".firebase/**",
-      ".firebaserc",
-      "firebase.json",
-      "node_modules",
-      "**/node_modules/**",
-      "**/public/**",
-      "**/.next/cache/**"
-    ]
-  },
   "firestore": {
     "indexes": "firestore.indexes.json"
   },
