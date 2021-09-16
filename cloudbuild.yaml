@@ -28,3 +28,4 @@ options:
   # TODO: Enviar correo donde se informa la actualizacion.
   # TODO: Notificar que el envio fallo.
   # TODO: deploy functions.
+  # TODO: Format all files "npx prettier --write ."
