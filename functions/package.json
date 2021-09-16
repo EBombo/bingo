@@ -8,8 +8,7 @@
     "serve": "firebase serve --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
-    "deployProd": "firebase deploy --only functions -P default",
-    "deployDev": "firebase deploy --only functions -P dev",
+    "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "dependencies": {
