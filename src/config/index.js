@@ -1,1 +1,1 @@
-export {default as yup} from "./yup";
+export { default as yup } from "./yup";

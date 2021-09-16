@@ -1,27 +1,21 @@
 import React from "react";
 import Responsive from "react-responsive";
-import {breakPoints} from "./breakPoints";
+import { breakPoints } from "./breakPoints";
 
-const Desktop = props =>
-    <Responsive {...props}
-                minWidth={breakPoints.tablet}/>;
+const Desktop = (props) => (
+  <Responsive {...props} minWidth={breakPoints.tablet} />
+);
 
-const Tablet = props =>
-    <Responsive {...props}
-                maxWidth={breakPoints.tablet}/>;
+const Tablet = (props) => (
+  <Responsive {...props} maxWidth={breakPoints.tablet} />
+);
 
-const Mobile = props =>
-    <Responsive {...props}
-                maxWidth={breakPoints.mobile}/>;
+const Mobile = (props) => (
+  <Responsive {...props} maxWidth={breakPoints.mobile} />
+);
 
-const Kiosk = props =>
-    <Responsive {...props}
-                minDeviceWidth={1080}
-                maxDeviceWidth={1080}/>;
+const Kiosk = (props) => (
+  <Responsive {...props} minDeviceWidth={1080} maxDeviceWidth={1080} />
+);
 
-export {
-    Desktop,
-    Tablet,
-    Mobile,
-    Kiosk
-}
+export { Desktop, Tablet, Mobile, Kiosk };

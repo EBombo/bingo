@@ -4,11 +4,11 @@ import orderBy from "lodash/orderBy";
 
 export const aclMenus = (props) => {
   const currentMenus = props.menus.filter((menu) =>
-      isRouteEnabled({...props, menu})
+    isRouteEnabled({ ...props, menu })
   );
 
   return orderBy(currentMenus, ["index"], ["asc"]);
 };
 
 const isRouteEnabled = (props) =>
-    includes(props.userAcls, get(props, "menu.url"));
+  includes(props.userAcls, get(props, "menu.url"));

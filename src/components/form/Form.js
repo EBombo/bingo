@@ -1,21 +1,19 @@
-import React, {useEffect} from "react";
-import {useGlobal} from "reactn";
+import React, { useEffect } from "react";
+import { useGlobal } from "reactn";
 
-export const Form = props => {
-    const [languageCode] = useGlobal("languageCode");
+export const Form = (props) => {
+  const [languageCode] = useGlobal("languageCode");
 
-    useEffect(() => {
-        const {clearError, triggerValidation} = props;
+  useEffect(() => {
+    const { clearError, triggerValidation } = props;
 
-        const updateErrors = async () => {
-            await triggerValidation();
-            clearError();
-        };
+    const updateErrors = async () => {
+      await triggerValidation();
+      clearError();
+    };
 
-        updateErrors();
-    }, [languageCode, props]);
+    updateErrors();
+  }, [languageCode, props]);
 
-    return <form {...props} >
-        {props.children}
-    </form>;
+  return <form {...props}>{props.children}</form>;
 };

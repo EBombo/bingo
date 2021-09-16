@@ -1,28 +1,28 @@
 import React from "reactn";
 import styled from "styled-components";
 import Link from "next/link";
-import {useAcl} from "../../hooks";
-import {adminMenus} from "../../components/common/DataList";
-import {sizes} from "../../constants";
+import { useAcl } from "../../hooks";
+import { adminMenus } from "../../components/common/DataList";
+import { sizes } from "../../constants";
 
 export const AdminPage = () => {
-    const {aclMenus} = useAcl();
+  const { aclMenus } = useAcl();
 
-    return <WelcomeContainer>
-        <div className="title">Bienvenido Administrador</div>
-        <div className="list-subtitle">Lista de permisos otorgados</div>
-        <ul>
-            {
-                aclMenus({menus: adminMenus}).map(menu =>
-                    <li key={menu.url}>
-                        <Link href={menu.url}>
-                            <span>{menu.value}</span>
-                        </Link>
-                    </li>
-                )
-            }
-        </ul>
-    </WelcomeContainer>;
+  return (
+    <WelcomeContainer>
+      <div className="title">Bienvenido Administrador</div>
+      <div className="list-subtitle">Lista de permisos otorgados</div>
+      <ul>
+        {aclMenus({ menus: adminMenus }).map((menu) => (
+          <li key={menu.url}>
+            <Link href={menu.url}>
+              <span>{menu.value}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </WelcomeContainer>
+  );
 };
 
 const WelcomeContainer = styled.div`
@@ -44,7 +44,6 @@ const WelcomeContainer = styled.div`
   }
 
   ul {
-
     li {
       cursor: pointer;
       list-style-position: inside;

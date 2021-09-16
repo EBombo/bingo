@@ -1,27 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import {config} from "../../firebase";
-import {Image} from "../common/Image";
-import {mediaQuery} from "../../constants";
-import {ButtonAnt} from "../form";
+import { config } from "../../firebase";
+import { Image } from "../common/Image";
+import { mediaQuery } from "../../constants";
+import { ButtonAnt } from "../form";
 
-const UpdateVersion = () =>
-    <UpdateContainer>
-        <div className="card">
-            <Image src={`${config.storageUrl}/resources/${window.location.hostname}.png`}
-                   alt=""
-                   width={"96px"}
-                   height={"26px"}/>
-            <h2 className="title">
-                Por favor actualiza a la última versión de la plataforma
-            </h2>
-            <ButtonAnt
-                onClick={() => document.location.reload(true)}
-                fontSize="18px">
-                ACTUALIZAR
-            </ButtonAnt>
-        </div>
-    </UpdateContainer>;
+const UpdateVersion = () => (
+  <UpdateContainer>
+    <div className="card">
+      <Image
+        src={`${config.storageUrl}/resources/${window.location.hostname}.png`}
+        alt=""
+        width={"96px"}
+        height={"26px"}
+      />
+      <h2 className="title">
+        Por favor actualiza a la última versión de la plataforma
+      </h2>
+      <ButtonAnt onClick={() => document.location.reload(true)} fontSize="18px">
+        ACTUALIZAR
+      </ButtonAnt>
+    </div>
+  </UpdateContainer>
+);
 
 const UpdateContainer = styled.div`
   display: flex;

@@ -1,46 +1,47 @@
 import React from "react";
 import styled from "styled-components";
-import {LoadingOutlined} from "@ant-design/icons";
-import {mediaQuery} from "../../constants";
-import {config} from "../../firebase";
-import {Spin} from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import { mediaQuery } from "../../constants";
+import { config } from "../../firebase";
+import { Spin } from "antd";
 
-const antIcon = <LoadingOutlined className="spin-version-icon"/>;
+const antIcon = <LoadingOutlined className="spin-version-icon" />;
 
-export const spinLoader = () =>
-    <SpinLoader>
-        <Spin indicator={antIcon}
-              spinning={true}
-              className="spin-version">
-        </Spin>
-    </SpinLoader>;
+export const spinLoader = () => (
+  <SpinLoader>
+    <Spin indicator={antIcon} spinning={true} className="spin-version"></Spin>
+  </SpinLoader>
+);
 
-export const spinLoaderMin = () =>
-    <SpinLoaderMin>
-        <Spin indicator={antIcon}
-              spinning={true}
-              className="spin-version">
-        </Spin>
-    </SpinLoaderMin>;
+export const spinLoaderMin = () => (
+  <SpinLoaderMin>
+    <Spin indicator={antIcon} spinning={true} className="spin-version"></Spin>
+  </SpinLoaderMin>
+);
 
-export const LogoSpin = () =>
-    <SpinLoaderLogo>
-        <div className="logo-spin">
-            <div className="item-preloader">
-                <img src={`${config.storageUrl}/resources/${window.location.hostname}.png`}
-                     alt="Preloader bombo"/>
-                <label htmlFor="cargando..."
-                       style={{display: "flex"}}>
-                    <span>Cargando</span>
-                    <marquee loop
-                             scrolldelay="300"
-                             direction="right"
-                             style={{width: "10px"}}>. . .
-                    </marquee>
-                </label>
-            </div>
-        </div>
-    </SpinLoaderLogo>;
+export const LogoSpin = () => (
+  <SpinLoaderLogo>
+    <div className="logo-spin">
+      <div className="item-preloader">
+        <img
+          src={`${config.storageUrl}/resources/${window.location.hostname}.png`}
+          alt="Preloader bombo"
+        />
+        <label htmlFor="cargando..." style={{ display: "flex" }}>
+          <span>Cargando</span>
+          <marquee
+            loop
+            scrolldelay="300"
+            direction="right"
+            style={{ width: "10px" }}
+          >
+            . . .
+          </marquee>
+        </label>
+      </div>
+    </div>
+  </SpinLoaderLogo>
+);
 
 const SpinLoaderLogo = styled.div`
   display: flex;
@@ -60,7 +61,7 @@ const SpinLoaderLogo = styled.div`
       justify-content: center;
       align-items: center;
       text-align: center;
-      color: ${props => props.theme.basic.white};
+      color: ${(props) => props.theme.basic.white};
 
       label {
         margin-top: 5px;
@@ -73,15 +74,13 @@ const SpinLoaderLogo = styled.div`
           width: 250px;
         }
       }
-
     }
   }
 `;
 
 const SpinLoader = styled.div`
-
   .spin-version {
-    color: ${props => props.theme.primary};
+    color: ${(props) => props.theme.primary};
     display: flex;
     justify-content: center;
     align-items: center;

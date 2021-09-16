@@ -23,21 +23,21 @@ export const LastPlays = (props) => {
 const Container = styled.div`
   width: 100%;
   max-width: 450px;
-  
+
   .balls {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  
-  .label{
+
+  .label {
     margin: 0.5rem 0;
     font-family: Lato;
     font-style: italic;
     font-weight: normal;
     font-size: 10px;
     line-height: 12px;
-    color: #A3A3A3;
+    color: #a3a3a3;
   }
 `;
 

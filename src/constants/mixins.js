@@ -1,12 +1,12 @@
-import {colorBlack, colorPrimary, colorRed, colorWhite} from "./colors";
-import {mediaQuery} from "./mediaQuery";
+import { colorBlack, colorPrimary, colorRed, colorWhite } from "./colors";
+import { mediaQuery } from "./mediaQuery";
 
 export const rgbaPrimary = (opacity) => {
-    return `background: rgba(105, 232, 160, ${opacity});`;
+  return `background: rgba(105, 232, 160, ${opacity});`;
 };
 
 export const btnPrimary = (fonSize, fontWeight, margin, width, height) => {
-    return `display: flex;
+  return `display: flex;
           justify-content: center;
           text-align: center;
           align-items: center;
@@ -19,11 +19,20 @@ export const btnPrimary = (fonSize, fontWeight, margin, width, height) => {
           height: ${height};
           font-size: ${fonSize};
           font-weight: ${fontWeight};
-          margin: ${margin};`
+          margin: ${margin};`;
 };
 
-export const btnPrimaryGeneral = (fonSize, fontWeight, margin, width, height, color, bgColor, borderRadius) => {
-    return `display: flex;
+export const btnPrimaryGeneral = (
+  fonSize,
+  fontWeight,
+  margin,
+  width,
+  height,
+  color,
+  bgColor,
+  borderRadius
+) => {
+  return `display: flex;
     justify-content: center;
     align-items: center;
     border-radius: ${borderRadius};
@@ -36,11 +45,11 @@ export const btnPrimaryGeneral = (fonSize, fontWeight, margin, width, height, co
     font-weight: ${fontWeight};
     background: ${bgColor}!important;
     color: ${color}!important;
-    margin: ${margin};`
+    margin: ${margin};`;
 };
 
 export const btnDashed = (fonSize, fontWeight, margin, width, height) => {
-    return `display: flex;
+  return `display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
@@ -57,7 +66,7 @@ export const btnDashed = (fonSize, fontWeight, margin, width, height) => {
 };
 
 export const btnDashedLive = (fonSize, fontWeight, margin, width, height) => {
-    return `display: flex;
+  return `display: flex;
             justify-content: center;
             text-align: center;
             border-radius: 7px;
@@ -72,8 +81,14 @@ export const btnDashedLive = (fonSize, fontWeight, margin, width, height) => {
             height: ${height};`;
 };
 
-export const moneyBombo = (widthHeight, fontSize, borderSize, borderRadius, colorMoney) => {
-    return `padding: 8px;
+export const moneyBombo = (
+  widthHeight,
+  fontSize,
+  borderSize,
+  borderRadius,
+  colorMoney
+) => {
+  return `padding: 8px;
             font-weight: 600;
             display: flex;
             align-items: center;
@@ -87,7 +102,7 @@ export const moneyBombo = (widthHeight, fontSize, borderSize, borderRadius, colo
 };
 
 export const dot = (size, bgColor) => {
-    return `border-radius: 50%;
+  return `border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -98,7 +113,7 @@ export const dot = (size, bgColor) => {
 
 //HOVER - FOCUS BUTTONS
 export const btnPrimaryHoverFocus = (borderColor, colorText, bgColor) => {
-    return `&:hover, &:focus {
+  return `&:hover, &:focus {
         border-color: ${borderColor};
         color: ${colorText};
         background: ${bgColor};
@@ -107,7 +122,7 @@ export const btnPrimaryHoverFocus = (borderColor, colorText, bgColor) => {
 
 //HOVER - FOCUS SELECTS AND INPUTS
 export const selectPrimaryHoverFocus = (borderColor, colorText, bgColor) => {
-    return `&:hover, &:focus {
+  return `&:hover, &:focus {
         border-color: ${borderColor};
         color: ${colorText};
         background: ${bgColor};
@@ -115,7 +130,7 @@ export const selectPrimaryHoverFocus = (borderColor, colorText, bgColor) => {
 };
 
 export const inputPrimaryHoverFocus = (borderColor, colorText, bgColor) => {
-    return `&:hover, &:focus {
+  return `&:hover, &:focus {
         border-color: ${borderColor};
         color: ${colorText};
         background: ${bgColor};
@@ -123,7 +138,7 @@ export const inputPrimaryHoverFocus = (borderColor, colorText, bgColor) => {
 };
 
 export const inputPrimaryHoverFocusTwo = (borderColor, colorText, bgColor) => {
-    return `&:hover, &:focus {
+  return `&:hover, &:focus {
         border-color: ${borderColor};
         color: ${colorText};
         background: ${bgColor};
@@ -134,7 +149,7 @@ export const inputPrimaryHoverFocusTwo = (borderColor, colorText, bgColor) => {
 
 //AUTO FILLS SELECT AND INPUTS
 export const inputAutoFill = (cursorColor, borderColor, textColor, bgColor) => {
-    return `&:-webkit-autofill,
+  return `&:-webkit-autofill,
             &:-webkit-autofill:hover,
             &:-webkit-autofill:focus {
                     caret-color: ${cursorColor};
@@ -145,8 +160,13 @@ export const inputAutoFill = (cursorColor, borderColor, textColor, bgColor) => {
                 }`;
 };
 
-export const selectAutoFill = (cursorColor, borderColor, textColor, bgColor) => {
-    return `&:-webkit-autofill,
+export const selectAutoFill = (
+  cursorColor,
+  borderColor,
+  textColor,
+  bgColor
+) => {
+  return `&:-webkit-autofill,
             &:-webkit-autofill:hover,
             &:-webkit-autofill:focus {
                     caret-color: ${cursorColor};
@@ -159,19 +179,18 @@ export const selectAutoFill = (cursorColor, borderColor, textColor, bgColor) => 
 
 //FONT SIZE TABS
 export const tabsFontSize = (fontSize) => {
-    return `font-size: ${fontSize};`;
+  return `font-size: ${fontSize};`;
 };
 
 //FONT WEIGHT FONTS
 export const fontWeightFont = (weight) => {
-    return `font-family: 'Encode Sans', sans-serif;
+  return `font-family: 'Encode Sans', sans-serif;
     font-weight: ${weight};`;
 };
 
-
 //WALLET BUTTON
 export const walletButton = (background, colorOne, colorTwo) => {
-    return `width: 100%;
+  return `width: 100%;
             margin-bottom: 10px;
             display: flex;
             padding: 12px;
@@ -206,9 +225,15 @@ export const walletButton = (background, colorOne, colorTwo) => {
             }`;
 };
 
-
-export const iconCaptainDynamic = (width, height, bgColor, color, fontSize, fontWeight) => {
-    return `width:${width};
+export const iconCaptainDynamic = (
+  width,
+  height,
+  bgColor,
+  color,
+  fontSize,
+  fontWeight
+) => {
+  return `width:${width};
             height: ${height};
             background: ${bgColor};
             color: ${color};
@@ -220,15 +245,14 @@ export const iconCaptainDynamic = (width, height, bgColor, color, fontSize, font
             align-items: center;`;
 };
 
-
 export const centerFlexBox = () => {
-    return `display: flex;
+  return `display: flex;
         justify-content: center;
         align-items: center;`;
 };
 
 export const flexBoxDynamic = (vertical, horizontal) => {
-    return `display: flex;
+  return `display: flex;
         justify-content: ${horizontal};
         align-items: ${vertical};`;
 };

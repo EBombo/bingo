@@ -1,26 +1,26 @@
-import React, {forwardRef} from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
-import {sizes} from "../../constants";
+import { sizes } from "../../constants";
 
-export const TextArea = forwardRef((props, ref) =>
-    <InputContainer marginBottom={props.marginBottom}>
-        {props.label && <Label required={props.required}>{props.label}</Label>}
-        <InputWrapper>
-          <span
-              className="ant-input-wrapper ant-input-group"
-              style={{display: "table"}}
-          >
-            <StyledInput
-                hasError={props.error}
-                {...props}
-                ref={ref}
-                className={props.className ? props.className : "ant-input"}
-            />
-          </span>
-        </InputWrapper>
-        {props.error && <Error>{props.error.message}</Error>}
-    </InputContainer>
-);
+export const TextArea = forwardRef((props, ref) => (
+  <InputContainer marginBottom={props.marginBottom}>
+    {props.label && <Label required={props.required}>{props.label}</Label>}
+    <InputWrapper>
+      <span
+        className="ant-input-wrapper ant-input-group"
+        style={{ display: "table" }}
+      >
+        <StyledInput
+          hasError={props.error}
+          {...props}
+          ref={ref}
+          className={props.className ? props.className : "ant-input"}
+        />
+      </span>
+    </InputWrapper>
+    {props.error && <Error>{props.error.message}</Error>}
+  </InputContainer>
+));
 
 const InputContainer = styled.div`
   margin-bottom: ${(props) => props.marginBottom || "1rem"} !important;
@@ -30,7 +30,7 @@ const Label = styled.label`
   display: block;
   margin-bottom: 0.5rem;
   font-size: ${sizes.font.mini};
-  color: ${props => props.theme.basic.primary};
+  color: ${(props) => props.theme.basic.primary};
 
   ${(props) =>
     props.required &&
@@ -54,9 +54,11 @@ const InputWrapper = styled.div`
 `;
 
 const StyledInput = styled.textarea`
-  background: ${props => props.background ? props.background : "transparent"};
-  color: ${props => props.color ? props.color : "white"};
-  border: ${props => props.border ? props.border : `1px solid ${props.theme.basic.primary}`};
+  background: ${(props) =>
+    props.background ? props.background : "transparent"};
+  color: ${(props) => (props.color ? props.color : "white")};
+  border: ${(props) =>
+    props.border ? props.border : `1px solid ${props.theme.basic.primary}`};
   ${(props) =>
     !props.addonBefore &&
     `
@@ -66,7 +68,8 @@ const StyledInput = styled.textarea`
   ${(props) =>
     props.hasError &&
     `
-    background: ${props => props.background ? props.background : "transparent"};
+    background: ${(props) =>
+      props.background ? props.background : "transparent"};
     border-color: ${props.theme.basic.danger};!important;
   `} ${(props) => props.borderRadius && `border-radius: ${props.borderRadius};`}
 `;

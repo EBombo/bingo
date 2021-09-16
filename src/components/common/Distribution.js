@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import {mediaQuery} from "../../constants";
+import { mediaQuery } from "../../constants";
 
 export const Distribution3Styled = styled.div`
-  color: ${props => props.theme.basic.white};
+  color: ${(props) => props.theme.basic.white};
   height: 100%;
   width: 100%;
-  padding-bottom: ${props => props.footerBar ? props.footerBar : "0px"};
+  padding-bottom: ${(props) => (props.footerBar ? props.footerBar : "0px")};
 
   ${mediaQuery.afterTablet} {
     display: grid;
@@ -16,14 +16,14 @@ export const Distribution3Styled = styled.div`
 `;
 
 export const Distribution3CenterStyled = styled.div`
-  color: ${props => props.theme.basic.white};
+  color: ${(props) => props.theme.basic.white};
   height: 100%;
   width: 100%;
-  padding-bottom: ${props => props.footerBar ? props.footerBar : "0px"};
+  padding-bottom: ${(props) => (props.footerBar ? props.footerBar : "0px")};
 
   ${mediaQuery.afterTablet} {
     display: grid;
-    grid-template-columns: .5fr 1fr .5fr;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
     height: 100%;
     width: 100%;
     padding: 0;
@@ -31,14 +31,14 @@ export const Distribution3CenterStyled = styled.div`
 `;
 
 export const Distribution4Center = styled.div`
-  color: ${props => props.theme.basic.white};
+  color: ${(props) => props.theme.basic.white};
   height: 100%;
   width: 100%;
-  padding-bottom: ${props => props.footerBar ? props.footerBar : "0px"};
+  padding-bottom: ${(props) => (props.footerBar ? props.footerBar : "0px")};
 
   ${mediaQuery.afterTablet} {
     display: grid;
-    grid-template-columns: .5fr .5fr .5fr .5fr;
+    grid-template-columns: 0.5fr 0.5fr 0.5fr 0.5fr;
     height: 100%;
     width: 100%;
     padding: 0;
@@ -46,10 +46,10 @@ export const Distribution4Center = styled.div`
 `;
 
 export const Distribution2LeftStyled = styled.div`
-  color: ${props => props.theme.basic.white};
+  color: ${(props) => props.theme.basic.white};
   height: 100%;
   width: 100%;
-  padding-bottom: ${props => props.footerBar ? props.footerBar : "0px"};
+  padding-bottom: ${(props) => (props.footerBar ? props.footerBar : "0px")};
 
   ${mediaQuery.afterTablet} {
     display: grid;
@@ -61,10 +61,10 @@ export const Distribution2LeftStyled = styled.div`
 `;
 
 export const Distribution2RightStyled = styled.div`
-  color: ${props => props.theme.basic.white};
+  color: ${(props) => props.theme.basic.white};
   height: 100%;
   width: 100%;
-  padding-bottom: ${props => props.footerBar ? props.footerBar : "0px"};
+  padding-bottom: ${(props) => (props.footerBar ? props.footerBar : "0px")};
 
   ${mediaQuery.afterTablet} {
     display: grid;
@@ -76,10 +76,10 @@ export const Distribution2RightStyled = styled.div`
 `;
 
 export const Distribution2CenterStyled = styled.div`
-  color: ${props => props.theme.basic.white};
+  color: ${(props) => props.theme.basic.white};
   height: 100%;
   width: 100%;
-  padding-bottom: ${props => props.footerBar ? props.footerBar : "0px"};
+  padding-bottom: ${(props) => (props.footerBar ? props.footerBar : "0px")};
 
   ${mediaQuery.afterTablet} {
     display: grid;
@@ -91,11 +91,12 @@ export const Distribution2CenterStyled = styled.div`
 `;
 
 export const DistributionCol = styled.div`
-  background: ${props => props.background ? props.background : "transparent"};
-  ${props => props.color ? `color:${props.color};` : ""};
+  background: ${(props) =>
+    props.background ? props.background : "transparent"};
+  ${(props) => (props.color ? `color:${props.color};` : "")};
   padding: 10px 8px;
   overflow-y: hidden;
-  ${props => !isNaN(props.visible) && !props.visible && "display:none;"};
+  ${(props) => !isNaN(props.visible) && !props.visible && "display:none;"};
 
   ${mediaQuery.afterTablet} {
     overflow-y: auto;

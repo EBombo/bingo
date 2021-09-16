@@ -1,31 +1,29 @@
-import React, {useState} from "reactn";
+import React, { useState } from "reactn";
 import styled from "styled-components";
-import {mediaQuery} from "../../constants";
-import {AppstoreAddOutlined, LoadingOutlined} from "@ant-design/icons";
+import { mediaQuery } from "../../constants";
+import { AppstoreAddOutlined, LoadingOutlined } from "@ant-design/icons";
 import usePWA from "react-pwa-install-prompt";
 
 const PWA = () => {
-    const [loading, setLoading] = useState(false);
-    const {isStandalone, isInstallPromptSupported, promptInstall} = usePWA();
+  const [loading, setLoading] = useState(false);
+  const { isStandalone, isInstallPromptSupported, promptInstall } = usePWA();
 
-    return (isInstallPromptSupported && !isStandalone)
-        ? <PWAIconCss onClick={async () => {
-            setLoading(true);
-            await promptInstall();
-            setLoading(false);
-        }}>
-            {
-                loading
-                    ? <LoadingOutlined/>
-                    : <AppstoreAddOutlined/>
-            }
-        </PWAIconCss>
-        : null
+  return isInstallPromptSupported && !isStandalone ? (
+    <PWAIconCss
+      onClick={async () => {
+        setLoading(true);
+        await promptInstall();
+        setLoading(false);
+      }}
+    >
+      {loading ? <LoadingOutlined /> : <AppstoreAddOutlined />}
+    </PWAIconCss>
+  ) : null;
 };
 
 const PWAIconCss = styled.div`
-  background-color: ${props => props.theme.basic.blackDarken};
-  color: ${props => props.theme.basic.primary};
+  background-color: ${(props) => props.theme.basic.blackDarken};
+  color: ${(props) => props.theme.basic.primary};
   display: flex;
   position: fixed;
   bottom: 150px;

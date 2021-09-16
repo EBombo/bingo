@@ -1,7 +1,6 @@
 import React from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../constants";
-import map from "lodash/map";
 import get from "lodash/get";
 
 export const BingoBoard = (props) => {
@@ -44,27 +43,57 @@ export const BingoBoard = (props) => {
         <tbody>
           <tr>
             {range(1, 15).map((number) => (
-              <td className={`td-numbers ${props.numbers.includes(number) && `active`}`}>{number}</td>
+              <td
+                className={`td-numbers ${
+                  props.numbers.includes(number) && `active`
+                }`}
+              >
+                {number}
+              </td>
             ))}
           </tr>
           <tr>
             {range(16, 30).map((number) => (
-              <td className={`td-numbers ${props.numbers.includes(number) && `active`}`}>{number}</td>
+              <td
+                className={`td-numbers ${
+                  props.numbers.includes(number) && `active`
+                }`}
+              >
+                {number}
+              </td>
             ))}
           </tr>
           <tr>
             {range(31, 45).map((number) => (
-              <td className={`td-numbers ${props.numbers.includes(number) && `active`}`}>{number}</td>
+              <td
+                className={`td-numbers ${
+                  props.numbers.includes(number) && `active`
+                }`}
+              >
+                {number}
+              </td>
             ))}
           </tr>
           <tr>
             {range(46, 60).map((number) => (
-              <td className={`td-numbers ${props.numbers.includes(number) && `active`}`}>{number}</td>
+              <td
+                className={`td-numbers ${
+                  props.numbers.includes(number) && `active`
+                }`}
+              >
+                {number}
+              </td>
             ))}
           </tr>
           <tr>
             {range(61, 75).map((number) => (
-              <td className={`td-numbers ${props.numbers.includes(number) && `active`}`}>{number}</td>
+              <td
+                className={`td-numbers ${
+                  props.numbers.includes(number) && `active`
+                }`}
+              >
+                {number}
+              </td>
             ))}
           </tr>
         </tbody>
@@ -105,7 +134,7 @@ const BoardContainer = styled.div`
     tbody {
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly; 
+      justify-content: space-evenly;
 
       .td-numbers {
         width: 20px;
@@ -120,8 +149,8 @@ const BoardContainer = styled.div`
         font-size: 10px;
         line-height: 15px;
       }
-      
-      .active{
+
+      .active {
         background: ${(props) => props.theme.basic.primary};
         color: ${(props) => props.theme.basic.whiteDark};
       }

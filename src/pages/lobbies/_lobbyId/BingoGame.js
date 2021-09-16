@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useGlobal } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Chat } from "../../../components/chat";
-import { mediaQuery, Tablet, Desktop } from "../../../constants";
+import { Desktop, mediaQuery, Tablet } from "../../../constants";
 import { BingoBoard } from "./BingoBoard";
 import { RoundsLastNumber } from "./RoundsLastNumber";
 import { GameOptions } from "./GameOptions";
@@ -228,8 +228,8 @@ const BingoGameContainer = styled.div`
       align-items: center;
       justify-content: center;
       margin: 1rem 0;
-      
-      .right-container{
+
+      .right-container {
         display: flex;
         align-items: center;
         justify-content: center;

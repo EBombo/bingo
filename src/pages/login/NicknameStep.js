@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "reactn";
+import React, { useEffect, useState } from "reactn";
 import { ButtonBingo, InputBingo } from "../../components/form";
 import { Image } from "../../components/common/Image";
 import { useForm } from "react-hook-form";
@@ -32,7 +32,10 @@ export const NicknameStep = (props) => {
     try {
       if (users.some((user) => user.nickname === data.nickname)) {
         setIsValidating(false);
-        props.showNotification("ERROR", "El nickname ya se encuentra registrado");
+        props.showNotification(
+          "ERROR",
+          "El nickname ya se encuentra registrado"
+        );
         return;
       }
 

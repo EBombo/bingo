@@ -1,3 +1,3 @@
-const {postMessage} = require("./postMessage");
+const { postMessage } = require("./postMessage");
 
 module.exports = { postMessage };

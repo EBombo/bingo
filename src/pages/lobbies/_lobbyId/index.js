@@ -5,7 +5,7 @@ import { spinLoaderMin } from "../../../components/common/loader";
 import { LobbyAdmin } from "./lobbyAdmin";
 import { LobbyUser } from "./LobbyUser";
 import { LoadingGame } from "./LoadingGame";
-import {BingoGame} from "./BingoGame";
+import { BingoGame } from "./BingoGame";
 
 export const Lobby = (props) => {
   const router = useRouter();
@@ -52,7 +52,8 @@ export const Lobby = (props) => {
   if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby)
     return spinLoaderMin();
 
-  if(lobby.bingoCardsDistributed) return <BingoGame lobby={lobby} {...props} />;
+  if (lobby.bingoCardsDistributed)
+    return <BingoGame lobby={lobby} {...props} />;
 
   if (lobby.startAt) return <LoadingGame lobby={lobby} {...props} />;
 
