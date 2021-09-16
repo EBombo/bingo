@@ -12,10 +12,6 @@
         "function": "api"
       },
       {
-        "source": "/sw.js",
-        "destination": "/sw.js"
-      },
-      {
         "source": "**",
         "run": {
           "serviceId": "bingo-dev",
@@ -60,19 +56,6 @@
           }
         ]
       }
-    ]
-  },
-  "functions": {
-    "source": ".",
-    "runtime": "nodejs10",
-    "ignore": [
-      ".firebase/**",
-      ".firebaserc",
-      "firebase.json",
-      "node_modules",
-      "**/node_modules/**",
-      "**/public/**",
-      "**/.next/cache/**"
     ]
   },
   "firestore": {

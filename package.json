@@ -2,21 +2,18 @@
   "name": "bingo-322514",
   "version": "0.1.0",
   "private": true,
-  "main": "functions/index.js",
   "scripts": {
     "dev": "next dev && cross-env NODE_ENV=development",
     "build:prod": "next build && cross-env NODE_ENV=production",
     "build": "next build",
     "start": "next start -p ${PORT:-5000}",
     "analyze": "cross-env ANALYZE=true next build",
-    "deployDev": "npm run build && cross-env NODE_ENV=development firebase deploy --only functions,hosting -P dev",
-    "deployFrontDev": "npm run build && cross-env NODE_ENV=development firebase deploy --only functions:next,hosting -P dev",
-    "deployBackDev": "firebase deploy --only functions:api,hosting -P dev",
+    "deployBackDev": "firebase deploy --only functions -P dev",
+    "deployBackProd": "firebase deploy --only functions -P default",
     "deployIndexesDev": "firebase deploy --only firestore:indexes -P dev",
-    "deployProd": "npm run build && cross-env NODE_ENV=production firebase deploy --only functions,hosting -P default",
-    "deployFrontProd": "npm run build && cross-env NODE_ENV=production firebase deploy --only functions:next,hosting -P default",
-    "deployBackProd": "firebase deploy --only functions:api,hosting -P default",
-    "startBackEnd": "firebase emulators:start --only functions,auth,firestore --import=./dataEmulator --export-on-exit",
+    "deployIndexesProd": "firebase deploy --only firestore:indexes -P default",
+    "deployHostingDev": "firebase deploy --only hosting -P dev",
+    "deployHostingProd": "firebase deploy --only hosting -P default",
     "startFunctions": "firebase emulators:start --only functions"
   },
   "dependencies": {
@@ -49,7 +46,19 @@
     "cross-env": "^7.0.3",
     "react-email-editor": "^1.3.0"
   },
-  "engines": {
-    "node": ">= 12.0.0"
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
