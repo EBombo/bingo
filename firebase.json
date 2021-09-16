@@ -14,7 +14,7 @@
       {
         "source": "**",
         "run": {
-          "serviceId": "bingo-dev",
+          "serviceId": "bingo-322514/bingo-dev",
           "region": "us-central1"
         }
       }
