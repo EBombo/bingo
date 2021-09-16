@@ -33,7 +33,7 @@ try {
   if (typeof window !== "undefined")
     hostName = window.location.hostname.replace("subdomain.", "");
 
-  console.log("projectId", hostName);
+  console.log("projectId", hostName, process.env.NODE_ENV);
 } catch (error) {
   console.log("Error environment", error);
 }

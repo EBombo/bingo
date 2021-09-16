@@ -13,10 +13,7 @@
       },
       {
         "source": "**",
-        "run": {
-          "serviceId": "bingo-dev",
-          "region": "us-central1"
-        }
+        "destination": "https://bingo-dev-wwqwnfac3a-uc.a.run.app"
       }
     ],
     "headers": [
