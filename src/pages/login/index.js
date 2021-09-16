@@ -121,7 +121,7 @@ const Login = (props) => {
                 loading={isLoading}
                 htmlType="submit"
               >
-                Ingresar
+                Ingresar.
               </ButtonBingo>
             </div>
           </form>
