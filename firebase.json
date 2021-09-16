@@ -17,7 +17,10 @@
       },
       {
         "source": "**",
-        "function": "next"
+        "run": {
+          "serviceId": "bingo-dev",
+          "region": "us-central1"
+        }
       }
     ],
     "headers": [
