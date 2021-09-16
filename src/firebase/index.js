@@ -33,7 +33,13 @@ try {
   if (typeof window !== "undefined")
     hostName = window.location.hostname.replace("subdomain.", "");
 
-  console.log("projectId", hostName, process.env.NODE_ENV);
+  console.log(
+    "projectId",
+    hostName,
+    process.env.NODE_ENV,
+    get(process, "env.GCLOUD_PROJECT", ""),
+    window?.location?.hostname
+  );
 } catch (error) {
   console.log("Error environment", error);
 }
