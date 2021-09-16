@@ -119,12 +119,12 @@ export const colorGrey = {
 };
 
 export const socialNetworkColor = {
-    facebook: "#2f477a",
-    microsoft: "#2B579A",
+  facebook: "#2f477a",
+  microsoft: "#2B579A",
 };
 
 export const colorVioletDarken = {
-    darken_1: "#7c53af",
+  darken_1: "#7c53af",
 };
 
 // export const colorSuccess = {
