@@ -1,0 +1,32 @@
+{
+  "productionConfig": {
+    "serverEmail": {
+      "service": "gmail",
+      "host": "smtp.gmail.com",
+      "from": "Bombo Perú Team",
+      "user": "hello@bombo.pe",
+      "password": "Bomboperu123",
+      "storageUrl": ""
+    },
+    "phone": "",
+    "currency": "",
+    "serverUrl": "https://bingo-322514.web.app",
+    "mails": "",
+    "maxAgeCache": "86400"
+  },
+  "devConfig": {
+    "serverEmail": {
+      "service": "gmail",
+      "host": "smtp.gmail.com",
+      "from": "Bombo Perú Team",
+      "user": "hello@bombo.pe",
+      "password": "Bomboperu123",
+      "storageUrl": ""
+    },
+    "phone": "",
+    "currency": "",
+    "serverUrl": "https://bingo-dev-322514.web.app",
+    "mails": "",
+    "maxAgeCache": "86400"
+  }
+}

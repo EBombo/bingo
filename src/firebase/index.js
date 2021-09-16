@@ -40,7 +40,7 @@ try {
 
 if (hostName.includes("-dev") || hostName.includes("localhost")) {
   config = configJson.development;
-  console.log("dev", version);
+  console.log("dev");
 } else {
   config = configJson.production;
   console.log("prod");
@@ -62,7 +62,6 @@ if (isEmpty(firebase.apps)) {
   } catch (error) {
     console.error("error initializeApp", error);
   }
-
   // Allow connection with events firebase
   try {
     firebase.initializeApp(config.firebaseEvents, "events");
