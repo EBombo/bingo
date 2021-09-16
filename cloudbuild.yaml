@@ -27,5 +27,6 @@ options:
   # TODO: Solicitar confirmacion de build y deploy de una nueva version.
   # TODO: Enviar correo donde se informa la actualizacion.
   # TODO: Notificar que el envio fallo.
-  # TODO: deploy functions.
+  # TODO: Deploy functions.
+  # TODO: Deploy hosting [front / back].
   # TODO: Format all files "npx prettier --write ."
