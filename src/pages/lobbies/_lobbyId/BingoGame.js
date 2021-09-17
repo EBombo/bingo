@@ -165,6 +165,9 @@ export const BingoGame = (props) => {
               >
                 Premios
               </div>
+              <div className="last-plays-container">
+                <LastPlays lastNumbers={[1, 34, 65, 26, 73]} {...props} />
+              </div>
               <div className="chat-container">
                 <Chat title={"CHAT DEL BINGO"} />
               </div>
@@ -252,11 +255,11 @@ const BingoGameContainer = styled.div`
       .tab {
         padding: 0.5rem 1rem;
         text-align: center;
-        font-family: Lato;
+        font-family: 'Encode Sans', sans-serif;
         font-style: normal;
-        font-weight: bold;
-        font-size: 12px;
-        line-height: 14px;
+        font-size: 15px;
+        font-weight: 400 !important;
+        line-height: 17px;
         position: relative;
         cursor: pointer;
         color: ${(props) => props.theme.basic.secondary};
@@ -308,10 +311,17 @@ const BingoGameContainer = styled.div`
     text-decoration: underline;
     color: ${(props) => props.theme.basic.primaryLight};
     cursor: pointer;
+    padding: 1rem;
   }
 
   .chat-container {
     height: 550px;
+  }
+
+  .last-plays-container {
+    margin: 1rem;
+    overflow: auto;
+    max-width: 100%;
   }
 
   ${mediaQuery.afterTablet} {
@@ -385,7 +395,10 @@ const BingoGameContainer = styled.div`
         grid-template-columns: 335px auto;
 
         .last-plays-container {
-          margin: 1rem 0;
+          margin: 1rem;
+          display: inline-flex;
+          overflow: auto;
+          max-width: 100%;
         }
       }
     }

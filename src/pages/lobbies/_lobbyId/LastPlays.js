@@ -21,8 +21,7 @@ export const LastPlays = (props) => {
 };
 
 const Container = styled.div`
-  width: 100%;
-  max-width: 450px;
+  width: 450px;
 
   .balls {
     display: flex;
