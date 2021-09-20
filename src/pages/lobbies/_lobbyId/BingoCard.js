@@ -66,29 +66,31 @@ const CardContainer = styled.div`
   }
 
   table {
-    width: 90%;
     border-collapse: separate;
     border-spacing: 2.5px;
     margin: 0 auto;
 
     thead {
-      th {
-        text-align: center;
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 15px;
-        line-height: 18px;
-        color: ${(props) => props.theme.basic.whiteLight};
+      tr {
+        th {
+          height: 30px;
+          width: 30px;
+          text-align: center;
+          font-family: Lato;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 15px;
+          line-height: 18px;
+          color: ${(props) => props.theme.basic.whiteLight};
+        }
       }
     }
 
     tbody {
       tr {
-        width: 25px;
-        height: 25px;
-
         td {
+          width: 30px;
+          height: 30px;
           margin-right: 5px;
           text-align: center;
           font-family: Lato;
