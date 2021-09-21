@@ -255,7 +255,7 @@ const BingoGameContainer = styled.div`
       .tab {
         padding: 0.5rem 1rem;
         text-align: center;
-        font-family: 'Encode Sans', sans-serif;
+        font-family: "Encode Sans", sans-serif;
         font-style: normal;
         font-size: 15px;
         font-weight: 400 !important;
@@ -326,7 +326,7 @@ const BingoGameContainer = styled.div`
 
   ${mediaQuery.afterTablet} {
     display: grid;
-    grid-template-columns: auto 350px;
+    grid-template-columns: calc(100% - 300px) 300px;
 
     .main-container {
       padding: 0;
@@ -371,9 +371,12 @@ const BingoGameContainer = styled.div`
     .bingo {
       padding: 0.5rem 0.5rem 2rem 0.5rem;
       display: grid;
+      display: -webkit-box;
       grid-template-columns: 1fr 2fr;
+      grid-gap: 1rem;
       border-bottom: 10px solid ${(props) => props.theme.basic.primary};
       justify-content: center;
+      overflow: auto;
     }
 
     .left-container {
