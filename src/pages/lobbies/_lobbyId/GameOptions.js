@@ -3,8 +3,29 @@ import styled from "styled-components";
 import { ButtonAnt } from "../../../components/form";
 import { Image } from "../../../components/common/Image";
 import { config } from "../../../firebase";
+import { firestore } from "../../../firebase";
 
 export const GameOptions = (props) => {
+  const startGame = async () => {
+    if (!props.lobby.pattern) {
+      return props.showNotification(
+        "UPS",
+        "Define un patrón antes de empezar el bingo",
+        "warning"
+      );
+    }
+
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      startAt: new Date(),
+      updateAt: new Date(),
+    });
+  };
+
+  const callNumber = async () => {
+
+    // WHEN THE NUMBER IS SELECTED MAKE THE ANIMATION
+  }
+
   return (
     <GameOptionsContainer hiddenOptions={props.hiddenOptions}>
       <div className="out">
@@ -16,16 +37,20 @@ export const GameOptions = (props) => {
       {!props.hiddenOptions && (
         <div className="options">
           <div className="btn-container">
-            <ButtonAnt width="100%">
-              Iniciar Juego
-              <Image
-                src={`${config.storageUrl}/resources/white-play.svg`}
-                height="15px"
-                width="15px"
-                size="contain"
-                margin="0"
-              />
-            </ButtonAnt>
+            {props.lobby.startAt ? (
+              <ButtonAnt width="100%">LLamar número</ButtonAnt>
+            ) : (
+              <ButtonAnt width="100%" onClick={() => startGame()}>
+                Iniciar Juego
+                <Image
+                  src={`${config.storageUrl}/resources/white-play.svg`}
+                  height="15px"
+                  width="15px"
+                  size="contain"
+                  margin="0"
+                />
+              </ButtonAnt>
+            )}
           </div>
           <div className="btn-container">
             <ButtonAnt color="default" width="100%" className="btn-automatic">
@@ -79,14 +104,6 @@ const GameOptionsContainer = styled.div`
   .options {
     .btn-container {
       margin: 0.5rem !important;
-
-      .btn-automatic {
-        line-break: auto;
-        span {
-          word-break: break-all !important;
-          line-break: auto;
-        }
-      }
     }
   }
 `;

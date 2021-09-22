@@ -11,10 +11,12 @@ export const ButtonAnt = forwardRef((props, ref) => (
     size={props.size ? props.size : "medium"}
     width={props.width ? props.width : "auto"}
     {...props}
-  />
+  >
+    {props.children}
+  </ButtonAntCss>
 ));
 
-const ButtonAntCss = styled(Button)`
+const ButtonAntCss = styled.button`
   padding: ${(props) =>
     props.size === "small"
       ? "10px"
@@ -54,6 +56,8 @@ const ButtonAntCss = styled(Button)`
             ? theme.basic.secondaryLight
             : color === "default"
             ? theme.basic.blackDarken
+            : color === "warning"
+            ? theme.basic.blackDarken
             : theme.basic.white
         };
       border: none;
@@ -63,7 +67,7 @@ const ButtonAntCss = styled(Button)`
           : color === "secondary"
           ? theme.basic.secondaryDark
           : color === "warning"
-          ? theme.basic.warning
+          ? theme.basic.warningDark
           : color === "danger"
           ? theme.basic.danger
           : color === "default"
@@ -141,6 +145,8 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.secondaryLight
           : color === "default"
           ? theme.basic.blackDarken
+          : color === "warning"
+          ? theme.basic.blackDarken
           : theme.basic.white
       };
       border: none;
@@ -204,7 +210,7 @@ const ButtonAntCss = styled(Button)`
             : color === "secondary"
             ? theme.basic.secondary
             : color === "warning"
-            ? theme.basic.warning
+            ? theme.basic.warningDark
             : color === "danger"
             ? theme.basic.danger
             : color === "default"

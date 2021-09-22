@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { LastPlays } from "./LastPlays";
 import { BingoCard } from "./BingoCard";
 import { ButtonAnt } from "../../../components/form";
+import { firestore } from "../../../config";
 
 export const BingoGame = (props) => {
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(true);
@@ -41,7 +42,7 @@ export const BingoGame = (props) => {
     <BingoGameContainer>
       {isVisibleModalAwards && (
         <ModalAwards
-          awards={[]}
+          awards={get(props, "lobby.settings.awards", [])}
           isVisibleModalAwards={isVisibleModalAwards}
           setIsVisibleModalAwards={setIsVisibleModalAwards}
           {...props}

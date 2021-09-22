@@ -1,22 +1,66 @@
-import React, { useState, useGlobal } from "reactn";
+import React, { useState, useGlobal, useEffect } from "reactn";
 import styled from "styled-components";
 import get from "lodash/get";
+import defaultTo from "lodash/defaultTo";
 import { ButtonAnt } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { ModalPattern } from "./ModalPattern";
+import { firestore } from "../../../firebase";
+import { spinLoader } from "../../../components/common/loader";
 
 export const CardPattern = (props) => {
   const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apagon, setApagon] = useState(false);
+  const [pattern, setPattern] = useState(
+    Array.from(Array(5), () => new Array(5).fill(null))
+  );
   const [authUser] = useGlobal("user");
 
-  const savePattern = () => {
-    console.log("guardando");
+  useEffect(() => {
+    if (props.apagon) {
+      return setPattern(Array.from(Array(5), () => new Array(5).fill(true)));
+    }
+    return setPattern(
+      defaultTo(
+        JSON.parse(props.lobby.pattern),
+        Array.from(Array(5), () => new Array(5).fill(null))
+      )
+    );
+  }, []);
+
+  const copyMatrix = () => {
+    const newMatrix = [];
+    for (const row of pattern) {
+      newMatrix.push(row.slice());
+    }
+    return newMatrix;
   };
 
+  const editPattern = (row, col) => {
+    const newPattern = copyMatrix();
+    newPattern[row][col] = newPattern[row][col] ? null : true;
+    setPattern(newPattern);
+  };
+
+  const savePattern = async () => {
+    setIsLoading(true);
+
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      pattern: JSON.stringify(pattern),
+      updateAt: new Date(),
+    });
+    setIsLoading(false);
+    setIsVisibleModalPattern(false);
+  };
+
+  console.log("rerender");
+
   return (
-    <PatternContainer user={authUser}>
+    <PatternContainer user={authUser} isEdit={props.isEdit}>
       {isVisibleModalPattern && (
         <ModalPattern
+          apagon={apagon}
           isVisibleModalPattern={isVisibleModalPattern}
           setIsVisibleModalPattern={setIsVisibleModalPattern}
           {...props}
@@ -36,84 +80,98 @@ export const CardPattern = (props) => {
 
           <tr>
             <th>1</th>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
+            {pattern[0].map((element, idx) => (
+              <td
+                onClick={() => {
+                  if (!props.isEdit) return;
+                  editPattern(0, idx);
+                }}
+                key={`${pattern}-0-${idx}`}
+              >
+                <div className={`${element ? "selected" : "empty"}`} />
+              </td>
+            ))}
           </tr>
 
           <tr>
             <th>2</th>
-            <td>
-              <div className="selected" />
-            </td>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
-            <td>
-              <div className="selected" />
-            </td>
+            {pattern[1].map((element, idx) => (
+              <td
+                onClick={() => {
+                  if (!props.isEdit) return;
+                  editPattern(1, idx);
+                }}
+                key={`${pattern}-1-${idx}`}
+              >
+                <div className={`${element === true ? "selected" : "empty"}`} />
+              </td>
+            ))}
           </tr>
 
           <tr>
             <th>3</th>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
+            {pattern[2].map((element, idx) => (
+              <td
+                onClick={() => {
+                  if (!props.isEdit) return;
+                  editPattern(2, idx);
+                }}
+                key={`${pattern}-2-${idx}`}
+              >
+                <div className={`${element ? "selected" : "empty"}`} />
+              </td>
+            ))}
           </tr>
 
           <tr>
             <th>4</th>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
+            {pattern[3].map((element, idx) => (
+              <td
+                onClick={() => {
+                  if (!props.isEdit) return;
+                  editPattern(3, idx);
+                }}
+                key={`${pattern}-3-${idx}`}
+              >
+                <div className={`${element ? "selected" : "empty"}`} />
+              </td>
+            ))}
           </tr>
 
           <tr>
             <th>5</th>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
+            {pattern[4].map((element, idx) => (
+              <td
+                onClick={() => {
+                  if (!props.isEdit) return;
+                  editPattern(4, idx);
+                }}
+                key={`${pattern}-4-${idx}`}
+              >
+                <div className={`${element ? "selected" : "empty"}`} />
+              </td>
+            ))}
           </tr>
         </table>
       </div>
       {!props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
-          <ButtonAnt>Apágon</ButtonAnt>
+          <ButtonAnt
+            onClick={() => {
+              setApagon(true);
+              setIsVisibleModalPattern(true);
+            }}
+          >
+            Apágon
+          </ButtonAnt>
           <ButtonAnt
             color="default"
-            onClick={() => setIsVisibleModalPattern(true)}
+            onClick={() => {
+              setApagon(false);
+              setIsVisibleModalPattern(true);
+            }}
           >
-            Limpiar
+            Editar
           </ButtonAnt>
         </div>
       )}
@@ -122,7 +180,11 @@ export const CardPattern = (props) => {
           <ButtonAnt color="default" onClick={() => props.cancelAction()}>
             Cancelar
           </ButtonAnt>
-          <ButtonAnt color="warning" onClick={() => savePattern()}>
+          <ButtonAnt
+            color="warning"
+            loading={isLoading}
+            onClick={() => savePattern()}
+          >
             Guardar
           </ButtonAnt>
         </div>
@@ -179,6 +241,7 @@ const PatternContainer = styled.div`
         background: ${(props) => props.theme.basic.primary};
         border-radius: 3px;
         position: relative;
+        cursor: ${(props) => (props.isEdit ? "pointer" : "default")};
 
         .selected {
           position: absolute;
@@ -202,6 +265,11 @@ const PatternContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    
+    button {
+      font-size: 14px;
+      line-height: 18px;
+    }
   }
   
   ${mediaQuery.afterTablet}{

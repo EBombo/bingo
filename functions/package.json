@@ -20,7 +20,7 @@
     "firebase-functions": "^3.15.6",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "node-fetch": "^3.0.0",
+    "node-fetch": "^2.6.1",
     "nodemailer": "^6.6.3",
     "nodemailer-smtp-transport": "^2.7.4"
   },

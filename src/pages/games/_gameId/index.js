@@ -48,6 +48,20 @@ export const Game = (props) => {
     if (!tokenId || !gameId) return;
 
     const verifyUser = async () => {
+      return {
+        countryCode: "PE",
+        dialCode: "+51",
+        email: "mendo.chato5@gmail.com",
+        id: "YFgtxvDEi2OO2Y63ORO379jBVK42",
+        isAdmin: true,
+        isVerified: true,
+        lastName: "Mendo",
+        name: "Sebastian",
+        origin: "http://localhost:3000",
+        phoneNumber: "123123123",
+        providers: ["password"],
+        searchName: (3)[("SEBASTIAN", "MENDO", "MENDO.CHATO5@GMAIL.COM")],
+      };
       try {
         const url = `${config.serverUrlEvents}/api/tokens`;
         const { response, error } = await Fetch(url, "POST", { tokenId });
@@ -84,8 +98,8 @@ export const Game = (props) => {
           isAdmin: true,
         };
 
-        if (!game.usersIds.includes(formatUser.id))
-          return router.push("/login");
+        // if (!game.usersIds.includes(formatUser.id))
+        //   return router.push("/login");
 
         await setAuthUser(formatUser);
         setLSAuthUser(formatUser);

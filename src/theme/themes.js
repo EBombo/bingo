@@ -11,6 +11,7 @@ export const darkTheme = {
     whiteDark: "#F2F2F2",
     whiteLight: "#FAFAFA",
     warning: "#FFC715",
+    warningDark: "#A9840E",
     danger: "#FC6C6C",
     default: "#494949",
     black: "#000000",
