@@ -69,7 +69,7 @@ const ButtonAntCss = styled.button`
           : color === "warning"
           ? theme.basic.warningDark
           : color === "danger"
-          ? theme.basic.danger
+          ? theme.basic.dangerDark
           : color === "default"
           ? "#979797"
           : color
@@ -212,7 +212,7 @@ const ButtonAntCss = styled.button`
             : color === "warning"
             ? theme.basic.warningDark
             : color === "danger"
-            ? theme.basic.danger
+            ? theme.basic.dangerDark
             : color === "default"
             ? "#979797"
             : color

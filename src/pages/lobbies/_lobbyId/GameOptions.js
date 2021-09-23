@@ -1,12 +1,17 @@
-import React from "reactn";
+import React, { useState } from "reactn";
 import styled from "styled-components";
 import { ButtonAnt } from "../../../components/form";
 import { Image } from "../../../components/common/Image";
 import { config } from "../../../firebase";
 import { firestore } from "../../../firebase";
 import { mapKeys } from "lodash/object";
+import { ModalContainer } from "../../../components/common/ModalContainer";
+import { mediaQuery } from "../../../constants";
 
 export const GameOptions = (props) => {
+  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const startGame = async () => {
     if (!props.lobby.pattern) {
       return props.showNotification(
@@ -16,17 +21,78 @@ export const GameOptions = (props) => {
       );
     }
 
-    const board = {};
-
-    Array.from({ length: 75 }, (_, i) => i + 1).map(
-      (number) => (board[number] = false)
-    );
+    const board = createBoard();
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       startAt: new Date(),
       updateAt: new Date(),
       board,
     });
+  };
+
+  const modalConfirm = () => (
+    <ModalContainer
+      background="#FAFAFA"
+      footer={null}
+      closable={false}
+      padding="1rem"
+      width="440px"
+      top="30%"
+      visible={isVisibleModalConfirm}
+    >
+      <ContentModal>
+        <div className="title">¿Seguro que quieres reiniciar el tablero?</div>
+        <div className="description">
+          Si lo reinicias, no podrás deshacerlo.
+        </div>
+        <div className="btns-container">
+          <ButtonAnt
+            color="default"
+            disabled={loading}
+            onClick={() => setIsVisibleModalConfirm(false)}
+          >
+            Cancelar
+          </ButtonAnt>
+          <ButtonAnt
+            color="danger"
+            loading={loading}
+            onClick={() => restartBoard()}
+          >
+            Reiniciar
+          </ButtonAnt>
+        </div>
+      </ContentModal>
+    </ModalContainer>
+  );
+
+  const restartBoard = async () => {
+    setLoading(true);
+    if (!props.lobby.pattern) {
+      return props.showNotification(
+        "UPS",
+        "El juego aun no ha iniciado.",
+        "warning"
+      );
+    }
+    const board = createBoard();
+
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      updateAt: new Date(),
+      board,
+    });
+
+    setIsVisibleModalConfirm(false);
+    setLoading(false);
+  };
+
+  const createBoard = () => {
+    const board = {};
+
+    Array.from({ length: 75 }, (_, i) => i + 1).map(
+      (number) => (board[number] = false)
+    );
+
+    return board;
   };
 
   const callNumber = async () => {
@@ -61,6 +127,7 @@ export const GameOptions = (props) => {
 
   return (
     <GameOptionsContainer hiddenOptions={props.hiddenOptions}>
+      {modalConfirm()}
       <div className="out">
         <div className="in">
           <p>{props.lastLetter}</p>
@@ -93,7 +160,12 @@ export const GameOptions = (props) => {
             </ButtonAnt>
           </div>
           <div className="btn-container">
-            <ButtonAnt variant="contained" color="default" width="100%">
+            <ButtonAnt
+              variant="contained"
+              color="default"
+              width="100%"
+              onClick={() => setIsVisibleModalConfirm(true)}
+            >
               Reiniciar tablero
             </ButtonAnt>
           </div>
@@ -139,6 +211,45 @@ const GameOptionsContainer = styled.div`
   .options {
     .btn-container {
       margin: 0.5rem !important;
+    }
+  }
+`;
+
+const ContentModal = styled.div`
+  width: 100%;
+
+  .title {
+    font-family: Encode Sans, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    color: ${(props) => props.theme.basic.blackDarken};
+    text-align: center;
+  }
+
+  .description {
+    margin: 1rem 0;
+    color: ${(props) => props.theme.basic.blackDarken};
+    text-align: center;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+  .btns-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 1rem 0;
+  }
+
+  ${mediaQuery.afterTablet} {
+    .title {
+      font-size: 18px;
+      line-height: 22px;
     }
   }
 `;
