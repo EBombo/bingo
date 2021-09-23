@@ -62,7 +62,11 @@ export const BingoGame = (props) => {
             <div className="bingo">
               <div className="left-container">
                 <RoundsLastNumber lastNumber={35} round={6} {...props} />
-                <CardPattern caption={"Patrón que se debe llenar"} {...props} />
+                <CardPattern
+                  caption={"Patrón que se debe llenar"}
+                  key={props.lobby.pattern}
+                  {...props}
+                />
               </div>
               <div className="right-container">
                 <div className="board-container">
@@ -97,6 +101,7 @@ export const BingoGame = (props) => {
                   <CardPattern
                     caption={"Patrón que se debe llenar"}
                     hiddenOptions
+                    key={props.lobby.pattern}
                     {...props}
                   />
                   <GameOptions
@@ -186,6 +191,7 @@ export const BingoGame = (props) => {
                     {...props}
                   />
                   <CardPattern
+                    key={props.lobby.pattern}
                     caption={"Patrón que se debe llenar"}
                     hiddenOptions
                     {...props}
