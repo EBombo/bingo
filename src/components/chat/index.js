@@ -19,8 +19,6 @@ import { ChatMessage } from "./ChatMessage";
 import { object, string } from "yup";
 import { useForm } from "react-hook-form";
 
-const limit = 25;
-
 export const Chat = (props) => {
   const router = useRouter();
   const chatRef = useRef(null);
@@ -64,8 +62,7 @@ export const Chat = (props) => {
     firestore
       .collection("messages")
       .where("lobbyId", "==", lobbyId)
-      .orderBy("createAt", "desc")
-      .limit(limit)
+      .orderBy("createAt", "asc")
       .onSnapshot((messagesSnapshot) => {
         setMessages(snapshotToArray(messagesSnapshot));
         setLoading(false);
@@ -76,13 +73,17 @@ export const Chat = (props) => {
       setIsLoadingSendMessage(true);
       setMessage("");
 
-      const { error } = await Fetch(`${config.serverUrl}/messages`, "POST", {
-        message: data.message,
-        user: authUser,
-        lobbyId,
-      });
+      const { error } = await Fetch(
+        `${config.serverUrl}/api/messages`,
+        "POST",
+        {
+          message: data.message,
+          user: authUser,
+          lobbyId,
+        }
+      );
 
-      if (error) setMessage(message);
+      if (error) return setMessage(message);
     } catch (error) {
       sendError({ error: Object(error).toString(), action: "sendMessage" });
     }
@@ -113,6 +114,8 @@ export const Chat = (props) => {
             placeholder="Escribe tu mensaje aqui"
             className="input-message"
             name="message"
+            value={message}
+            onChange={(event) => setMessage(event.target.value)}
             error={errors.message}
             ref={register}
           />

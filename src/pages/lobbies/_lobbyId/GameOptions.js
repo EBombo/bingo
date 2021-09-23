@@ -4,6 +4,7 @@ import { ButtonAnt } from "../../../components/form";
 import { Image } from "../../../components/common/Image";
 import { config } from "../../../firebase";
 import { firestore } from "../../../firebase";
+import { mapKeys } from "lodash/object";
 
 export const GameOptions = (props) => {
   const startGame = async () => {
@@ -15,16 +16,48 @@ export const GameOptions = (props) => {
       );
     }
 
+    const board = {};
+
+    Array.from({ length: 75 }, (_, i) => i + 1).map(
+      (number) => (board[number] = false)
+    );
+
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       startAt: new Date(),
       updateAt: new Date(),
+      board,
     });
   };
 
   const callNumber = async () => {
+    if (!props.lobby || !props.lobby.board) return;
 
-    // WHEN THE NUMBER IS SELECTED MAKE THE ANIMATION
-  }
+    const newBoard = props.lobby.board;
+    const missingNumbers = [];
+
+    mapKeys(newBoard, function (value, key) {
+      if (!value) missingNumbers.push(key);
+    });
+
+    const randomIndex = Math.round(Math.random() * missingNumbers.length);
+
+    const numberCalled = missingNumbers[randomIndex];
+
+    newBoard[numberCalled] = true;
+
+    console.log(
+      "trying to call",
+      missingNumbers,
+      newBoard,
+      randomIndex,
+      numberCalled
+    );
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      startAt: new Date(),
+      updateAt: new Date(),
+      board: newBoard,
+    });
+  };
 
   return (
     <GameOptionsContainer hiddenOptions={props.hiddenOptions}>
@@ -38,7 +71,9 @@ export const GameOptions = (props) => {
         <div className="options">
           <div className="btn-container">
             {props.lobby.startAt ? (
-              <ButtonAnt width="100%">LLamar número</ButtonAnt>
+              <ButtonAnt width="100%" onClick={() => callNumber()}>
+                LLamar número
+              </ButtonAnt>
             ) : (
               <ButtonAnt width="100%" onClick={() => startGame()}>
                 Iniciar Juego

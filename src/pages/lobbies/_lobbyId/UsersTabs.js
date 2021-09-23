@@ -12,14 +12,14 @@ export const UsersTabs = (props) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
 
-  const userContent = (user) => {
+  const userContent = (user, index) => {
     if (tab === "cards") {
       return (
-        <div className="user-card">
+        <div className="user-card" key={`${user.nickname}-${index}`}>
           <div className="name">{user.nickname}</div>
           <div className="card-preview">
             {defaultTo(user.card, Array(5).fill(Array(5).fill(0))).map((row) =>
-              row.map((num) => <div className={`matrix-num`} />)
+              row.map((num) => <div className={`matrix-num`} key={`${row}-${Math.random() * 150}`}/>)
             )}
           </div>
           <div className="btn-container">
@@ -42,7 +42,7 @@ export const UsersTabs = (props) => {
       );
     } else {
       return (
-        <div className="user-progress">
+        <div className="user-progress" key={`${user.nickname}-${index}`}>
           <div className="name">{user.nickname}</div>
           <div className={`progress ${user.progress === 100 && winner}`}>
             <Progress percent={30} strokeColor={darkTheme.basic.primary} />
@@ -85,7 +85,9 @@ export const UsersTabs = (props) => {
         </div>
       </div>
       <div className={`user-tab-${tab === "cards" ? "cards" : "table"}`}>
-        {defaultTo(props.users, []).map((user) => userContent(user))}
+        {defaultTo(props.users, []).map((user, index) =>
+          userContent(user, index)
+        )}
       </div>
     </TabsContainer>
   );

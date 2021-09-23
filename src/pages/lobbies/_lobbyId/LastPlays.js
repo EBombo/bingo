@@ -6,7 +6,7 @@ export const LastPlays = (props) => {
     <Container>
       <div className="balls">
         {props.lastNumbers.map((number) => (
-          <BallContainer number={number}>
+          <BallContainer number={number} key={number}>
             <div className="inner-container">
               <div className="letter">B</div>
               <div className="number">{number}</div>

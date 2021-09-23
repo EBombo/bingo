@@ -45,8 +45,9 @@ export const BingoBoard = (props) => {
             {range(1, 15).map((number) => (
               <td
                 className={`td-numbers ${
-                  props.numbers.includes(number) && `active`
+                  props.lobby.board[number] && `active`
                 }`}
+                key={number}
               >
                 {number}
               </td>
@@ -56,8 +57,9 @@ export const BingoBoard = (props) => {
             {range(16, 30).map((number) => (
               <td
                 className={`td-numbers ${
-                  props.numbers.includes(number) && `active`
+                  props.lobby.board[number] && `active`
                 }`}
+                key={number}
               >
                 {number}
               </td>
@@ -67,8 +69,9 @@ export const BingoBoard = (props) => {
             {range(31, 45).map((number) => (
               <td
                 className={`td-numbers ${
-                  props.numbers.includes(number) && `active`
+                  props.lobby.board[number] && `active`
                 }`}
+                key={number}
               >
                 {number}
               </td>
@@ -78,8 +81,9 @@ export const BingoBoard = (props) => {
             {range(46, 60).map((number) => (
               <td
                 className={`td-numbers ${
-                  props.numbers.includes(number) && `active`
+                  props.lobby.board[number] && `active`
                 }`}
+                key={number}
               >
                 {number}
               </td>
@@ -89,8 +93,9 @@ export const BingoBoard = (props) => {
             {range(61, 75).map((number) => (
               <td
                 className={`td-numbers ${
-                  props.numbers.includes(number) && `active`
+                  props.lobby.board[number] && `active`
                 }`}
+                key={number}
               >
                 {number}
               </td>

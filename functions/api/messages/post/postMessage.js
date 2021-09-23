@@ -7,7 +7,7 @@ exports.postMessage = async (req, res, next) => {
 
     const { user, message, lobbyId } = req.body;
     const messagesRef = firestore.collection("messages");
-    const messageId = messagesRef.id;
+    const messageId = messagesRef.doc().id;
 
     await messagesRef.doc(messageId).set({
       id: messageId,

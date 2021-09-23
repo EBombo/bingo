@@ -66,7 +66,7 @@ export const BingoGame = (props) => {
               </div>
               <div className="right-container">
                 <div className="board-container">
-                  <BingoBoard numbers={[1, 15, 45, 68, 23, 32]} {...props} />
+                  <BingoBoard {...props} />
                 </div>
                 <div className="bottom-section">
                   <div className="left">

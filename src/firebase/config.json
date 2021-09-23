@@ -20,7 +20,7 @@
     },
     "serverUrlLocal": "http://localhost:5001/bingo-322514/us-central1/api",
     "serverUrl": "https://bingo-322514.web.app",
-    "serverUrlEvents": "https://us-central1-ebombo-events.cloudfunctions.net/api",
+    "serverUrlEvents": "https://gold.api.ebombo.com",
     "storageUrl": "https://storage.googleapis.com/bingo-322514.appspot.com",
     "analytics": "",
     "maxAgeCache": 86400
@@ -46,7 +46,7 @@
     },
     "serverUrlLocal": "http://localhost:5001/bingo-dev-322514/us-central1/api",
     "serverUrl": "https://bingo-dev-322514.web.app",
-    "serverUrlEvents": "https://us-central1-ebombo-events-dev.cloudfunctions.net/api",
+    "serverUrlEvents": "https://red-api.ebombo.com",
     "storageUrl": "https://storage.googleapis.com/bingo-dev-322514.appspot.com",
     "analytics": "",
     "maxAgeCache": 86400

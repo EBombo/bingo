@@ -21,12 +21,10 @@ export const CardPattern = (props) => {
     if (props.apagon) {
       return setPattern(Array.from(Array(5), () => new Array(5).fill(true)));
     }
-    return setPattern(
-      defaultTo(
-        JSON.parse(props.lobby.pattern),
-        Array.from(Array(5), () => new Array(5).fill(null))
-      )
-    );
+
+    if (props.lobby.pattern) return setPattern(JSON.parse(props.lobby.pattern));
+
+    console.log(props);
   }, []);
 
   const copyMatrix = () => {
@@ -44,17 +42,14 @@ export const CardPattern = (props) => {
   };
 
   const savePattern = async () => {
-    setIsLoading(true);
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       pattern: JSON.stringify(pattern),
       updateAt: new Date(),
     });
-    setIsLoading(false);
+
     setIsVisibleModalPattern(false);
   };
-
-  console.log("rerender");
 
   return (
     <PatternContainer user={authUser} isEdit={props.isEdit}>
@@ -69,89 +64,94 @@ export const CardPattern = (props) => {
       <div className="caption">{props.caption}</div>
       <div className="table-container">
         <table>
-          <tr>
-            <th className="empty"></th>
-            <th>{get(props, "lobby.game.letters.b", {})}</th>
-            <th>{get(props, "lobby.game.letters.i", {})}</th>
-            <th>{get(props, "lobby.game.letters.n", {})}</th>
-            <th>{get(props, "lobby.game.letters.g", {})}</th>
-            <th>{get(props, "lobby.game.letters.o", {})}</th>
-          </tr>
+          <thead>
+            <tr>
+              <th className="empty"></th>
+              <th>{get(props, "lobby.game.letters.b", {})}</th>
+              <th>{get(props, "lobby.game.letters.i", {})}</th>
+              <th>{get(props, "lobby.game.letters.n", {})}</th>
+              <th>{get(props, "lobby.game.letters.g", {})}</th>
+              <th>{get(props, "lobby.game.letters.o", {})}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>1</th>
+              {pattern[0].map((element, idx) => (
+                <td
+                  onClick={() => {
+                    if (!props.isEdit) return;
+                    editPattern(0, idx);
+                  }}
+                  key={`${pattern}-0-${idx}`}
+                >
+                  <div className={`${element ? "selected" : "empty"}`} />
+                </td>
+              ))}
+            </tr>
 
-          <tr>
-            <th>1</th>
-            {pattern[0].map((element, idx) => (
-              <td
-                onClick={() => {
-                  if (!props.isEdit) return;
-                  editPattern(0, idx);
-                }}
-                key={`${pattern}-0-${idx}`}
-              >
-                <div className={`${element ? "selected" : "empty"}`} />
-              </td>
-            ))}
-          </tr>
+            <tr>
+              <th>2</th>
+              {pattern[1].map((element, idx) => (
+                <td
+                  onClick={() => {
+                    if (!props.isEdit) return;
+                    editPattern(1, idx);
+                  }}
+                  key={`${pattern}-1-${idx}`}
+                >
+                  <div
+                    className={`${element === true ? "selected" : "empty"}`}
+                  />
+                </td>
+              ))}
+            </tr>
 
-          <tr>
-            <th>2</th>
-            {pattern[1].map((element, idx) => (
-              <td
-                onClick={() => {
-                  if (!props.isEdit) return;
-                  editPattern(1, idx);
-                }}
-                key={`${pattern}-1-${idx}`}
-              >
-                <div className={`${element === true ? "selected" : "empty"}`} />
-              </td>
-            ))}
-          </tr>
+            <tr>
+              <th>3</th>
+              {pattern[2].map((element, idx) => (
+                <td
+                  onClick={() => {
+                    if (!props.isEdit) return;
+                    editPattern(2, idx);
+                  }}
+                  key={`${pattern}-2-${idx}`}
+                >
+                  <div className={`${element ? "selected" : "empty"}`} />
+                </td>
+              ))}
+            </tr>
 
-          <tr>
-            <th>3</th>
-            {pattern[2].map((element, idx) => (
-              <td
-                onClick={() => {
-                  if (!props.isEdit) return;
-                  editPattern(2, idx);
-                }}
-                key={`${pattern}-2-${idx}`}
-              >
-                <div className={`${element ? "selected" : "empty"}`} />
-              </td>
-            ))}
-          </tr>
+            <tr>
+              <th>4</th>
+              {pattern[3].map((element, idx) => (
+                <td
+                  onClick={() => {
+                    if (!props.isEdit) return;
+                    editPattern(3, idx);
+                  }}
+                  key={`${pattern}-3-${idx}`}
+                >
+                  <div className={`${element ? "selected" : "empty"}`} />
+                </td>
+              ))}
+            </tr>
 
-          <tr>
-            <th>4</th>
-            {pattern[3].map((element, idx) => (
-              <td
-                onClick={() => {
-                  if (!props.isEdit) return;
-                  editPattern(3, idx);
-                }}
-                key={`${pattern}-3-${idx}`}
-              >
-                <div className={`${element ? "selected" : "empty"}`} />
-              </td>
-            ))}
-          </tr>
-
-          <tr>
-            <th>5</th>
-            {pattern[4].map((element, idx) => (
-              <td
-                onClick={() => {
-                  if (!props.isEdit) return;
-                  editPattern(4, idx);
-                }}
-                key={`${pattern}-4-${idx}`}
-              >
-                <div className={`${element ? "selected" : "empty"}`} />
-              </td>
-            ))}
-          </tr>
+            <tr>
+              <th>5</th>
+              {pattern[4].map((element, idx) => (
+                <td
+                  onClick={() => {
+                    if (!props.isEdit) return;
+                    editPattern(4, idx);
+                  }}
+                  key={`${pattern}-4-${idx}`}
+                >
+                  <div className={`${element ? "selected" : "empty"}`} />
+                </td>
+              ))}
+            </tr>
+          </tbody>
         </table>
       </div>
       {!props.isEdit && !props.hiddenOptions && (
@@ -177,7 +177,11 @@ export const CardPattern = (props) => {
       )}
       {props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
-          <ButtonAnt color="default" onClick={() => props.cancelAction()}>
+          <ButtonAnt
+            color="default"
+            disabled={isLoading}
+            onClick={() => props.cancelAction()}
+          >
             Cancelar
           </ButtonAnt>
           <ButtonAnt
@@ -216,8 +220,6 @@ const PatternContainer = styled.div`
       background: ${(props) =>
         !props.user.isAdmin ? props.theme.basic.primaryLight : "transparent"};
       border-radius: 5px;
-      
-      
       
       th {
         font-family: Encode Sans;
