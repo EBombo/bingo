@@ -41,7 +41,7 @@ try {
 if (
   hostName.includes("-dev") ||
   hostName.includes("localhost") ||
-  hostName.includes(".red")
+  hostName.includes("red.")
 ) {
   config = configJson.development;
 
