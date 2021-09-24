@@ -11,12 +11,10 @@ export const ButtonAnt = forwardRef((props, ref) => (
     size={props.size ? props.size : "medium"}
     width={props.width ? props.width : "auto"}
     {...props}
-  >
-    {props.children}
-  </ButtonAntCss>
+  />
 ));
 
-const ButtonAntCss = styled.button`
+const ButtonAntCss = styled(Button)`
   padding: ${(props) =>
     props.size === "small"
       ? "10px"

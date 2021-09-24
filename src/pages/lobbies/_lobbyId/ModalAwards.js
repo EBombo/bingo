@@ -1,13 +1,51 @@
-import React, { useGlobal } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { ModalContainer } from "../../../components/common/ModalContainer";
 import get from "lodash/get";
 import { ButtonAnt } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { Input } from "antd";
+import defaultTo from "lodash/defaultTo";
+import {firestore} from "../../../firebase";
 
 export const ModalAwards = (props) => {
   const [authUser] = useGlobal("user");
+  const [isSaving, setIsSaving] = useState(false);
+  const [award, setAward] = useState("");
+
+  const deleteAward = async (index) => {
+    const newSettings = props.lobby.settings;
+
+    newSettings.awards.splice(index, 1);
+
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      settings: newSettings,
+      updateAt: new Date(),
+    });
+  };
+
+  const addAward = async () => {
+    setIsSaving(true);
+    try {
+      const newSettings = props.lobby.settings;
+
+      if (newSettings.awards) {
+        newSettings.awards.push(award);
+      } else {
+        newSettings.awards = [award];
+      }
+
+      setAward("");
+
+      await firestore.doc(`lobbies/${props.lobby.id}`).update({
+        settings: newSettings,
+        updateAt: new Date(),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setIsSaving(false);
+  };
 
   return (
     <ModalContainer
@@ -17,28 +55,35 @@ export const ModalAwards = (props) => {
       top="10%"
       visible={props.isVisibleModalAwards}
     >
-      <AwardsContainer>
+      <AwardsContainer key={props.lobby.settings}>
         <div className="title">{authUser.isAdmin ? "Editar " : ""} Premios</div>
-        {props.awards.map((award, index) => (
-          <div className="award">
+        {defaultTo(props.lobby.settings.awards, []).map((award, index) => (
+          <div className="award" key={index}>
             <div className="label">Premio {index + 1}</div>
             <div className="content">
-              <Input
-                defaultValue={get(award, "name", "")}
-                placeholder={`Premio ${index + 1}`}
-              />
-              {authUser.isAdmin && <ButtonAnt color="danger">Borrar</ButtonAnt>}
+              <Input defaultValue={award} placeholder={`Premio ${index + 1}`} />
+              {authUser.isAdmin && (
+                <ButtonAnt color="danger" onClick={() => deleteAward(index)}>
+                  Borrar
+                </ButtonAnt>
+              )}
             </div>
           </div>
         ))}
         {authUser.isAdmin && (
           <>
             <div className="label">Agregar premio</div>
-            <form action="">
-              <Input placeholder="Premio" />
+            <form>
+              <Input
+                placeholder="Premio"
+                name="award"
+                value={award}
+                onChange={(event) => setAward(event.target.value)}
+              />
               <ButtonAnt
                 color="secondary"
-                onClick={() => props.setIsVisibleModalAwards(false)}
+                loading={isSaving}
+                onClick={() => addAward()}
               >
                 Agregar
               </ButtonAnt>

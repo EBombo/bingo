@@ -14,10 +14,11 @@ import { useRouter } from "next/router";
 import { LastPlays } from "./LastPlays";
 import { BingoCard } from "./BingoCard";
 import { ButtonAnt } from "../../../components/form";
+import defaultTo from "lodash/defaultTo";
 import { firestore } from "../../../config";
 
 export const BingoGame = (props) => {
-  const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(true);
+  const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);
   const [isVisibleModalAwards, setIsVisibleModalAwards] = useState(false);
   const [users, setUsers] = useState([]);
   const [authUser] = useGlobal("user");
@@ -42,7 +43,7 @@ export const BingoGame = (props) => {
     <BingoGameContainer>
       {isVisibleModalAwards && (
         <ModalAwards
-          awards={get(props, "lobby.settings.awards", [])}
+          awards={defaultTo(props.lobby.settings.awards, [])}
           isVisibleModalAwards={isVisibleModalAwards}
           setIsVisibleModalAwards={setIsVisibleModalAwards}
           {...props}
@@ -201,7 +202,12 @@ export const BingoGame = (props) => {
 
               <div className="buttons-container">
                 <ButtonAnt>Bingo</ButtonAnt>
-                <ButtonAnt color="default">Ver premios</ButtonAnt>
+                <ButtonAnt
+                  color="default"
+                  onClick={() => setIsVisibleModalAwards(true)}
+                >
+                  Ver premios
+                </ButtonAnt>
               </div>
               <div className="chat-container">
                 <Chat title={"CHAT DEL BINGO"} />
