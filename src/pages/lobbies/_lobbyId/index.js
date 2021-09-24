@@ -1,5 +1,5 @@
 import React, { useEffect, useGlobal, useState } from "reactn";
-import { firestore } from "../../../firebase";
+import {database, firestore} from "../../../firebase";
 import { useRouter } from "next/router";
 import { spinLoaderMin } from "../../../components/common/loader";
 import { LobbyAdmin } from "./lobbyAdmin";
@@ -43,7 +43,13 @@ export const Lobby = (props) => {
   }, [lobbyId]);
 
   useEffect(() => {
-    if (!lobby || !lobby?.startAt) return;
+    if (!lobby || !lobby?.startAt || lobby.bingoCardsDistributed) return;
+
+    const userStatusDatabaseRef = database.ref(
+        `lobbies/${props.lobby.id}/users/${authUser.id}`
+    );
+
+
 
     //generar cartilla para los usuarios
     console.log("generar cartilla para los usuarios");
