@@ -1,16 +1,14 @@
-import React from "reactn";
+import React, { useEffect, useGlobal } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../constants";
 
-const bingoCard = [
-  [2, 4, 8, 13, 15],
-  [16, 22, 25, 27, 30],
-  [31, 33, 36, 38, 45],
-  [46, 48, 56, 59, 60],
-  [61, 63, 68, 72, 75],
-];
-
 export const BingoCard = (props) => {
+  const [authUser] = useGlobal("user");
+
+  useEffect(() => {
+    console.log("usuario", authUser);
+  });
+
   return (
     <CardContainer
       backgroundColor={props.lobby.game.backgroundColor}
@@ -30,7 +28,7 @@ export const BingoCard = (props) => {
           </tr>
         </thead>
         <tbody className="tbody">
-          {bingoCard.map((arrNums, index) => (
+          {JSON.parse(authUser.card).map((arrNums, index) => (
             <tr key={`key-${index}`}>
               {arrNums.map((num, idx) => (
                 <td key={`key-${num}-${idx}`}>{num}</td>
