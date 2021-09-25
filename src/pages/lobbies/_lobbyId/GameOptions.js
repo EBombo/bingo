@@ -24,7 +24,9 @@ export const GameOptions = (props) => {
     const board = createBoard();
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      startAt: new Date(),
+      startGame: true,
+      round: 0,
+      lastPlays: [],
       updateAt: new Date(),
       board,
     });
@@ -78,6 +80,8 @@ export const GameOptions = (props) => {
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       updateAt: new Date(),
+      round: 0,
+      lastPlays: [],
       board,
     });
 
@@ -111,16 +115,19 @@ export const GameOptions = (props) => {
 
     newBoard[numberCalled] = true;
 
-    console.log(
-      "trying to call",
-      missingNumbers,
-      newBoard,
-      randomIndex,
-      numberCalled
-    );
+    const newLastPlays = props.lobby.lastPlays;
+
+    console.log("prev", newLastPlays);
+
+    newLastPlays.unshift(numberCalled);
+
+    console.log(newLastPlays);
+
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       startAt: new Date(),
       updateAt: new Date(),
+      round: props.lobby.round + 1,
+      lastPlays: newLastPlays,
       board: newBoard,
     });
   };
@@ -137,7 +144,7 @@ export const GameOptions = (props) => {
       {!props.hiddenOptions && (
         <div className="options">
           <div className="btn-container">
-            {props.lobby.startAt ? (
+            {props.lobby.startGame ? (
               <ButtonAnt width="100%" onClick={() => callNumber()}>
                 LLamar número
               </ButtonAnt>

@@ -15,7 +15,6 @@ import { LastPlays } from "./LastPlays";
 import { BingoCard } from "./BingoCard";
 import { ButtonAnt } from "../../../components/form";
 import defaultTo from "lodash/defaultTo";
-import { firestore } from "../../../config";
 
 export const BingoGame = (props) => {
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);
@@ -62,7 +61,12 @@ export const BingoGame = (props) => {
           {authUser.isAdmin && (
             <div className="bingo">
               <div className="left-container">
-                <RoundsLastNumber lastNumber={35} round={6} {...props} />
+                <RoundsLastNumber
+                  key={props.lobby.lastPlays.length}
+                  lastNumber={props.lobby?.lastPlays?.shift() || 0}
+                  round={props.lobby.round}
+                  {...props}
+                />
                 <CardPattern
                   caption={"Patrón que se debe llenar"}
                   key={props.lobby.pattern}
@@ -85,7 +89,10 @@ export const BingoGame = (props) => {
                       Premios
                     </div>
                     <div className="last-plays-container">
-                      <LastPlays lastNumbers={[1, 34, 65, 26, 73]} {...props} />
+                      <LastPlays
+                        lastNumbers={props.lobby?.lastPlays?.slice(0, 4) || []}
+                        {...props}
+                      />
                     </div>
                   </div>
                 </div>
@@ -117,7 +124,10 @@ export const BingoGame = (props) => {
                   <ButtonAnt color="default">Ver premios</ButtonAnt>
                 </div>
                 <div className="last-plays-container">
-                  <LastPlays lastNumbers={[1, 34, 65, 26, 73]} {...props} />
+                  <LastPlays
+                    lastNumbers={props.lobby?.lastPlays?.slice(0, 4) || []}
+                    {...props}
+                  />
                 </div>
               </div>
             </div>
@@ -161,7 +171,15 @@ export const BingoGame = (props) => {
               </div>
               <div className="pattern-rounds">
                 <CardPattern caption={"Patrón que se debe llenar"} {...props} />
-                <RoundsLastNumber lastNumber={35} round={6} {...props} />
+                <RoundsLastNumber
+                  lastNumber={
+                    defaultTo(props.lobby.lastPlays.length, []) > 0
+                      ? 0
+                      : props.lobby.lastPlays.shift()
+                  }
+                  round={props.lobby.round}
+                  {...props}
+                />
               </div>
               <div className="options-container">
                 <GameOptions lastNumber={30} lastLetter={"I"} {...props} />
@@ -173,7 +191,10 @@ export const BingoGame = (props) => {
                 Premios
               </div>
               <div className="last-plays-container">
-                <LastPlays lastNumbers={[1, 34, 65, 26, 73]} {...props} />
+                <LastPlays
+                  lastNumbers={props.lobby?.lastPlays?.slice(0, 4) || []}
+                  {...props}
+                />
               </div>
               <div className="chat-container">
                 <Chat title={"CHAT DEL BINGO"} />

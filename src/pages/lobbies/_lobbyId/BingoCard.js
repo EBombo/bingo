@@ -122,11 +122,13 @@ const CardContainer = styled.div`
       border-spacing: 5px;
 
       thead {
-        th {
-          font-weight: 700;
-          font-size: 38px;
-          line-height: 41px;
-          color: ${(props) => props.theme.basic.whiteLight};
+        tr {
+          th {
+            font-weight: 700;
+            font-size: 34px;
+            line-height: 38px;
+            color: ${(props) => props.theme.basic.whiteLight};
+          }
         }
       }
 
