@@ -8,6 +8,10 @@ export const BingoCard = (props) => {
     Array.from(Array(5), () => new Array(5).fill(null))
   );
 
+  useEffect(() => {
+    console.log("user", authUser);
+  }, []);
+
   const copyMatrix = () => {
     const newMatrix = [];
     for (const row of matrix) {
@@ -41,30 +45,34 @@ export const BingoCard = (props) => {
           </tr>
         </thead>
         <tbody className="tbody">
-          {JSON.parse(authUser.card).map((arrNums, row) => (
-            <tr key={`key-${row}`}>
-              {arrNums.map((num, col) => (
-                <td key={`key-${num}-${col}-${matrix}`}>
-                  {props.lobby.settings.cardAutofill ? (
-                    <div
-                      className={`${
-                        props.lobby.board && props.lobby.board[num] && `active`
-                      }`}
-                    >
-                      {num}
-                    </div>
-                  ) : (
-                    <div
-                      className={`${matrix[row][col] ? "active" : "number"}`}
-                      onClick={() => selectNumber(row, col)}
-                    >
-                      {num}
-                    </div>
-                  )}
-                </td>
-              ))}
-            </tr>
-          ))}
+          {JSON.parse(props.lobby.users[authUser.id].card).map(
+            (arrNums, row) => (
+              <tr key={`key-${row}`}>
+                {arrNums.map((num, col) => (
+                  <td key={`key-${num}-${col}-${matrix}`}>
+                    {props.lobby.settings.cardAutofill ? (
+                      <div
+                        className={`${
+                          props.lobby.board &&
+                          props.lobby.board[num] &&
+                          `active`
+                        }`}
+                      >
+                        {num}
+                      </div>
+                    ) : (
+                      <div
+                        className={`${matrix[row][col] ? "active" : "number"}`}
+                        onClick={() => selectNumber(row, col)}
+                      >
+                        {num}
+                      </div>
+                    )}
+                  </td>
+                ))}
+              </tr>
+            )
+          )}
         </tbody>
       </table>
     </CardContainer>

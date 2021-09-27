@@ -226,7 +226,7 @@ export const BingoGame = (props) => {
                 </div>
 
                 <div className="buttons-container">
-                  <ButtonAnt>Bingo</ButtonAnt>
+                  <ButtonAnt onClick={() => callBingo()}>Bingo</ButtonAnt>
                   <ButtonAnt
                     color="default"
                     onClick={() => setIsVisibleModalAwards(true)}
