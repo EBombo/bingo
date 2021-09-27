@@ -63,8 +63,6 @@ export const BingoGame = (props) => {
               <div className="left-container">
                 <RoundsLastNumber
                   key={defaultTo(props.lobby.lastPlays, []).length}
-                  lastNumber={props.lobby?.lastPlays?.shift() || 0}
-                  round={props.lobby.round}
                   {...props}
                 />
                 <CardPattern
@@ -173,8 +171,6 @@ export const BingoGame = (props) => {
                 <CardPattern caption={"Patrón que se debe llenar"} {...props} />
                 <RoundsLastNumber
                   key={defaultTo(props.lobby.lastPlays, []).length}
-                  lastNumber={props.lobby?.lastPlays?.shift() || 0}
-                  round={props.lobby.round}
                   {...props}
                 />
               </div>
