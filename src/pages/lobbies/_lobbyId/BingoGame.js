@@ -372,9 +372,10 @@ const BingoGameContainer = styled.div`
       padding: 0;
 
       .user-content {
-        display: grid;
+        display: flex;
         align-items: center;
-        grid-template-columns: repeat(2, 1fr);
+        justify-content: space-evenly;
+        padding: 0.5rem 0.5rem 2rem 0.5rem;
 
         .left-user-content {
           display: flex;
@@ -410,10 +411,9 @@ const BingoGameContainer = styled.div`
 
     .bingo {
       padding: 0.5rem 0.5rem 2rem 0.5rem;
-      display: grid;
-      display: -webkit-box;
-      grid-template-columns: 1fr 2fr;
-      grid-gap: 1rem;
+      //display: -webkit-box;
+      display: flex;
+      justify-content: space-between;
       border-bottom: 10px solid ${(props) => props.theme.basic.primary};
       overflow: auto;
     }

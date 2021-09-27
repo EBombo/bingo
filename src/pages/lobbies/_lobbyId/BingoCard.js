@@ -1,13 +1,26 @@
-import React, { useEffect, useGlobal } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../constants";
 
 export const BingoCard = (props) => {
   const [authUser] = useGlobal("user");
+  const [matrix, setMatrix] = useState(
+    Array.from(Array(5), () => new Array(5).fill(null))
+  );
 
-  useEffect(() => {
-    console.log("usuario", authUser);
-  });
+  const copyMatrix = () => {
+    const newMatrix = [];
+    for (const row of matrix) {
+      newMatrix.push(row.slice());
+    }
+    return newMatrix;
+  };
+
+  const selectNumber = (row, col) => {
+    const newMatrix = copyMatrix();
+    newMatrix[row][col] = newMatrix[row][col] ? null : true;
+    setMatrix(newMatrix);
+  };
 
   return (
     <CardContainer
@@ -28,10 +41,27 @@ export const BingoCard = (props) => {
           </tr>
         </thead>
         <tbody className="tbody">
-          {JSON.parse(authUser.card).map((arrNums, index) => (
-            <tr key={`key-${index}`}>
-              {arrNums.map((num, idx) => (
-                <td key={`key-${num}-${idx}`}>{num}</td>
+          {JSON.parse(authUser.card).map((arrNums, row) => (
+            <tr key={`key-${row}`}>
+              {arrNums.map((num, col) => (
+                <td key={`key-${num}-${col}-${matrix}`}>
+                  {props.lobby.settings.cardAutofill ? (
+                    <div
+                      className={`${
+                        props.lobby.board && props.lobby.board[num] && `active`
+                      }`}
+                    >
+                      {num}
+                    </div>
+                  ) : (
+                    <div
+                      className={`${matrix[row][col] ? "active" : "number"}`}
+                      onClick={() => selectNumber(row, col)}
+                    >
+                      {num}
+                    </div>
+                  )}
+                </td>
               ))}
             </tr>
           ))}
@@ -43,7 +73,6 @@ export const BingoCard = (props) => {
 
 const CardContainer = styled.div`
   width: 100%;
-  max-width: 200px;
   background: ${(props) =>
     props.backgroundColor
       ? props.backgroundColor
@@ -99,15 +128,25 @@ const CardContainer = styled.div`
             props.numberColor ? props.numberColor : props.theme.basic.white};
           background: ${(props) =>
             props.blocksColor ? props.blocksColor : props.theme.basic.primary};
+          justify-content: center;
+
+          .active {
+            width: 85%;
+            height: 85%;
+            border-radius: 50%;
+            background: ${(props) => props.theme.basic.primaryLight};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+          }
         }
       }
     }
   }
 
   ${mediaQuery.afterTablet} {
-    max-width: 460px;
-    height: 500px;
-
+    padding: 0.5rem 1rem;
     .card-title {
       font-size: 28px;
       line-height: 35px;
