@@ -30,3 +30,4 @@ options:
   # TODO: Deploy functions.
   # TODO: Deploy hosting [front / back].
   # TODO: Format all files "npx prettier --write ."
+  # TODO: Add tests

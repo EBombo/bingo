@@ -6,19 +6,6 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "redirects": [
-      {
-        "source": "**",
-        "destination": "https://bingo-dev-wwqwnfac3a-uc.a.run.app",
-        "type": 301
-      }
-    ],
-    "rewrites": [
-      {
-        "source": "/api/**",
-        "function": "api"
-      }
-    ],
     "headers": [
       {
         "source": "**/*.@(jpg|jpeg|gif|png|svg|ico)",
