@@ -60,10 +60,11 @@ export const LobbyAdmin = (props) => {
   };
 
   const mapUsersWithCards = () =>
-    users.map((user) => {
+    users.reduce((usersSum, user) => {
       const card = getBingoCard();
-      return { ...user, id: user.userId, card: JSON.stringify(card) };
-    });
+      const newUser = { ...user, id: user.userId, card: JSON.stringify(card) };
+      return { ...usersSum, [newUser.id]: newUser };
+    }, {});
 
   return (
     <LobbyCss>
