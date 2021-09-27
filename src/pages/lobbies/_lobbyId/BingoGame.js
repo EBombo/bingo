@@ -62,7 +62,7 @@ export const BingoGame = (props) => {
             <div className="bingo">
               <div className="left-container">
                 <RoundsLastNumber
-                  key={props.lobby.lastPlays.length}
+                  key={defaultTo(props.lobby.lastPlays, []).length}
                   lastNumber={props.lobby?.lastPlays?.shift() || 0}
                   round={props.lobby.round}
                   {...props}
@@ -172,11 +172,8 @@ export const BingoGame = (props) => {
               <div className="pattern-rounds">
                 <CardPattern caption={"Patrón que se debe llenar"} {...props} />
                 <RoundsLastNumber
-                  lastNumber={
-                    defaultTo(props.lobby.lastPlays.length, []) > 0
-                      ? 0
-                      : props.lobby.lastPlays.shift()
-                  }
+                  key={defaultTo(props.lobby.lastPlays, []).length}
+                  lastNumber={props.lobby?.lastPlays?.shift() || 0}
                   round={props.lobby.round}
                   {...props}
                 />
