@@ -43,7 +43,6 @@ export const BingoCard = (props) => {
 
 const CardContainer = styled.div`
   width: 100%;
-  height: 210px;
   max-width: 200px;
   background: ${(props) =>
     props.backgroundColor

@@ -77,7 +77,14 @@ export const BingoGame = (props) => {
                 </div>
                 <div className="bottom-section">
                   <div className="left">
-                    <GameOptions lastNumber={30} lastLetter={"I"} {...props} />
+                    <GameOptions
+                      lastNumber={
+                        defaultTo(props.lobby.lastPlays, []).length > 0
+                          ? props.lobby.lastPlays[0]
+                          : 0
+                      }
+                      {...props}
+                    />
                   </div>
                   <div className="right">
                     <div
@@ -111,8 +118,11 @@ export const BingoGame = (props) => {
                     {...props}
                   />
                   <GameOptions
-                    lastNumber={30}
-                    lastLetter={"I"}
+                    lastNumber={
+                      defaultTo(props.lobby.lastPlays, []).length > 0
+                        ? props.lobby.lastPlays[0]
+                        : 0
+                    }
                     hiddenOptions
                     {...props}
                   />
@@ -175,7 +185,14 @@ export const BingoGame = (props) => {
                 />
               </div>
               <div className="options-container">
-                <GameOptions lastNumber={30} lastLetter={"I"} {...props} />
+                <GameOptions
+                  lastNumber={
+                    defaultTo(props.lobby.lastPlays, []).length > 0
+                      ? props.lobby.lastPlays[0]
+                      : 0
+                  }
+                  {...props}
+                />
               </div>
               <div
                 className="awards"
@@ -200,8 +217,11 @@ export const BingoGame = (props) => {
                 <BingoCard user={authUser} {...props} />
                 <div className="right-container">
                   <GameOptions
-                    lastNumber={30}
-                    lastLetter={"I"}
+                    lastNumber={
+                      defaultTo(props.lobby.lastPlays, []).length > 0
+                        ? props.lobby.lastPlays[0]
+                        : 0
+                    }
                     hiddenOptions
                     {...props}
                   />
@@ -258,6 +278,7 @@ const BingoGameContainer = styled.div`
       align-items: center;
       justify-content: center;
       margin: 1rem 0;
+      padding: 0.5rem;
 
       .right-container {
         display: flex;
@@ -402,7 +423,6 @@ const BingoGameContainer = styled.div`
       grid-template-columns: 1fr 2fr;
       grid-gap: 1rem;
       border-bottom: 10px solid ${(props) => props.theme.basic.primary};
-      justify-content: center;
       overflow: auto;
     }
 

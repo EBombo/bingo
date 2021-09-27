@@ -7,6 +7,7 @@ import { firestore } from "../../../firebase";
 import { mapKeys } from "lodash/object";
 import { ModalContainer } from "../../../components/common/ModalContainer";
 import { mediaQuery } from "../../../constants";
+import get from "lodash/get";
 
 export const GameOptions = (props) => {
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
@@ -137,7 +138,17 @@ export const GameOptions = (props) => {
       {modalConfirm()}
       <div className="out">
         <div className="in">
-          <p>{props.lastLetter}</p>
+          <p>
+            {props.lastNumber < 16
+              ? get(props, "lobby.game.letters.b", "B")
+              : props.lastNumber < 31
+              ? get(props, "lobby.game.letters.i", "I")
+              : props.lastNumber < 46
+              ? get(props, "lobby.game.letters.n", "N")
+              : props.lastNumber < 61
+              ? get(props, "lobby.game.letters.g", "G")
+              : get(props, "lobby.game.letters.o", "O")}
+          </p>
           <p>{props.lastNumber}</p>
         </div>
       </div>
