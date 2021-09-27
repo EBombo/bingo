@@ -16,27 +16,27 @@ export const BingoBoard = (props) => {
         <thead>
           <tr>
             <th className="th-header">
-              {get(props, "lobby.game.letters.b", {})}
+              {get(props, "lobby.game.letters.b", "B")}
             </th>
           </tr>
           <tr>
             <th className="th-header">
-              {get(props, "lobby.game.letters.i", {})}
+              {get(props, "lobby.game.letters.i", "I")}
             </th>
           </tr>
           <tr>
             <th className="th-header">
-              {get(props, "lobby.game.letters.n", {})}
+              {get(props, "lobby.game.letters.n", "N")}
             </th>
           </tr>
           <tr>
             <th className="th-header">
-              {get(props, "lobby.game.letters.g", {})}
+              {get(props, "lobby.game.letters.g", "G")}
             </th>
           </tr>
           <tr>
             <th className="th-header">
-              {get(props, "lobby.game.letters.o", {})}
+              {get(props, "lobby.game.letters.o", "O")}
             </th>
           </tr>
         </thead>

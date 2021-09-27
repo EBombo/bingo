@@ -1,5 +1,6 @@
 import React from "reactn";
 import styled from "styled-components";
+import get from "lodash/get";
 
 export const LastPlays = (props) => {
   return (
@@ -8,7 +9,17 @@ export const LastPlays = (props) => {
         {props.lastNumbers.map((number) => (
           <BallContainer number={number} key={number}>
             <div className="inner-container">
-              <div className="letter">B</div>
+              <div className="letter">
+                {number < 16
+                  ? get(props, "lobby.game.letters.b", "B")
+                  : number < 31
+                  ? get(props, "lobby.game.letters.i", "I")
+                  : number < 46
+                  ? get(props, "lobby.game.letters.n", "N")
+                  : number < 61
+                  ? get(props, "lobby.game.letters.g", "G")
+                  : get(props, "lobby.game.letters.o", "O")}
+              </div>
               <div className="number">{number}</div>
             </div>
           </BallContainer>

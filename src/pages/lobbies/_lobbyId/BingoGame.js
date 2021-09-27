@@ -88,7 +88,7 @@ export const BingoGame = (props) => {
                     </div>
                     <div className="last-plays-container">
                       <LastPlays
-                        lastNumbers={props.lobby?.lastPlays?.slice(0, 4) || []}
+                        lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
                         {...props}
                       />
                     </div>
@@ -123,7 +123,7 @@ export const BingoGame = (props) => {
                 </div>
                 <div className="last-plays-container">
                   <LastPlays
-                    lastNumbers={props.lobby?.lastPlays?.slice(0, 4) || []}
+                    lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
                     {...props}
                   />
                 </div>
@@ -185,7 +185,7 @@ export const BingoGame = (props) => {
               </div>
               <div className="last-plays-container">
                 <LastPlays
-                  lastNumbers={props.lobby?.lastPlays?.slice(0, 4) || []}
+                  lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
                   {...props}
                 />
               </div>
