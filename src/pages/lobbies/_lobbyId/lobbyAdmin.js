@@ -12,6 +12,7 @@ import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
+import { getBingoCard } from "../../../business";
 
 export const LobbyAdmin = (props) => {
   const router = useRouter();
@@ -49,7 +50,7 @@ export const LobbyAdmin = (props) => {
         updateAt: new Date(),
       };
 
-      if (gameStarted) newLobby.users = users;
+      if (gameStarted) newLobby.users = mapUsersWithCards();
 
       await firestore.doc(`lobbies/${lobbyId}`).update(newLobby);
     } catch (error) {
@@ -57,6 +58,12 @@ export const LobbyAdmin = (props) => {
       console.error(error);
     }
   };
+
+  const mapUsersWithCards = () =>
+    users.map((user) => {
+      const card = getBingoCard();
+      return { ...user, card: JSON.stringify(card) };
+    });
 
   return (
     <LobbyCss>
