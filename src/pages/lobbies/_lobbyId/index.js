@@ -82,6 +82,14 @@ export const Lobby = (props) => {
     createCardOnUser();
   }, [lobby]);
 
+  const transpose = (matrix) => {
+    return Object.keys(matrix[0]).map(function (c) {
+      return matrix.map((r) => {
+        return r[c];
+      });
+    });
+  };
+
   const getBingoCard = () => {
     let arr = [
       [], // b (1-15)
@@ -106,7 +114,7 @@ export const Lobby = (props) => {
       arr[i].sort((a, b) => a - b);
     }
 
-    return arr;
+    return transpose(arr);
   };
 
   if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby)
