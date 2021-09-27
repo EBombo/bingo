@@ -12,7 +12,6 @@ import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
-import { BingoGame } from "./BingoGame";
 
 export const LobbyAdmin = (props) => {
   const router = useRouter();
@@ -94,9 +93,11 @@ export const LobbyAdmin = (props) => {
                   return setIsPlay(false);
                 }
 
+                const currentAudioToPlay =
+                  props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
+
                 const currentAudio =
-                  audioRef.current ??
-                  new Audio(props.lobby?.game.audio.audioUrl);
+                  audioRef.current ?? new Audio(currentAudioToPlay);
 
                 audioRef.current = currentAudio;
                 audioRef.current.play();
