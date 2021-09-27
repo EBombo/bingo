@@ -1,9 +1,9 @@
-import React, { useState, useGlobal, useEffect } from "reactn";
-import styled from "styled-components";
-import { Image } from "../../../components/common/Image";
-import { config, firestore } from "../../../firebase";
 import get from "lodash/get";
+import styled from "styled-components";
 import { mediaQuery } from "../../../constants";
+import React, { useEffect, useGlobal } from "reactn";
+import { config, firestore } from "../../../firebase";
+import { Image } from "../../../components/common/Image";
 
 export const LoadingGame = (props) => {
   const [authUser] = useGlobal("user");

@@ -43,11 +43,15 @@ export const LobbyAdmin = (props) => {
     try {
       if (!lobbyId) throw Error("Lobby not exist");
 
-      await firestore.doc(`lobbies/${lobbyId}`).update({
+      let newLobby = {
         isLocked,
         startAt: gameStarted,
         updateAt: new Date(),
-      });
+      };
+
+      if (gameStarted) newLobby.users = users;
+
+      await firestore.doc(`lobbies/${lobbyId}`).update(newLobby);
     } catch (error) {
       props.showNotification("ERROR", "Lobby not exist");
       console.error(error);
