@@ -62,7 +62,7 @@ export const LobbyAdmin = (props) => {
   const mapUsersWithCards = () =>
     users.map((user) => {
       const card = getBingoCard();
-      return { ...user, card: JSON.stringify(card) };
+      return { ...user, id: user.userId, card: JSON.stringify(card) };
     });
 
   return (
