@@ -18,7 +18,7 @@
       "appId": "1:83072686764:web:2c5680dc46bfacb5d5dd09",
       "measurementId": "G-BWH1540T4Q"
     },
-    "serverUrlLocal": "http://localhost:5001/bingo-322514/us-central1/api",
+    "serverUrlLocal": "http://localhost:8080",
     "serverUrl": "https://api.ebombo.io",
     "serverUrlEvents": "https://api.ebombo.com",
     "storageUrl": "https://storage.googleapis.com/bingo-322514.appspot.com",
@@ -44,7 +44,7 @@
       "appId": "1:400641140585:web:4edded714bb211fd8c7ff8",
       "measurementId": "G-NWBPEND5Q0"
     },
-    "serverUrlLocal": "http://localhost:5001/bingo-dev-322514/us-central1/api",
+    "serverUrlLocal": "http://localhost:8080",
     "serverUrl": "https://red-api.ebombo.io",
     "serverUrlEvents": "https://red-api.ebombo.com",
     "storageUrl": "https://storage.googleapis.com/bingo-dev-322514.appspot.com",
