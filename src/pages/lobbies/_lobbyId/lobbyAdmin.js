@@ -19,27 +19,10 @@ export const LobbyAdmin = (props) => {
   const [audios] = useGlobal("audios");
   const [users, setUsers] = useState([]);
   const [isPlay, setIsPlay] = useState(false);
-  const [isLoading, setLoading] = useState(false);
-  const [isLocked, setIsLocked] = useState(false);
-  const [gameStarted, setGameStarted] = useState(null);
+  const [isLoadingLock, setIsLoadingLock] = useState(false);
+  const [isLoadingStart, setIsLoadingStart] = useState(false);
 
   const audioRef = useRef(null);
-
-  useEffect(() => {
-    if (!lobbyId) return;
-
-    const updateLobby = async () => {
-      setLoading(true);
-      await firestore.doc(`lobbies/${lobbyId}`).update({
-        isLocked,
-        startAt: gameStarted,
-        updateAt: new Date(),
-      });
-      setLoading(false);
-    };
-
-    updateLobby();
-  }, [isLocked, gameStarted]);
 
   useEffect(() => {
     if (!props.lobby) return;
@@ -55,6 +38,21 @@ export const LobbyAdmin = (props) => {
 
     fetchUsers();
   }, [props.lobby]);
+
+  const updateLobby = async (isLocked = false, gameStarted = null) => {
+    try {
+      if (!lobbyId) throw Error("Lobby not exist");
+
+      await firestore.doc(`lobbies/${lobbyId}`).update({
+        isLocked,
+        startAt: gameStarted,
+        updateAt: new Date(),
+      });
+    } catch (error) {
+      props.showNotification("ERROR", "Lobby not exist");
+      console.error(error);
+    }
+  };
 
   return (
     <LobbyCss>
@@ -134,7 +132,7 @@ export const LobbyAdmin = (props) => {
           <div className="label">Entra a www.ebombo.it</div>
           <div className="pin-label">Pin del juego:</div>
           <div className="pin">
-            {isLocked ? <LockOutlined /> : props.lobby?.pin}
+            {props.lobby.isLocked ? <LockOutlined /> : props.lobby?.pin}
           </div>
         </div>
 
@@ -142,19 +140,27 @@ export const LobbyAdmin = (props) => {
           <ButtonBingo
             variant="primary"
             margin="10px 20px"
-            disabled={isLoading}
-            loading={isLoading}
-            onClick={() => setIsLocked(!isLocked)}
+            disabled={isLoadingLock}
+            loading={isLoadingLock}
+            onClick={async () => {
+              setIsLoadingLock(true);
+              await updateLobby(!props.lobby.isLocked);
+              setIsLoadingLock(false);
+            }}
           >
-            {isLocked ? <LockOutlined /> : <UnlockOutlined />}
+            {props.lobby.isLocked ? <LockOutlined /> : <UnlockOutlined />}
           </ButtonBingo>
           <ButtonBingo
             variant="primary"
             margin="10px 20px"
             padding="10px 30px"
-            loading={isLoading}
-            disabled={!users?.length || isLoading}
-            onClick={() => setGameStarted(new Date())}
+            loading={isLoadingStart}
+            disabled={!users?.length || isLoadingStart}
+            onClick={async () => {
+              setIsLoadingStart(true);
+              await updateLobby(true, new Date());
+              setIsLoadingStart(false);
+            }}
           >
             EMPEZAR
           </ButtonBingo>
