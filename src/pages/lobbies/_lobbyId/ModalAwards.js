@@ -6,7 +6,7 @@ import { ButtonAnt } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { Input } from "antd";
 import defaultTo from "lodash/defaultTo";
-import {firestore} from "../../../firebase";
+import { firestore } from "../../../firebase";
 
 export const ModalAwards = (props) => {
   const [authUser] = useGlobal("user");
@@ -51,9 +51,9 @@ export const ModalAwards = (props) => {
     <ModalContainer
       background="#FAFAFA"
       footer={null}
-      closable={false}
       top="10%"
       visible={props.isVisibleModalAwards}
+      onCancel={() => props.setIsVisibleModalAwards(false)}
     >
       <AwardsContainer key={props.lobby.settings}>
         <div className="title">{authUser.isAdmin ? "Editar " : ""} Premios</div>
@@ -61,7 +61,10 @@ export const ModalAwards = (props) => {
           <div className="award" key={index}>
             <div className="label">Premio {index + 1}</div>
             <div className="content">
-              <Input defaultValue={award} placeholder={`Premio ${index + 1}`} />
+              <Input
+                defaultValue={award.name}
+                placeholder={`Premio ${index + 1}`}
+              />
               {authUser.isAdmin && (
                 <ButtonAnt color="danger" onClick={() => deleteAward(index)}>
                   Borrar
@@ -77,8 +80,14 @@ export const ModalAwards = (props) => {
               <Input
                 placeholder="Premio"
                 name="award"
-                value={award}
-                onChange={(event) => setAward(event.target.value)}
+                value={award.name}
+                onChange={(event) =>
+                  setAward({
+                    name: event.target.value,
+                    order:
+                      defaultTo(props.lobby.settings.awards, []).length + 1,
+                  })
+                }
               />
               <ButtonAnt
                 color="secondary"
@@ -88,15 +97,6 @@ export const ModalAwards = (props) => {
                 Agregar
               </ButtonAnt>
             </form>
-            <div className="btns-container">
-              <ButtonAnt
-                color="default"
-                onClick={() => props.setIsVisibleModalAwards(false)}
-              >
-                Volver
-              </ButtonAnt>
-              <ButtonAnt>Guardar</ButtonAnt>
-            </div>
           </>
         )}
       </AwardsContainer>

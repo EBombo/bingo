@@ -62,9 +62,7 @@ export const BingoGame = (props) => {
             <div className="bingo">
               <div className="left-container">
                 <RoundsLastNumber
-                  key={props.lobby.lastPlays.length}
-                  lastNumber={props.lobby?.lastPlays?.shift() || 0}
-                  round={props.lobby.round}
+                  key={defaultTo(props.lobby.lastPlays, []).length}
                   {...props}
                 />
                 <CardPattern
@@ -90,7 +88,7 @@ export const BingoGame = (props) => {
                     </div>
                     <div className="last-plays-container">
                       <LastPlays
-                        lastNumbers={props.lobby?.lastPlays?.slice(0, 4) || []}
+                        lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
                         {...props}
                       />
                     </div>
@@ -125,7 +123,7 @@ export const BingoGame = (props) => {
                 </div>
                 <div className="last-plays-container">
                   <LastPlays
-                    lastNumbers={props.lobby?.lastPlays?.slice(0, 4) || []}
+                    lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
                     {...props}
                   />
                 </div>
@@ -172,12 +170,7 @@ export const BingoGame = (props) => {
               <div className="pattern-rounds">
                 <CardPattern caption={"Patrón que se debe llenar"} {...props} />
                 <RoundsLastNumber
-                  lastNumber={
-                    defaultTo(props.lobby.lastPlays.length, []) > 0
-                      ? 0
-                      : props.lobby.lastPlays.shift()
-                  }
-                  round={props.lobby.round}
+                  key={defaultTo(props.lobby.lastPlays, []).length}
                   {...props}
                 />
               </div>
@@ -192,7 +185,7 @@ export const BingoGame = (props) => {
               </div>
               <div className="last-plays-container">
                 <LastPlays
-                  lastNumbers={props.lobby?.lastPlays?.slice(0, 4) || []}
+                  lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
                   {...props}
                 />
               </div>
