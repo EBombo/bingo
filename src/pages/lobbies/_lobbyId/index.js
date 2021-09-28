@@ -47,11 +47,11 @@ export const Lobby = (props) => {
   if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby)
     return spinLoaderMin();
 
-  if (lobby.isPlaying) return <BingoGame lobby={lobby} {...props} />;
+  if (lobby?.isPlaying) return <BingoGame lobby={lobby} {...props} />;
 
-  if (lobby.startAt) return <LoadingGame lobby={lobby} {...props} />;
+  if (lobby?.startAt) return <LoadingGame lobby={lobby} {...props} />;
 
-  if (authUser.isAdmin) return <LobbyAdmin lobby={lobby} {...props} />;
+  if (authUser?.isAdmin) return <LobbyAdmin lobby={lobby} {...props} />;
 
   return <LobbyUser lobby={lobby} {...props} />;
 };
