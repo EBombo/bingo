@@ -1,10 +1,9 @@
-import styled from "styled-components";
 import React, { useGlobal, useRef, useState } from "reactn";
+import styled from "styled-components";
 import { Popover, Slider } from "antd";
 import { firestore } from "../../../firebase";
 import { useUser } from "../../../hooks";
-import { Desktop, mediaQuery, Tablet } from "../../../constants";
-import { ButtonAnt } from "../../../components/form";
+import { mediaQuery } from "../../../constants";
 import { SoundOutlined } from "@ant-design/icons";
 
 export const UserLayout = (props) => {
