@@ -14,12 +14,25 @@ import { BingoCard } from "./BingoCard";
 import { ButtonAnt } from "../../../components/form";
 import defaultTo from "lodash/defaultTo";
 import { UserLayout } from "./userLayout";
+import { firestore } from "../../../firebase";
 
 export const BingoGame = (props) => {
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);
   const [isVisibleModalAwards, setIsVisibleModalAwards] = useState(false);
   const [authUser] = useGlobal("user");
   const [tabletTab, setTabletTab] = useState("bingo");
+
+  useEffect(() => {
+    if (!props.lobby.bingo) return;
+    setIsVisibleModalWinner(true);
+  }, [props.lobby]);
+
+  const callBingo = async () => {
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      bingo: authUser,
+      updateAt: new Date(),
+    });
+  };
 
   return (
     <>
@@ -36,7 +49,7 @@ export const BingoGame = (props) => {
         )}
         {isVisibleModalWinner && (
           <ModalWinner
-            winner={{ nickname: "smendo95", id: "justfortesting" }}
+            winner={props.lobby.bingo}
             isVisibleModalWinner={isVisibleModalWinner}
             setIsVisibleModalWinner={setIsVisibleModalWinner}
             {...props}
@@ -116,7 +129,7 @@ export const BingoGame = (props) => {
                     />
                   </div>
                   <div className="buttons-container">
-                    <ButtonAnt>Bingo</ButtonAnt>
+                    <ButtonAnt onClick={() => callBingo()}>Bingo</ButtonAnt>
                     <ButtonAnt color="default">Ver premios</ButtonAnt>
                   </div>
                   <div className="last-plays-container">
