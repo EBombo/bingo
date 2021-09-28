@@ -142,16 +142,7 @@ export const BingoGame = (props) => {
               </div>
             )}
             <div className="subtitle">Participantes</div>
-            <UsersTabs
-              users={[
-                { nickname: "sebastian", id: "asdklfjowei" },
-                { nickname: "jacobo", id: "dsajkfaksjl" },
-                { nickname: "mendo", id: "dkfjwioefjwof" },
-                { nickname: "lopez", id: "elfjnk891238d" },
-                { nickname: "rafael", id: "sdklajfh2893" },
-              ]}
-              {...props}
-            />
+            <UsersTabs {...props} />
           </div>
           <div className="chat-container">
             <Chat title={"CHAT DEL BINGO"} />
@@ -255,16 +246,7 @@ export const BingoGame = (props) => {
           </div>
 
           {tabletTab === "users" && (
-            <UsersTabs
-              users={[
-                { nickname: "sebastian", id: "asdklfjowei" },
-                { nickname: "jacobo", id: "dsajkfaksjl" },
-                { nickname: "mendo", id: "dkfjwioefjwof" },
-                { nickname: "lopez", id: "elfjnk891238d" },
-                { nickname: "rafael", id: "sdklajfh2893" },
-              ]}
-              {...props}
-            />
+            <UsersTabs {...props} />
           )}
         </Tablet>
       </BingoGameContainer>

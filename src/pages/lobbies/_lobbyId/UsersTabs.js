@@ -18,8 +18,16 @@ export const UsersTabs = (props) => {
         <div className="user-card" key={`${user.nickname}-${index}`}>
           <div className="name">{user.nickname}</div>
           <div className="card-preview">
-            {defaultTo(user.card, Array(5).fill(Array(5).fill(0))).map((row) =>
-              row.map((num) => <div className={`matrix-num`} key={`${row}-${Math.random() * 150}`}/>)
+            {defaultTo(
+              JSON.parse(user.card),
+              Array(5).fill(Array(5).fill(0))
+            ).map((row) =>
+              row.map((num) => (
+                <div
+                  className={`matrix-num`}
+                  key={`${row}-${Math.random() * 150}`}
+                />
+              ))
             )}
           </div>
           <div className="btn-container">
@@ -85,7 +93,7 @@ export const UsersTabs = (props) => {
         </div>
       </div>
       <div className={`user-tab-${tab === "cards" ? "cards" : "table"}`}>
-        {defaultTo(props.users, []).map((user, index) =>
+        {defaultTo(Object.values(props.lobby.users), []).map((user, index) =>
           userContent(user, index)
         )}
       </div>
