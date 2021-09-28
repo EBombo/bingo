@@ -27,12 +27,11 @@ export const BingoGame = (props) => {
     setIsVisibleModalWinner(true);
   }, [props.lobby]);
 
-  const callBingo = async () => {
+  const callBingo = async () =>
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       bingo: authUser,
       updateAt: new Date(),
     });
-  };
 
   return (
     <>
@@ -57,14 +56,13 @@ export const BingoGame = (props) => {
         )}
         <Desktop>
           <div className="main-container">
-            {authUser.isAdmin && (
+            {authUser.isAdmin ? (
               <AdminPanel
                 {...props}
                 tabletTab={tabletTab}
                 setIsVisibleModalAwards={setIsVisibleModalAwards}
               />
-            )}
-            {!authUser.isAdmin && (
+            ) : (
               <UserPanel
                 {...props}
                 tabletTab={tabletTab}
@@ -107,14 +105,13 @@ export const BingoGame = (props) => {
                 </div>
               </div>
             )}
-            {tabletTab === "bingo" && authUser.isAdmin && (
+            {tabletTab === "bingo" && authUser.isAdmin ? (
               <AdminPanel
                 {...props}
                 tabletTab={tabletTab}
                 setIsVisibleModalAwards={setIsVisibleModalAwards}
               />
-            )}
-            {tabletTab === "bingo" && !authUser.isAdmin && (
+            ) : (
               <UserPanel
                 {...props}
                 tabletTab={tabletTab}
