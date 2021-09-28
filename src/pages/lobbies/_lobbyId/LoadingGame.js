@@ -12,7 +12,7 @@ export const LoadingGame = (props) => {
     const timer = setTimeout(() => {
       const updateLobby = async () =>
         await firestore.doc(`lobbies/${props.lobby.id}`).update({
-          bingoCardsDistributed: true,
+          isPlaying: true,
         });
 
       updateLobby();
