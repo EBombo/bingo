@@ -45,34 +45,32 @@ export const BingoCard = (props) => {
           </tr>
         </thead>
         <tbody className="tbody">
-          {JSON.parse(props.lobby.users[authUser.id].card).map(
-            (arrNums, row) => (
-              <tr key={`key-${row}`}>
-                {arrNums.map((num, col) => (
-                  <td key={`key-${num}-${col}-${matrix}`}>
-                    {props.lobby.settings.cardAutofill ? (
-                      <div
-                        className={`${
-                          props.lobby.board &&
-                          props.lobby.board[num] &&
-                          `active`
-                        }`}
-                      >
-                        {num}
-                      </div>
-                    ) : (
-                      <div
-                        className={`${matrix[row][col] ? "active" : "number"}`}
-                        onClick={() => selectNumber(row, col)}
-                      >
-                        {num}
-                      </div>
-                    )}
-                  </td>
-                ))}
-              </tr>
-            )
-          )}
+          {JSON.parse(
+            props.lobby.users[props.user ? props.user.id : authUser.id].card
+          ).map((arrNums, row) => (
+            <tr key={`key-${row}`}>
+              {arrNums.map((num, col) => (
+                <td key={`key-${num}-${col}-${matrix}`}>
+                  {props.lobby.settings.cardAutofill ? (
+                    <div
+                      className={`${
+                        props.lobby.board && props.lobby.board[num] && `active`
+                      }`}
+                    >
+                      {num}
+                    </div>
+                  ) : (
+                    <div
+                      className={`${matrix[row][col] ? "active" : "number"}`}
+                      onClick={() => selectNumber(row, col)}
+                    >
+                      {num}
+                    </div>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </CardContainer>
