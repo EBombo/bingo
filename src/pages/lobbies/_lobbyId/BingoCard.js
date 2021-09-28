@@ -12,16 +12,8 @@ export const BingoCard = (props) => {
     console.log("user", authUser);
   }, []);
 
-  const copyMatrix = () => {
-    const newMatrix = [];
-    for (const row of matrix) {
-      newMatrix.push(row.slice());
-    }
-    return newMatrix;
-  };
-
   const selectNumber = (row, col) => {
-    const newMatrix = copyMatrix();
+    const newMatrix = [...matrix];
     newMatrix[row][col] = newMatrix[row][col] ? null : true;
     setMatrix(newMatrix);
   };
