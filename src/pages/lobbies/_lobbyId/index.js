@@ -47,8 +47,7 @@ export const Lobby = (props) => {
   if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby)
     return spinLoaderMin();
 
-  if (lobby.bingoCardsDistributed)
-    return <BingoGame lobby={lobby} {...props} />;
+  if (lobby.isPlaying) return <BingoGame lobby={lobby} {...props} />;
 
   if (lobby.startAt) return <LoadingGame lobby={lobby} {...props} />;
 
