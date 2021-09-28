@@ -154,8 +154,12 @@ export const BingoGame = (props) => {
                 </div>
               </div>
             )}
-            <div className="subtitle">Participantes</div>
-            <UsersTabs {...props} />
+            {props.lobby.settings.showParticipants && (
+              <>
+                <div className="subtitle">Participantes</div>
+                <UsersTabs {...props} />
+              </>
+            )}
           </div>
           <div className="chat-container">
             <Chat title={"CHAT DEL BINGO"} />
@@ -163,20 +167,22 @@ export const BingoGame = (props) => {
         </Desktop>
         <Tablet>
           <div className="main-container">
-            <div className="tablet-tabs">
-              <div
-                className={`tab ${tabletTab === "bingo" && "active"}`}
-                onClick={() => setTabletTab("bingo")}
-              >
-                Bingo
+            {props.lobby.settings.showParticipants && (
+              <div className="tablet-tabs">
+                <div
+                  className={`tab ${tabletTab === "bingo" && "active"}`}
+                  onClick={() => setTabletTab("bingo")}
+                >
+                  Bingo
+                </div>
+                <div
+                  className={`tab ${tabletTab === "users" && "active"}`}
+                  onClick={() => setTabletTab("users")}
+                >
+                  Participantes
+                </div>
               </div>
-              <div
-                className={`tab ${tabletTab === "users" && "active"}`}
-                onClick={() => setTabletTab("users")}
-              >
-                Participantes
-              </div>
-            </div>
+            )}
             {tabletTab === "bingo" && authUser.isAdmin && (
               <>
                 <div className="bingo-board">
@@ -263,7 +269,9 @@ export const BingoGame = (props) => {
             )}
           </div>
 
-          {tabletTab === "users" && <UsersTabs {...props} />}
+          {tabletTab === "users" && props.lobby.showParticipants && (
+            <UsersTabs {...props} />
+          )}
         </Tablet>
       </BingoGameContainer>
     </>
