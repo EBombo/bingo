@@ -144,9 +144,11 @@ export const BingoGame = (props) => {
             <div className="subtitle">Participantes</div>
             <UsersTabs {...props} />
           </div>
-          <div className="chat-container">
-            <Chat title={"CHAT DEL BINGO"} />
-          </div>
+          {props.lobby?.settings?.showChat && (
+            <div className="chat-container">
+              <Chat title={"CHAT DEL BINGO"} />
+            </div>
+          )}
         </Desktop>
         <Tablet>
           <div className="main-container">
@@ -201,9 +203,11 @@ export const BingoGame = (props) => {
                     {...props}
                   />
                 </div>
-                <div className="chat-container">
-                  <Chat title={"CHAT DEL BINGO"} />
-                </div>
+                {props.lobby?.settings?.showChat && (
+                  <div className="chat-container">
+                    <Chat title={"CHAT DEL BINGO"} />
+                  </div>
+                )}
               </>
             )}
             {tabletTab === "bingo" && !authUser.isAdmin && (
@@ -238,16 +242,16 @@ export const BingoGame = (props) => {
                     Ver premios
                   </ButtonAnt>
                 </div>
-                <div className="chat-container">
-                  <Chat title={"CHAT DEL BINGO"} />
-                </div>
+                {props.lobby?.settings?.showChat && (
+                  <div className="chat-container">
+                    <Chat title={"CHAT DEL BINGO"} />
+                  </div>
+                )}
               </>
             )}
           </div>
 
-          {tabletTab === "users" && (
-            <UsersTabs {...props} />
-          )}
+          {tabletTab === "users" && <UsersTabs {...props} />}
         </Tablet>
       </BingoGameContainer>
     </>
