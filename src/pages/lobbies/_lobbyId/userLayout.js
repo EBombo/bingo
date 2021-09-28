@@ -159,12 +159,12 @@ const UserLayoutCss = styled.div`
     align-items: center;
 
     button {
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       border: none;
       background: ${(props) => props.theme.basic.whiteLight};
       border-radius: 50%;
-      margin: 0 1rem;
+      margin: 0 5px;
     }
   }
 
@@ -174,6 +174,14 @@ const UserLayoutCss = styled.div`
     .description {
       font-size: 18px;
       line-height: 22px;
+    }
+
+    .right-container {
+      button {
+        width: 40px;
+        height: 40px;
+        margin: 0 1rem;
+      }
     }
   }
 `;

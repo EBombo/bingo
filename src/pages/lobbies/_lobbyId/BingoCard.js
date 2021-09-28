@@ -78,12 +78,12 @@ export const BingoCard = (props) => {
 };
 
 const CardContainer = styled.div`
-  width: 100%;
   background: ${(props) =>
     props.backgroundColor
       ? props.backgroundColor
       : props.theme.basic.secondary};
   border-radius: 3px;
+  padding: 0.5rem;
 
   .card-title {
     font-family: Lato;
@@ -137,8 +137,8 @@ const CardContainer = styled.div`
           justify-content: center;
 
           .active {
-            width: 85%;
-            height: 85%;
+            width: 90%;
+            height: 90%;
             border-radius: 50%;
             background: ${(props) => props.theme.basic.primaryLight};
             display: flex;
@@ -161,7 +161,6 @@ const CardContainer = styled.div`
     }
 
     table {
-      width: 400px;
       border-collapse: separate;
       border-spacing: 5px;
 
@@ -169,8 +168,8 @@ const CardContainer = styled.div`
         tr {
           th {
             font-weight: 700;
-            font-size: 34px;
-            line-height: 38px;
+            font-size: 32px;
+            line-height: 36px;
             color: ${(props) => props.theme.basic.whiteLight};
           }
         }
@@ -178,13 +177,12 @@ const CardContainer = styled.div`
 
       tbody {
         tr {
-          height: 70px;
-
           td {
-            margin-right: 5px;
+            width: 50px;
+            height: 50px;
             font-weight: 700;
-            font-size: 38px;
-            line-height: 41px;
+            font-size: 32px;
+            line-height: 36px;
           }
         }
       }

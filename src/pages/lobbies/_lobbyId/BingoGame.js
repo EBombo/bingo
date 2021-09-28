@@ -111,32 +111,45 @@ export const BingoGame = (props) => {
                   <BingoCard user={authUser} {...props} />
                 </div>
                 <div className="right-user-content">
-                  <div className="top-content">
-                    <CardPattern
-                      caption={"Patrón que se debe llenar"}
-                      hiddenOptions
-                      key={props.lobby.pattern}
-                      {...props}
-                    />
-                    <GameOptions
-                      lastNumber={
-                        defaultTo(props.lobby.lastPlays, []).length > 0
-                          ? props.lobby.lastPlays[0]
-                          : 0
-                      }
-                      hiddenOptions
-                      {...props}
-                    />
-                  </div>
-                  <div className="buttons-container">
-                    <ButtonAnt onClick={() => callBingo()}>Bingo</ButtonAnt>
-                    <ButtonAnt color="default">Ver premios</ButtonAnt>
-                  </div>
-                  <div className="last-plays-container">
-                    <LastPlays
-                      lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
-                      {...props}
-                    />
+                  {props.lobby.settings.showBoardToUser && (
+                    <div className="board-container">
+                      <BingoBoard {...props} />
+                    </div>
+                  )}
+                  <div
+                    className={`${
+                      props.lobby.settings.showBoardToUser
+                        ? "flex-container"
+                        : "normal"
+                    } `}
+                  >
+                    <div className="top-content">
+                      <CardPattern
+                        caption={"Patrón que se debe llenar"}
+                        hiddenOptions
+                        key={props.lobby.pattern}
+                        {...props}
+                      />
+                      <GameOptions
+                        lastNumber={
+                          defaultTo(props.lobby.lastPlays, []).length > 0
+                            ? props.lobby.lastPlays[0]
+                            : 0
+                        }
+                        hiddenOptions
+                        {...props}
+                      />
+                    </div>
+                    <div className="last-plays-container">
+                      <div className="buttons-container">
+                        <ButtonAnt onClick={() => callBingo()}>Bingo</ButtonAnt>
+                        <ButtonAnt color="default">Ver premios</ButtonAnt>
+                      </div>
+                      <LastPlays
+                        lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
+                        {...props}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -167,7 +180,7 @@ export const BingoGame = (props) => {
             {tabletTab === "bingo" && authUser.isAdmin && (
               <>
                 <div className="bingo-board">
-                  <BingoBoard numbers={[1, 15, 45, 68, 23, 32]} {...props} />
+                  <BingoBoard {...props} />
                 </div>
                 <div className="pattern-rounds">
                   <CardPattern
@@ -208,8 +221,13 @@ export const BingoGame = (props) => {
             )}
             {tabletTab === "bingo" && !authUser.isAdmin && (
               <>
+                <div className="bingo-board">
+                  <BingoBoard {...props} />
+                </div>
                 <div className="top-container-user">
-                  <BingoCard user={authUser} {...props} />
+                  <div className="bingo-card-container">
+                    <BingoCard user={authUser} {...props} />
+                  </div>
                   <div className="right-container">
                     <GameOptions
                       lastNumber={
@@ -245,9 +263,7 @@ export const BingoGame = (props) => {
             )}
           </div>
 
-          {tabletTab === "users" && (
-            <UsersTabs {...props} />
-          )}
+          {tabletTab === "users" && <UsersTabs {...props} />}
         </Tablet>
       </BingoGameContainer>
     </>
@@ -266,6 +282,11 @@ const BingoGameContainer = styled.div`
       justify-content: center;
       margin: 1rem 0;
       padding: 0.5rem;
+
+      .bingo-card-container {
+        max-width: 250px;
+        margin: 0 auto;
+      }
 
       .right-container {
         display: flex;
@@ -317,9 +338,11 @@ const BingoGameContainer = styled.div`
     }
 
     .bingo-board {
-      max-width: 100%;
+      width: 100%;
+      max-width: 430px;
       overflow: auto;
-      margin-top: 1rem;
+      margin: 1rem auto;
+      padding: 0.5rem;
     }
 
     .pattern-rounds {
@@ -347,6 +370,8 @@ const BingoGameContainer = styled.div`
     color: ${(props) => props.theme.basic.primaryLight};
     cursor: pointer;
     padding: 1rem;
+    max-width: 450px;
+    margin: 0 auto;
   }
 
   .chat-container {
@@ -354,9 +379,9 @@ const BingoGameContainer = styled.div`
   }
 
   .last-plays-container {
-    margin: 1rem;
+    margin: 0.5rem auto;
     overflow: auto;
-    max-width: 100%;
+    max-width: 450px;
   }
 
   ${mediaQuery.afterTablet} {
@@ -367,10 +392,11 @@ const BingoGameContainer = styled.div`
       padding: 0;
 
       .user-content {
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
+        display: grid;
         padding: 0.5rem 0.5rem 2rem 0.5rem;
+        grid-template-columns: 400px minmax(650px, auto);
+        grid-gap: 1rem;
+        overflow: auto;
 
         .left-user-content {
           display: flex;
@@ -384,6 +410,14 @@ const BingoGameContainer = styled.div`
           align-items: center;
           justify-content: center;
           flex-direction: column;
+
+          .flex-container {
+            display: grid;
+            grid-template-columns: 270px 450px;
+            grid-gap: 1rem;
+            justify-content: space-between;
+            margin-top: 1rem;
+          }
 
           .top-content {
             display: flex;
@@ -406,10 +440,10 @@ const BingoGameContainer = styled.div`
 
     .bingo {
       padding: 0.5rem 0.5rem 2rem 0.5rem;
-      //display: -webkit-box;
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 300px minmax(600px, auto);
       border-bottom: 10px solid ${(props) => props.theme.basic.primary};
+      grid-gap: 1rem;
       overflow: auto;
     }
 
@@ -422,14 +456,15 @@ const BingoGameContainer = styled.div`
 
     .right-container {
       .board-container {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
+        max-width: 650px;
+        margin: 0 auto;
       }
       .bottom-section {
-        margin-top: 1rem;
         display: grid;
         grid-template-columns: 335px auto;
+        align-items: center;
+        max-width: 800px;
+        margin: 1rem auto;
 
         .last-plays-container {
           margin: 1rem;

@@ -209,7 +209,7 @@ const Content = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
-    height: 85vh;
+    height: calc(100vh - 185px);
     .chat-body {
       height: 100%;
     }
