@@ -51,9 +51,7 @@ export const Lobby = (props) => {
 
   if (lobby.startAt) return <LoadingGame lobby={lobby} {...props} />;
 
-  return authUser.isAdmin ? (
-    <LobbyAdmin lobby={lobby} {...props} />
-  ) : (
-    <LobbyUser lobby={lobby} {...props} />
-  );
+  if (authUser.isAdmin) return <LobbyAdmin lobby={lobby} {...props} />;
+
+  return <LobbyUser lobby={lobby} {...props} />;
 };
