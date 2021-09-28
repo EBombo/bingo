@@ -2,19 +2,19 @@ import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Chat } from "../../../components/chat";
 import { Desktop, mediaQuery, Tablet } from "../../../constants";
-import { BingoBoard } from "./BingoBoard";
-import { RoundsLastNumber } from "./RoundsLastNumber";
-import { GameOptions } from "./GameOptions";
-import { CardPattern } from "./CardPattern";
 import { ModalWinner } from "./ModalWinner";
 import { ModalAwards } from "./ModalAwards";
 import { UsersTabs } from "./UsersTabs";
-import { LastPlays } from "./LastPlays";
-import { BingoCard } from "./BingoCard";
-import { ButtonAnt } from "../../../components/form";
 import defaultTo from "lodash/defaultTo";
 import { UserLayout } from "./userLayout";
 import { firestore } from "../../../firebase";
+import { AdminPanel } from "./play/AdminPanel";
+import { UserPanel } from "./play/UserPanel";
+
+const TABS = {
+  BINGO: { value: "bingo" },
+  USERS: { value: "users" },
+};
 
 export const BingoGame = (props) => {
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);
@@ -58,103 +58,21 @@ export const BingoGame = (props) => {
         <Desktop>
           <div className="main-container">
             {authUser.isAdmin && (
-              <div className="bingo">
-                <div className="left-container">
-                  <RoundsLastNumber
-                    key={defaultTo(props.lobby.lastPlays, []).length}
-                    {...props}
-                  />
-                  <CardPattern
-                    caption={"Patrón que se debe llenar"}
-                    key={props.lobby.pattern}
-                    {...props}
-                  />
-                </div>
-                <div className="right-container">
-                  <div className="board-container">
-                    <BingoBoard {...props} />
-                  </div>
-                  <div className="bottom-section">
-                    <div className="left">
-                      <GameOptions
-                        lastNumber={
-                          defaultTo(props.lobby.lastPlays, []).length > 0
-                            ? props.lobby.lastPlays[0]
-                            : 0
-                        }
-                        {...props}
-                      />
-                    </div>
-                    <div className="right">
-                      <div
-                        className="awards"
-                        onClick={() => setIsVisibleModalAwards(true)}
-                      >
-                        Premios
-                      </div>
-                      <div className="last-plays-container">
-                        <LastPlays
-                          lastNumbers={
-                            props.lobby?.lastPlays?.slice(0, 5) || []
-                          }
-                          {...props}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <AdminPanel
+                {...props}
+                tabletTab={tabletTab}
+                setIsVisibleModalAwards={setIsVisibleModalAwards}
+              />
             )}
             {!authUser.isAdmin && (
-              <div className="user-content">
-                <div className="left-user-content">
-                  <BingoCard user={authUser} {...props} />
-                </div>
-                <div className="right-user-content">
-                  {props.lobby.settings.showBoardToUser && (
-                    <div className="board-container">
-                      <BingoBoard {...props} />
-                    </div>
-                  )}
-                  <div
-                    className={`${
-                      props.lobby.settings.showBoardToUser
-                        ? "flex-container"
-                        : "normal"
-                    } `}
-                  >
-                    <div className="top-content">
-                      <CardPattern
-                        caption={"Patrón que se debe llenar"}
-                        hiddenOptions
-                        key={props.lobby.pattern}
-                        {...props}
-                      />
-                      <GameOptions
-                        lastNumber={
-                          defaultTo(props.lobby.lastPlays, []).length > 0
-                            ? props.lobby.lastPlays[0]
-                            : 0
-                        }
-                        hiddenOptions
-                        {...props}
-                      />
-                    </div>
-                    <div className="last-plays-container">
-                      <div className="buttons-container">
-                        <ButtonAnt onClick={() => callBingo()}>Bingo</ButtonAnt>
-                        <ButtonAnt color="default">Ver premios</ButtonAnt>
-                      </div>
-                      <LastPlays
-                        lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
-                        {...props}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <UserPanel
+                {...props}
+                tabletTab={tabletTab}
+                callBingo={callBingo}
+                setIsVisibleModalAwards={setIsVisibleModalAwards}
+              />
             )}
-            {props.lobby.settings.showParticipants && (
+            {props.lobby.settings?.showParticipants && (
               <>
                 <div className="subtitle">Participantes</div>
                 <UsersTabs {...props} />
@@ -169,113 +87,43 @@ export const BingoGame = (props) => {
         </Desktop>
         <Tablet>
           <div className="main-container">
-            {props.lobby.settings.showParticipants && (
+            {props.lobby.settings?.showParticipants && (
               <div className="tablet-tabs">
                 <div
-                  className={`tab ${tabletTab === "bingo" && "active"}`}
-                  onClick={() => setTabletTab("bingo")}
+                  className={`tab ${
+                    tabletTab === TABS.BINGO.value && "active"
+                  }`}
+                  onClick={() => setTabletTab(TABS.BINGO.value)}
                 >
                   Bingo
                 </div>
                 <div
-                  className={`tab ${tabletTab === "users" && "active"}`}
-                  onClick={() => setTabletTab("users")}
+                  className={`tab ${
+                    tabletTab === TABS.USERS.value && "active"
+                  }`}
+                  onClick={() => setTabletTab(TABS.USERS.value)}
                 >
                   Participantes
                 </div>
               </div>
             )}
             {tabletTab === "bingo" && authUser.isAdmin && (
-              <>
-                <div className="bingo-board">
-                  <BingoBoard {...props} />
-                </div>
-                <div className="pattern-rounds">
-                  <CardPattern
-                    caption={"Patrón que se debe llenar"}
-                    {...props}
-                  />
-                  <RoundsLastNumber
-                    key={defaultTo(props.lobby.lastPlays, []).length}
-                    {...props}
-                  />
-                </div>
-                <div className="options-container">
-                  <GameOptions
-                    lastNumber={
-                      defaultTo(props.lobby.lastPlays, []).length > 0
-                        ? props.lobby.lastPlays[0]
-                        : 0
-                    }
-                    {...props}
-                  />
-                </div>
-                <div
-                  className="awards"
-                  onClick={() => setIsVisibleModalAwards(true)}
-                >
-                  Premios
-                </div>
-                <div className="last-plays-container">
-                  <LastPlays
-                    lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
-                    {...props}
-                  />
-                </div>
-                {props.lobby?.settings?.showChat && (
-                  <div className="chat-container">
-                    <Chat title={"CHAT DEL BINGO"} />
-                  </div>
-                )}
-              </>
+              <AdminPanel
+                {...props}
+                tabletTab={tabletTab}
+                setIsVisibleModalAwards={setIsVisibleModalAwards}
+              />
             )}
             {tabletTab === "bingo" && !authUser.isAdmin && (
-              <>
-                <div className="bingo-board">
-                  <BingoBoard {...props} />
-                </div>
-                <div className="top-container-user">
-                  <div className="bingo-card-container">
-                    <BingoCard user={authUser} {...props} />
-                  </div>
-                  <div className="right-container">
-                    <GameOptions
-                      lastNumber={
-                        defaultTo(props.lobby.lastPlays, []).length > 0
-                          ? props.lobby.lastPlays[0]
-                          : 0
-                      }
-                      hiddenOptions
-                      {...props}
-                    />
-                    <CardPattern
-                      key={props.lobby.pattern}
-                      caption={"Patrón que se debe llenar"}
-                      hiddenOptions
-                      {...props}
-                    />
-                  </div>
-                </div>
-
-                <div className="buttons-container">
-                  <ButtonAnt onClick={() => callBingo()}>Bingo</ButtonAnt>
-                  <ButtonAnt
-                    color="default"
-                    onClick={() => setIsVisibleModalAwards(true)}
-                  >
-                    Ver premios
-                  </ButtonAnt>
-                </div>
-                {props.lobby?.settings?.showChat && (
-                  <div className="chat-container">
-                    <Chat title={"CHAT DEL BINGO"} />
-                  </div>
-                )}
-              </>
+              <UserPanel
+                {...props}
+                tabletTab={tabletTab}
+                callBingo={callBingo}
+                setIsVisibleModalAwards={setIsVisibleModalAwards}
+              />
             )}
           </div>
-
-          {tabletTab === "users" && props.lobby.showParticipants && (
+          {tabletTab === "users" && props.lobby.settings?.showParticipants && (
             <UsersTabs {...props} />
           )}
         </Tablet>
