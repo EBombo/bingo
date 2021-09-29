@@ -39,6 +39,9 @@ export const createBoard = () =>
     {}
   );
 
+export const generateMatrix = (value = null) =>
+  Array.from(Array(5), () => new Array(5).fill(value));
+
 export const MAX_NUMBER_BOARD = 75;
 
 export const BOARD_PARAMS = {

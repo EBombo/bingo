@@ -5,19 +5,17 @@ import { ButtonAnt } from "../../../../components/form";
 import { mediaQuery } from "../../../../constants";
 import { ModalPattern } from "./ModalPattern";
 import { firestore } from "../../../../firebase";
-
-const matrix = (value = null) =>
-  Array.from(Array(5), () => new Array(5).fill(value));
+import { generateMatrix } from "../../../../business";
 
 export const CardPattern = (props) => {
   const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [apagon, setApagon] = useState(false);
-  const [pattern, setPattern] = useState(matrix());
+  const [pattern, setPattern] = useState(generateMatrix());
   const [authUser] = useGlobal("user");
 
   useEffect(() => {
-    if (props.apagon) return setPattern(matrix(true));
+    if (props.apagon) return setPattern(generateMatrix(true));
 
     if (props.lobby.pattern) return setPattern(JSON.parse(props.lobby.pattern));
   }, [props.lobby.pattern, props.apagon]);

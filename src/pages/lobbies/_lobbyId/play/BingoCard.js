@@ -1,16 +1,11 @@
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
+import { generateMatrix } from "../../../../business";
 
 export const BingoCard = (props) => {
   const [authUser] = useGlobal("user");
-  const [matrix, setMatrix] = useState(
-    Array.from(Array(5), () => new Array(5).fill(null))
-  );
-
-  useEffect(() => {
-    console.log("user", authUser);
-  }, []);
+  const [matrix, setMatrix] = useState(generateMatrix());
 
   const selectNumber = (row, col) => {
     const newMatrix = [...matrix];
