@@ -7,6 +7,8 @@ export const BingoCard = (props) => {
   const [authUser] = useGlobal("user");
   const [matrix, setMatrix] = useState(generateMatrix());
 
+  const userId = props.user ? props.user?.id : authUser?.id;
+
   const selectNumber = (row, col) => {
     const newMatrix = [...matrix];
     newMatrix[row][col] = newMatrix[row][col] ? null : true;
@@ -32,9 +34,7 @@ export const BingoCard = (props) => {
           </tr>
         </thead>
         <tbody className="tbody">
-          {JSON.parse(
-            props.lobby.users[props.user ? props.user.id : authUser.id].card
-          ).map((arrNums, row) => (
+          {JSON.parse(props.lobby.users[userId]?.card).map((arrNums, row) => (
             <tr key={`key-${row}`}>
               {arrNums.map((num, col) => (
                 <td key={`key-${num}-${col}-${matrix}`}>
