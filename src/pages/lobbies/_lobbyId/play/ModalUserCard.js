@@ -1,4 +1,4 @@
-import React, { useGlobal } from "reactn";
+import React from "reactn";
 import styled from "styled-components";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { ButtonAnt } from "../../../../components/form";
@@ -6,17 +6,13 @@ import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { BingoCard } from "./BingoCard";
 import { BingoBoard } from "./BingoBoard";
 import { firestore } from "../../../../firebase";
-import defaultTo from "lodash/defaultTo";
 
 export const ModalUserCard = (props) => {
-  const [authUser] = useGlobal("user");
-
-  const disqualifyUser = async () => {
+  const disqualifyUser = async () =>
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       bingo: null,
       updateAt: new Date(),
     });
-  };
 
   const validateBingo = async () => {
     const winners = props.lobby.winners
@@ -30,112 +26,95 @@ export const ModalUserCard = (props) => {
     });
   };
 
-  const modalContent = () => {
-    switch (props.user?.id) {
-      case defaultTo(props.lobby.bingo.id, ""):
-        return (
-          <ModalContainer
-            background="#FAFAFA"
-            footer={null}
-            closable={false}
-            top="20%"
-            padding="1rem"
-            visible={props.isVisibleModalUserCard}
-            width="1100px"
-          >
-            <ContainerValidate>
-              <Desktop>
-                <div className="board-container">
-                  <BingoBoard {...props} />
-                  <div className="action-container">
-                    <ButtonAnt
-                      color="default"
-                      onClick={() => props.setIsVisibleModalUserCard(false)}
-                    >
-                      Volver
-                    </ButtonAnt>
-                    <ButtonAnt onClick={() => validateBingo()}>Bingo</ButtonAnt>
-                  </div>
-                </div>
-                <div className="card-container">
-                  <div className="top-container">
-                    <div className="name">{props.user.nickname}</div>
-                    <div className="btn-container">
-                      <ButtonAnt
-                        color="danger"
-                        className="disqualify"
-                        onClick={() => disqualifyUser()}
-                      >
-                        Descalificar
-                      </ButtonAnt>
-                    </div>
-                  </div>
-                  <BingoCard user={props.user} {...props} />
-                </div>
-              </Desktop>
-              <Tablet>
-                <div className="top-container">
-                  <div className="name">{props.user.nickname}</div>
-                  <div className="btn-container">
-                    <ButtonAnt
-                      color="danger"
-                      className="disqualify"
-                      onClick={() => disqualifyUser()}
-                    >
-                      Descalificar
-                    </ButtonAnt>
-                  </div>
-                </div>
-                <div className="card-container">
-                  <BingoCard user={props.user} {...props} />
-                </div>
-                <div className="board-container">
-                  <BingoBoard {...props} />
-                </div>
-                <div className="action-container">
-                  <ButtonAnt
-                    color="default"
-                    onClick={() => props.setIsVisibleModalUserCard(false)}
-                  >
-                    Volver
-                  </ButtonAnt>
-                  <ButtonAnt onClick={() => validateBingo()}>Bingo</ButtonAnt>
-                </div>
-              </Tablet>
-            </ContainerValidate>
-          </ModalContainer>
-        );
-
-      default:
-        return (
-          <ModalContainer
-            background="#FAFAFA"
-            footer={null}
-            closable={false}
-            top="20%"
-            padding="1rem"
-            visible={props.isVisibleModalUserCard}
-          >
-            <Content>
-              <div className="title-card">Cartilla {props.user.nickname}</div>
-              <div className="card-container">
-                <BingoCard user={props.user} {...props} />
-              </div>
-              <div className="btn-container">
+  return (
+    <ModalContainer
+      background="#FAFAFA"
+      footer={null}
+      closable={false}
+      top="20%"
+      padding="1rem"
+      visible={props.isVisibleModalUserCard}
+      width={props.user?.id === props.lobby?.bingo?.id ? "1100px" : "auto"}
+    >
+      {props.user?.id === props.lobby?.bingo?.id ? (
+        <ContainerValidate>
+          <Desktop>
+            <div className="board-container">
+              <BingoBoard {...props} />
+              <div className="action-container">
                 <ButtonAnt
                   color="default"
                   onClick={() => props.setIsVisibleModalUserCard(false)}
                 >
-                  Cerrar
+                  Volver
+                </ButtonAnt>
+                <ButtonAnt onClick={() => validateBingo()}>Bingo</ButtonAnt>
+              </div>
+            </div>
+            <div className="card-container">
+              <div className="top-container">
+                <div className="name">{props.user.nickname}</div>
+                <div className="btn-container">
+                  <ButtonAnt
+                    color="danger"
+                    className="disqualify"
+                    onClick={() => disqualifyUser()}
+                  >
+                    Descalificar
+                  </ButtonAnt>
+                </div>
+              </div>
+              <BingoCard user={props.user} {...props} />
+            </div>
+          </Desktop>
+          <Tablet>
+            <div className="top-container">
+              <div className="name">{props.user.nickname}</div>
+              <div className="btn-container">
+                <ButtonAnt
+                  color="danger"
+                  className="disqualify"
+                  onClick={() => disqualifyUser()}
+                >
+                  Descalificar
                 </ButtonAnt>
               </div>
-            </Content>
-          </ModalContainer>
-        );
-    }
-  };
-
-  return modalContent();
+            </div>
+            <div className="card-container">
+              <BingoCard user={props.user} {...props} />
+            </div>
+            <div className="board-container">
+              <BingoBoard {...props} />
+            </div>
+            <div className="action-container">
+              <ButtonAnt
+                color="default"
+                onClick={() => props.setIsVisibleModalUserCard(false)}
+              >
+                Volver
+              </ButtonAnt>
+              <ButtonAnt onClick={() => validateBingo()}>Bingo</ButtonAnt>
+            </div>
+          </Tablet>
+        </ContainerValidate>
+      ) : (
+        <Content>
+          <div className="title-card">Cartilla {props.user.nickname}</div>
+          <div className="card-container">
+            <BingoCard user={props.user} {...props} />
+          </div>
+          <div className="btn-container">
+            <ButtonAnt
+              color="default"
+              onClick={() => props.setIsVisibleModalUserCard(false)}
+            >
+              Cerrar
+            </ButtonAnt>
+          </div>
+        </Content>
+      )}
+    </ModalContainer>
+  );
 };
 
 const ContainerValidate = styled.div`
@@ -187,6 +166,7 @@ const ContainerValidate = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .card-container {
       max-width: 320px;
     }

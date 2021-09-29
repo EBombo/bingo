@@ -12,7 +12,7 @@ export const UsersTabs = (props) => {
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
 
   const userContent = (user, index) => {
-    if (tab === "cards") {
+    if (tab === "cards")
       return (
         <div className="user-card" key={`${user.nickname}-${index}`}>
           <div className="name">{user.nickname}</div>
@@ -47,24 +47,23 @@ export const UsersTabs = (props) => {
           </div>
         </div>
       );
-    } else {
-      return (
-        <div className="user-progress" key={`${user.nickname}-${index}`}>
-          <div className="name">{user.nickname}</div>
-          <div className={`progress ${user.progress === 100 && winner}`}>
-            <Progress percent={30} strokeColor={darkTheme.basic.primary} />
-          </div>
-          <div className="options">
-            <button className="btn-show-card">Ver cartilla</button>
-            <div className="more">
-              <div />
-              <div />
-              <div />
-            </div>
+
+    return (
+      <div className="user-progress" key={`${user.nickname}-${index}`}>
+        <div className="name">{user.nickname}</div>
+        <div className={`progress ${user.progress === 100 && winner}`}>
+          <Progress percent={30} strokeColor={darkTheme.basic.primary} />
+        </div>
+        <div className="options">
+          <button className="btn-show-card">Ver cartilla</button>
+          <div className="more">
+            <div />
+            <div />
+            <div />
           </div>
         </div>
-      );
-    }
+      </div>
+    );
   };
 
   return (
@@ -92,7 +91,7 @@ export const UsersTabs = (props) => {
         </div>
       </div>
       <div className={`user-tab-${tab === "cards" ? "cards" : "table"}`}>
-        {defaultTo(Object.values(props.lobby.users), []).map((user, index) =>
+        {Object.values(props.lobby.users ?? {}).map((user, index) =>
           userContent(user, index)
         )}
       </div>
