@@ -22,7 +22,8 @@ export const GameOptions = (props) => {
     return board;
   };
 
-  const startGame = async () => {
+  const startGame = async (callback) => {
+    setLoading(true);
     if (!props.lobby.pattern)
       return props.showNotification(
         "UPS",
@@ -33,12 +34,15 @@ export const GameOptions = (props) => {
     const board = createBoard();
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      startGame: new Date(),
       round: 0,
       lastPlays: [],
+      startGame: new Date(),
       updateAt: new Date(),
       board,
     });
+
+    setLoading(false);
+    callback && callback(false);
   };
 
   const modalConfirm = () => (
@@ -67,7 +71,7 @@ export const GameOptions = (props) => {
           <ButtonAnt
             color="danger"
             loading={loading}
-            onClick={() => restartBoard()}
+            onClick={() => startGame(setIsVisibleModalConfirm)}
           >
             Reiniciar
           </ButtonAnt>
@@ -75,28 +79,6 @@ export const GameOptions = (props) => {
       </ContentModal>
     </ModalContainer>
   );
-
-  const restartBoard = async () => {
-    setLoading(true);
-    if (!props.lobby.pattern) {
-      return props.showNotification(
-        "UPS",
-        "El juego aun no ha iniciado.",
-        "warning"
-      );
-    }
-    const board = createBoard();
-
-    await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      updateAt: new Date(),
-      round: 0,
-      lastPlays: [],
-      board,
-    });
-
-    setIsVisibleModalConfirm(false);
-    setLoading(false);
-  };
 
   const callNumber = async () => {
     if (!props.lobby || !props.lobby.board) return;
