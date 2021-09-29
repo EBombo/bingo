@@ -4,10 +4,12 @@ import get from "lodash/get";
 import { BOARD_PARAMS } from "../../../../business";
 
 export const LastPlays = (props) => {
+  const lastPlays = props.lobby?.lastPlays?.slice(0, 5) || [];
+
   return (
     <Container>
       <div className="balls">
-        {props.lastNumbers.map((number) => (
+        {lastPlays.map((number) => (
           <BallContainer number={number} key={number}>
             <div className="inner-container">
               <div className="letter">

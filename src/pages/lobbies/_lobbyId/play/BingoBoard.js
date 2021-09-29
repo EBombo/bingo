@@ -4,11 +4,10 @@ import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
 
 export const BingoBoard = (props) => {
-  const range = (start, end) => {
-    return Array(end - start + 1)
+  const range = (start, end) =>
+    Array(end - start + 1)
       .fill()
       .map((_, idx) => start + idx);
-  };
 
   return (
     <BoardContainer>

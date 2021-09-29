@@ -54,10 +54,7 @@ export const UserPanel = (props) => {
                   <ButtonAnt onClick={() => props.callBingo()}>Bingo</ButtonAnt>
                   <ButtonAnt color="default">Ver premios</ButtonAnt>
                 </div>
-                <LastPlays
-                  lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
-                  {...props}
-                />
+                <LastPlays {...props} />
               </div>
             </div>
           </div>

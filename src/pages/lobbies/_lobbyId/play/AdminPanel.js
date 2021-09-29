@@ -47,10 +47,7 @@ export const AdminPanel = (props) => {
                   Premios
                 </div>
                 <div className="last-plays-container">
-                  <LastPlays
-                    lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
-                    {...props}
-                  />
+                  <LastPlays {...props} />
                 </div>
               </div>
             </div>
@@ -85,10 +82,7 @@ export const AdminPanel = (props) => {
           Premios
         </div>
         <div className="last-plays-container">
-          <LastPlays
-            lastNumbers={props.lobby?.lastPlays?.slice(0, 5) || []}
-            {...props}
-          />
+          <LastPlays {...props} />
         </div>
         {props.lobby?.settings?.showChat && (
           <div className="chat-container">
