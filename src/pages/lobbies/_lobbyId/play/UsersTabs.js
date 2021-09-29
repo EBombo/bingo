@@ -14,16 +14,14 @@ export const UsersTabs = (props) => {
   const [tab, setTab] = useState("cards");
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
-    const [isLoadingRemoveUser, setIsLoadingRemoveUser] = useState(false);
-    const confirm = useConfirm();
+  const confirm = useConfirm();
 
   const removeUser = async (userId) => {
-    return console.log("userId", userId);
     const newUsers = { ...props.lobby.users };
     delete newUsers[userId];
     await firestore
       .doc(`lobbies/${props.lobby.id}`)
-      .update({ users: { ...newUsers } });
+      .update({ users: newUsers });
   };
 
   const userContent = (user, index) => {
