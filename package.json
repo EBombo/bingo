@@ -29,13 +29,14 @@
     "react-dom": "17.0.2",
     "react-error-boundary": "^3.1.1",
     "react-hook-form": "^4.6.2",
+    "react-is": "^17.0.2",
     "react-linkify": "^1.0.0-alpha",
     "react-pwa-install-prompt": "^1.0.5",
     "react-responsive": "^8.2.0",
     "react-router-dom": "^5.2.0",
     "reactn": "^2.2.7",
     "resize-image": "^0.1.0",
-    "styled-components": "^5.0.0",
+    "styled-components": "^5.3.1",
     "url-assembler": "^2.1.1",
     "use-local-storage-state": "^9.0.2",
     "yup": "^0.28.1"
@@ -60,5 +61,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "styled-components": "^5"
   }
 }

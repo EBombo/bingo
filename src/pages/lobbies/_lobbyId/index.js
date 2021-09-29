@@ -5,12 +5,14 @@ import { spinLoaderMin } from "../../../components/common/loader";
 import { LobbyAdmin } from "./lobbyAdmin";
 import { LobbyUser } from "./LobbyUser";
 import { LoadingGame } from "./LoadingGame";
-import { BingoGame } from "./BingoGame";
+import { BingoGame } from "./play/BingoGame";
+import { useUser } from "../../../hooks";
 
 export const Lobby = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
-  const [authUser] = useGlobal("user");
+  const [, setAuthUserLs] = useUser();
+  const [authUser, setAuthUser] = useGlobal("user");
   const [lobby, setLobby] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
@@ -42,24 +44,14 @@ export const Lobby = (props) => {
     return () => sub && sub();
   }, [lobbyId]);
 
-  useEffect(() => {
-    if (!lobby || !lobby?.startAt) return;
-
-    //generar cartilla para los usuarios
-    console.log("generar cartilla para los usuarios");
-  }, [lobby]);
-
   if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby)
     return spinLoaderMin();
 
-  if (lobby.bingoCardsDistributed)
-    return <BingoGame lobby={lobby} {...props} />;
+  if (lobby?.isPlaying) return <BingoGame lobby={lobby} {...props} />;
 
-  if (lobby.startAt) return <LoadingGame lobby={lobby} {...props} />;
+  if (lobby?.startAt) return <LoadingGame lobby={lobby} {...props} />;
 
-  return authUser.isAdmin ? (
-    <LobbyAdmin lobby={lobby} {...props} />
-  ) : (
-    <LobbyUser lobby={lobby} {...props} />
-  );
+  if (authUser?.isAdmin) return <LobbyAdmin lobby={lobby} {...props} />;
+
+  return <LobbyUser lobby={lobby} {...props} />;
 };

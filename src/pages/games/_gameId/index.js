@@ -15,6 +15,7 @@ import {
 } from "../../../components/form";
 import { useUser } from "../../../hooks";
 import { Image } from "../../../components/common/Image";
+import { mediaQuery } from "../../../constants";
 
 export const Game = (props) => {
   const router = useRouter();
@@ -205,7 +206,7 @@ export const Game = (props) => {
             <div className="option">
               <div>
                 <div className="title-opt">Identificador de jugador</div>
-                <div>Conoce el nombre de la persona atrás del nickname</div>
+                <span>Conoce el nombre de la persona atrás del nickname</span>
               </div>
               <Switch
                 defaultChecked={userIdentity}
@@ -220,7 +221,7 @@ export const Game = (props) => {
                 <div className="title-opt">
                   Mostrar cartilla principal y bolas en dispositivos de jug.{" "}
                 </div>
-                <div>Para videoconferencias y mejorar accesibilidad</div>
+                <span>Para videoconferencias y mejorar accesibilidad</span>
               </div>
               <Switch
                 defaultChecked={showMainCard}
@@ -259,7 +260,7 @@ export const Game = (props) => {
                 <div className="title-opt">
                   El jug. tiene que llenar su cartilla manualmente
                 </div>
-                <div>Los jugadores tienen que estar atentos al juego</div>
+                <span>Los jugadores tienen que estar atentos al juego</span>
               </div>
               <Switch
                 defaultChecked={cardAutofill}
@@ -376,7 +377,7 @@ const GameCss = styled.div`
   width: 100%;
   margin: auto;
   max-width: 500px;
-  padding-top: 20px;
+  padding: 1rem;
   color: ${(props) => props.theme.basic.white};
 
   .container-game {
@@ -412,9 +413,22 @@ const GameCss = styled.div`
     }
 
     .option {
-      margin: 1px auto;
+      margin: 2px auto;
       padding: 5px 10px;
-      background: ${(props) => props.theme.basic.primary};
+      font-size: 13px;
+      line-height: 16px;
+      background: ${(props) => props.theme.basic.primaryLight};
+      color: ${(props) => props.theme.basic.whiteLight};
+      border-radius: 2px;
+
+      span {
+        font-family: Lato;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 13px;
+        line-height: 16px;
+        color: ${(props) => props.theme.basic.whiteLight};
+      }
 
       .title-opt {
         font-weight: bold;
@@ -426,6 +440,7 @@ const GameCss = styled.div`
 
       display: grid;
       grid-template-columns: 5fr 1fr;
+      align-items: center;
     }
   }
 
@@ -463,5 +478,9 @@ const GameCss = styled.div`
       line-height: 16px;
       border: none !important;
     }
+  }
+
+  ${mediaQuery.afterTablet} {
+    padding: 20px auto 0 auto;
   }
 `;

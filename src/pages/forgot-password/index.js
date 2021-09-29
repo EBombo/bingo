@@ -65,7 +65,7 @@ const ForgotPassword = (props) => {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <h1 className="title">Recuperar clave</h1>
+            <h1 className="title">Cambiar contraseña</h1>
             <p className="forgot-password-note">
               Por favor, introduce la dirección de correo electrónico asociada a
               tu cuenta. Te enviaremos un correo electrónico que te permitirá

@@ -1,9 +1,9 @@
 import React from "reactn";
 import styled from "styled-components";
-import { ModalContainer } from "../../../components/common/ModalContainer";
+import { ModalContainer } from "../../../../components/common/ModalContainer";
 import get from "lodash/get";
-import { ButtonAnt } from "../../../components/form";
-import { mediaQuery } from "../../../constants";
+import { ButtonAnt } from "../../../../components/form";
+import { mediaQuery } from "../../../../constants";
 
 export const ModalWinner = (props) => {
   return (

@@ -1,14 +1,13 @@
 import React from "reactn";
 import styled from "styled-components";
-import { mediaQuery } from "../../../constants";
+import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
 
 export const BingoBoard = (props) => {
-  const range = (start, end) => {
-    return Array(end - start + 1)
+  const range = (start, end) =>
+    Array(end - start + 1)
       .fill()
       .map((_, idx) => start + idx);
-  };
 
   return (
     <BoardContainer>
@@ -16,27 +15,27 @@ export const BingoBoard = (props) => {
         <thead>
           <tr>
             <th className="th-header">
-              {get(props, "lobby.game.letters.b", {})}
+              {get(props, "lobby.game.letters.b", "B")}
             </th>
           </tr>
           <tr>
             <th className="th-header">
-              {get(props, "lobby.game.letters.i", {})}
+              {get(props, "lobby.game.letters.i", "I")}
             </th>
           </tr>
           <tr>
             <th className="th-header">
-              {get(props, "lobby.game.letters.n", {})}
+              {get(props, "lobby.game.letters.n", "N")}
             </th>
           </tr>
           <tr>
             <th className="th-header">
-              {get(props, "lobby.game.letters.g", {})}
+              {get(props, "lobby.game.letters.g", "G")}
             </th>
           </tr>
           <tr>
             <th className="th-header">
-              {get(props, "lobby.game.letters.o", {})}
+              {get(props, "lobby.game.letters.o", "O")}
             </th>
           </tr>
         </thead>
@@ -45,8 +44,9 @@ export const BingoBoard = (props) => {
             {range(1, 15).map((number) => (
               <td
                 className={`td-numbers ${
-                  props.numbers.includes(number) && `active`
+                  props.lobby.board && props.lobby.board[number] && `active`
                 }`}
+                key={number}
               >
                 {number}
               </td>
@@ -56,8 +56,9 @@ export const BingoBoard = (props) => {
             {range(16, 30).map((number) => (
               <td
                 className={`td-numbers ${
-                  props.numbers.includes(number) && `active`
+                  props.lobby.board && props.lobby.board[number] && `active`
                 }`}
+                key={number}
               >
                 {number}
               </td>
@@ -67,8 +68,9 @@ export const BingoBoard = (props) => {
             {range(31, 45).map((number) => (
               <td
                 className={`td-numbers ${
-                  props.numbers.includes(number) && `active`
+                  props.lobby.board && props.lobby.board[number] && `active`
                 }`}
+                key={number}
               >
                 {number}
               </td>
@@ -78,8 +80,9 @@ export const BingoBoard = (props) => {
             {range(46, 60).map((number) => (
               <td
                 className={`td-numbers ${
-                  props.numbers.includes(number) && `active`
+                  props.lobby.board && props.lobby.board[number] && `active`
                 }`}
+                key={number}
               >
                 {number}
               </td>
@@ -89,8 +92,9 @@ export const BingoBoard = (props) => {
             {range(61, 75).map((number) => (
               <td
                 className={`td-numbers ${
-                  props.numbers.includes(number) && `active`
+                  props.lobby.board && props.lobby.board[number] && `active`
                 }`}
+                key={number}
               >
                 {number}
               </td>

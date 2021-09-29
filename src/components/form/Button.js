@@ -54,6 +54,8 @@ const ButtonAntCss = styled(Button)`
             ? theme.basic.secondaryLight
             : color === "default"
             ? theme.basic.blackDarken
+            : color === "warning"
+            ? theme.basic.blackDarken
             : theme.basic.white
         };
       border: none;
@@ -63,9 +65,9 @@ const ButtonAntCss = styled(Button)`
           : color === "secondary"
           ? theme.basic.secondaryDark
           : color === "warning"
-          ? theme.basic.warning
+          ? theme.basic.warningDark
           : color === "danger"
-          ? theme.basic.danger
+          ? theme.basic.dangerDark
           : color === "default"
           ? "#979797"
           : color
@@ -141,6 +143,8 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.secondaryLight
           : color === "default"
           ? theme.basic.blackDarken
+          : color === "warning"
+          ? theme.basic.blackDarken
           : theme.basic.white
       };
       border: none;
@@ -204,9 +208,9 @@ const ButtonAntCss = styled(Button)`
             : color === "secondary"
             ? theme.basic.secondary
             : color === "warning"
-            ? theme.basic.warning
+            ? theme.basic.warningDark
             : color === "danger"
-            ? theme.basic.danger
+            ? theme.basic.dangerDark
             : color === "default"
             ? "#979797"
             : color

@@ -1,9 +1,9 @@
-import React, { useState, useGlobal, useEffect } from "reactn";
-import styled from "styled-components";
-import { Image } from "../../../components/common/Image";
-import { config, firestore } from "../../../firebase";
 import get from "lodash/get";
+import styled from "styled-components";
 import { mediaQuery } from "../../../constants";
+import React, { useEffect, useGlobal } from "reactn";
+import { config, firestore } from "../../../firebase";
+import { Image } from "../../../components/common/Image";
 
 export const LoadingGame = (props) => {
   const [authUser] = useGlobal("user");
@@ -12,7 +12,7 @@ export const LoadingGame = (props) => {
     const timer = setTimeout(() => {
       const updateLobby = async () =>
         await firestore.doc(`lobbies/${props.lobby.id}`).update({
-          bingoCardsDistributed: true,
+          isPlaying: true,
         });
 
       updateLobby();
@@ -68,13 +68,17 @@ export const LoadingGame = (props) => {
               />
             </div>
             <div className="step-four-description">BINGO</div>
-            <div className="step-four-bar" />
+            <div className="progress-bar">
+              <div className="bar">
+                <div className="progress" />
+              </div>
+            </div>
           </div>
         </>
       ) : (
         <>
-          <div className="step-one">
-            <div className="step-one-title">¡Prepárate!</div>
+          <div className="step-one-tablet">
+            <div className="step-one-tablet-title">¡Prepárate!</div>
 
             <Image
               src={`${config.storageUrl}/resources/pacman.gif`}
@@ -98,7 +102,11 @@ export const LoadingGame = (props) => {
               />
             </div>
             <div className="step-four-description">BINGO</div>
-            <div className="step-four-bar" />
+            <div className="progress-bar">
+              <div className="bar">
+                <div className="progress" />
+              </div>
+            </div>
           </div>
         </>
       )}
@@ -111,17 +119,15 @@ const LoadingGameContainer = styled.div`
   height: 100vh;
   position: relative;
   overflow: hidden;
-
-  .step-one {
-    &-logo {
-      position: relative;
-      animation-delay: 2s;
-      margin-top: 3rem;
-      animation: move-up 2s forwards;
-      -webkit-animation-delay: 2s;
-      -o-animation-delay: 2s;
-    }
-
+  
+  .step-one-tablet {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    right: 0;
+    animation: fadeout 11s forwards;
+    -webkit-animation: fadeout 11s forwards;
+    
     &-title {
       font-family: Lato;
       font-style: normal;
@@ -131,6 +137,16 @@ const LoadingGameContainer = styled.div`
       margin: 3rem 0;
       text-align: center;
       color: ${(props) => props.theme.basic.white};
+    }
+  }
+  .step-one {
+    &-logo {
+      position: relative;
+      animation-delay: 2s;
+      margin-top: 3rem;
+      animation: move-up 2s forwards;
+      -webkit-animation-delay: 2s;
+      -o-animation-delay: 2s;
     }
 
     &-description {
@@ -299,16 +315,58 @@ const LoadingGameContainer = styled.div`
       }
     }
     
-    &-bar {
+    .progress-bar{
       width: 80%;
-      margin: 1rem auto;
-      height: 20px;
       border-radius: 40px;
-      background: ${(props) => props.theme.basic.grayLighten};
+      overflow: hidden;
+      margin: 1rem auto;
+    }
 
-      ${mediaQuery.afterTablet} {
-        height: 31px;
-      }
+    .bar {
+      background: ${(props) => props.theme.basic.grayLighten};
+    }
+
+    .progress {
+      animation: loader 8s ease forwards;
+      animation-delay: 11s;
+      -webkit-animation-delay: 11s;
+      -o-animation-delay: 11s;
+      background: ${(props) => props.theme.basic.whiteLight};
+      padding: 20px;
+      width: 100%;
+    }
+  }
+
+  @keyframes loader {
+    0% {
+      width: 100%;
+    }
+    20% {
+      width: 86%;
+    }
+    25% {
+      width: 76%;
+    }
+    43% {
+      width: 60%;
+    }
+    56% {
+      width: 52%;
+    }
+    66% {
+      width: 50%;
+    }
+    71% {
+      width: 41%;
+    }
+    75% {
+      width: 24%;
+    }
+    94% {
+      width: 10%;
+    }
+    100% {
+      width: 0;
     }
   }
 
@@ -367,4 +425,19 @@ const LoadingGameContainer = styled.div`
       opacity: 0;
     }
   }
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 `;

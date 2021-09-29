@@ -1,22 +1,45 @@
-import React, { useState, useGlobal } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import get from "lodash/get";
-import { ButtonAnt } from "../../../components/form";
-import { mediaQuery } from "../../../constants";
+import { ButtonAnt } from "../../../../components/form";
+import { mediaQuery } from "../../../../constants";
 import { ModalPattern } from "./ModalPattern";
+import { firestore } from "../../../../firebase";
+import { generateMatrix } from "../../../../business";
 
 export const CardPattern = (props) => {
   const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apagon, setApagon] = useState(false);
+  const [pattern, setPattern] = useState(generateMatrix());
   const [authUser] = useGlobal("user");
 
-  const savePattern = () => {
-    console.log("guardando");
+  useEffect(() => {
+    if (props.apagon) return setPattern(generateMatrix(true));
+
+    if (props.lobby.pattern) return setPattern(JSON.parse(props.lobby.pattern));
+  }, [props.lobby.pattern, props.apagon]);
+
+  const editPattern = (row, col) => {
+    const newPattern = [...pattern];
+    newPattern[row][col] = newPattern[row][col] ? null : true;
+    setPattern(newPattern);
+  };
+
+  const savePattern = async () => {
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      pattern: JSON.stringify(pattern),
+      updateAt: new Date(),
+    });
+
+    setIsVisibleModalPattern(false);
   };
 
   return (
-    <PatternContainer user={authUser}>
+    <PatternContainer user={authUser} isEdit={props.isEdit}>
       {isVisibleModalPattern && (
         <ModalPattern
+          apagon={apagon}
           isVisibleModalPattern={isVisibleModalPattern}
           setIsVisibleModalPattern={setIsVisibleModalPattern}
           {...props}
@@ -25,104 +48,71 @@ export const CardPattern = (props) => {
       <div className="caption">{props.caption}</div>
       <div className="table-container">
         <table>
-          <tr>
-            <th className="empty"></th>
-            <th>{get(props, "lobby.game.letters.b", {})}</th>
-            <th>{get(props, "lobby.game.letters.i", {})}</th>
-            <th>{get(props, "lobby.game.letters.n", {})}</th>
-            <th>{get(props, "lobby.game.letters.g", {})}</th>
-            <th>{get(props, "lobby.game.letters.o", {})}</th>
-          </tr>
-
-          <tr>
-            <th>1</th>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
-          </tr>
-
-          <tr>
-            <th>2</th>
-            <td>
-              <div className="selected" />
-            </td>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
-            <td>
-              <div className="selected" />
-            </td>
-          </tr>
-
-          <tr>
-            <th>3</th>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
-          </tr>
-
-          <tr>
-            <th>4</th>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
-          </tr>
-
-          <tr>
-            <th>5</th>
-            <td>
-              <div className="selected" />
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-              <div className="selected" />
-            </td>
-          </tr>
+          <thead>
+            <tr>
+              <th className="empty" />
+              <th>{get(props, "lobby.game.letters.b")}</th>
+              <th>{get(props, "lobby.game.letters.i")}</th>
+              <th>{get(props, "lobby.game.letters.n")}</th>
+              <th>{get(props, "lobby.game.letters.g")}</th>
+              <th>{get(props, "lobby.game.letters.o")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pattern.map((element, index) => (
+              <tr key={index}>
+                <th>{index + 1}</th>
+                {element.map((value, index_) => (
+                  <td
+                    onClick={() => {
+                      if (!props.isEdit) return;
+                      editPattern(index, index_);
+                    }}
+                    key={`${pattern}-${index}-${index_}`}
+                  >
+                    <div className={`${value ? "selected" : "empty"}`} />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
       {!props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
-          <ButtonAnt>Apágon</ButtonAnt>
+          <ButtonAnt
+            onClick={() => {
+              setApagon(true);
+              setIsVisibleModalPattern(true);
+            }}
+          >
+            Apágon
+          </ButtonAnt>
           <ButtonAnt
             color="default"
-            onClick={() => setIsVisibleModalPattern(true)}
+            onClick={() => {
+              setApagon(false);
+              setIsVisibleModalPattern(true);
+            }}
           >
-            Limpiar
+            Editar
           </ButtonAnt>
         </div>
       )}
       {props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
-          <ButtonAnt color="default" onClick={() => props.cancelAction()}>
+          <ButtonAnt
+            color="default"
+            disabled={isLoading}
+            onClick={() => props.cancelAction()}
+          >
             Cancelar
           </ButtonAnt>
-          <ButtonAnt color="warning" onClick={() => savePattern()}>
+          <ButtonAnt
+            color="warning"
+            loading={isLoading}
+            onClick={() => savePattern()}
+          >
             Guardar
           </ButtonAnt>
         </div>
@@ -155,8 +145,6 @@ const PatternContainer = styled.div`
         !props.user.isAdmin ? props.theme.basic.primaryLight : "transparent"};
       border-radius: 5px;
       
-      
-      
       th {
         font-family: Encode Sans;
         font-style: normal;
@@ -179,6 +167,7 @@ const PatternContainer = styled.div`
         background: ${(props) => props.theme.basic.primary};
         border-radius: 3px;
         position: relative;
+        cursor: ${(props) => (props.isEdit ? "pointer" : "default")};
 
         .selected {
           position: absolute;
@@ -202,6 +191,11 @@ const PatternContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    
+    button {
+      font-size: 14px;
+      line-height: 18px;
+    }
   }
   
   ${mediaQuery.afterTablet}{

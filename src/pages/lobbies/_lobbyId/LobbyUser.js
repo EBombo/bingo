@@ -4,10 +4,8 @@ import React, { useEffect, useGlobal } from "reactn";
 import { mediaQuery } from "../../../constants";
 import styled from "styled-components";
 import { UserLayout } from "./userLayout";
-import { useRouter } from "next/router";
 
 export const LobbyUser = (props) => {
-  const router = useRouter();
   const [authUser] = useGlobal("user");
 
   useEffect(() => {
