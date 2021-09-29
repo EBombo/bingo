@@ -4,19 +4,77 @@ import { mediaQuery } from "../../../../constants";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { BingoCard } from "./BingoCard";
 import { ButtonAnt } from "../../../../components/form";
-import { config } from "../../../../firebase";
+import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
+import { useRouter } from "next/router";
+import { createBoard, generateMatrix } from "../../../../business";
+import { ModalPattern } from "./ModalPattern";
 
 export const ModalFinalStage = (props) => {
   const [authUser] = useGlobal("user");
+  const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
+  const router = useRouter();
+
+  const blackout = async () => {
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      pattern: generateMatrix(true),
+      finalStage: false,
+      updateAt: new Date(),
+    });
+
+    props.isVisibleModalFinal(false);
+  };
+
+  const closeGame = async () => {
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      isClosed: true,
+      updateAt: new Date(),
+    });
+
+    router.push("/");
+  };
+
+  const continueGame = async () => {
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      finalStage: false,
+      updateAt: new Date(),
+    });
+
+    props.isVisibleModalFinal(false);
+  };
+
+  const newGame = async () => {
+    const board = createBoard();
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      round: 0,
+      lastPlays: [],
+      startGame: new Date(),
+      board,
+      finalStage: false,
+      updateAt: new Date(),
+    });
+
+    props.isVisibleModalFinal(false);
+  };
 
   const adminContent = () => (
     <AdminContent>
-      <ButtonAnt color="secondary">Continuar juego</ButtonAnt>
-      <ButtonAnt color="secondary">Apagón</ButtonAnt>
+      <ButtonAnt
+        color="secondary"
+        onClick={() => setIsVisibleModalPattern(true)}
+      >
+        Continuar juego
+      </ButtonAnt>
+      <ButtonAnt color="secondary" onClick={() => blackout()}>
+        Apagón
+      </ButtonAnt>
       <ButtonAnt color="secondary">Continuar con cartillas nuevas</ButtonAnt>
-      <ButtonAnt color="secondary">Juego nuevo</ButtonAnt>
-      <ButtonAnt color="danger">Finalizar juego</ButtonAnt>
+      <ButtonAnt color="secondary" onClick={() => newGame()}>
+        Juego nuevo
+      </ButtonAnt>
+      <ButtonAnt color="danger" onCick={() => closeGame()}>
+        Finalizar juego
+      </ButtonAnt>
     </AdminContent>
   );
 
@@ -40,10 +98,17 @@ export const ModalFinalStage = (props) => {
       background="#FAFAFA"
       footer={null}
       closable={false}
-      top="20%"
       width="600px"
       visible={props.isVisibleModalFinal}
     >
+      {isVisibleModalPattern && (
+        <ModalPattern
+          continueGame={continueGame}
+          isVisibleModalPattern={isVisibleModalPattern}
+          setIsVisibleModalPattern={setIsVisibleModalPattern}
+          {...props}
+        />
+      )}
       <Content>
         <div className="title">Ganador</div>
         <div className="main-container">

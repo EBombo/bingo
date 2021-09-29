@@ -32,6 +32,9 @@ export const CardPattern = (props) => {
       updateAt: new Date(),
     });
 
+    if (props.continueGame) {
+      await props.continueGame;
+    }
     setIsVisibleModalPattern(false);
   };
 
