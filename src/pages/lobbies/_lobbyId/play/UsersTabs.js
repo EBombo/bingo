@@ -1,15 +1,23 @@
-import React, { useState } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
 import defaultTo from "lodash/defaultTo";
-import { Progress } from "antd";
+import { Popover, Progress } from "antd";
 import { darkTheme } from "../../../../theme";
 import { ModalUserCard } from "./ModalUserCard";
+import { config, firestore } from "../../../../firebase";
+import { Image } from "../../../../components/common/Image";
 
 export const UsersTabs = (props) => {
+  const [authUser] = useGlobal("user");
   const [tab, setTab] = useState("cards");
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
+  const [isLoadingRemoveUser, setIsLoadingRemoveUser] = useState(false);
+
+  const removeUser = async (userId) => {
+    await firestore.doc(`lobbies/${props.lobby.id}`);
+  };
 
   const userContent = (user, index) => {
     if (tab === "cards")
@@ -40,11 +48,30 @@ export const UsersTabs = (props) => {
               Ver cartilla
             </button>
           </div>
-          <div className="more">
-            <div />
-            <div />
-            <div />
-          </div>
+          {authUser.isAdmin && (
+            <Popover
+              placement="bottom"
+              content={
+                <div style={{ display: "flex" }}>
+                  <Image
+                    src={`${config.storageUrl}/resources/close.svg`}
+                    filter="brightness(0.5)"
+                    height="15px"
+                    width="15px"
+                    size="contain"
+                    margin="auto 5px"
+                  />{" "}
+                  <div style={{ margin: "auto" }}>Remover jugador</div>
+                </div>
+              }
+            >
+              <div className="more">
+                <div />
+                <div />
+                <div />
+              </div>
+            </Popover>
+          )}
         </div>
       );
 
