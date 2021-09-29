@@ -1,6 +1,7 @@
 import React from "reactn";
 import styled from "styled-components";
 import get from "lodash/get";
+import { BOARD_PARAMS } from "./GameOptions";
 
 export const LastPlays = (props) => {
   return (
@@ -10,13 +11,13 @@ export const LastPlays = (props) => {
           <BallContainer number={number} key={number}>
             <div className="inner-container">
               <div className="letter">
-                {number < 16
+                {number < BOARD_PARAMS.B.value
                   ? get(props, "lobby.game.letters.b", "B")
-                  : number < 31
+                  : number < BOARD_PARAMS.I.value
                   ? get(props, "lobby.game.letters.i", "I")
-                  : number < 46
+                  : number < BOARD_PARAMS.N.value
                   ? get(props, "lobby.game.letters.n", "N")
-                  : number < 61
+                  : number < BOARD_PARAMS.G.value
                   ? get(props, "lobby.game.letters.g", "G")
                   : get(props, "lobby.game.letters.o", "O")}
               </div>

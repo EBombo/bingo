@@ -10,7 +10,7 @@ import get from "lodash/get";
 
 const MAX_NUMBER_BOARD = 75;
 
-const BOARD_PARAMS = {
+export const BOARD_PARAMS = {
   B: { value: 16 },
   I: { value: 31 },
   N: { value: 46 },
