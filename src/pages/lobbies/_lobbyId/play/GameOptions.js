@@ -10,6 +10,14 @@ import get from "lodash/get";
 
 const MAX_NUMBER_BOARD = 75;
 
+const BOARD_PARAMS = {
+  B: { value: 16 },
+  I: { value: 31 },
+  N: { value: 46 },
+  G: { value: 61 },
+  O: { value: 75 },
+};
+
 export const GameOptions = (props) => {
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -115,13 +123,13 @@ export const GameOptions = (props) => {
       <div className="out">
         <div className="in">
           <p>
-            {props.lastNumber < 16
+            {props.lastNumber < BOARD_PARAMS.B.value
               ? get(props, "lobby.game.letters.b", "B")
-              : props.lastNumber < 31
+              : props.lastNumber < BOARD_PARAMS.I.value
               ? get(props, "lobby.game.letters.i", "I")
-              : props.lastNumber < 46
+              : props.lastNumber < BOARD_PARAMS.N.value
               ? get(props, "lobby.game.letters.n", "N")
-              : props.lastNumber < 61
+              : props.lastNumber < BOARD_PARAMS.G.value
               ? get(props, "lobby.game.letters.g", "G")
               : get(props, "lobby.game.letters.o", "O")}
           </p>
