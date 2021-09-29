@@ -12,6 +12,7 @@ import { AdminPanel } from "./AdminPanel";
 import { UserPanel } from "./UserPanel";
 import { useUser } from "../../../../hooks";
 import { useRouter } from "next/router";
+import { ModalFinalStage } from "./ModalFinalStage";
 
 const TABS = {
   BINGO: { value: "bingo" },
