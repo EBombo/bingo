@@ -8,19 +8,17 @@ import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
 
+const MAX_NUMBER_BOARD = 75;
+
 export const GameOptions = (props) => {
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const createBoard = () => {
-    const board = {};
-
-    Array.from({ length: 75 }, (_, i) => i + 1).forEach(
-      (number) => (board[number] = false)
+  const createBoard = () =>
+    Array.from({ length: MAX_NUMBER_BOARD }, (_, i) => i + 1).reduce(
+      (board, number) => ({ ...board, [number]: false }),
+      {}
     );
-
-    return board;
-  };
 
   const startGame = async (callback) => {
     setLoading(true);
@@ -86,7 +84,7 @@ export const GameOptions = (props) => {
     const newBoard = props.lobby.board;
     const missingNumbers = [];
 
-    mapKeys(newBoard, function (value, key) {
+    mapKeys(newBoard, (value, key) => {
       if (!value) missingNumbers.push(key);
     });
 
