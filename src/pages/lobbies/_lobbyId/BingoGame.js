@@ -105,13 +105,14 @@ export const BingoGame = (props) => {
                 </div>
               </div>
             )}
-            {tabletTab === "bingo" && authUser.isAdmin ? (
+            {tabletTab === "bingo" && authUser.isAdmin && (
               <AdminPanel
                 {...props}
                 tabletTab={tabletTab}
                 setIsVisibleModalAwards={setIsVisibleModalAwards}
               />
-            ) : (
+            )}
+            {tabletTab === "bingo" && !authUser.isAdmin && (
               <UserPanel
                 {...props}
                 tabletTab={tabletTab}
