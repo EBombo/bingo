@@ -48,7 +48,9 @@ export const BingoCard = (props) => {
                     </div>
                   ) : (
                     <div
-                      className={`${matrix[row][col] ? "active" : "number"}`}
+                      className={`${
+                        matrix[row][col] ? "active" : "number"
+                      } to-fill`}
                       onClick={() => selectNumber(row, col)}
                     >
                       {num}
@@ -133,6 +135,10 @@ const CardContainer = styled.div`
             justify-content: center;
             margin: 0 auto;
           }
+
+          .to-fill {
+            cursor: pointer;
+          }
         }
       }
     }
@@ -140,6 +146,7 @@ const CardContainer = styled.div`
 
   ${mediaQuery.afterTablet} {
     padding: 0.5rem 1rem;
+
     .card-title {
       font-size: 28px;
       line-height: 35px;
