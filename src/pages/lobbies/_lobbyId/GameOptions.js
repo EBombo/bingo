@@ -2,8 +2,7 @@ import React, { useState } from "reactn";
 import styled from "styled-components";
 import { ButtonAnt } from "../../../components/form";
 import { Image } from "../../../components/common/Image";
-import { config } from "../../../firebase";
-import { firestore } from "../../../firebase";
+import { config, firestore } from "../../../firebase";
 import { mapKeys } from "lodash/object";
 import { ModalContainer } from "../../../components/common/ModalContainer";
 import { mediaQuery } from "../../../constants";
@@ -13,19 +12,28 @@ export const GameOptions = (props) => {
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const createBoard = () => {
+    const board = {};
+
+    Array.from({ length: 75 }, (_, i) => i + 1).forEach(
+      (number) => (board[number] = false)
+    );
+
+    return board;
+  };
+
   const startGame = async () => {
-    if (!props.lobby.pattern) {
+    if (!props.lobby.pattern)
       return props.showNotification(
         "UPS",
         "Define un patrón antes de empezar el bingo",
         "warning"
       );
-    }
 
     const board = createBoard();
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      startGame: true,
+      startGame: new Date(),
       round: 0,
       lastPlays: [],
       updateAt: new Date(),
@@ -90,16 +98,6 @@ export const GameOptions = (props) => {
     setLoading(false);
   };
 
-  const createBoard = () => {
-    const board = {};
-
-    Array.from({ length: 75 }, (_, i) => i + 1).map(
-      (number) => (board[number] = false)
-    );
-
-    return board;
-  };
-
   const callNumber = async () => {
     if (!props.lobby || !props.lobby.board) return;
 
@@ -156,11 +154,19 @@ export const GameOptions = (props) => {
         <div className="options">
           <div className="btn-container">
             {props.lobby.startGame ? (
-              <ButtonAnt width="100%" onClick={() => callNumber()}>
+              <ButtonAnt
+                width="100%"
+                onClick={() => callNumber()}
+                disabled={loading}
+              >
                 LLamar número
               </ButtonAnt>
             ) : (
-              <ButtonAnt width="100%" onClick={() => startGame()}>
+              <ButtonAnt
+                width="100%"
+                onClick={() => startGame()}
+                disabled={loading}
+              >
                 Iniciar Juego
                 <Image
                   src={`${config.storageUrl}/resources/white-play.svg`}
