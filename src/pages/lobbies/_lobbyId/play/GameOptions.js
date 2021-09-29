@@ -13,6 +13,7 @@ const MAX_NUMBER_BOARD = 75;
 export const GameOptions = (props) => {
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
 
   const createBoard = () =>
     Array.from({ length: MAX_NUMBER_BOARD }, (_, i) => i + 1).reduce(
@@ -80,6 +81,7 @@ export const GameOptions = (props) => {
 
   const callNumber = async () => {
     if (!props.lobby || !props.lobby.board) return;
+    setIsLoadingCalledNumber(true);
 
     const newBoard = props.lobby.board;
     const missingNumbers = [];
@@ -104,6 +106,7 @@ export const GameOptions = (props) => {
       lastPlays: newLastPlays,
       board: newBoard,
     });
+    setIsLoadingCalledNumber(false);
   };
 
   return (
@@ -132,7 +135,8 @@ export const GameOptions = (props) => {
               <ButtonAnt
                 width="100%"
                 onClick={() => callNumber()}
-                disabled={loading}
+                disabled={loading || isLoadingCalledNumber}
+                loading={isLoadingCalledNumber}
               >
                 LLamar número
               </ButtonAnt>
