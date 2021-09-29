@@ -33,6 +33,12 @@ export const getBingoCard = () => {
   return transpose(arr);
 };
 
+export const createBoard = () =>
+  Array.from({ length: MAX_NUMBER_BOARD }, (_, i) => i + 1).reduce(
+    (board, number) => ({ ...board, [number]: false }),
+    {}
+  );
+
 export const MAX_NUMBER_BOARD = 75;
 
 export const BOARD_PARAMS = {

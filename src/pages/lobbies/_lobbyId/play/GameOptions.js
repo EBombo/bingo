@@ -7,18 +7,12 @@ import { mapKeys } from "lodash/object";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
-import { BOARD_PARAMS, MAX_NUMBER_BOARD } from "../../../../business";
+import { BOARD_PARAMS, createBoard } from "../../../../business";
 
 export const GameOptions = (props) => {
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
-
-  const createBoard = () =>
-    Array.from({ length: MAX_NUMBER_BOARD }, (_, i) => i + 1).reduce(
-      (board, number) => ({ ...board, [number]: false }),
-      {}
-    );
 
   const startGame = async (callback) => {
     setLoading(true);
