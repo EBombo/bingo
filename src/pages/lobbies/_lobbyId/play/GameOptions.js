@@ -7,16 +7,7 @@ import { mapKeys } from "lodash/object";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
-
-const MAX_NUMBER_BOARD = 75;
-
-export const BOARD_PARAMS = {
-  B: { value: 16 },
-  I: { value: 31 },
-  N: { value: 46 },
-  G: { value: 61 },
-  O: { value: 75 },
-};
+import { BOARD_PARAMS, MAX_NUMBER_BOARD } from "../../../../business";
 
 export const GameOptions = (props) => {
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);

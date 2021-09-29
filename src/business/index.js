@@ -32,3 +32,13 @@ export const getBingoCard = () => {
 
   return transpose(arr);
 };
+
+export const MAX_NUMBER_BOARD = 75;
+
+export const BOARD_PARAMS = {
+  B: { value: 16 },
+  I: { value: 31 },
+  N: { value: 46 },
+  G: { value: 61 },
+  O: { value: 75 },
+};

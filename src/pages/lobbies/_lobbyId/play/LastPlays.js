@@ -1,7 +1,7 @@
 import React from "reactn";
 import styled from "styled-components";
 import get from "lodash/get";
-import { BOARD_PARAMS } from "./GameOptions";
+import { BOARD_PARAMS } from "../../../../business";
 
 export const LastPlays = (props) => {
   return (
