@@ -25,11 +25,16 @@ export const BingoGame = (props) => {
   const [tabletTab, setTabletTab] = useState("bingo");
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);
   const [isVisibleModalAwards, setIsVisibleModalAwards] = useState(false);
+  const [isVisibleModalFinal, setIsVisibleModalFinal] = useState(false);
+
+  useEffect(() => {
+    if (props.lobby.finalStage) setIsVisibleModalFinal(true);
+  }, [props.lobby.finalStage]);
 
   useEffect(() => {
     if (!props.lobby.bingo) return;
     setIsVisibleModalWinner(true);
-  }, [props.lobby]);
+  }, [props.lobby.bingo]);
 
   useEffect(() => {
     const currentUserId = authUser.id;
@@ -59,6 +64,14 @@ export const BingoGame = (props) => {
       <UserLayout {...props} logout={logout} />
 
       <BingoGameContainer>
+        {isVisibleModalFinal && (
+          <ModalFinalStage
+            isVisibleModalFinal={isVisibleModalFinal}
+            setIsVisibleModalFinal={setIsVisibleModalFinal}
+            {...props}
+          />
+        )}
+
         {isVisibleModalAwards && (
           <ModalAwards
             awards={defaultTo(props.lobby.settings.awards, [])}

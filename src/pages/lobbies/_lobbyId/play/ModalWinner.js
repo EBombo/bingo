@@ -1,4 +1,4 @@
-import React from "reactn";
+import React, { useGlobal } from "reactn";
 import styled from "styled-components";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
 import get from "lodash/get";
@@ -6,6 +6,8 @@ import { ButtonAnt } from "../../../../components/form";
 import { mediaQuery } from "../../../../constants";
 
 export const ModalWinner = (props) => {
+  const [authUser] = useGlobal("user");
+
   return (
     <ModalContainer
       background="#FAFAFA"
@@ -17,14 +19,16 @@ export const ModalWinner = (props) => {
       <WinnerContainer>
         <div className="title">¡Bingo!</div>
         <div className="name">{get(props, "winner.nickname", "")}</div>
-        <div className="btn-container">
-          <ButtonAnt
-            color="default"
-            onClick={() => props.setIsVisibleModalWinner(false)}
-          >
-            Cerrar
-          </ButtonAnt>
-        </div>
+        {authUser.isAdmin && (
+          <div className="btn-container">
+            <ButtonAnt
+              color="default"
+              onClick={() => props.setIsVisibleModalWinner(false)}
+            >
+              Cerrar
+            </ButtonAnt>
+          </div>
+        )}
       </WinnerContainer>
     </ModalContainer>
   );

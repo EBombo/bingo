@@ -1,4 +1,4 @@
-import React, { useGlobal, useState } from "reactn";
+import React, { useState } from "reactn";
 import styled from "styled-components";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { ButtonAnt, Input } from "../../../../components/form";
@@ -9,7 +9,6 @@ import { firestore } from "../../../../firebase";
 import defaultTo from "lodash/defaultTo";
 
 export const ModalUserCard = (props) => {
-  const [authUser] = useGlobal("user");
   const [isVisibleAssignAward, setIsVisibleAssignAward] = useState(false);
   const [awardSelected, setAwardSelected] = useState(null);
 
@@ -22,29 +21,36 @@ export const ModalUserCard = (props) => {
 
   const saveBingoWinner = async () => {
     const winners = props.lobby.winners
-      ? [...props.lobby.winners, props.user]
+      ? [...props.lobby.winners, { ...props.user, award: awardSelected }]
       : [{ ...props.user, award: awardSelected }];
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       bingo: null,
       winners,
+      finalStage: true,
       updateAt: new Date(),
     });
+
+    props.setIsVisibleModalUserCard(false);
   };
 
   const modalContent = () => {
-    if (isVisibleAssignAward && props.user?.id === props.lobby?.bingo.id) {
+    if (
+      isVisibleAssignAward &&
+      props.lobby.bingo &&
+      props.user.id === props.lobby.bingo.id
+    ) {
       return (
         <ModalContainer
           background="#FAFAFA"
           footer={null}
           closable={false}
           top="20%"
-          padding="1rem"
+          width="650px"
           visible={props.isVisibleModalUserCard}
         >
           <ContentAward>
-            <div className="award-content">
+            <div className="main-content-award">
               <div className="first-content">
                 <div className="top-container">
                   <div className="name">{props.user.nickname}</div>
@@ -93,7 +99,9 @@ export const ModalUserCard = (props) => {
               >
                 Volver
               </ButtonAnt>
-              <ButtonAnt onClick={() => saveBingoWinner()}>Bingo</ButtonAnt>
+              <ButtonAnt onClick={() => saveBingoWinner()}>
+                Guardar y anunciar
+              </ButtonAnt>
             </div>
           </ContentAward>
         </ModalContainer>
@@ -242,8 +250,19 @@ const ContentAward = styled.div`
   .btns-container {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
     margin: 1rem 0;
+    flex-direction: column;
+    button {
+      width: 150px;
+      margin: 0.5rem 0;
+    }
+  }
+
+  .first-content {
+    .card-container {
+      max-width: 200px;
+      margin: 1rem auto;
+    }
   }
 
   .second-content {
@@ -272,17 +291,33 @@ const ContentAward = styled.div`
           font-weight: 500;
           font-size: 13px;
           line-height: 16px;
+          margin-left: 5px;
         }
       }
     }
   }
 
   ${mediaQuery.afterTablet} {
-    .award-content {
+    .main-content-award {
       display: grid;
       grid-template-columns: 2fr 1fr;
       align-items: center;
       grid-gap: 1rem;
+
+      .first-content {
+        .card-container {
+          max-width: 320px;
+          margin: 1rem auto;
+        }
+      }
+    }
+
+    .btns-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      margin: 1rem 0;
+      flex-direction: row;
     }
   }
 `;
