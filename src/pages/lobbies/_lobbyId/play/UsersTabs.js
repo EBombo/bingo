@@ -7,16 +7,23 @@ import { darkTheme } from "../../../../theme";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
+import { useConfirm } from "../../../../hooks/useConfirm";
 
 export const UsersTabs = (props) => {
   const [authUser] = useGlobal("user");
   const [tab, setTab] = useState("cards");
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
-  const [isLoadingRemoveUser, setIsLoadingRemoveUser] = useState(false);
+    const [isLoadingRemoveUser, setIsLoadingRemoveUser] = useState(false);
+    const confirm = useConfirm();
 
   const removeUser = async (userId) => {
-    await firestore.doc(`lobbies/${props.lobby.id}`);
+    return console.log("userId", userId);
+    const newUsers = { ...props.lobby.users };
+    delete newUsers[userId];
+    await firestore
+      .doc(`lobbies/${props.lobby.id}`)
+      .update({ users: { ...newUsers } });
   };
 
   const userContent = (user, index) => {
@@ -52,7 +59,17 @@ export const UsersTabs = (props) => {
             <Popover
               placement="bottom"
               content={
-                <div style={{ display: "flex" }}>
+                <div
+                  style={{ display: "flex", cursor: "pointer" }}
+                  onClick={() =>
+                    confirm(
+                      removeUser,
+                      user.id,
+                      "Estas seguro de esta acción?",
+                      "El usuario será eliminado"
+                    )
+                  }
+                >
                   <Image
                     src={`${config.storageUrl}/resources/close.svg`}
                     filter="brightness(0.5)"
