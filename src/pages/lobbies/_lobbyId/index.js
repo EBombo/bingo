@@ -6,13 +6,11 @@ import { LobbyAdmin } from "./lobbyAdmin";
 import { LobbyUser } from "./LobbyUser";
 import { LoadingGame } from "./LoadingGame";
 import { BingoGame } from "./play/BingoGame";
-import { useUser } from "../../../hooks";
 
 export const Lobby = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
-  const [, setAuthUserLs] = useUser();
-  const [authUser, setAuthUser] = useGlobal("user");
+  const [authUser] = useGlobal("user");
   const [lobby, setLobby] = useState(null);
   const [isLoading, setLoading] = useState(true);
 

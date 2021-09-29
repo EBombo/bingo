@@ -1,23 +1,15 @@
 import React, { useGlobal, useRef, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
-import { firestore } from "../../../firebase";
-import { useUser } from "../../../hooks";
 import { mediaQuery } from "../../../constants";
 import { SoundOutlined } from "@ant-design/icons";
 
 export const UserLayout = (props) => {
-  const [, setAuthUserLs] = useUser();
-  const [authUser, setAuthUser] = useGlobal("user");
+  const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
   const [isPlay, setIsPlay] = useState(false);
 
   const audioRef = useRef(null);
-
-  const logout = async () => {
-    await setAuthUser({ id: firestore.collection("users").doc().id });
-    setAuthUserLs(null);
-  };
 
   return (
     <UserLayoutCss>
@@ -94,7 +86,7 @@ export const UserLayout = (props) => {
           <Popover
             content={
               <div>
-                <div onClick={logout} style={{ cursor: "pointer" }}>
+                <div onClick={props.logout} style={{ cursor: "pointer" }}>
                   Salir
                 </div>
               </div>

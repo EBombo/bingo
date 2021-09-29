@@ -10,6 +10,8 @@ import { UserLayout } from "../userLayout";
 import { firestore } from "../../../../firebase";
 import { AdminPanel } from "./AdminPanel";
 import { UserPanel } from "./UserPanel";
+import { useUser } from "../../../../hooks";
+import { useRouter } from "next/router";
 
 const TABS = {
   BINGO: { value: "bingo" },
@@ -17,15 +19,34 @@ const TABS = {
 };
 
 export const BingoGame = (props) => {
+  const router = useRouter();
+  const [, setAuthUserLs] = useUser();
+  const [authUser, setAuthUser] = useGlobal("user");
+  const [tabletTab, setTabletTab] = useState("bingo");
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);
   const [isVisibleModalAwards, setIsVisibleModalAwards] = useState(false);
-  const [authUser] = useGlobal("user");
-  const [tabletTab, setTabletTab] = useState("bingo");
 
   useEffect(() => {
     if (!props.lobby.bingo) return;
     setIsVisibleModalWinner(true);
   }, [props.lobby]);
+
+  useEffect(() => {
+    const currentUserId = authUser.id;
+    if (
+      props.lobby?.users?.[currentUserId] ||
+      props.lobby.game.usersIds.includes(currentUserId)
+    )
+      return;
+
+    logout();
+  }, [props.lobby.users]);
+
+  const logout = async () => {
+    await setAuthUser({ id: firestore.collection("users").doc().id });
+    setAuthUserLs(null);
+    router.push("/");
+  };
 
   const callBingo = async () =>
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
@@ -35,7 +56,7 @@ export const BingoGame = (props) => {
 
   return (
     <>
-      <UserLayout {...props} />
+      <UserLayout {...props} logout={logout} />
 
       <BingoGameContainer>
         {isVisibleModalAwards && (
