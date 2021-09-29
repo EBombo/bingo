@@ -39,7 +39,7 @@ export const BingoCard = (props) => {
               <tr key={`key-${row}`}>
                 {arrNums.map((num, col) => (
                   <td key={`key-${num}-${col}-${matrix}`}>
-                    {props.lobby.settings.cardAutofill ? (
+                    {props.lobby.settings.cardAutofill || authUser.isAdmin ? (
                       <div
                         className={`${
                           props.lobby.board &&
