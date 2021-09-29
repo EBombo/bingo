@@ -15,13 +15,14 @@ export const GameOptions = (props) => {
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
 
   const startGame = async (callback) => {
-    setLoading(true);
     if (!props.lobby.pattern)
       return props.showNotification(
         "UPS",
         "Define un patrón antes de empezar el bingo",
         "warning"
       );
+
+    setLoading(true);
 
     const board = createBoard();
 
