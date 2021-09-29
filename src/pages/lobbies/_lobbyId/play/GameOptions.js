@@ -96,14 +96,9 @@ export const GameOptions = (props) => {
 
     const newLastPlays = props.lobby.lastPlays;
 
-    console.log("prev", newLastPlays);
-
     newLastPlays.unshift(numberCalled);
 
-    console.log(newLastPlays);
-
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      startAt: new Date(),
       updateAt: new Date(),
       round: props.lobby.round + 1,
       lastPlays: newLastPlays,
