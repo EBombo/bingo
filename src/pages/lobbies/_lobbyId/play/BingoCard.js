@@ -24,11 +24,11 @@ export const BingoCard = (props) => {
       <table>
         <thead className="thead">
           <tr>
-            <th>{props.lobby.game.letters.b}</th>
-            <th>{props.lobby.game.letters.i}</th>
-            <th>{props.lobby.game.letters.n}</th>
-            <th>{props.lobby.game.letters.g}</th>
-            <th>{props.lobby.game.letters.o}</th>
+            <th>{props.lobby?.game?.letters?.b}</th>
+            <th>{props.lobby?.game?.letters?.i}</th>
+            <th>{props.lobby?.game?.letters?.n}</th>
+            <th>{props.lobby?.game?.letters?.g}</th>
+            <th>{props.lobby?.game?.letters?.o}</th>
           </tr>
         </thead>
         <tbody className="tbody">
