@@ -1,6 +1,6 @@
 import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
-import { mediaQuery } from "../../../constants";
+import { mediaQuery } from "../../../../constants";
 
 export const BingoCard = (props) => {
   const [authUser] = useGlobal("user");

@@ -1,8 +1,8 @@
 import React from "reactn";
 import styled from "styled-components";
-import { ModalContainer } from "../../../components/common/ModalContainer";
+import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { CardPattern } from "./CardPattern";
-import { mediaQuery } from "../../../constants";
+import { mediaQuery } from "../../../../constants";
 
 export const ModalPattern = (props) => {
   return (

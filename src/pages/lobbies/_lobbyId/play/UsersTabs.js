@@ -1,10 +1,9 @@
 import React, { useState } from "reactn";
 import styled from "styled-components";
-import { mediaQuery } from "../../../constants";
+import { mediaQuery } from "../../../../constants";
 import defaultTo from "lodash/defaultTo";
-import { ButtonAnt } from "../../../components/form";
 import { Progress } from "antd";
-import { darkTheme } from "../../../theme";
+import { darkTheme } from "../../../../theme";
 import { ModalUserCard } from "./ModalUserCard";
 
 export const UsersTabs = (props) => {

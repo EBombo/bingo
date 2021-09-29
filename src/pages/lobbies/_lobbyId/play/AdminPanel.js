@@ -1,10 +1,10 @@
 import React from "reactn";
-import { RoundsLastNumber } from "../RoundsLastNumber";
+import { RoundsLastNumber } from "./RoundsLastNumber";
 import defaultTo from "lodash/defaultTo";
-import { CardPattern } from "../CardPattern";
-import { BingoBoard } from "../BingoBoard";
-import { GameOptions } from "../GameOptions";
-import { LastPlays } from "../LastPlays";
+import { CardPattern } from "./CardPattern";
+import { BingoBoard } from "./BingoBoard";
+import { GameOptions } from "./GameOptions";
+import { LastPlays } from "./LastPlays";
 import { Desktop, Tablet } from "../../../../constants";
 import { Chat } from "../../../../components/chat";
 

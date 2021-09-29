@@ -1,11 +1,11 @@
 import React, { useState } from "reactn";
 import styled from "styled-components";
-import { ButtonAnt } from "../../../components/form";
-import { Image } from "../../../components/common/Image";
-import { config, firestore } from "../../../firebase";
+import { ButtonAnt } from "../../../../components/form";
+import { Image } from "../../../../components/common/Image";
+import { config, firestore } from "../../../../firebase";
 import { mapKeys } from "lodash/object";
-import { ModalContainer } from "../../../components/common/ModalContainer";
-import { mediaQuery } from "../../../constants";
+import { ModalContainer } from "../../../../components/common/ModalContainer";
+import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
 
 export const GameOptions = (props) => {

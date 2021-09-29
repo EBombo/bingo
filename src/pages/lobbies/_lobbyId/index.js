@@ -5,7 +5,7 @@ import { spinLoaderMin } from "../../../components/common/loader";
 import { LobbyAdmin } from "./lobbyAdmin";
 import { LobbyUser } from "./LobbyUser";
 import { LoadingGame } from "./LoadingGame";
-import { BingoGame } from "./BingoGame";
+import { BingoGame } from "./play/BingoGame";
 import { useUser } from "../../../hooks";
 
 export const Lobby = (props) => {

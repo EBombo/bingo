@@ -1,15 +1,15 @@
 import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
-import { Chat } from "../../../components/chat";
-import { Desktop, mediaQuery, Tablet } from "../../../constants";
+import { Chat } from "../../../../components/chat";
+import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { ModalWinner } from "./ModalWinner";
 import { ModalAwards } from "./ModalAwards";
 import { UsersTabs } from "./UsersTabs";
 import defaultTo from "lodash/defaultTo";
-import { UserLayout } from "./userLayout";
-import { firestore } from "../../../firebase";
-import { AdminPanel } from "./play/AdminPanel";
-import { UserPanel } from "./play/UserPanel";
+import { UserLayout } from "../userLayout";
+import { firestore } from "../../../../firebase";
+import { AdminPanel } from "./AdminPanel";
+import { UserPanel } from "./UserPanel";
 
 const TABS = {
   BINGO: { value: "bingo" },

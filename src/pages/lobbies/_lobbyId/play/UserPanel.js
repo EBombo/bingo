@@ -1,10 +1,10 @@
-import { BingoCard } from "../BingoCard";
-import { BingoBoard } from "../BingoBoard";
-import { CardPattern } from "../CardPattern";
-import { GameOptions } from "../GameOptions";
+import { BingoCard } from "./BingoCard";
+import { BingoBoard } from "./BingoBoard";
+import { CardPattern } from "./CardPattern";
+import { GameOptions } from "./GameOptions";
 import defaultTo from "lodash/defaultTo";
 import { ButtonAnt } from "../../../../components/form";
-import { LastPlays } from "../LastPlays";
+import { LastPlays } from "./LastPlays";
 import React, { useGlobal } from "reactn";
 import { Chat } from "../../../../components/chat";
 import { Desktop, Tablet } from "../../../../constants";

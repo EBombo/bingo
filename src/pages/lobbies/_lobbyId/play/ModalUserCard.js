@@ -1,12 +1,11 @@
 import React, { useGlobal } from "reactn";
 import styled from "styled-components";
-import { ModalContainer } from "../../../components/common/ModalContainer";
-import get from "lodash/get";
-import { ButtonAnt } from "../../../components/form";
-import { mediaQuery, Tablet, Desktop } from "../../../constants";
+import { ModalContainer } from "../../../../components/common/ModalContainer";
+import { ButtonAnt } from "../../../../components/form";
+import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { BingoCard } from "./BingoCard";
 import { BingoBoard } from "./BingoBoard";
-import { firestore } from "../../../firebase";
+import { firestore } from "../../../../firebase";
 import defaultTo from "lodash/defaultTo";
 
 export const ModalUserCard = (props) => {

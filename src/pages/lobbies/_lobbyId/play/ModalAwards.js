@@ -1,12 +1,10 @@
 import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
-import { ModalContainer } from "../../../components/common/ModalContainer";
-import get from "lodash/get";
-import { ButtonAnt } from "../../../components/form";
-import { mediaQuery } from "../../../constants";
+import { ModalContainer } from "../../../../components/common/ModalContainer";
+import { ButtonAnt } from "../../../../components/form";
 import { Input } from "antd";
 import defaultTo from "lodash/defaultTo";
-import { firestore } from "../../../firebase";
+import { firestore } from "../../../../firebase";
 
 export const ModalAwards = (props) => {
   const [authUser] = useGlobal("user");

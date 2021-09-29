@@ -1,10 +1,10 @@
 import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import get from "lodash/get";
-import { ButtonAnt } from "../../../components/form";
-import { mediaQuery } from "../../../constants";
+import { ButtonAnt } from "../../../../components/form";
+import { mediaQuery } from "../../../../constants";
 import { ModalPattern } from "./ModalPattern";
-import { firestore } from "../../../firebase";
+import { firestore } from "../../../../firebase";
 
 const matrix = (value = null) =>
   Array.from(Array(5), () => new Array(5).fill(value));
