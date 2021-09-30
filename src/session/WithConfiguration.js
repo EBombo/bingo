@@ -16,6 +16,7 @@ import { yup } from "../config";
 import { register } from "next-offline/runtime";
 import { spinLoader } from "../components/common/loader";
 import dynamic from "next/dynamic";
+import { ANIMATION, SPEED } from "../business";
 
 const UpdateVersion = dynamic(
   () => import("../components/versions/UpdateVersion"),
@@ -53,6 +54,9 @@ export const WithConfiguration = (props) => {
         audios: [],
         languageCode,
         ping: null,
+        animation: ANIMATION.default,
+        speed: SPEED.default,
+        isAutomate: false,
         register: null,
         isLoadingUser: true,
         isLoadingCreateUser: true,

@@ -7,6 +7,7 @@ import { GameOptions } from "./GameOptions";
 import { LastPlays } from "./LastPlays";
 import { Desktop, Tablet } from "../../../../constants";
 import { Chat } from "../../../../components/chat";
+import { SliderControls } from "./SliderControls";
 
 export const AdminPanel = (props) => {
   return (
@@ -49,6 +50,7 @@ export const AdminPanel = (props) => {
                 <div className="last-plays-container">
                   <LastPlays {...props} />
                 </div>
+                <SliderControls {...props} />
               </div>
             </div>
           </div>
@@ -84,6 +86,7 @@ export const AdminPanel = (props) => {
         <div className="last-plays-container">
           <LastPlays {...props} />
         </div>
+        <SliderControls {...props} />
         {props.lobby?.settings?.showChat && (
           <div className="chat-container">
             <Chat title={"CHAT DEL BINGO"} />

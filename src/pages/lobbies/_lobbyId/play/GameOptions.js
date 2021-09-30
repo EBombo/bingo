@@ -1,4 +1,4 @@
-import React, { useState } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { ButtonAnt } from "../../../../components/form";
 import { Image } from "../../../../components/common/Image";
@@ -10,6 +10,7 @@ import get from "lodash/get";
 import { BOARD_PARAMS, createBoard } from "../../../../business";
 
 export const GameOptions = (props) => {
+  const [isAutomate, setIsAutomate] = useGlobal("isAutomate");
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
@@ -129,7 +130,7 @@ export const GameOptions = (props) => {
               <ButtonAnt
                 width="100%"
                 onClick={() => callNumber()}
-                disabled={loading || isLoadingCalledNumber}
+                disabled={loading || isLoadingCalledNumber || isAutomate}
                 loading={isLoadingCalledNumber}
               >
                 LLamar número
@@ -152,8 +153,15 @@ export const GameOptions = (props) => {
             )}
           </div>
           <div className="btn-container">
-            <ButtonAnt color="default" width="100%" className="btn-automatic">
-              Reproducción automática
+            <ButtonAnt
+              color="default"
+              width="100%"
+              className="btn-automatic"
+              onClick={() => setIsAutomate(!isAutomate)}
+            >
+              {isAutomate
+                ? "Detener Rep. automática"
+                : "Reproducción automática"}
             </ButtonAnt>
           </div>
           <div className="btn-container">

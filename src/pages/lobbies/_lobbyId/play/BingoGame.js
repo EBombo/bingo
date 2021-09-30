@@ -189,6 +189,7 @@ const BingoGameContainer = styled.div`
         flex-direction: column;
       }
     }
+
     .buttons-container {
       margin: 1rem 0;
       display: flex;
@@ -317,6 +318,7 @@ const BingoGameContainer = styled.div`
             display: flex;
             align-items: center;
           }
+
           .buttons-container {
             width: 100%;
             margin: 1rem 0;
@@ -353,6 +355,7 @@ const BingoGameContainer = styled.div`
         max-width: 650px;
         margin: 0 auto;
       }
+
       .bottom-section {
         display: grid;
         grid-template-columns: 335px auto;
