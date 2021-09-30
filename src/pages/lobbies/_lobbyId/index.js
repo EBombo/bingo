@@ -40,7 +40,6 @@ export const Lobby = (props) => {
             "warning"
           );
           logout();
-          return router.push("/login");
         }
 
         setLobby(currentLobby);
