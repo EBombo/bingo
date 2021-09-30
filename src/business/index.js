@@ -56,13 +56,13 @@ export const getBingoCard = () => {
 };
 
 export const createBoard = () =>
-    Array.from({ length: MAX_NUMBER_BOARD }, (_, i) => i + 1).reduce(
-        (board, number) => ({ ...board, [number]: false }),
-        {}
-    );
+  Array.from({ length: MAX_NUMBER_BOARD }, (_, i) => i + 1).reduce(
+    (board, number) => ({ ...board, [number]: false }),
+    {}
+  );
 
 export const generateMatrix = (value = null) =>
-    Array.from(Array(5), () => new Array(5).fill(value));
+  Array.from(Array(5), () => new Array(5).fill(value));
 
 export const getNumberBoard = (board) =>
   Object.keys(board).reduce(

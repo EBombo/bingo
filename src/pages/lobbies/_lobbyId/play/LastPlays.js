@@ -1,10 +1,26 @@
-import React from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import get from "lodash/get";
 import { BOARD_PARAMS } from "../../../../business";
+import { timeoutPromise } from "../../../../utils/promised";
 
 export const LastPlays = (props) => {
-  const lastPlays = props.lobby?.lastPlays?.slice(0, 5) || [];
+  const [animationSpeed] = useGlobal("animationSpeed");
+  const [lastPlays, setLastPlays] = useState(
+    props.lobby?.lastPlays?.slice(0, 5) || []
+  );
+
+  useEffect(() => {
+    const initialize = async () => {
+      const newLastPlays = props.lobby?.lastPlays?.slice(0, 5) || [];
+
+      newLastPlays?.length && (await timeoutPromise(animationSpeed * 1000));
+
+      setLastPlays(newLastPlays);
+    };
+
+    initialize();
+  }, [props.lobby?.lastPlays]);
 
   return (
     <Container>
