@@ -1,7 +1,7 @@
 import { spinLoaderMin } from "../../../components/common/loader";
 import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
-import { config, firestore, firestoreEvents } from "../../../firebase";
+import { config, firestore } from "../../../firebase";
 import { useFetch } from "../../../hooks/useFetch";
 import defaultTo from "lodash/defaultTo";
 import { useRouter } from "next/router";
@@ -129,11 +129,11 @@ export const Game = (props) => {
         },
       });
 
-      const promiseEvents = firestoreEvents
+      const promiseCountPlays = firestore
         .doc(`games/${game.id}`)
         .update({ countPlays: (game?.countPlays ?? 0) + 1 });
 
-      await Promise.all([promiseLobby, promiseEvents]);
+      await Promise.all([promiseLobby, promiseCountPlays]);
 
       return router.push(`/lobbies/${lobbyId}`);
     } catch (error) {
