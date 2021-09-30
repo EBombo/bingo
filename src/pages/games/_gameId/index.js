@@ -29,12 +29,11 @@ export const Game = (props) => {
   const [showSettings, setShowSettings] = useState(false);
   const [isLoadingSave, setIsLoadingSave] = useState(false);
 
-  const [showMainCard, setShowMainCard] = useState(true);
-  const [userIdentity, setUserIdentity] = useState(false);
+  const [userIdentity, setUserIdentity] = useState(true);
   const [showAllCards, setShowAllCards] = useState(false);
   const [cardAutofill, setCardAutofill] = useState(false);
-  const [showChat, setShowChat] = useState(false);
-  const [showParticipants, setShowParticipants] = useState(false);
+  const [showChat, setShowChat] = useState(true);
+  const [showParticipants, setShowParticipants] = useState(true);
   const [showBoardToUser, setShowBoardToUser] = useState(false);
   const [awards, setAwards] = useState([
     {
@@ -118,7 +117,6 @@ export const Game = (props) => {
         isClosed: false,
         startAt: null,
         settings: {
-          showMainCard,
           userIdentity,
           showAllCards,
           cardAutofill,
@@ -225,13 +223,13 @@ export const Game = (props) => {
             <div className="option">
               <div>
                 <div className="title-opt">
-                  Mostrar cartilla principal y bolas en dispositivos de jug.{" "}
+                  Mostrar tablero principal y bolas en dispositivos de jug.{" "}
                 </div>
                 <span>Para videoconferencias y mejorar accesibilidad</span>
               </div>
               <Switch
-                defaultChecked={showMainCard}
-                onChange={() => setShowMainCard(!showMainCard)}
+                defaultChecked={showBoardToUser}
+                onChange={() => setShowBoardToUser(!showBoardToUser)}
               />
             </div>
 
@@ -269,7 +267,7 @@ export const Game = (props) => {
                 <span>Los jugadores tienen que estar atentos al juego</span>
               </div>
               <Switch
-                defaultChecked={cardAutofill}
+                defaultChecked={!cardAutofill}
                 onChange={() => setCardAutofill(!cardAutofill)}
               />
             </div>
@@ -293,18 +291,6 @@ export const Game = (props) => {
               <Switch
                 defaultChecked={showParticipants}
                 onChange={() => setShowParticipants(!showParticipants)}
-              />
-            </div>
-
-            <div className="option">
-              <div>
-                <div className="title-opt">
-                  El usuario tiene la tabla general en su pantalla
-                </div>
-              </div>
-              <Switch
-                defaultChecked={showBoardToUser}
-                onChange={() => setShowBoardToUser(!showBoardToUser)}
               />
             </div>
 

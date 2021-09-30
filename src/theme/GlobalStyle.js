@@ -104,7 +104,7 @@ export const GlobalStyle = createGlobalStyle`
   /*-------------- SELECT ANT----------------*/
 
   .ant-select-dropdown, .ant-select-dropdown--single, .ant-select-dropdown-placement-bottomLeft {
-    background-color: ${(props) => props.theme.basic.default} !important;
+    background-color: ${(props) => props.theme.basic.whiteLight} !important;
   }
 
 
