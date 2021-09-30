@@ -12,7 +12,7 @@ import { useInterval } from "../../../../hooks/useInterval";
 
 export const GameOptions = (props) => {
   const [isAutomate, setIsAutomate] = useGlobal("isAutomate");
-  const [speed] = useGlobal("speed");
+  const [reproductionSpeed] = useGlobal("reproductionSpeed");
 
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -75,7 +75,7 @@ export const GameOptions = (props) => {
     setIsLoadingCalledNumber(false);
   };
 
-  useInterval(callNumber, isAutomate ? speed * 1000 : null);
+  useInterval(callNumber, isAutomate ? reproductionSpeed * 1000 : null);
 
   const modalConfirm = () => (
     <ModalContainer

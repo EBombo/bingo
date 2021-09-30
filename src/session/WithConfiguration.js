@@ -55,7 +55,7 @@ export const WithConfiguration = (props) => {
         languageCode,
         ping: null,
         animationSpeed: ANIMATION.default,
-        speed: SPEED.default,
+        reproductionSpeed: SPEED.default,
         isAutomate: false,
         register: null,
         isLoadingUser: true,
