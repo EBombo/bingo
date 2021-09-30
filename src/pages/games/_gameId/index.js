@@ -184,8 +184,7 @@ export const Game = (props) => {
             <ButtonBingo
               variant="primary"
               padding="0 15px"
-              loading={isLoadingSave}
-              disabled={isLoadingSave}
+              disabled={isLoadingSave || true}
               onClick={() => createLobby("team")}
             >
               Modo equipo
