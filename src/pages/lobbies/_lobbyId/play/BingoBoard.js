@@ -1,18 +1,59 @@
-import React from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
+import { timeoutPromise } from "../../../../utils/promised";
+import { getHead } from "../../../../business";
 
 export const BingoBoard = (props) => {
+  const [animationSpeed] = useGlobal("animationSpeed");
+  const [startEffectHead, setStartEffectHead] = useState(null);
+  const [startEffectBody, setStartEffectBody] = useState(null);
+
+  const [currentBoard, setCurrentBoard] = useState(props.lobby.board ?? {});
+
+  useEffect(() => {
+    if (!props.lobby.board) return setCurrentBoard({});
+
+    const initialize = async () => {
+      if (!props.lobby.lastPlays[0]) return setCurrentBoard({});
+
+      const lastPlays = [...props.lobby.lastPlays];
+      const lastNumber = lastPlays[0];
+
+      const position = getHead(lastNumber);
+
+      const positionOnScreenY = 42 * position?.index ?? 0;
+      setStartEffectHead(String(positionOnScreenY));
+      await timeoutPromise((animationSpeed / 2) * 1000);
+
+      const positionOnScreenX = 42 * (lastNumber - position.min);
+      setStartEffectBody(String(positionOnScreenX));
+      await timeoutPromise((animationSpeed / 2) * 1000);
+
+      setStartEffectHead(null);
+      setStartEffectBody(null);
+
+      setCurrentBoard(props.lobby.board);
+    };
+
+    initialize();
+  }, [props.lobby.board]);
+
   const range = (start, end) =>
     Array(end - start + 1)
       .fill()
       .map((_, idx) => start + idx);
 
   return (
-    <BoardContainer>
+    <BoardContainer
+      startEffectHead={startEffectHead}
+      animationSpeed={animationSpeed}
+      startEffectBody={startEffectBody}
+    >
       <table className="board">
         <thead>
+          {!!startEffectHead && <tr className="div-animation-head" />}
           <tr>
             <th className="th-header">
               {get(props, "lobby.game.letters.b", "B")}
@@ -40,12 +81,11 @@ export const BingoBoard = (props) => {
           </tr>
         </thead>
         <tbody>
+          {!!startEffectBody && <tr className="div-animation-body" />}
           <tr>
             {range(1, 15).map((number) => (
               <td
-                className={`td-numbers ${
-                  props.lobby.board && props.lobby.board[number] && `active`
-                }`}
+                className={`td-numbers ${currentBoard[number] && `active`}`}
                 key={number}
               >
                 {number}
@@ -55,9 +95,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(16, 30).map((number) => (
               <td
-                className={`td-numbers ${
-                  props.lobby.board && props.lobby.board[number] && `active`
-                }`}
+                className={`td-numbers ${currentBoard[number] && `active`}`}
                 key={number}
               >
                 {number}
@@ -67,9 +105,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(31, 45).map((number) => (
               <td
-                className={`td-numbers ${
-                  props.lobby.board && props.lobby.board[number] && `active`
-                }`}
+                className={`td-numbers ${currentBoard[number] && `active`}`}
                 key={number}
               >
                 {number}
@@ -79,9 +115,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(46, 60).map((number) => (
               <td
-                className={`td-numbers ${
-                  props.lobby.board && props.lobby.board[number] && `active`
-                }`}
+                className={`td-numbers ${currentBoard[number] && `active`}`}
                 key={number}
               >
                 {number}
@@ -91,9 +125,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(61, 75).map((number) => (
               <td
-                className={`td-numbers ${
-                  props.lobby.board && props.lobby.board[number] && `active`
-                }`}
+                className={`td-numbers ${currentBoard[number] && `active`}`}
                 key={number}
               >
                 {number}
@@ -108,16 +140,23 @@ export const BingoBoard = (props) => {
 
 const BoardContainer = styled.div`
   width: 420px;
+
   table {
     display: flex;
     width: 420px;
     height: 130px;
+
     thead {
+      position: relative;
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
       background: ${(props) => props.theme.basic.primaryLight};
       border-radius: 3px;
+
+      tr {
+        z-index: 2;
+      }
 
       .th-header {
         width: 20px;
@@ -133,9 +172,47 @@ const BoardContainer = styled.div`
         margin: 0;
         color: ${(props) => props.theme.basic.secondary};
       }
+
+      /* effects */
+      @keyframes board-animation-head {
+        0% {
+          top: 0;
+        }
+        20% {
+          top: calc(100% - 42px);
+        }
+        40% {
+          top: 0;
+        }
+        60% {
+          top: calc(100% - 42px);
+        }
+        80% {
+          top: 0;
+        }
+        100% {
+          top: ${(props) => props.startEffectHead ?? 0}px;
+        }
+      }
+
+      .div-animation-head {
+        top: ${(props) => props.startEffectHead ?? 0}px;
+        z-index: 1;
+        width: 100%;
+        height: 42px;
+        position: absolute;
+        background: ${(props) => props.theme.basic.primary};
+        animation: ${(props) =>
+          props.startEffectHead
+            ? `board-animation-head ${(props.animationSpeed / 2).toFixed(2)}s`
+            : "none"};
+      }
+
+      /* effects */
     }
 
     tbody {
+      position: relative;
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
@@ -158,11 +235,54 @@ const BoardContainer = styled.div`
         background: ${(props) => props.theme.basic.primary};
         color: ${(props) => props.theme.basic.whiteDark};
       }
+
+      tr {
+        z-index: 2;
+      }
+
+      /* effects */
+      @keyframes board-animation-body {
+        0% {
+          left: 0;
+        }
+        20% {
+          left: calc(100% - 40px);
+        }
+        40% {
+          left: 0;
+        }
+        60% {
+          left: calc(100% - 40px);
+        }
+        80% {
+          left: 0;
+        }
+        100% {
+          left: ${(props) => props.startEffectBody ?? 0}px;
+        }
+      }
+
+      .div-animation-body {
+        top: ${(props) => props.startEffectHead ?? 0}px;
+        left: ${(props) => props.startEffectBody ?? 0}px;
+        z-index: 1;
+        width: 40px;
+        height: 42px;
+        position: absolute;
+        background: ${(props) => props.theme.basic.primary};
+        animation: ${(props) =>
+          props.startEffectBody
+            ? `board-animation-body ${(props.animationSpeed / 2).toFixed(2)}s`
+            : "none"};
+      }
+
+      /* effects */
     }
   }
 
   ${mediaQuery.afterTablet} {
     width: 650px;
+
     table {
       width: 650px;
       height: 210px;

@@ -107,7 +107,7 @@ export const Game = (props) => {
       const lobbiesRef = firestore.collection("lobbies");
       const lobbyId = lobbiesRef.doc().id;
 
-      await lobbiesRef.doc(lobbyId).set({
+      const promiseLobby = lobbiesRef.doc(lobbyId).set({
         pin,
         game,
         typeOfGame,
@@ -128,6 +128,12 @@ export const Game = (props) => {
           awards: showAwards ? awards : null,
         },
       });
+
+      const promiseCountPlays = firestore
+        .doc(`games/${game.id}`)
+        .update({ countPlays: (game?.countPlays ?? 0) + 1 });
+
+      await Promise.all([promiseLobby, promiseCountPlays]);
 
       return router.push(`/lobbies/${lobbyId}`);
     } catch (error) {

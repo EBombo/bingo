@@ -1,4 +1,4 @@
-import React, { useState } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { ButtonAnt } from "../../../../components/form";
 import { Image } from "../../../../components/common/Image";
@@ -8,10 +8,16 @@ import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
 import { BOARD_PARAMS, createBoard } from "../../../../business";
+import { useInterval } from "../../../../hooks/useInterval";
+import { timeoutPromise } from "../../../../utils/promised";
 
 export const GameOptions = (props) => {
-  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
+  const [animationSpeed] = useGlobal("animationSpeed");
+  const [reproductionSpeed] = useGlobal("reproductionSpeed");
+  const [isAutomatic, setIsAutomatic] = useGlobal("isAutomatic");
+
   const [loading, setLoading] = useState(false);
+  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
 
   const startGame = async (callback) => {
@@ -37,6 +43,44 @@ export const GameOptions = (props) => {
     setLoading(false);
     callback && callback(false);
   };
+
+  const callNumber = async () => {
+    if (!props.lobby || !props.lobby.board) return;
+
+    setIsLoadingCalledNumber(true);
+
+    const newBoard = { ...props.lobby.board };
+    const missingNumbers = [];
+
+    mapKeys(newBoard, (value, key) => {
+      if (!value) missingNumbers.push(key);
+    });
+
+    const randomIndex = Math.round(Math.random() * missingNumbers.length);
+
+    const numberCalled = missingNumbers[randomIndex];
+
+    newBoard[numberCalled] = true;
+
+    const newLastPlays = props.lobby.lastPlays;
+
+    newLastPlays.unshift(numberCalled);
+
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      updateAt: new Date(),
+      round: props.lobby.round + 1,
+      lastPlays: newLastPlays,
+      board: newBoard,
+    });
+
+    await timeoutPromise(animationSpeed * 1000);
+    setIsLoadingCalledNumber(false);
+  };
+
+  useInterval(
+    callNumber,
+    isAutomatic ? (reproductionSpeed + animationSpeed) * 1000 : null
+  );
 
   const modalConfirm = () => (
     <ModalContainer
@@ -73,36 +117,6 @@ export const GameOptions = (props) => {
     </ModalContainer>
   );
 
-  const callNumber = async () => {
-    if (!props.lobby || !props.lobby.board) return;
-    setIsLoadingCalledNumber(true);
-
-    const newBoard = props.lobby.board;
-    const missingNumbers = [];
-
-    mapKeys(newBoard, (value, key) => {
-      if (!value) missingNumbers.push(key);
-    });
-
-    const randomIndex = Math.round(Math.random() * missingNumbers.length);
-
-    const numberCalled = missingNumbers[randomIndex];
-
-    newBoard[numberCalled] = true;
-
-    const newLastPlays = props.lobby.lastPlays;
-
-    newLastPlays.unshift(numberCalled);
-
-    await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      updateAt: new Date(),
-      round: props.lobby.round + 1,
-      lastPlays: newLastPlays,
-      board: newBoard,
-    });
-    setIsLoadingCalledNumber(false);
-  };
-
   return (
     <GameOptionsContainer hiddenOptions={props.hiddenOptions}>
       {modalConfirm()}
@@ -129,7 +143,7 @@ export const GameOptions = (props) => {
               <ButtonAnt
                 width="100%"
                 onClick={() => callNumber()}
-                disabled={loading || isLoadingCalledNumber}
+                disabled={loading || isLoadingCalledNumber || isAutomatic}
                 loading={isLoadingCalledNumber}
               >
                 LLamar número
@@ -152,8 +166,16 @@ export const GameOptions = (props) => {
             )}
           </div>
           <div className="btn-container">
-            <ButtonAnt color="default" width="100%" className="btn-automatic">
-              Reproducción automática
+            <ButtonAnt
+              color="default"
+              width="100%"
+              className="btn-automatic"
+              disabled={!props.lobby.startGame || isLoadingCalledNumber}
+              onClick={() => setIsAutomatic(!isAutomatic)}
+            >
+              {isAutomatic
+                ? "Detener Rep. automática"
+                : "Reproducción automática"}
             </ButtonAnt>
           </div>
           <div className="btn-container">
@@ -161,6 +183,7 @@ export const GameOptions = (props) => {
               variant="contained"
               color="default"
               width="100%"
+              disabled={isLoadingCalledNumber || isAutomatic}
               onClick={() => setIsVisibleModalConfirm(true)}
             >
               Reiniciar tablero
