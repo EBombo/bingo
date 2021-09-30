@@ -45,8 +45,6 @@ export const GameOptions = (props) => {
   const callNumber = async () => {
     if (!props.lobby || !props.lobby.board) return;
 
-    console.log("soy llamdo", isAutomate);
-
     setIsLoadingCalledNumber(true);
 
     const newBoard = props.lobby.board;
