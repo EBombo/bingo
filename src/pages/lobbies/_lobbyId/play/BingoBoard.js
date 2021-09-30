@@ -180,31 +180,40 @@ const BoardContainer = styled.div`
         }
         20% {
           top: calc(100% - 26px);
-
-          ${mediaQuery.afterTablet} {
-            top: calc(100% - 42px);
-          }
         }
         40% {
           top: 0;
         }
         60% {
           top: calc(100% - 26px);
-
-          ${mediaQuery.afterTablet} {
-            top: calc(100% - 42px);
-          }
         }
         80% {
           top: 0;
         }
         100% {
-          top: ${(props) =>
-            props.startEffectHead ? 26 * props.startEffectHead : 0}px;
+          top: ${(props) => 26 * +props.startEffectHead}px;
+        }
+      }
 
-          ${mediaQuery.afterTablet} {
-            top: ${(props) =>
-              props.startEffectHead ? 42 * props.startEffectHead : 0}px;
+      ${mediaQuery.afterTablet} {
+        @keyframes board-animation-head {
+          0% {
+            top: 0;
+          }
+          20% {
+            top: calc(100% - 42px);
+          }
+          40% {
+            top: 0;
+          }
+          60% {
+            top: calc(100% - 42px);
+          }
+          80% {
+            top: 0;
+          }
+          100% {
+            top: ${(props) => 42 * +props.startEffectHead}px;
           }
         }
       }
@@ -215,14 +224,12 @@ const BoardContainer = styled.div`
         position: absolute;
         background: ${(props) => props.theme.basic.primary};
 
-        top: ${(props) =>
-          props.startEffectHead ? 26 * props.startEffectHead : 0}px;
         height: 26px;
+        top: ${(props) => 26 * +props.startEffectHead}px;
 
         ${mediaQuery.afterTablet} {
           height: 42px;
-          top: ${(props) =>
-            props.startEffectHead ? 42 * props.startEffectHead : 0}px;
+          top: ${(props) => 42 * +props.startEffectHead}px;
         }
 
         animation: ${(props) =>
@@ -270,31 +277,40 @@ const BoardContainer = styled.div`
         }
         20% {
           left: calc(100% - 20px);
-
-          ${mediaQuery.afterTablet} {
-            left: calc(100% - 40px);
-          }
         }
         40% {
           left: 0;
         }
         60% {
           left: calc(100% - 20px);
-
-          ${mediaQuery.afterTablet} {
-            left: calc(100% - 40px);
-          }
         }
         80% {
           left: 0;
         }
         100% {
-          left: ${(props) =>
-            props.startEffectBody ? props.startEffectBody * 20 : 0}px;
+          left: ${(props) => 20 * +props.startEffectBody}px;
+        }
+      }
 
-          ${mediaQuery.afterTablet} {
-            left: ${(props) =>
-              props.startEffectBody ? props.startEffectBody * 42 : 0}px;
+      ${mediaQuery.afterTablet} {
+        @keyframes board-animation-body {
+          0% {
+            left: 0;
+          }
+          20% {
+            left: calc(100% - 40px);
+          }
+          40% {
+            left: 0;
+          }
+          60% {
+            left: calc(100% - 40px);
+          }
+          80% {
+            left: 0;
+          }
+          100% {
+            left: ${(props) => 42 * +props.startEffectBody}px;
           }
         }
       }
@@ -306,17 +322,17 @@ const BoardContainer = styled.div`
         background: ${(props) => props.theme.basic.primary};
 
         top: ${(props) =>
-          props.startEffectHead ? 27 * props.startEffectHead : 0}px;
+          props.startEffectHead ? 27 * +props.startEffectHead : 0}px;
         left: ${(props) =>
-          props.startEffectBody ? 27 * props.startEffectBody : 0}px;
+          props.startEffectBody ? 27 * +props.startEffectBody : 0}px;
         width: 20px;
         height: 20px;
 
         ${mediaQuery.afterTablet} {
           top: ${(props) =>
-            props.startEffectHead ? 42 * props.startEffectHead : 0}px;
+            props.startEffectHead ? 42 * +props.startEffectHead : 0}px;
           left: ${(props) =>
-            props.startEffectBody ? 42 * props.startEffectBody : 0}px;
+            props.startEffectBody ? 42 * +props.startEffectBody : 0}px;
           width: 40px;
           height: 42px;
         }
