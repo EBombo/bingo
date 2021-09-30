@@ -65,8 +65,6 @@ const Login = (props) => {
     }
     const currentLobby = snapshotToArray(lobbyRef)[0];
 
-    console.log("currentLobby.isClosed", currentLobby.isClosed);
-
     if (currentLobby.isClosed) {
       await setAuthUser({ id: firestore.collection("users").doc().id });
       setLobby(null);

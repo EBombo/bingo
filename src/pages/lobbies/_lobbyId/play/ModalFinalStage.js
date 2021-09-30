@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal, useState, useRef } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
@@ -29,14 +29,11 @@ export const ModalFinalStage = (props) => {
     props.setIsVisibleModalFinal(false);
   };
 
-  const closeGame = async () => {
+  const closeGame = async () =>
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       isClosed: true,
       updateAt: new Date(),
     });
-
-    router.push("/");
-  };
 
   const continueGame = async () => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({

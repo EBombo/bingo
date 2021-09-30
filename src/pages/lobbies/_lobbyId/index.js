@@ -16,6 +16,12 @@ export const Lobby = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [authUser, setAuthUser] = useGlobal("user");
 
+  const logout = async () => {
+    await setAuthUser({ id: firestore.collection("users").doc().id });
+    setAuthUserLs(null);
+    router.push("/");
+  };
+
   useEffect(() => {
     if (!authUser?.nickname && !authUser.isAdmin) return router.push("/");
   }, [authUser]);
@@ -33,6 +39,7 @@ export const Lobby = (props) => {
             "No encontramos tu sala, intenta nuevamente",
             "warning"
           );
+          logout();
           return router.push("/login");
         }
 
@@ -43,12 +50,6 @@ export const Lobby = (props) => {
     const sub = fetchLobby();
     return () => sub && sub();
   }, [lobbyId]);
-
-  const logout = async () => {
-    await setAuthUser({ id: firestore.collection("users").doc().id });
-    setAuthUserLs(null);
-    router.push("/");
-  };
 
   if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby)
     return spinLoaderMin();

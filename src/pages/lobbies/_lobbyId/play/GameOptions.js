@@ -79,7 +79,9 @@ export const GameOptions = (props) => {
 
   useInterval(
     callNumber,
-    isAutomatic ? (reproductionSpeed + animationSpeed) * 1000 : null
+    isAutomatic && !props.lobby.bingo
+      ? (reproductionSpeed + animationSpeed) * 1000
+      : null
   );
 
   const modalConfirm = () => (
@@ -143,7 +145,12 @@ export const GameOptions = (props) => {
               <ButtonAnt
                 width="100%"
                 onClick={() => callNumber()}
-                disabled={loading || isLoadingCalledNumber || isAutomatic}
+                disabled={
+                  loading ||
+                  isLoadingCalledNumber ||
+                  isAutomatic ||
+                  props.lobby.bingo
+                }
                 loading={isLoadingCalledNumber}
               >
                 LLamar número
@@ -170,7 +177,11 @@ export const GameOptions = (props) => {
               color="default"
               width="100%"
               className="btn-automatic"
-              disabled={!props.lobby.startGame || isLoadingCalledNumber}
+              disabled={
+                !props.lobby.startGame ||
+                isLoadingCalledNumber ||
+                props.lobby.bingo
+              }
               onClick={() => setIsAutomatic(!isAutomatic)}
             >
               {isAutomatic
@@ -183,7 +194,9 @@ export const GameOptions = (props) => {
               variant="contained"
               color="default"
               width="100%"
-              disabled={isLoadingCalledNumber || isAutomatic}
+              disabled={
+                isLoadingCalledNumber || isAutomatic || props.lobby.bingo
+              }
               onClick={() => setIsVisibleModalConfirm(true)}
             >
               Reiniciar tablero
