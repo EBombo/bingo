@@ -6,13 +6,15 @@ import { LobbyAdmin } from "./lobbyAdmin";
 import { LobbyUser } from "./LobbyUser";
 import { LoadingGame } from "./LoadingGame";
 import { BingoGame } from "./play/BingoGame";
+import { useUser } from "../../../hooks";
 
 export const Lobby = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
-  const [authUser] = useGlobal("user");
+  const [, setAuthUserLs] = useUser();
   const [lobby, setLobby] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const [authUser, setAuthUser] = useGlobal("user");
 
   useEffect(() => {
     if (!authUser?.nickname && !authUser.isAdmin) return router.push("/");
@@ -42,14 +44,21 @@ export const Lobby = (props) => {
     return () => sub && sub();
   }, [lobbyId]);
 
+  const logout = async () => {
+    await setAuthUser({ id: firestore.collection("users").doc().id });
+    setAuthUserLs(null);
+    router.push("/");
+  };
+
   if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby)
     return spinLoaderMin();
 
-  if (lobby?.isPlaying) return <BingoGame lobby={lobby} {...props} />;
+  if (lobby?.isPlaying)
+    return <BingoGame lobby={lobby} {...props} logout={logout} />;
 
   if (lobby?.startAt) return <LoadingGame lobby={lobby} {...props} />;
 
   if (authUser?.isAdmin) return <LobbyAdmin lobby={lobby} {...props} />;
 
-  return <LobbyUser lobby={lobby} {...props} />;
+  return <LobbyUser lobby={lobby} {...props} logout={logout} />;
 };

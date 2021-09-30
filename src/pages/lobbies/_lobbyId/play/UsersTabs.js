@@ -51,7 +51,7 @@ export const UsersTabs = (props) => {
 
       const percentage = (hits / sizePattern) * 100;
 
-      return percentage.toFixed(0);
+      return (percentage || 0).toFixed(0);
     } catch (error) {
       console.error(error);
     }

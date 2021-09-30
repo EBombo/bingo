@@ -86,7 +86,10 @@ export const UserLayout = (props) => {
           <Popover
             content={
               <div>
-                <div onClick={props.logout} style={{ cursor: "pointer" }}>
+                <div
+                  onClick={() => props.logout()}
+                  style={{ cursor: "pointer" }}
+                >
                   Salir
                 </div>
               </div>
@@ -122,6 +125,7 @@ const UserLayoutCss = styled.div`
     justify-content: flex-end;
 
     .icon-menu {
+      width: 40px;
       display: flex;
       align-items: center;
       justify-content: space-evenly;
