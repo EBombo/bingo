@@ -109,7 +109,7 @@ export const BingoGame = (props) => {
                 setIsVisibleModalAwards={setIsVisibleModalAwards}
               />
             )}
-            {props.lobby.settings?.showParticipants && (
+            {(authUser.isAdmin || props.lobby.settings?.showParticipants) && (
               <>
                 <div className="subtitle">Participantes</div>
                 <UsersTabs {...props} />
@@ -124,7 +124,7 @@ export const BingoGame = (props) => {
         </Desktop>
         <Tablet>
           <div className="main-container">
-            {props.lobby.settings?.showParticipants && (
+            {(authUser.isAdmin || props.lobby.settings?.showParticipants) && (
               <div className="tablet-tabs">
                 <div
                   className={`tab ${
@@ -160,9 +160,10 @@ export const BingoGame = (props) => {
               />
             )}
           </div>
-          {tabletTab === "users" && props.lobby.settings?.showParticipants && (
-            <UsersTabs {...props} />
-          )}
+          {tabletTab === "users" &&
+            (authUser.isAdmin || props.lobby.settings.showAllCards) && (
+              <UsersTabs {...props} />
+            )}
         </Tablet>
       </BingoGameContainer>
     </>
@@ -286,7 +287,8 @@ const BingoGameContainer = styled.div`
 
   ${mediaQuery.afterTablet} {
     ${(props) =>
-      props.chat && `
+      props.chat &&
+      `
       display: grid;
       grid-template-columns: calc(100% - 300px) 300px;
     `}
