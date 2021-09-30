@@ -57,6 +57,42 @@ export const UsersTabs = (props) => {
     }
   };
 
+  const menu = (user) => (
+    <Popover
+      trigger="click"
+      placement="bottom"
+      content={
+        <div
+          style={{ display: "flex", cursor: "pointer" }}
+          onClick={() =>
+            confirm(
+              removeUser,
+              user.id,
+              "Estas seguro de esta acción?",
+              "El usuario será eliminado"
+            )
+          }
+        >
+          <Image
+            src={`${config.storageUrl}/resources/close.svg`}
+            filter="brightness(0.5)"
+            height="15px"
+            width="15px"
+            size="contain"
+            margin="auto 5px"
+          />{" "}
+          <div style={{ margin: "auto" }}>Remover jugador</div>
+        </div>
+      }
+    >
+      <div className="more">
+        <div />
+        <div />
+        <div />
+      </div>
+    </Popover>
+  );
+
   return (
     <TabsContainer>
       {isVisibleModalUserCard && (
@@ -115,41 +151,7 @@ export const UsersTabs = (props) => {
                 </button>
               </div>
 
-              {authUser.isAdmin && (
-                <Popover
-                  trigger="click"
-                  placement="bottom"
-                  content={
-                    <div
-                      style={{ display: "flex", cursor: "pointer" }}
-                      onClick={() =>
-                        confirm(
-                          removeUser,
-                          user.id,
-                          "Estas seguro de esta acción?",
-                          "El usuario será eliminado"
-                        )
-                      }
-                    >
-                      <Image
-                        src={`${config.storageUrl}/resources/close.svg`}
-                        filter="brightness(0.5)"
-                        height="15px"
-                        width="15px"
-                        size="contain"
-                        margin="auto 5px"
-                      />{" "}
-                      <div style={{ margin: "auto" }}>Remover jugador</div>
-                    </div>
-                  }
-                >
-                  <div className="more">
-                    <div />
-                    <div />
-                    <div />
-                  </div>
-                </Popover>
-              )}
+              {authUser.isAdmin && menu(user)}
             </div>
           ) : (
             <div className="user-progress" key={`${user.nickname}-${index}`}>
@@ -164,11 +166,7 @@ export const UsersTabs = (props) => {
 
               <div className="options">
                 <button className="btn-show-card">Ver cartilla</button>
-                <div className="more">
-                  <div />
-                  <div />
-                  <div />
-                </div>
+                {authUser.isAdmin && menu(user)}
               </div>
             </div>
           )
