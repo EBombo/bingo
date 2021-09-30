@@ -68,7 +68,7 @@ export const BingoGame = (props) => {
     <>
       <UserLayout {...props} logout={logout} />
 
-      <BingoGameContainer>
+      <BingoGameContainer chat={props.lobby?.settings?.showChat}>
         {isVisibleModalFinal && (
           <ModalFinalStage
             isVisibleModalFinal={isVisibleModalFinal}
@@ -285,8 +285,11 @@ const BingoGameContainer = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
-    display: grid;
-    grid-template-columns: calc(100% - 300px) 300px;
+    ${(props) =>
+      props.chat && `
+      display: grid;
+      grid-template-columns: calc(100% - 300px) 300px;
+    `}
 
     .main-container {
       padding: 0;
