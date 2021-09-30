@@ -23,8 +23,8 @@ export const UsersTabs = (props) => {
   const confirm = useConfirm();
 
   const users = Object.values(props.lobby.users ?? {});
-  const numberWinners = getNumberBoard(props.lobby.board);
-  const lobbyPattern = JSON.parse(props.lobby.pattern);
+  const numberWinners = getNumberBoard(props.lobby.board ?? {});
+  const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
   const removeUser = async (userId) => {
     const newUsers = { ...props.lobby.users };
