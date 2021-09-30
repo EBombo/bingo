@@ -54,7 +54,7 @@ export const WithConfiguration = (props) => {
         audios: [],
         languageCode,
         ping: null,
-        animation: ANIMATION.default,
+        animationSpeed: ANIMATION.default,
         speed: SPEED.default,
         isAutomate: false,
         register: null,

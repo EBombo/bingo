@@ -8,9 +8,12 @@ import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
 import { BOARD_PARAMS, createBoard } from "../../../../business";
+import { useInterval } from "../../../../hooks/useInterval";
 
 export const GameOptions = (props) => {
   const [isAutomate, setIsAutomate] = useGlobal("isAutomate");
+  const [speed] = useGlobal("speed");
+
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
@@ -38,6 +41,41 @@ export const GameOptions = (props) => {
     setLoading(false);
     callback && callback(false);
   };
+
+  const callNumber = async () => {
+    if (!props.lobby || !props.lobby.board) return;
+
+    console.log("soy llamdo", isAutomate);
+
+    setIsLoadingCalledNumber(true);
+
+    const newBoard = props.lobby.board;
+    const missingNumbers = [];
+
+    mapKeys(newBoard, (value, key) => {
+      if (!value) missingNumbers.push(key);
+    });
+
+    const randomIndex = Math.round(Math.random() * missingNumbers.length);
+
+    const numberCalled = missingNumbers[randomIndex];
+
+    newBoard[numberCalled] = true;
+
+    const newLastPlays = props.lobby.lastPlays;
+
+    newLastPlays.unshift(numberCalled);
+
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      updateAt: new Date(),
+      round: props.lobby.round + 1,
+      lastPlays: newLastPlays,
+      board: newBoard,
+    });
+    setIsLoadingCalledNumber(false);
+  };
+
+  useInterval(callNumber, isAutomate ? speed * 1000 : null);
 
   const modalConfirm = () => (
     <ModalContainer
@@ -73,36 +111,6 @@ export const GameOptions = (props) => {
       </ContentModal>
     </ModalContainer>
   );
-
-  const callNumber = async () => {
-    if (!props.lobby || !props.lobby.board) return;
-    setIsLoadingCalledNumber(true);
-
-    const newBoard = props.lobby.board;
-    const missingNumbers = [];
-
-    mapKeys(newBoard, (value, key) => {
-      if (!value) missingNumbers.push(key);
-    });
-
-    const randomIndex = Math.round(Math.random() * missingNumbers.length);
-
-    const numberCalled = missingNumbers[randomIndex];
-
-    newBoard[numberCalled] = true;
-
-    const newLastPlays = props.lobby.lastPlays;
-
-    newLastPlays.unshift(numberCalled);
-
-    await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      updateAt: new Date(),
-      round: props.lobby.round + 1,
-      lastPlays: newLastPlays,
-      board: newBoard,
-    });
-    setIsLoadingCalledNumber(false);
-  };
 
   return (
     <GameOptionsContainer hiddenOptions={props.hiddenOptions}>
@@ -157,6 +165,7 @@ export const GameOptions = (props) => {
               color="default"
               width="100%"
               className="btn-automatic"
+              disabled={!props.lobby.startGame}
               onClick={() => setIsAutomate(!isAutomate)}
             >
               {isAutomate
