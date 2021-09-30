@@ -4,6 +4,8 @@ import { ModalContainer } from "../../../../components/common/ModalContainer";
 import get from "lodash/get";
 import { ButtonAnt } from "../../../../components/form";
 import { mediaQuery } from "../../../../constants";
+import { config } from "../../../../firebase";
+import { Image } from "../../../../components/common/Image";
 
 export const ModalWinner = (props) => {
   const [authUser] = useGlobal("user");
@@ -19,7 +21,7 @@ export const ModalWinner = (props) => {
       <WinnerContainer>
         <div className="title">¡Bingo!</div>
         <div className="name">{get(props, "winner.nickname", "")}</div>
-        {authUser.isAdmin && (
+        {authUser.isAdmin ? (
           <div className="btn-container">
             <ButtonAnt
               color="default"
@@ -27,6 +29,19 @@ export const ModalWinner = (props) => {
             >
               Cerrar
             </ButtonAnt>
+          </div>
+        ) : (
+          <div className="user-waiting">
+            <Image
+              src={`${config.storageUrl}/resources/pacman.gif`}
+              height="75px"
+              width="75px"
+              size="contain"
+              margin="1rem auto"
+            />
+            <div className="description">
+              Esperando que el administrador continúe el juego...
+            </div>
           </div>
         )}
       </WinnerContainer>
@@ -58,6 +73,23 @@ const WinnerContainer = styled.div`
     line-height: 33px;
     margin: 70px 0;
     color: ${(props) => props.theme.basic.blackDarken};
+  }
+
+  .user-waiting {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    .description {
+      font-family: Lato;
+      font-style: normal;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 22px;
+      text-align: center;
+      color: ${(props) => props.theme.basic.blackDarken};
+    }
   }
 
   ${mediaQuery.afterTablet} {

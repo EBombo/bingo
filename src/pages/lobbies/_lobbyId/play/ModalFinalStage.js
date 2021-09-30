@@ -7,7 +7,11 @@ import { ButtonAnt } from "../../../../components/form";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { useRouter } from "next/router";
-import { createBoard, generateMatrix } from "../../../../business";
+import {
+  createBoard,
+  generateMatrix,
+  getBingoCard,
+} from "../../../../business";
 import { ModalPattern } from "./ModalPattern";
 
 export const ModalFinalStage = (props) => {
@@ -17,12 +21,12 @@ export const ModalFinalStage = (props) => {
 
   const blackout = async () => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      pattern: generateMatrix(true),
+      pattern: JSON.stringify(generateMatrix(true)),
       finalStage: false,
       updateAt: new Date(),
     });
 
-    props.isVisibleModalFinal(false);
+    props.setIsVisibleModalFinal(false);
   };
 
   const closeGame = async () => {
@@ -40,7 +44,7 @@ export const ModalFinalStage = (props) => {
       updateAt: new Date(),
     });
 
-    props.isVisibleModalFinal(false);
+    props.setIsVisibleModalFinal(false);
   };
 
   const newGame = async () => {
@@ -48,10 +52,33 @@ export const ModalFinalStage = (props) => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       round: 0,
       lastPlays: [],
-      startGame: new Date(),
       board,
       finalStage: false,
       updateAt: new Date(),
+    });
+
+    props.setIsVisibleModalFinal(false);
+  };
+
+  const newCards = async () => {
+    const newUsers = Object.values(props.lobby.users).reduce(
+      (usersSum, user) => {
+        const card = getBingoCard();
+        const newUser = { ...user, card: JSON.stringify(card) };
+        return { ...usersSum, [newUser.id]: newUser };
+      },
+      {}
+    );
+
+    const board = createBoard();
+
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      round: 0,
+      lastPlays: [],
+      board,
+      finalStage: false,
+      updateAt: new Date(),
+      users: newUsers,
     });
 
     props.isVisibleModalFinal(false);
@@ -68,7 +95,9 @@ export const ModalFinalStage = (props) => {
       <ButtonAnt color="secondary" onClick={() => blackout()}>
         Apagón
       </ButtonAnt>
-      <ButtonAnt color="secondary">Continuar con cartillas nuevas</ButtonAnt>
+      <ButtonAnt color="secondary" onClick={() => newCards()}>
+        Continuar con cartillas nuevas
+      </ButtonAnt>
       <ButtonAnt color="secondary" onClick={() => newGame()}>
         Juego nuevo
       </ButtonAnt>
