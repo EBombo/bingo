@@ -30,11 +30,15 @@ export const BingoGame = (props) => {
 
   useEffect(() => {
     if (props.lobby.finalStage) setIsVisibleModalFinal(true);
+    if (!props.lobby.finalStage) setIsVisibleModalFinal(false);
   }, [props.lobby.finalStage]);
 
   useEffect(() => {
-    if (!props.lobby.bingo) return;
-    setIsVisibleModalWinner(true);
+    if (!props.lobby.bingo) {
+      setIsVisibleModalWinner(false);
+    } else {
+      setIsVisibleModalWinner(true);
+    }
   }, [props.lobby.bingo]);
 
   useEffect(() => {
