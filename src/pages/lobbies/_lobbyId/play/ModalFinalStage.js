@@ -44,6 +44,7 @@ export const ModalFinalStage = (props) => {
       updateAt: new Date(),
     });
 
+    setIsVisibleModalPattern(false);
     props.setIsVisibleModalFinal(false);
   };
 
@@ -81,7 +82,7 @@ export const ModalFinalStage = (props) => {
       users: newUsers,
     });
 
-    props.isVisibleModalFinal(false);
+    props.setIsVisibleModalFinal(false);
   };
 
   const adminContent = () => (
