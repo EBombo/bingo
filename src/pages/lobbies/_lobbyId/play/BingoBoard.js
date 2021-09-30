@@ -23,11 +23,11 @@ export const BingoBoard = (props) => {
 
       const position = getHead(lastNumber);
 
-      const positionOnScreenY = 42 * position?.index ?? 0;
+      const positionOnScreenY = position?.index ?? 0;
       setStartEffectHead(String(positionOnScreenY));
       await timeoutPromise((animationSpeed / 2) * 1000);
 
-      const positionOnScreenX = 42 * (lastNumber - position.min);
+      const positionOnScreenX = lastNumber - position.min;
       setStartEffectBody(String(positionOnScreenX));
       await timeoutPromise((animationSpeed / 2) * 1000);
 
@@ -179,29 +179,52 @@ const BoardContainer = styled.div`
           top: 0;
         }
         20% {
-          top: calc(100% - 42px);
+          top: calc(100% - 26px);
+
+          ${mediaQuery.afterTablet} {
+            top: calc(100% - 42px);
+          }
         }
         40% {
           top: 0;
         }
         60% {
-          top: calc(100% - 42px);
+          top: calc(100% - 26px);
+
+          ${mediaQuery.afterTablet} {
+            top: calc(100% - 42px);
+          }
         }
         80% {
           top: 0;
         }
         100% {
-          top: ${(props) => props.startEffectHead ?? 0}px;
+          top: ${(props) =>
+            props.startEffectHead ? 26 * props.startEffectHead : 0}px;
+
+          ${mediaQuery.afterTablet} {
+            top: ${(props) =>
+              props.startEffectHead ? 42 * props.startEffectHead : 0}px;
+          }
         }
       }
 
       .div-animation-head {
-        top: ${(props) => props.startEffectHead ?? 0}px;
         z-index: 1;
         width: 100%;
-        height: 42px;
         position: absolute;
         background: ${(props) => props.theme.basic.primary};
+
+        top: ${(props) =>
+          props.startEffectHead ? 26 * props.startEffectHead : 0}px;
+        height: 26px;
+
+        ${mediaQuery.afterTablet} {
+          height: 42px;
+          top: ${(props) =>
+            props.startEffectHead ? 42 * props.startEffectHead : 0}px;
+        }
+
         animation: ${(props) =>
           props.startEffectHead
             ? `board-animation-head ${(props.animationSpeed / 2).toFixed(2)}s`
@@ -246,30 +269,58 @@ const BoardContainer = styled.div`
           left: 0;
         }
         20% {
-          left: calc(100% - 40px);
+          left: calc(100% - 20px);
+
+          ${mediaQuery.afterTablet} {
+            left: calc(100% - 40px);
+          }
         }
         40% {
           left: 0;
         }
         60% {
-          left: calc(100% - 40px);
+          left: calc(100% - 20px);
+
+          ${mediaQuery.afterTablet} {
+            left: calc(100% - 40px);
+          }
         }
         80% {
           left: 0;
         }
         100% {
-          left: ${(props) => props.startEffectBody ?? 0}px;
+          left: ${(props) =>
+            props.startEffectBody ? props.startEffectBody * 20 : 0}px;
+
+          ${mediaQuery.afterTablet} {
+            left: ${(props) =>
+              props.startEffectBody ? props.startEffectBody * 42 : 0}px;
+          }
         }
       }
 
       .div-animation-body {
-        top: ${(props) => props.startEffectHead ?? 0}px;
-        left: ${(props) => props.startEffectBody ?? 0}px;
         z-index: 1;
-        width: 40px;
-        height: 42px;
+
         position: absolute;
         background: ${(props) => props.theme.basic.primary};
+
+        top: ${(props) =>
+          props.startEffectHead ? 27 * props.startEffectHead : 0}px;
+        left: ${(props) =>
+          props.startEffectBody ? 27 * props.startEffectBody : 0}px;
+        width: 20px;
+        height: 20px;
+
+        ${mediaQuery.afterTablet} {
+          top: ${(props) =>
+            props.startEffectHead ? 42 * props.startEffectHead : 0}px;
+          left: ${(props) =>
+            props.startEffectBody ? 42 * props.startEffectBody : 0}px;
+          width: 40px;
+          height: 42px;
+        }
+
         animation: ${(props) =>
           props.startEffectBody
             ? `board-animation-body ${(props.animationSpeed / 2).toFixed(2)}s`
