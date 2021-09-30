@@ -124,7 +124,7 @@ const Login = (props) => {
             </div>
           </form>
         )}
-        {lobby && lobby.userIdentity && !email && (
+        {lobby && lobby.settings.userIdentity && !email && (
           <EmailStep
             lobby={lobby}
             setIsLoading={setIsLoading}
@@ -133,8 +133,8 @@ const Login = (props) => {
             {...props}
           />
         )}
-        {((lobby && lobby.userIdentity && email && !nickname) ||
-          (lobby && !lobby.userIdentity && !nickname)) && (
+        {((lobby && lobby.settings.userIdentity && email && !nickname) ||
+          (lobby && !lobby.settings.userIdentity && !nickname)) && (
           <NicknameStep
             lobby={lobby}
             nickname={nickname}
