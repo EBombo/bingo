@@ -139,17 +139,19 @@ export const UsersTabs = (props) => {
                 )}
               </div>
 
-              <div className="btn-container">
-                <button
-                  className="btn-show-card"
-                  onClick={() => {
-                    setCurrentUser(user);
-                    setIsVisibleModalUserCard(true);
-                  }}
-                >
-                  Ver cartilla
-                </button>
-              </div>
+              {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
+                <div className="btn-container">
+                  <button
+                    className="btn-show-card"
+                    onClick={() => {
+                      setCurrentUser(user);
+                      setIsVisibleModalUserCard(true);
+                    }}
+                  >
+                    Ver cartilla
+                  </button>
+                </div>
+              )}
 
               {authUser.isAdmin && menu(user)}
             </div>
@@ -165,7 +167,17 @@ export const UsersTabs = (props) => {
               </div>
 
               <div className="options">
-                <button className="btn-show-card">Ver cartilla</button>
+                {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
+                  <button
+                    className="btn-show-card"
+                    onClick={() => {
+                      setCurrentUser(user);
+                      setIsVisibleModalUserCard(true);
+                    }}
+                  >
+                    Ver cartilla
+                  </button>
+                )}
                 {authUser.isAdmin && menu(user)}
               </div>
             </div>
