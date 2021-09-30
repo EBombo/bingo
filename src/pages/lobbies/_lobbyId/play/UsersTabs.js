@@ -35,21 +35,26 @@ export const UsersTabs = (props) => {
   };
 
   const progress = (user) => {
-    const userPattern = JSON.parse(user.card);
+    try {
+      const userPattern = JSON.parse(user.card);
 
-    let hits = 0;
-    let sizePattern = 0;
+      let hits = 0;
+      let sizePattern = 0;
 
-    lobbyPattern.forEach((y, indexY) =>
-      y.forEach((x, indexX) => {
-        if (!!x) sizePattern++;
-        if (!!x && numberWinners.includes(userPattern[indexY][indexX])) hits++;
-      })
-    );
+      lobbyPattern.forEach((y, indexY) =>
+        y.forEach((x, indexX) => {
+          if (!!x) sizePattern++;
+          if (!!x && numberWinners.includes(userPattern[indexY][indexX]))
+            hits++;
+        })
+      );
 
-    const percentage = (hits / sizePattern) * 100;
+      const percentage = (hits / sizePattern) * 100;
 
-    return percentage.toFixed(0);
+      return percentage.toFixed(0);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
