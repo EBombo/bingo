@@ -6,7 +6,6 @@ import { BingoCard } from "./BingoCard";
 import { ButtonAnt } from "../../../../components/form";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
-import { useRouter } from "next/router";
 import {
   createBoard,
   generateMatrix,
@@ -17,7 +16,6 @@ import { ModalPattern } from "./ModalPattern";
 export const ModalFinalStage = (props) => {
   const [authUser] = useGlobal("user");
   const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
-  const router = useRouter();
 
   const blackout = async () => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
