@@ -79,6 +79,7 @@ export const Game = (props) => {
 
         const formatUser = {
           id: authUser.uid,
+          nickname: authUser.name,
           email: authUser.email,
           isAdmin: true,
         };
