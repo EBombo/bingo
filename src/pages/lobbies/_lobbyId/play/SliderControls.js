@@ -6,7 +6,7 @@ import { ANIMATION, SPEED } from "../../../../business";
 export const SliderControls = () => {
   const [isAutomatic] = useGlobal("isAutomatic");
   const [animationSpeed, setAnimationSpeed] = useGlobal("animationSpeed");
-  const [reproductionSpeed, setReproductionSpeedSpeed] =
+  const [reproductionSpeed, setReproductionSpeed] =
     useGlobal("reproductionSpeed");
 
   if (!isAutomatic) return null;
@@ -28,7 +28,7 @@ export const SliderControls = () => {
         <div className="description">Velocidad de reproducción automática</div>
         <div>
           <Slider
-            onChange={(value) => setReproductionSpeedSpeed(value)}
+            onChange={(value) => setReproductionSpeed(value)}
             defaultValue={reproductionSpeed}
             min={SPEED.min}
             max={SPEED.max}

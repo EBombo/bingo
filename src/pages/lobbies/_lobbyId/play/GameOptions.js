@@ -9,13 +9,15 @@ import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
 import { BOARD_PARAMS, createBoard } from "../../../../business";
 import { useInterval } from "../../../../hooks/useInterval";
+import { timeoutPromise } from "../../../../utils/promised";
 
 export const GameOptions = (props) => {
-  const [isAutomatic, setIsAutomatic] = useGlobal("isAutomatic");
+  const [animationSpeed] = useGlobal("animationSpeed");
   const [reproductionSpeed] = useGlobal("reproductionSpeed");
+  const [isAutomatic, setIsAutomatic] = useGlobal("isAutomatic");
 
-  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
 
   const startGame = async (callback) => {
@@ -47,7 +49,7 @@ export const GameOptions = (props) => {
 
     setIsLoadingCalledNumber(true);
 
-    const newBoard = props.lobby.board;
+    const newBoard = { ...props.lobby.board };
     const missingNumbers = [];
 
     mapKeys(newBoard, (value, key) => {
@@ -70,10 +72,15 @@ export const GameOptions = (props) => {
       lastPlays: newLastPlays,
       board: newBoard,
     });
+
+    await timeoutPromise(animationSpeed * 1000);
     setIsLoadingCalledNumber(false);
   };
 
-  useInterval(callNumber, isAutomatic ? reproductionSpeed * 1000 : null);
+  useInterval(
+    callNumber,
+    isAutomatic ? (reproductionSpeed + animationSpeed) * 1000 : null
+  );
 
   const modalConfirm = () => (
     <ModalContainer
@@ -163,7 +170,7 @@ export const GameOptions = (props) => {
               color="default"
               width="100%"
               className="btn-automatic"
-              disabled={!props.lobby.startGame}
+              disabled={!props.lobby.startGame || isLoadingCalledNumber}
               onClick={() => setIsAutomatic(!isAutomatic)}
             >
               {isAutomatic
@@ -176,6 +183,7 @@ export const GameOptions = (props) => {
               variant="contained"
               color="default"
               width="100%"
+              disabled={isLoadingCalledNumber || isAutomatic}
               onClick={() => setIsVisibleModalConfirm(true)}
             >
               Reiniciar tablero
