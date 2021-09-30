@@ -125,6 +125,7 @@ const UserLayoutCss = styled.div`
     justify-content: flex-end;
 
     .icon-menu {
+      width: 40px;
       display: flex;
       align-items: center;
       justify-content: space-evenly;
