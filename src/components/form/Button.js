@@ -2,9 +2,6 @@ import React, { forwardRef } from "reactn";
 import styled from "styled-components";
 import Button from "antd/lib/button";
 
-// Variant="outlined".
-// Variant="contained".
-
 export const ButtonAnt = forwardRef((props, ref) => (
   <ButtonAntCss
     ref={ref}
@@ -216,4 +213,5 @@ const ButtonAntCss = styled(Button)`
             : color
         } !important;
         transform: translateY(2px);`}
+  }
 `;

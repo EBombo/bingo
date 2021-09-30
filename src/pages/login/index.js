@@ -91,50 +91,55 @@ const Login = (props) => {
   };
 
   return (
-    <>
-      <LoginContainer>
-        {!lobby && (
-          <form onSubmit={handleSubmit(validatePin)}>
-            <Image
-              src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
-              width="180px"
-              margin="10px auto"
-            />
-            <div className="login-container">
-              <InputBingo
-                ref={register}
-                error={errors.pin}
-                type="number"
-                name="pin"
-                align="center"
-                width="100%"
-                margin="10px auto"
-                variant="default"
-                disabled={isLoading}
-                placeholder="Pin del juego"
-              />
-              <ButtonBingo
-                width="100%"
-                disabled={isLoading}
-                loading={isLoading}
-                htmlType="submit"
-              >
-                Ingresar
-              </ButtonBingo>
-            </div>
-          </form>
-        )}
-        {lobby && lobby.settings.userIdentity && !email && (
-          <EmailStep
-            lobby={lobby}
-            setIsLoading={setIsLoading}
-            isLoading={isLoading}
-            setEmailVerification={setEmail}
-            {...props}
+    <LoginContainer>
+      {!lobby && (
+        <form onSubmit={handleSubmit(validatePin)}>
+          <Image
+            src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
+            width="180px"
+            margin="10px auto"
           />
-        )}
-        {((lobby && lobby.settings.userIdentity && email && !nickname) ||
-          (lobby && !lobby.settings.userIdentity && !nickname)) && (
+          <div className="login-container">
+            <InputBingo
+              ref={register}
+              error={errors.pin}
+              type="number"
+              name="pin"
+              align="center"
+              width="100%"
+              margin="10px auto"
+              variant="default"
+              disabled={isLoading}
+              placeholder="Pin del juego"
+            />
+            <ButtonBingo
+              width="100%"
+              disabled={isLoading}
+              loading={isLoading}
+              htmlType="submit"
+            >
+              Ingresar
+            </ButtonBingo>
+          </div>
+        </form>
+      )}
+
+      {lobby
+        ? lobby.settings?.userIdentity &&
+          !email && (
+            <EmailStep
+              lobby={lobby}
+              setIsLoading={setIsLoading}
+              isLoading={isLoading}
+              setEmailVerification={setEmail}
+              {...props}
+            />
+          )
+        : null}
+
+      {lobby ? (
+        (lobby.settings.userIdentity && email && !nickname) ||
+        (!lobby.settings.userIdentity && !nickname) ? (
           <NicknameStep
             lobby={lobby}
             nickname={nickname}
@@ -143,9 +148,9 @@ const Login = (props) => {
             isLoading={isLoading}
             {...props}
           />
-        )}
-      </LoginContainer>
-    </>
+        ) : null
+      ) : null}
+    </LoginContainer>
   );
 };
 
