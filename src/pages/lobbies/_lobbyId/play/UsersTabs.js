@@ -8,13 +8,23 @@ import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { useConfirm } from "../../../../hooks/useConfirm";
+import { getNumberBoard } from "../../../../business";
+
+const TAB = {
+  CARDS: "cards",
+  TABLE: "table",
+};
 
 export const UsersTabs = (props) => {
   const [authUser] = useGlobal("user");
-  const [tab, setTab] = useState("cards");
+  const [tab, setTab] = useState(TAB.CARDS);
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
   const confirm = useConfirm();
+
+  const users = Object.values(props.lobby.users ?? {});
+  const numberWinners = getNumberBoard(props.lobby.board);
+  const lobbyPattern = JSON.parse(props.lobby.pattern);
 
   const removeUser = async (userId) => {
     const newUsers = { ...props.lobby.users };
@@ -24,88 +34,22 @@ export const UsersTabs = (props) => {
       .update({ users: newUsers });
   };
 
-  const userContent = (user, index) => {
-    if (tab === "cards")
-      return (
-        <div className="user-card" key={`${user.nickname}-${index}`}>
-          <div className="name">{user.nickname}</div>
-          <div className="card-preview">
-            {defaultTo(
-              JSON.parse(user.card),
-              Array(5).fill(Array(5).fill(0))
-            ).map((row) =>
-              row.map((num) => (
-                <div
-                  className={`matrix-num`}
-                  key={`${row}-${Math.random() * 150}`}
-                />
-              ))
-            )}
-          </div>
-          <div className="btn-container">
-            <button
-              className="btn-show-card"
-              onClick={() => {
-                setCurrentUser(user);
-                setIsVisibleModalUserCard(true);
-              }}
-            >
-              Ver cartilla
-            </button>
-          </div>
-          {authUser.isAdmin && (
-            <Popover
-              placement="bottom"
-              content={
-                <div
-                  style={{ display: "flex", cursor: "pointer" }}
-                  onClick={() =>
-                    confirm(
-                      removeUser,
-                      user.id,
-                      "Estas seguro de esta acción?",
-                      "El usuario será eliminado"
-                    )
-                  }
-                >
-                  <Image
-                    src={`${config.storageUrl}/resources/close.svg`}
-                    filter="brightness(0.5)"
-                    height="15px"
-                    width="15px"
-                    size="contain"
-                    margin="auto 5px"
-                  />{" "}
-                  <div style={{ margin: "auto" }}>Remover jugador</div>
-                </div>
-              }
-            >
-              <div className="more">
-                <div />
-                <div />
-                <div />
-              </div>
-            </Popover>
-          )}
-        </div>
-      );
+  const progress = (user) => {
+    const userPattern = JSON.parse(user.card);
 
-    return (
-      <div className="user-progress" key={`${user.nickname}-${index}`}>
-        <div className="name">{user.nickname}</div>
-        <div className={`progress ${user.progress === 100 && winner}`}>
-          <Progress percent={30} strokeColor={darkTheme.basic.primary} />
-        </div>
-        <div className="options">
-          <button className="btn-show-card">Ver cartilla</button>
-          <div className="more">
-            <div />
-            <div />
-            <div />
-          </div>
-        </div>
-      </div>
+    let hits = 0;
+    let sizePattern = 0;
+
+    lobbyPattern.forEach((y, indexY) =>
+      y.forEach((x, indexX) => {
+        if (!!x) sizePattern++;
+        if (!!x && numberWinners.includes(userPattern[indexY][indexX])) hits++;
+      })
     );
+
+    const percentage = (hits / sizePattern) * 100;
+
+    return percentage.toFixed(0);
   };
 
   return (
@@ -118,23 +62,111 @@ export const UsersTabs = (props) => {
           {...props}
         />
       )}
+
       <div className="tabs-container">
         <div
-          className={`tab ${tab === "cards" && "active"}`}
-          onClick={() => setTab("cards")}
+          className={`tab ${tab === TAB.CARDS && "active"}`}
+          onClick={() => setTab(TAB.CARDS)}
         >
           Cuadrícula
         </div>
         <div
-          className={`tab ${tab === "table" && "active"}`}
-          onClick={() => setTab("table")}
+          className={`tab ${tab === TAB.TABLE && "active"}`}
+          onClick={() => setTab(TAB.TABLE)}
         >
           Tabla
         </div>
       </div>
-      <div className={`user-tab-${tab === "cards" ? "cards" : "table"}`}>
-        {Object.values(props.lobby.users ?? {}).map((user, index) =>
-          userContent(user, index)
+
+      <div className={`user-tab-${tab}`}>
+        {users.map((user, index) =>
+          tab === TAB.CARDS ? (
+            <div className="user-card" key={`${user.nickname}-${index}`}>
+              <div className="name">{user.nickname}</div>
+
+              <div className="card-preview">
+                {defaultTo(
+                  JSON.parse(user.card),
+                  Array(5).fill(Array(5).fill(0))
+                ).map((row) =>
+                  row.map((num) => (
+                    <div
+                      className={`matrix-num`}
+                      key={`${row}-${Math.random() * 150}`}
+                    />
+                  ))
+                )}
+              </div>
+
+              <div className="btn-container">
+                <button
+                  className="btn-show-card"
+                  onClick={() => {
+                    setCurrentUser(user);
+                    setIsVisibleModalUserCard(true);
+                  }}
+                >
+                  Ver cartilla
+                </button>
+              </div>
+
+              {authUser.isAdmin && (
+                <Popover
+                  trigger="click"
+                  placement="bottom"
+                  content={
+                    <div
+                      style={{ display: "flex", cursor: "pointer" }}
+                      onClick={() =>
+                        confirm(
+                          removeUser,
+                          user.id,
+                          "Estas seguro de esta acción?",
+                          "El usuario será eliminado"
+                        )
+                      }
+                    >
+                      <Image
+                        src={`${config.storageUrl}/resources/close.svg`}
+                        filter="brightness(0.5)"
+                        height="15px"
+                        width="15px"
+                        size="contain"
+                        margin="auto 5px"
+                      />{" "}
+                      <div style={{ margin: "auto" }}>Remover jugador</div>
+                    </div>
+                  }
+                >
+                  <div className="more">
+                    <div />
+                    <div />
+                    <div />
+                  </div>
+                </Popover>
+              )}
+            </div>
+          ) : (
+            <div className="user-progress" key={`${user.nickname}-${index}`}>
+              <div className="name">{user.nickname}</div>
+
+              <div className={`progress ${user.progress === 100 && "winner"}`}>
+                <Progress
+                  percent={progress(user)}
+                  strokeColor={darkTheme.basic.primary}
+                />
+              </div>
+
+              <div className="options">
+                <button className="btn-show-card">Ver cartilla</button>
+                <div className="more">
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </div>
+            </div>
+          )
         )}
       </div>
     </TabsContainer>
