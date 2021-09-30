@@ -161,7 +161,7 @@ export const BingoGame = (props) => {
             )}
           </div>
           {tabletTab === "users" &&
-            (authUser.isAdmin || props.lobby.settings.showAllCards) && (
+            (authUser.isAdmin || props.lobby.settings.showParticipants) && (
               <UsersTabs {...props} />
             )}
         </Tablet>
