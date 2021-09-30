@@ -1,7 +1,7 @@
 import { spinLoaderMin } from "../../../components/common/loader";
 import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
-import { config, firestore } from "../../../firebase";
+import { config, firestore, firestoreEvents } from "../../../firebase";
 import { useFetch } from "../../../hooks/useFetch";
 import defaultTo from "lodash/defaultTo";
 import { useRouter } from "next/router";
@@ -107,7 +107,7 @@ export const Game = (props) => {
       const lobbiesRef = firestore.collection("lobbies");
       const lobbyId = lobbiesRef.doc().id;
 
-      await lobbiesRef.doc(lobbyId).set({
+      const promiseLobby = lobbiesRef.doc(lobbyId).set({
         pin,
         game,
         typeOfGame,
@@ -128,6 +128,12 @@ export const Game = (props) => {
           awards: showAwards ? awards : null,
         },
       });
+
+      const promiseEvents = firestoreEvents
+        .doc(`games/${game.id}`)
+        .update({ countPlays: (game?.countPlays ?? 0) + 1 });
+
+      await Promise.all([promiseLobby, promiseEvents]);
 
       return router.push(`/lobbies/${lobbyId}`);
     } catch (error) {
