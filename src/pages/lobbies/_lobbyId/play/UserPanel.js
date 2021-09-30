@@ -61,9 +61,11 @@ export const UserPanel = (props) => {
         </div>
       </Desktop>
       <Tablet>
-        <div className="bingo-board">
-          <BingoBoard {...props} />
-        </div>
+        {props.lobby.settings.showBoardToUser && (
+          <div className="bingo-board">
+            <BingoBoard {...props} />
+          </div>
+        )}
         <div className="top-container-user">
           <div className="bingo-card-container">
             <BingoCard user={authUser} {...props} />
