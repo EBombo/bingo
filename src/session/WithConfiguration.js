@@ -56,7 +56,7 @@ export const WithConfiguration = (props) => {
         ping: null,
         animationSpeed: ANIMATION.default,
         reproductionSpeed: SPEED.default,
-        isAutomate: false,
+        isAutomatic: false,
         register: null,
         isLoadingUser: true,
         isLoadingCreateUser: true,

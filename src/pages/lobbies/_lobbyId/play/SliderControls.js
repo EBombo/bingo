@@ -4,12 +4,12 @@ import styled from "styled-components";
 import { ANIMATION, SPEED } from "../../../../business";
 
 export const SliderControls = () => {
-  const [isAutomate] = useGlobal("isAutomate");
+  const [isAutomatic] = useGlobal("isAutomatic");
   const [animationSpeed, setAnimationSpeed] = useGlobal("animationSpeed");
   const [reproductionSpeed, setReproductionSpeedSpeed] =
     useGlobal("reproductionSpeed");
 
-  if (!isAutomate) return null;
+  if (!isAutomatic) return null;
 
   return (
     <SliderControlsCss>

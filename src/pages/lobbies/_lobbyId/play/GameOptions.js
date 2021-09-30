@@ -11,7 +11,7 @@ import { BOARD_PARAMS, createBoard } from "../../../../business";
 import { useInterval } from "../../../../hooks/useInterval";
 
 export const GameOptions = (props) => {
-  const [isAutomate, setIsAutomate] = useGlobal("isAutomate");
+  const [isAutomatic, setIsAutomatic] = useGlobal("isAutomatic");
   const [reproductionSpeed] = useGlobal("reproductionSpeed");
 
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
@@ -73,7 +73,7 @@ export const GameOptions = (props) => {
     setIsLoadingCalledNumber(false);
   };
 
-  useInterval(callNumber, isAutomate ? reproductionSpeed * 1000 : null);
+  useInterval(callNumber, isAutomatic ? reproductionSpeed * 1000 : null);
 
   const modalConfirm = () => (
     <ModalContainer
@@ -136,7 +136,7 @@ export const GameOptions = (props) => {
               <ButtonAnt
                 width="100%"
                 onClick={() => callNumber()}
-                disabled={loading || isLoadingCalledNumber || isAutomate}
+                disabled={loading || isLoadingCalledNumber || isAutomatic}
                 loading={isLoadingCalledNumber}
               >
                 LLamar número
@@ -164,9 +164,9 @@ export const GameOptions = (props) => {
               width="100%"
               className="btn-automatic"
               disabled={!props.lobby.startGame}
-              onClick={() => setIsAutomate(!isAutomate)}
+              onClick={() => setIsAutomatic(!isAutomatic)}
             >
-              {isAutomate
+              {isAutomatic
                 ? "Detener Rep. automática"
                 : "Reproducción automática"}
             </ButtonAnt>
