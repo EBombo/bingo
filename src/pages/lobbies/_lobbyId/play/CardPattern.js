@@ -33,7 +33,7 @@ export const CardPattern = (props) => {
     });
 
     if (props.continueGame) {
-      await props.continueGame;
+      await props.continueGame();
     }
     setIsVisibleModalPattern(false);
   };
