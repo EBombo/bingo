@@ -29,7 +29,7 @@ export const ModalFinalStage = (props) => {
     props.setIsVisibleModalFinal(false);
   };
 
-  const closeGame = async () =>
+  const endGame = async () => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       isClosed: true,
       updateAt: new Date(),
@@ -99,7 +99,7 @@ export const ModalFinalStage = (props) => {
       <ButtonAnt color="secondary" onClick={() => newGame()}>
         Juego nuevo
       </ButtonAnt>
-      <ButtonAnt color="danger" onCick={() => closeGame()}>
+      <ButtonAnt color="danger" onClick={() => endGame()}>
         Finalizar juego
       </ButtonAnt>
     </AdminContent>
