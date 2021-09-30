@@ -29,7 +29,7 @@ export const ModalFinalStage = (props) => {
     props.setIsVisibleModalFinal(false);
   };
 
-  const endGame = async () => {
+  const endGame = async () =>
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       isClosed: true,
       updateAt: new Date(),
