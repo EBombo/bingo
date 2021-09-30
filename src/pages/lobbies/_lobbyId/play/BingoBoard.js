@@ -13,6 +13,8 @@ export const BingoBoard = (props) => {
   const [currentBoard, setCurrentBoard] = useState(props.lobby.board ?? {});
 
   useEffect(() => {
+    //animation
+    if (props.isView) return setCurrentBoard(props.lobby.board ?? {});
     if (!props.lobby.board) return setCurrentBoard({});
 
     const initialize = async () => {

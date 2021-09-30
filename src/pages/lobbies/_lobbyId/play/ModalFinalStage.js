@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal, useState, useRef } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
@@ -6,7 +6,6 @@ import { BingoCard } from "./BingoCard";
 import { ButtonAnt } from "../../../../components/form";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
-import { useRouter } from "next/router";
 import {
   createBoard,
   generateMatrix,
@@ -17,7 +16,6 @@ import { ModalPattern } from "./ModalPattern";
 export const ModalFinalStage = (props) => {
   const [authUser] = useGlobal("user");
   const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
-  const router = useRouter();
 
   const blackout = async () => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
@@ -29,14 +27,11 @@ export const ModalFinalStage = (props) => {
     props.setIsVisibleModalFinal(false);
   };
 
-  const closeGame = async () => {
+  const endGame = async () =>
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       isClosed: true,
       updateAt: new Date(),
     });
-
-    router.push("/");
-  };
 
   const continueGame = async () => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
@@ -44,6 +39,7 @@ export const ModalFinalStage = (props) => {
       updateAt: new Date(),
     });
 
+    setIsVisibleModalPattern(false);
     props.setIsVisibleModalFinal(false);
   };
 
@@ -81,7 +77,7 @@ export const ModalFinalStage = (props) => {
       users: newUsers,
     });
 
-    props.isVisibleModalFinal(false);
+    props.setIsVisibleModalFinal(false);
   };
 
   const adminContent = () => (
@@ -101,7 +97,7 @@ export const ModalFinalStage = (props) => {
       <ButtonAnt color="secondary" onClick={() => newGame()}>
         Juego nuevo
       </ButtonAnt>
-      <ButtonAnt color="danger" onCick={() => closeGame()}>
+      <ButtonAnt color="danger" onClick={() => endGame()}>
         Finalizar juego
       </ButtonAnt>
     </AdminContent>

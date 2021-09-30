@@ -1,8 +1,8 @@
 import React, { useState } from "reactn";
 import styled from "styled-components";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
-import { ButtonAnt, Input } from "../../../../components/form";
-import { mediaQuery, Tablet, Desktop } from "../../../../constants";
+import { ButtonAnt } from "../../../../components/form";
+import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { BingoCard } from "./BingoCard";
 import { BingoBoard } from "./BingoBoard";
 import { firestore } from "../../../../firebase";
@@ -123,7 +123,7 @@ export const ModalUserCard = (props) => {
             <ContainerValidate>
               <Desktop>
                 <div className="board-container">
-                  <BingoBoard {...props} />
+                  <BingoBoard {...props} isView />
                   <div className="action-container">
                     <ButtonAnt
                       color="default"
@@ -169,7 +169,7 @@ export const ModalUserCard = (props) => {
                   <BingoCard user={props.user} {...props} />
                 </div>
                 <div className="board-container">
-                  <BingoBoard {...props} />
+                  <BingoBoard {...props} isView />
                 </div>
                 <div className="action-container">
                   <ButtonAnt

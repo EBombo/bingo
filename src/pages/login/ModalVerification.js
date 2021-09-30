@@ -2,7 +2,7 @@ import React from "reactn";
 import styled from "styled-components";
 import { ModalContainer } from "../../components/common/ModalContainer";
 import { darkTheme } from "../../theme";
-import { ButtonAnt } from "../../components/form";
+import { ButtonBingo } from "../../components/form";
 
 export const ModalVerification = (props) => (
   <ModalContainer
@@ -21,14 +21,13 @@ export const ModalVerification = (props) => (
         identificación de jugador otra vez, asi que puedes ingresar rápidamente.
         Lo puedes cambiar en ajustes en cualquier momento.
       </div>
-      <ButtonAnt
-        variant={"primary"}
-        width={"200px"}
-        margin={"1rem auto"}
+      <ButtonBingo
+        variant="secondary"
+        width="200px"
         onClick={() => props.setIsVisibleModalVerification(props.email)}
       >
         Ok
-      </ButtonAnt>
+      </ButtonBingo>
     </ContentModal>
   </ModalContainer>
 );
@@ -53,5 +52,10 @@ const ContentModal = styled.div`
     font-size: 15px;
     line-height: 18px;
     color: ${(props) => props.theme.basic.blackDarken};
+  }
+
+  button {
+    display: block;
+    margin-top: 10px;
   }
 `;

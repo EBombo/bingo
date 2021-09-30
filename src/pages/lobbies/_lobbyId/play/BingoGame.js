@@ -10,8 +10,6 @@ import { UserLayout } from "../userLayout";
 import { firestore } from "../../../../firebase";
 import { AdminPanel } from "./AdminPanel";
 import { UserPanel } from "./UserPanel";
-import { useUser } from "../../../../hooks";
-import { useRouter } from "next/router";
 import { ModalFinalStage } from "./ModalFinalStage";
 
 const TABS = {
@@ -20,9 +18,7 @@ const TABS = {
 };
 
 export const BingoGame = (props) => {
-  const router = useRouter();
-  const [, setAuthUserLs] = useUser();
-  const [authUser, setAuthUser] = useGlobal("user");
+  const [authUser] = useGlobal("user");
   const [tabletTab, setTabletTab] = useState("bingo");
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);
   const [isVisibleModalAwards, setIsVisibleModalAwards] = useState(false);
@@ -49,14 +45,8 @@ export const BingoGame = (props) => {
     )
       return;
 
-    logout();
+    props.logout();
   }, [props.lobby.users]);
-
-  const logout = async () => {
-    await setAuthUser({ id: firestore.collection("users").doc().id });
-    setAuthUserLs(null);
-    router.push("/");
-  };
 
   const callBingo = async () =>
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
@@ -66,7 +56,7 @@ export const BingoGame = (props) => {
 
   return (
     <>
-      <UserLayout {...props} logout={logout} />
+      <UserLayout {...props} />
 
       <BingoGameContainer chat={props.lobby?.settings?.showChat}>
         {isVisibleModalFinal && (
@@ -161,7 +151,7 @@ export const BingoGame = (props) => {
             )}
           </div>
           {tabletTab === "users" &&
-            (authUser.isAdmin || props.lobby.settings.showAllCards) && (
+            (authUser.isAdmin || props.lobby.settings.showParticipants) && (
               <UsersTabs {...props} />
             )}
         </Tablet>
