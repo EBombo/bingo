@@ -9,7 +9,8 @@ export const SliderControls = () => {
   const [reproductionSpeed, setReproductionSpeed] =
     useGlobal("reproductionSpeed");
 
-  if (!isAutomatic) return null;
+  // TODO: Consider only showing when "isAutomatic" is active.
+  //if (!isAutomatic) return null;
 
   return (
     <SliderControlsCss>
