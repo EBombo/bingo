@@ -33,7 +33,8 @@ export const Lobby = (props) => {
       firestore.doc(`lobbies/${lobbyId}`).onSnapshot((lobbyRef) => {
         const currentLobby = lobbyRef.data();
 
-        if (!currentLobby || currentLobby.isClosed) {
+        // Lobby not found.
+        if (!currentLobby) {
           props.showNotification(
             "UPS",
             "No encontramos tu sala, intenta nuevamente",
@@ -41,6 +42,9 @@ export const Lobby = (props) => {
           );
           logout();
         }
+
+        // Game is closed.
+        if (currentLobby.isClosed) logout();
 
         setLobby(currentLobby);
         setLoading(false);
@@ -53,12 +57,17 @@ export const Lobby = (props) => {
   if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby)
     return spinLoaderMin();
 
-  if (lobby?.isPlaying)
-    return <BingoGame lobby={lobby} {...props} logout={logout} />;
+  const additionalProps = {
+    logout: logout,
+    lobby: lobby,
+    ...props,
+  };
 
-  if (lobby?.startAt) return <LoadingGame lobby={lobby} {...props} />;
+  if (lobby?.isPlaying) return <BingoGame {...additionalProps} />;
 
-  if (authUser?.isAdmin) return <LobbyAdmin lobby={lobby} {...props} />;
+  if (lobby?.startAt) return <LoadingGame {...additionalProps} />;
 
-  return <LobbyUser lobby={lobby} {...props} logout={logout} />;
+  if (authUser?.isAdmin) return <LobbyAdmin {...additionalProps} />;
+
+  return <LobbyUser {...additionalProps} />;
 };
