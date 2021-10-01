@@ -261,7 +261,7 @@ const BingoGameContainer = styled.div`
     color: ${(props) => props.theme.basic.primaryLight};
     cursor: pointer;
     padding: 1rem;
-    max-width: 450px;
+    max-width: 430px;
     margin: 0 auto;
   }
 
@@ -272,7 +272,7 @@ const BingoGameContainer = styled.div`
   .last-plays-container {
     margin: 0.5rem auto;
     overflow: auto;
-    max-width: 450px;
+    max-width: 430px;
   }
 
   ${mediaQuery.afterTablet} {
@@ -308,7 +308,7 @@ const BingoGameContainer = styled.div`
 
           .flex-container {
             display: grid;
-            grid-template-columns: 270px 450px;
+            grid-template-columns: 270px 430px;
             grid-gap: 1rem;
             justify-content: space-between;
             margin-top: 1rem;

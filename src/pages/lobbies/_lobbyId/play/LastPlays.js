@@ -51,12 +51,11 @@ export const LastPlays = (props) => {
 };
 
 const Container = styled.div`
-  width: 450px;
+  width: 430px;
 
   .balls {
     display: flex;
     align-items: center;
-    justify-content: space-between;
   }
 
   .label {
@@ -89,6 +88,7 @@ const BallContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 7px;
 
   .inner-container {
     width: 70px;
