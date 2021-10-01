@@ -9,7 +9,8 @@ export const SliderControls = () => {
   const [reproductionSpeed, setReproductionSpeed] =
     useGlobal("reproductionSpeed");
 
-  if (!isAutomatic) return null;
+  // TODO: Consider only showing when "isAutomatic" is active.
+  //if (!isAutomatic) return null;
 
   return (
     <SliderControlsCss>
@@ -24,17 +25,21 @@ export const SliderControls = () => {
           />
         </div>
       </div>
-      <div className="slider-auto">
-        <div className="description">Velocidad de reproducción automática</div>
-        <div>
-          <Slider
-            onChange={(value) => setReproductionSpeed(value)}
-            defaultValue={reproductionSpeed}
-            min={SPEED.min}
-            max={SPEED.max}
-          />
+      {isAutomatic && (
+        <div className="slider-auto">
+          <div className="description">
+            Velocidad de reproducción automática
+          </div>
+          <div>
+            <Slider
+              onChange={(value) => setReproductionSpeed(value)}
+              defaultValue={reproductionSpeed}
+              min={SPEED.min}
+              max={SPEED.max}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </SliderControlsCss>
   );
 };

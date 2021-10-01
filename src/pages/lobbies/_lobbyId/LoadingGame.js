@@ -234,20 +234,20 @@ const LoadingGameContainer = styled.div`
         justify-content: center;
       }
 
-      .num3,
-      .num2,
-      .num1 {
-        color: ${(props) => props.theme.basic.danger};
-      }
+    .num3,
+    .num2,
+    .num1 {
+      color: ${(props) => props.theme.basic.white};
+    }
 
-      .num1 {
-        animation: time 20s forwards;
-        animation-delay: 9s;
-      }
+    .num1 {
+      animation: time 20s forwards;
+      animation-delay: 9s;
+    }
 
-      .num2 {
-        animation: time 20s forwards;
-        animation-delay: 8s;
+    .num2 {
+      animation: time 20s forwards;
+      animation-delay: 8s;
       }
 
       .num3 {
