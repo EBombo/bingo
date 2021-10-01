@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ANIMATION, SPEED } from "../../../../business";
 
 export const SliderControls = () => {
-  //const [isAutomatic] = useGlobal("isAutomatic");
+  const [isAutomatic] = useGlobal("isAutomatic");
   const [animationSpeed, setAnimationSpeed] = useGlobal("animationSpeed");
   const [reproductionSpeed, setReproductionSpeed] =
     useGlobal("reproductionSpeed");
@@ -25,17 +25,21 @@ export const SliderControls = () => {
           />
         </div>
       </div>
-      <div className="slider-auto">
-        <div className="description">Velocidad de reproducción automática</div>
-        <div>
-          <Slider
-            onChange={(value) => setReproductionSpeed(value)}
-            defaultValue={reproductionSpeed}
-            min={SPEED.min}
-            max={SPEED.max}
-          />
+      {isAutomatic && (
+        <div className="slider-auto">
+          <div className="description">
+            Velocidad de reproducción automática
+          </div>
+          <div>
+            <Slider
+              onChange={(value) => setReproductionSpeed(value)}
+              defaultValue={reproductionSpeed}
+              min={SPEED.min}
+              max={SPEED.max}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </SliderControlsCss>
   );
 };
