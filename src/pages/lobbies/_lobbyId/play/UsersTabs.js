@@ -7,8 +7,8 @@ import { darkTheme } from "../../../../theme";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
-import { useConfirm } from "../../../../hooks/useConfirm";
 import { getNumberBoard } from "../../../../business";
+import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 
 const TAB = {
   CARDS: "cards",
@@ -20,7 +20,7 @@ export const UsersTabs = (props) => {
   const [tab, setTab] = useState(TAB.CARDS);
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
-  const confirm = useConfirm();
+  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
 
   const users = Object.values(props.lobby.users ?? {});
   const numberWinners = getNumberBoard(props.lobby.board ?? {});
@@ -64,14 +64,7 @@ export const UsersTabs = (props) => {
       content={
         <div
           style={{ display: "flex", cursor: "pointer" }}
-          onClick={() =>
-            confirm(
-              removeUser,
-              user.id,
-              "Estas seguro de esta acción?",
-              "El usuario será eliminado"
-            )
-          }
+          onClick={() => setIsVisibleModalConfirm(true)}
         >
           <Image
             src={`${config.storageUrl}/resources/close.svg`}
@@ -103,7 +96,17 @@ export const UsersTabs = (props) => {
           {...props}
         />
       )}
-
+      {isVisibleModalConfirm && (
+        <ModalConfirm
+          isVisibleModalConfirm={isVisibleModalConfirm}
+          setIsVisibleModalConfirm={setIsVisibleModalConfirm}
+          title="Estas seguro de esta acción?"
+          description={"El usuario será eliminado"}
+          action={removeUser}
+          buttonName={"Remover"}
+          {...props}
+        />
+      )}
       <div className="tabs-container">
         <div
           className={`tab ${tab === TAB.CARDS && "active"}`}

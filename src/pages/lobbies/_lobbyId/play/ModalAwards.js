@@ -5,10 +5,15 @@ import { ButtonAnt } from "../../../../components/form";
 import { Input } from "antd";
 import defaultTo from "lodash/defaultTo";
 import { firestore } from "../../../../firebase";
+import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 
 export const ModalAwards = (props) => {
   const [authUser] = useGlobal("user");
   const [isSaving, setIsSaving] = useState(false);
+  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
+  const [awards, setAwards] = useState(
+    defaultTo(props.lobby.settings.awards, [])
+  );
   const [award, setAward] = useState("");
 
   const deleteAward = async (index) => {
@@ -48,11 +53,22 @@ export const ModalAwards = (props) => {
   return (
     <ModalContainer
       background="#FAFAFA"
+      closable={false}
       footer={null}
       top="10%"
       visible={props.isVisibleModalAwards}
-      onCancel={() => props.setIsVisibleModalAwards(false)}
     >
+      {isVisibleModalConfirm && (
+        <ModalConfirm
+          isVisibleModalConfirm={isVisibleModalConfirm}
+          setIsVisibleModalConfirm={setIsVisibleModalConfirm}
+          title="¿Estás seguro que deseas volver?"
+          description={"Si vuelves no se guardaran los cambios"}
+          action={() => props.setIsVisibleModalAwards(false)}
+          buttonName={"Volver"}
+          {...props}
+        />
+      )}
       <AwardsContainer key={props.lobby.settings}>
         <div className="title">{authUser.isAdmin ? "Editar " : ""} Premios</div>
         {defaultTo(props.lobby.settings.awards, []).map((award, index) => (
@@ -95,6 +111,15 @@ export const ModalAwards = (props) => {
                 Agregar
               </ButtonAnt>
             </form>
+            <div className="btns-container">
+              <ButtonAnt
+                color="default"
+                onClick={() => setIsVisibleModalConfirm(true)}
+              >
+                Cancelar
+              </ButtonAnt>
+              <ButtonAnt>Guardar</ButtonAnt>
+            </div>
           </>
         )}
       </AwardsContainer>
@@ -143,7 +168,7 @@ const AwardsContainer = styled.div`
   .btns-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     margin: 1rem 0;
   }
 `;
