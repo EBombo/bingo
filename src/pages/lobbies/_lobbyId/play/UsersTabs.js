@@ -258,6 +258,14 @@ const TabsContainer = styled.div`
         background: ${(props) => props.theme.basic.whiteDark};
         padding: 0.5rem;
         border-radius: 3px;
+
+        .name {
+          font-family: Encode Sans, sans-serif;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 13px;
+          line-height: 18px;
+        }
       }
 
       .card-preview {
@@ -315,7 +323,7 @@ const TabsContainer = styled.div`
         padding: 0 1rem;
 
         .name {
-          font-family: Open Sans;
+          font-family: Encode Sans, sans-serif;
           font-style: normal;
           font-weight: bold;
           font-size: 13px;
