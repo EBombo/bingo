@@ -17,37 +17,32 @@ export const ModalAwards = (props) => {
   const [award, setAward] = useState("");
 
   const deleteAward = async (index) => {
+    const newAwards = [...awards];
+    newAwards.splice(index, 1);
+    setAwards(newAwards);
+  };
+
+  const addAward = async () => {
+    const newAwards = [...awards];
+    newAwards.push(award);
+    setAwards(newAwards);
+    setAward("");
+  };
+
+  const saveAwards = async () => {
+    setIsSaving(true);
+
     const newSettings = props.lobby.settings;
 
-    newSettings.awards.splice(index, 1);
+    newSettings.awards = awards;
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       settings: newSettings,
       updateAt: new Date(),
     });
-  };
 
-  const addAward = async () => {
-    setIsSaving(true);
-    try {
-      const newSettings = props.lobby.settings;
-
-      if (newSettings.awards) {
-        newSettings.awards.push(award);
-      } else {
-        newSettings.awards = [award];
-      }
-
-      setAward("");
-
-      await firestore.doc(`lobbies/${props.lobby.id}`).update({
-        settings: newSettings,
-        updateAt: new Date(),
-      });
-    } catch (error) {
-      console.log(error);
-    }
     setIsSaving(false);
+    props.setIsVisibleModalAwards(false);
   };
 
   return (
@@ -71,12 +66,20 @@ export const ModalAwards = (props) => {
       )}
       <AwardsContainer key={props.lobby.settings}>
         <div className="title">{authUser.isAdmin ? "Editar " : ""} Premios</div>
-        {defaultTo(props.lobby.settings.awards, []).map((award, index) => (
+        {defaultTo(awards, []).map((award, index) => (
           <div className="award" key={index}>
             <div className="label">Premio {index + 1}</div>
             <div className="content">
               <Input
                 defaultValue={award.name}
+                onBlur={(e) => {
+                  const newAwards = [...awards];
+                  newAwards[index] = {
+                    name: e.target.value,
+                    order: index + 1,
+                  };
+                  setAwards([...newAwards]);
+                }}
                 placeholder={`Premio ${index + 1}`}
               />
               {authUser.isAdmin && (
@@ -103,11 +106,7 @@ export const ModalAwards = (props) => {
                   })
                 }
               />
-              <ButtonAnt
-                color="secondary"
-                loading={isSaving}
-                onClick={() => addAward()}
-              >
+              <ButtonAnt color="secondary" onClick={() => addAward()}>
                 Agregar
               </ButtonAnt>
             </form>
@@ -118,7 +117,9 @@ export const ModalAwards = (props) => {
               >
                 Cancelar
               </ButtonAnt>
-              <ButtonAnt>Guardar</ButtonAnt>
+              <ButtonAnt loading={isSaving} onClick={() => saveAwards()}>
+                Guardar
+              </ButtonAnt>
             </div>
           </>
         )}
