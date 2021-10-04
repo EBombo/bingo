@@ -97,7 +97,7 @@ const Login = (props) => {
           <Image
             src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
             width="180px"
-            margin="10px auto"
+            margin="10px auto 2rem auto"
           />
           <div className="login-container">
             <InputBingo
