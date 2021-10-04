@@ -353,7 +353,11 @@ const BingoGameContainer = styled.div`
     .right-container {
       .board-container {
         max-width: 650px;
-        margin: 0 auto;
+        margin: 0;
+      }
+
+      .awards {
+        padding: 0;
       }
 
       .bottom-section {
