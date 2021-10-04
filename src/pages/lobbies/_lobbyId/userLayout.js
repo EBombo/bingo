@@ -14,7 +14,7 @@ export const UserLayout = (props) => {
   return (
     <UserLayoutCss>
       <div className="description">1-75 números</div>
-      <div className="title">{props.lobby.game.title}</div>
+      <div className="title">{props.lobby.game.name}</div>
       <div className="right-content">
         {authUser.isAdmin ? (
           <div className="right-container">
@@ -84,6 +84,7 @@ export const UserLayout = (props) => {
           </div>
         ) : (
           <Popover
+            trigger="click"
             content={
               <div>
                 <div
@@ -125,6 +126,7 @@ const UserLayoutCss = styled.div`
     justify-content: flex-end;
 
     .icon-menu {
+      cursor: pointer;
       width: 40px;
       display: flex;
       align-items: center;

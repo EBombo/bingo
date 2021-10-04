@@ -36,7 +36,7 @@ export const LoadingGame = (props) => {
               margin="0 auto"
               className="step-one-logo"
             />
-            <div className="step-one-description">Entra a www.ebombo.it</div>
+            <div className="step-one-description">Entra a www.ebombo.io</div>
           </div>
           <div className="step-two">
             <div className="step-two-name">
