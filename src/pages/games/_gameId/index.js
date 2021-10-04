@@ -409,7 +409,7 @@ const GameCss = styled.div`
       padding: 5px 10px;
       font-size: 13px;
       line-height: 16px;
-      background: ${(props) => props.theme.basic.primaryLight};
+      background: ${(props) => props.theme.basic.primaryDarken};
       color: ${(props) => props.theme.basic.whiteLight};
       border-radius: 2px;
 
