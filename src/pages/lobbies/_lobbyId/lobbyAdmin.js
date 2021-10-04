@@ -7,7 +7,7 @@ import {
 import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
 import { database, firestore } from "../../../firebase";
-import { ButtonBingo } from "../../../components/form";
+import { ButtonAnt, ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -162,10 +162,8 @@ export const LobbyAdmin = (props) => {
           >
             {props.lobby.isLocked ? <LockOutlined /> : <UnlockOutlined />}
           </ButtonBingo>
-          <ButtonBingo
-            variant="primary"
-            margin="10px 20px"
-            padding="10px 30px"
+          <ButtonAnt
+            className="btn-start"
             loading={isLoadingStart}
             disabled={!users?.length || isLoadingStart}
             onClick={async () => {
@@ -174,8 +172,8 @@ export const LobbyAdmin = (props) => {
               setIsLoadingStart(false);
             }}
           >
-            EMPEZAR
-          </ButtonBingo>
+            Empezar
+          </ButtonAnt>
         </div>
       </div>
 
@@ -221,6 +219,16 @@ const LobbyCss = styled.div`
   .header {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+
+    .right-menus {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-evenly;
+      .btn-start {
+        margin: 10px 20px !important;
+        padding: 10px 30px !important;
+      }
+    }
 
     .right-menus,
     .left-menus {
