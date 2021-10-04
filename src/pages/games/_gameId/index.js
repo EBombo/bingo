@@ -162,9 +162,7 @@ export const Game = (props) => {
   return (
     <GameCss>
       <div>
-        <ButtonBingo variant="primary" width="100%">
-          {game.name}
-        </ButtonBingo>
+        <div className="title">{game.name}</div>
         <div className="container-game">
           <div className="item">
             <div>Jugadores vs Jugadores</div>
@@ -371,6 +369,21 @@ const GameCss = styled.div`
   max-width: 500px;
   padding: 1rem;
   color: ${(props) => props.theme.basic.white};
+
+  .title {
+    border: none;
+    width: 100%;
+    margin: auto;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: Lato;
+    text-align: center;
+    border-radius: 4px;
+    padding: 10px 10px;
+    color: ${(props) => props.theme.basic.black};
+    background: ${(props) => props.theme.basic.whiteDark};
+    box-shadow: 0 4px 0 ${(props) => props.theme.basic.grayLighten};
+  }
 
   .container-game {
     grid-gap: 5px;
