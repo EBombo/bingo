@@ -129,14 +129,13 @@ export const UsersTabs = (props) => {
               <div className="name">{user.nickname}</div>
 
               <div className="card-preview">
-                {defaultTo(
-                  JSON.parse(user.card),
-                  Array(5).fill(Array(5).fill(0))
-                ).map((row) =>
-                  row.map((num) => (
+                {defaultTo(JSON.parse(user.card)).map((axiX, indexX) =>
+                  axiX.map((axiY, indexY) => (
                     <div
-                      className={`matrix-num`}
-                      key={`${row}-${Math.random() * 150}`}
+                      className={`matrix-num ${
+                        numberWinners.includes(axiY) && "active"
+                      }`}
+                      key={`${indexX}-${indexY}`}
                     />
                   ))
                 )}
@@ -195,6 +194,7 @@ const TabsContainer = styled.div`
   width: 100%;
 
   .btn-show-card {
+    cursor: pointer;
     height: 21px;
     font-family: Encode Sans;
     font-style: normal;
