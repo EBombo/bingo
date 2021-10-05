@@ -41,6 +41,7 @@ export const LobbyAdmin = (props) => {
   }, [props.lobby]);
 
   useEffect(() => {
+    return;
     const currentAudioToPlay =
       props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
 

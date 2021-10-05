@@ -12,6 +12,7 @@ export const UserLayout = (props) => {
   const audioRef = useRef(null);
 
   useEffect(() => {
+    return;
     const currentAudioToPlay =
       props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
 
