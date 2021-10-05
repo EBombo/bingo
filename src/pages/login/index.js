@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { object, string } from "yup";
 import { useRouter } from "next/router";
 import { useUser } from "../../hooks";
+import { mediaQuery } from "../../constants";
 
 const Login = (props) => {
   const router = useRouter();
@@ -91,74 +92,86 @@ const Login = (props) => {
   };
 
   return (
-    <LoginContainer>
-      {!lobby && (
-        <form onSubmit={handleSubmit(validatePin)}>
-          <Image
-            src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
-            width="180px"
-            margin="10px auto 2rem auto"
-          />
-          <div className="login-container">
-            <InputBingo
-              ref={register}
-              error={errors.pin}
-              type="number"
-              name="pin"
-              align="center"
-              width="100%"
-              margin="10px auto"
-              variant="default"
-              disabled={isLoading}
-              placeholder="Pin del juego"
+    <LoginContainer config={config}>
+      <div className="main-container">
+        {!lobby && (
+          <form onSubmit={handleSubmit(validatePin)}>
+            <Image
+              src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
+              width="180px"
+              margin="3rem auto 2rem auto"
             />
-            <ButtonBingo
-              width="100%"
-              disabled={isLoading}
-              loading={isLoading}
-              htmlType="submit"
-            >
-              Ingresar
-            </ButtonBingo>
-          </div>
-        </form>
-      )}
+            <div className="login-container">
+              <InputBingo
+                ref={register}
+                error={errors.pin}
+                type="number"
+                name="pin"
+                align="center"
+                width="100%"
+                margin="10px auto"
+                variant="default"
+                disabled={isLoading}
+                placeholder="Pin del juego"
+              />
+              <ButtonBingo
+                width="100%"
+                disabled={isLoading}
+                loading={isLoading}
+                htmlType="submit"
+              >
+                Ingresar
+              </ButtonBingo>
+            </div>
+          </form>
+        )}
 
-      {lobby
-        ? lobby.settings?.userIdentity &&
-          !email && (
-            <EmailStep
+        {lobby
+          ? lobby.settings?.userIdentity &&
+            !email && (
+              <EmailStep
+                lobby={lobby}
+                setIsLoading={setIsLoading}
+                isLoading={isLoading}
+                setEmailVerification={setEmail}
+                {...props}
+              />
+            )
+          : null}
+
+        {lobby ? (
+          (lobby.settings.userIdentity && email && !nickname) ||
+          (!lobby.settings.userIdentity && !nickname) ? (
+            <NicknameStep
               lobby={lobby}
+              nickname={nickname}
+              setNickname={setNickname}
               setIsLoading={setIsLoading}
               isLoading={isLoading}
-              setEmailVerification={setEmail}
               {...props}
             />
-          )
-        : null}
-
-      {lobby ? (
-        (lobby.settings.userIdentity && email && !nickname) ||
-        (!lobby.settings.userIdentity && !nickname) ? (
-          <NicknameStep
-            lobby={lobby}
-            nickname={nickname}
-            setNickname={setNickname}
-            setIsLoading={setIsLoading}
-            isLoading={isLoading}
-            {...props}
-          />
-        ) : null
-      ) : null}
+          ) : null
+        ) : null}
+      </div>
     </LoginContainer>
   );
 };
 
 const LoginContainer = styled.div`
-  padding: 10px;
-  max-width: 400px;
-  margin: 10% auto auto auto;
   color: ${(props) => props.theme.basic.white};
+  width: 100%;
+  height: 100vh;
+  background-image: url("${(props) =>
+    `${props.config.storageUrl}/resources/balls/purple-balls-tablet.svg`}");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  .main-container {
+    padding: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
 
   .login-container {
     padding: 15px;
@@ -170,6 +183,11 @@ const LoginContainer = styled.div`
       -webkit-appearance: none;
       margin: 0;
     }
+  }
+
+  ${mediaQuery.afterTablet} {
+    background-image: url("${(props) =>
+        `${props.config.storageUrl}/resources/balls/purple-balls.svg`}");
   }
 `;
 

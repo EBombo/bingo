@@ -107,6 +107,7 @@ export const LobbyAdmin = (props) => {
             >
               {isPlay ? (
                 <Image
+                  cursor="pointer"
                   src={`${config.storageUrl}/resources/sound.svg`}
                   height="25px"
                   width="25px"
@@ -137,6 +138,7 @@ export const LobbyAdmin = (props) => {
               disabled={!isPlay}
             >
               <Image
+                cursor="pointer"
                 src={`${config.storageUrl}/resources/volume.svg`}
                 height="25px"
                 width="25px"
@@ -158,6 +160,7 @@ export const LobbyAdmin = (props) => {
             {props.lobby.isLocked ? (
               <ButtonBingo variant="primary" margin="10px 20px">
                 <Image
+                  cursor="pointer"
                   src={`${config.storageUrl}/resources/lock.svg`}
                   height="25px"
                   width="25px"
@@ -188,6 +191,7 @@ export const LobbyAdmin = (props) => {
                 src={`${config.storageUrl}/resources/${
                   props.lobby.isLocked ? "lock.svg" : "un-lock.svg"
                 }`}
+                cursor="pointer"
                 height="25px"
                 width="25px"
                 size="contain"
