@@ -125,7 +125,23 @@ export const UsersTabs = (props) => {
       <div className={`user-tab-${tab}`}>
         {users.map((user, index) =>
           tab === TAB.CARDS ? (
-            <div className="user-card" key={`${user.nickname}-${index}`}>
+            <div
+              className={`user-card ${
+                props.lobby?.bingo?.id === user.id && `winner`
+              }`}
+              key={`${user.nickname}-${index}`}
+            >
+              {props.lobby?.bingo?.id === user.id && (
+                <div className="winner-img">
+                  <Image
+                    src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
+                    height="30px"
+                    width="30px"
+                    borderRadious="50%"
+                  />
+                </div>
+              )}
+
               <div className="name">{user.nickname}</div>
 
               <div className="card-preview">
@@ -158,7 +174,12 @@ export const UsersTabs = (props) => {
               {authUser.isAdmin && menu(user)}
             </div>
           ) : (
-            <div className="user-progress" key={`${user.nickname}-${index}`}>
+            <div
+              className={`user-progress ${
+                props.lobby?.bingo?.id === user.id && `winner`
+              }`}
+              key={`${user.nickname}-${index}`}
+            >
               <div className="name">{user.nickname}</div>
 
               <div className={`progress ${user.progress === 100 && "winner"}`}>
@@ -168,6 +189,16 @@ export const UsersTabs = (props) => {
                 />
               </div>
 
+              {props.lobby?.bingo?.id === user.id && (
+                <div className="winner-img">
+                  <Image
+                    src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
+                    height="30px"
+                    width="30px"
+                    borderRadious="50%"
+                  />
+                </div>
+              )}
               <div className="options">
                 {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
                   <button
@@ -265,6 +296,21 @@ const TabsContainer = styled.div`
           font-weight: bold;
           font-size: 13px;
           line-height: 18px;
+        }
+      }
+
+      .winner {
+        background: ${(props) => props.theme.basic.primaryLight};
+        border: 3px solid ${(props) => props.theme.basic.primary};
+        box-sizing: border-box;
+        border-radius: 3px;
+        position: relative;
+
+        .winner-img {
+          position: absolute;
+          top: 0;
+          right: 0;
+          transform: translate(50%, -50%);
         }
       }
 
@@ -366,6 +412,7 @@ const TabsContainer = styled.div`
       }
 
       .winner {
+        grid-template-columns: repeat(4, 1fr);
         background: ${(props) => props.theme.basic.primaryLight};
       }
     }
