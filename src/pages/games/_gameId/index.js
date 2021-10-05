@@ -103,6 +103,14 @@ export const Game = (props) => {
   const createLobby = async (typeOfGame) => {
     setIsLoadingSave(true);
     try {
+      if (showAwards && awards.some((award) => award.name === "")) {
+        return props.showNotification(
+          "UPS",
+          "Debes completar el nombre de todos los premios agregados o deshabilita la opción de premios",
+          "warning"
+        );
+      }
+
       const pin = await generatePin();
 
       const lobbiesRef = firestore.collection("lobbies");
@@ -138,8 +146,9 @@ export const Game = (props) => {
       return router.push(`/lobbies/${lobbyId}`);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoadingSave(false);
     }
-    setIsLoadingSave(false);
   };
 
   const generatePin = async () => {
