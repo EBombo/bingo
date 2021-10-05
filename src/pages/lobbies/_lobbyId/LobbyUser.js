@@ -65,7 +65,7 @@ export const LobbyUser = (props) => {
       />
       <div className="message">Ya estas adentro :)</div>
       <div className="message">¿Ves tu nombre en pantalla?</div>
-      <div className="nickname">{authUser?.nickname}</div>
+      <div className="item-user">{authUser?.nickname}</div>
     </SuccessInscriptionContainer>
   );
 };
@@ -84,29 +84,32 @@ const SuccessInscriptionContainer = styled.div`
     text-align: center;
   }
 
-  .nickname {
-    margin-top: 50px;
-    background: ${(props) => props.theme.basic.whiteLight};
+  .item-user {
+    width: 150px;
+    padding: 5px 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: ${(props) => props.theme.basic.white};
+    background: ${(props) => props.theme.basic.primary};
+    margin: 2rem auto;
     font-family: Lato;
     font-style: normal;
     font-weight: bold;
-    font-size: 20px;
-    line-height: 24px;
-    height: 63px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 18px;
+    line-height: 22px;
+
+    ${mediaQuery.afterTablet} {
+      width: 200px;
+      padding: 15px 10px;
+      font-size: 20px;
+      line-height: 24px;
+    }
   }
 
   ${mediaQuery.afterTablet} {
     .message {
       font-size: 34px;
       line-height: 41px;
-    }
-
-    .nickname {
-      font-size: 28px;
-      line-height: 34px;
     }
   }
 `;
