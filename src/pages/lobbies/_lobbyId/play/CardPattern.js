@@ -35,7 +35,6 @@ export const CardPattern = (props) => {
     if (props.continueGame) {
       await props.continueGame();
     }
-    setIsVisibleModalPattern(false);
   };
 
   return (
@@ -45,6 +44,7 @@ export const CardPattern = (props) => {
           apagon={apagon}
           isVisibleModalPattern={isVisibleModalPattern}
           setIsVisibleModalPattern={setIsVisibleModalPattern}
+          continueGame={() => setIsVisibleModalPattern(false)}
           {...props}
         />
       )}
