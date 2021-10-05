@@ -15,8 +15,9 @@ export const ModalWinner = (props) => {
       background="#FAFAFA"
       footer={null}
       closable={false}
-      top="20%"
+      topDesktop="20%"
       visible={props.isVisibleModalWinner}
+      padding="2rem 1rem"
     >
       <WinnerContainer>
         <div className="title">¡Bingo!</div>
@@ -37,7 +38,7 @@ export const ModalWinner = (props) => {
               height="75px"
               width="75px"
               size="contain"
-              margin="1rem auto"
+              margin="auto"
             />
             <div className="description">
               Esperando que el administrador continúe el juego...
@@ -66,12 +67,12 @@ const WinnerContainer = styled.div`
   }
 
   .name {
-    font-family: Open Sans;
+    font-family: Encode Sans, sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
     line-height: 33px;
-    margin: 70px 0;
+    margin: 30px auto;
     color: ${(props) => props.theme.basic.blackDarken};
   }
 

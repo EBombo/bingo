@@ -145,9 +145,12 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${(props) => props.theme.basic.blackLighten} !important;
   }
 
-  /*-------------- SELECT ANT----------------*/
-
-
+  /*-------------- SWITCH ANT----------------*/
+  
+  .ant-switch-checked {
+    background-color: #85e4bf !important;
+  }
+  
   /*-------------- NOTIFICATIONS ANT---------------*/
   .ant-message {
     z-index: 999999;

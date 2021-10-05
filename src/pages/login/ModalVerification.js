@@ -10,7 +10,7 @@ export const ModalVerification = (props) => (
     closable={false}
     visible={props.isVisibleModalVerification}
     padding={"1rem"}
-    top={"20%"}
+    topDesktop="20%"
     background={darkTheme.basic.whiteLight}
     onCancel={() => props.setIsVisibleModalVerification(props.email)}
   >

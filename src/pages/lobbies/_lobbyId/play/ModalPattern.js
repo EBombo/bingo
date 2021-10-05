@@ -10,7 +10,7 @@ export const ModalPattern = (props) => {
       background="#FAFAFA"
       footer={null}
       closable={false}
-      top="20%"
+      topDesktop="20%"
       padding="1rem"
       visible={props.isVisibleModalPattern}
     >

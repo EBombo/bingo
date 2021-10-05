@@ -7,8 +7,8 @@ import { darkTheme } from "../../../../theme";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
-import { useConfirm } from "../../../../hooks/useConfirm";
 import { getNumberBoard } from "../../../../business";
+import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 
 const TAB = {
   CARDS: "cards",
@@ -20,7 +20,7 @@ export const UsersTabs = (props) => {
   const [tab, setTab] = useState(TAB.CARDS);
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
-  const confirm = useConfirm();
+  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
 
   const users = Object.values(props.lobby.users ?? {});
   const numberWinners = getNumberBoard(props.lobby.board ?? {});
@@ -64,14 +64,7 @@ export const UsersTabs = (props) => {
       content={
         <div
           style={{ display: "flex", cursor: "pointer" }}
-          onClick={() =>
-            confirm(
-              removeUser,
-              user.id,
-              "Estas seguro de esta acción?",
-              "El usuario será eliminado"
-            )
-          }
+          onClick={() => setIsVisibleModalConfirm(true)}
         >
           <Image
             src={`${config.storageUrl}/resources/close.svg`}
@@ -103,7 +96,17 @@ export const UsersTabs = (props) => {
           {...props}
         />
       )}
-
+      {isVisibleModalConfirm && (
+        <ModalConfirm
+          isVisibleModalConfirm={isVisibleModalConfirm}
+          setIsVisibleModalConfirm={setIsVisibleModalConfirm}
+          title="Estas seguro de esta acción?"
+          description={"El usuario será eliminado"}
+          action={removeUser}
+          buttonName={"Remover"}
+          {...props}
+        />
+      )}
       <div className="tabs-container">
         <div
           className={`tab ${tab === TAB.CARDS && "active"}`}
@@ -126,14 +129,13 @@ export const UsersTabs = (props) => {
               <div className="name">{user.nickname}</div>
 
               <div className="card-preview">
-                {defaultTo(
-                  JSON.parse(user.card),
-                  Array(5).fill(Array(5).fill(0))
-                ).map((row) =>
-                  row.map((num) => (
+                {defaultTo(JSON.parse(user.card)).map((axiX, indexX) =>
+                  axiX.map((axiY, indexY) => (
                     <div
-                      className={`matrix-num`}
-                      key={`${row}-${Math.random() * 150}`}
+                      className={`matrix-num ${
+                        numberWinners.includes(axiY) && "active"
+                      }`}
+                      key={`${indexX}-${indexY}`}
                     />
                   ))
                 )}
@@ -192,6 +194,7 @@ const TabsContainer = styled.div`
   width: 100%;
 
   .btn-show-card {
+    cursor: pointer;
     height: 21px;
     font-family: Encode Sans;
     font-style: normal;
@@ -255,6 +258,14 @@ const TabsContainer = styled.div`
         background: ${(props) => props.theme.basic.whiteDark};
         padding: 0.5rem;
         border-radius: 3px;
+
+        .name {
+          font-family: Encode Sans, sans-serif;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 13px;
+          line-height: 18px;
+        }
       }
 
       .card-preview {
@@ -312,7 +323,7 @@ const TabsContainer = styled.div`
         padding: 0 1rem;
 
         .name {
-          font-family: Open Sans;
+          font-family: Encode Sans, sans-serif;
           font-style: normal;
           font-weight: bold;
           font-size: 13px;

@@ -117,6 +117,95 @@ const ButtonAntCss = styled(Button)`
       };  
       border: none;
       `}
+  &:active {
+    ${({ variant = "contained", theme, color = "primary" }) =>
+      variant === "contained"
+        ? `
+      background: ${
+        color === "primary"
+          ? theme.basic.primary
+          : color === "secondary"
+          ? theme.basic.secondary
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? theme.basic.whiteDark
+          : color
+      };
+        color: ${
+          color === "white"
+            ? theme.basic.secondaryLight
+            : color === "default"
+            ? theme.basic.blackDarken
+            : color === "warning"
+            ? theme.basic.blackDarken
+            : theme.basic.white
+        };
+      border: none;
+      box-shadow: 0 4px ${
+        color === "primary"
+          ? theme.basic.primaryDark
+          : color === "secondary"
+          ? theme.basic.secondaryDark
+          : color === "warning"
+          ? theme.basic.warningDark
+          : color === "danger"
+          ? theme.basic.dangerDark
+          : color === "default"
+          ? "#979797"
+          : color
+      };
+      `
+        : variant === "outlined"
+        ? `
+      background: transparent;
+      color: ${
+        color === "primary"
+          ? theme.basic.primary
+          : color === "secondary"
+          ? theme.basic.secondary
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? theme.basic.blackDarken
+          : color
+      };
+      border: 1px solid ${
+        color === "primary"
+          ? theme.basic.primary
+          : color === "secondary"
+          ? theme.basic.secondary
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? theme.basic.whiteDark
+          : color
+      };
+      `
+        : `
+      background: transparent;
+      color: ${
+        color === "primary"
+          ? theme.basic.primary
+          : color === "secondary"
+          ? theme.basic.secondary
+          : color === "warning"
+          ? theme.basic.warning
+          : color === "danger"
+          ? theme.basic.danger
+          : color === "default"
+          ? theme.basic.blackDarken
+          : color
+      };  
+      border: none;
+      `}
+  }
 
   &:hover {
     ${({ variant = "contained", theme = darkTheme, color = "primary" }) =>

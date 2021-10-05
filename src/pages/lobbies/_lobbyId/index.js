@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import { firestore } from "../../../firebase";
 import { useRouter } from "next/router";
 import { spinLoaderMin } from "../../../components/common/loader";
@@ -15,6 +15,8 @@ export const Lobby = (props) => {
   const [lobby, setLobby] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [authUser, setAuthUser] = useGlobal("user");
+
+  const audioRef = useRef(null);
 
   const logout = async () => {
     await setAuthUser({ id: firestore.collection("users").doc().id });
@@ -58,6 +60,7 @@ export const Lobby = (props) => {
     return spinLoaderMin();
 
   const additionalProps = {
+    audioRef: audioRef,
     logout: logout,
     lobby: lobby,
     ...props,

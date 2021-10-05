@@ -16,9 +16,11 @@ import {
 import { useUser } from "../../../hooks";
 import { Image } from "../../../components/common/Image";
 import { mediaQuery } from "../../../constants";
+import { Collapse } from "antd";
 
 export const Game = (props) => {
   const router = useRouter();
+  const { Panel } = Collapse;
   const { Fetch } = useFetch();
   const [, setLSAuthUser] = useUser();
   const [audios] = useGlobal("audios");
@@ -26,7 +28,6 @@ export const Game = (props) => {
   const { tokenId, gameId } = router.query;
   const [, setAuthUser] = useGlobal("user");
   const [isLoading, setIsLoading] = useState(true);
-  const [showSettings, setShowSettings] = useState(false);
   const [isLoadingSave, setIsLoadingSave] = useState(false);
 
   const [userIdentity, setUserIdentity] = useState(true);
@@ -162,9 +163,7 @@ export const Game = (props) => {
   return (
     <GameCss>
       <div>
-        <ButtonBingo variant="primary" width="100%">
-          {game.name}
-        </ButtonBingo>
+        <div className="title">{game.name}</div>
         <div className="container-game">
           <div className="item">
             <div>Jugadores vs Jugadores</div>
@@ -192,174 +191,165 @@ export const Game = (props) => {
             </ButtonBingo>
           </div>
         </div>
-        <ButtonBingo
-          variant="primary"
-          className="btn-large"
-          width="100%"
-          align="left"
-          onClick={() => setShowSettings(!showSettings)}
-        >
-          Opciones del juego{" "}
-          {showSettings ? <DownOutlined /> : <RightOutlined />}
-        </ButtonBingo>
+        <Collapse defaultActiveKey={["1"]}>
+          <Panel header="Opciones del juego" key="1">
+            <div className="options">
+              <div className="title">Recomendado</div>
 
-        {showSettings ? (
-          <div className="options">
-            <div className="title">Recomendado</div>
-
-            <div className="option">
-              <div>
-                <div className="title-opt">Identificador de jugador</div>
-                <span>Conoce el nombre de la persona atrás del nickname</span>
-              </div>
-              <Switch
-                defaultChecked={userIdentity}
-                onChange={() => setUserIdentity(!userIdentity)}
-              />
-            </div>
-
-            <div className="title">General</div>
-
-            <div className="option">
-              <div>
-                <div className="title-opt">
-                  Mostrar tablero principal y bolas en dispositivos de jug.{" "}
+              <div className="option">
+                <div>
+                  <div className="title-opt">Identificador de jugador</div>
+                  <span>Conoce el nombre de la persona atrás del nickname</span>
                 </div>
-                <span>Para videoconferencias y mejorar accesibilidad</span>
+                <Switch
+                  defaultChecked={userIdentity}
+                  onChange={() => setUserIdentity(!userIdentity)}
+                />
               </div>
-              <Switch
-                defaultChecked={showBoardToUser}
-                onChange={() => setShowBoardToUser(!showBoardToUser)}
-              />
-            </div>
 
-            <div className="option">
-              <div>
-                <div className="title-opt">Música en el Lobby</div>
-              </div>
-              <Select
-                defaultValue={game?.audio?.id ?? audios[0]?.id}
-                optionsdom={audios.map((audio) => ({
-                  key: audio.id,
-                  code: audio.id,
-                  name: audio.title,
-                }))}
-              />
-            </div>
+              <div className="title">General</div>
 
-            <div className="option">
-              <div>
-                <div className="title-opt">
-                  Los jugadores pueden ver cartillas de otros jug.
-                </div>
-              </div>
-              <Switch
-                defaultChecked={showAllCards}
-                onChange={() => setShowAllCards(!showAllCards)}
-              />
-            </div>
-
-            <div className="option">
-              <div>
-                <div className="title-opt">
-                  El jug. tiene que llenar su cartilla manualmente
-                </div>
-                <span>Los jugadores tienen que estar atentos al juego</span>
-              </div>
-              <Switch
-                defaultChecked={!cardAutofill}
-                onChange={() => setCardAutofill(!cardAutofill)}
-              />
-            </div>
-
-            <div className="option">
-              <div>
-                <div className="title-opt">Chat dentro del juego</div>
-              </div>
-              <Switch
-                defaultChecked={showChat}
-                onChange={() => setShowChat(!showChat)}
-              />
-            </div>
-
-            <div className="option">
-              <div>
-                <div className="title-opt">
-                  El jug. puede ver a los demás participantes
-                </div>
-              </div>
-              <Switch
-                defaultChecked={showParticipants}
-                onChange={() => setShowParticipants(!showParticipants)}
-              />
-            </div>
-
-            <div className="option">
-              <div>
-                <div className="title-opt">Premio</div>
-              </div>
-              <Switch
-                defaultChecked={showAwards}
-                onChange={() => setShowAwards(!showAwards)}
-              />
-            </div>
-
-            {showAwards && (
-              <div className="awards-container" id={awards.length}>
-                {defaultTo(awards, []).map((award, index) => (
-                  <div className="input-container" key={`award-${index}`}>
-                    <Input
-                      type="text"
-                      name={`award-${index}`}
-                      defaultValue={award.name}
-                      onBlur={(e) => {
-                        let newAwards = awards;
-                        newAwards[index].name = e.target.value;
-                        setAwards([...newAwards]);
-                      }}
-                      placeholder={`Premio ${index + 1}`}
-                      className={"input-award"}
-                      key={`award-${index}-${award.order}`}
-                    />
-                    <button
-                      className="btn-delete"
-                      onClick={() => {
-                        let newAwards = awards.filter(
-                          (award, idx) => idx !== index
-                        );
-
-                        setAwards([...newAwards]);
-                      }}
-                    >
-                      <Image
-                        src={`${config.storageUrl}/resources/close.svg`}
-                        height="15px"
-                        width="15px"
-                        size="contain"
-                        margin="0"
-                      />
-                    </button>
+              <div className="option">
+                <div>
+                  <div className="title-opt">
+                    Mostrar tablero principal y bolas en dispositivos de jug.{" "}
                   </div>
-                ))}
-                <ButtonAnt
-                  color="secondary"
-                  margin="0.5rem 0 0.5rem auto"
-                  onClick={() => {
-                    setAwards([
-                      ...awards,
-                      {
-                        name: "",
-                        order: awards.length + 1,
-                      },
-                    ]);
-                  }}
-                >
-                  Agregar
-                </ButtonAnt>
+                  <span>Para videoconferencias y mejorar accesibilidad</span>
+                </div>
+                <Switch
+                  defaultChecked={showBoardToUser}
+                  onChange={() => setShowBoardToUser(!showBoardToUser)}
+                />
               </div>
-            )}
-          </div>
-        ) : null}
+
+              <div className="option">
+                <div>
+                  <div className="title-opt">Música en el Lobby</div>
+                </div>
+                <Select
+                  defaultValue={game?.audio?.id ?? audios[0]?.id}
+                  optionsdom={audios.map((audio) => ({
+                    key: audio.id,
+                    code: audio.id,
+                    name: audio.title,
+                  }))}
+                />
+              </div>
+
+              <div className="option">
+                <div>
+                  <div className="title-opt">
+                    Los jugadores pueden ver cartillas de otros jug.
+                  </div>
+                </div>
+                <Switch
+                  defaultChecked={showAllCards}
+                  onChange={() => setShowAllCards(!showAllCards)}
+                />
+              </div>
+
+              <div className="option">
+                <div>
+                  <div className="title-opt">
+                    El jug. tiene que llenar su cartilla manualmente
+                  </div>
+                  <span>Los jugadores tienen que estar atentos al juego</span>
+                </div>
+                <Switch
+                  defaultChecked={!cardAutofill}
+                  onChange={() => setCardAutofill(!cardAutofill)}
+                />
+              </div>
+
+              <div className="option">
+                <div>
+                  <div className="title-opt">Chat dentro del juego</div>
+                </div>
+                <Switch
+                  defaultChecked={showChat}
+                  onChange={() => setShowChat(!showChat)}
+                />
+              </div>
+
+              <div className="option">
+                <div>
+                  <div className="title-opt">
+                    El jug. puede ver a los demás participantes
+                  </div>
+                </div>
+                <Switch
+                  defaultChecked={showParticipants}
+                  onChange={() => setShowParticipants(!showParticipants)}
+                />
+              </div>
+
+              <div className="option">
+                <div>
+                  <div className="title-opt">Premio</div>
+                </div>
+                <Switch
+                  defaultChecked={showAwards}
+                  onChange={() => setShowAwards(!showAwards)}
+                />
+              </div>
+
+              {showAwards && (
+                <div className="awards-container" id={awards.length}>
+                  {defaultTo(awards, []).map((award, index) => (
+                    <div className="input-container" key={`award-${index}`}>
+                      <Input
+                        type="text"
+                        name={`award-${index}`}
+                        defaultValue={award.name}
+                        onBlur={(e) => {
+                          let newAwards = awards;
+                          newAwards[index].name = e.target.value;
+                          setAwards([...newAwards]);
+                        }}
+                        placeholder={`Premio ${index + 1}`}
+                        className={"input-award"}
+                        key={`award-${index}-${award.order}`}
+                      />
+                      <button
+                        className="btn-delete"
+                        onClick={() => {
+                          let newAwards = awards.filter(
+                            (award, idx) => idx !== index
+                          );
+
+                          setAwards([...newAwards]);
+                        }}
+                      >
+                        <Image
+                          src={`${config.storageUrl}/resources/close.svg`}
+                          height="15px"
+                          width="15px"
+                          size="contain"
+                          margin="0"
+                        />
+                      </button>
+                    </div>
+                  ))}
+                  <ButtonAnt
+                    color="secondary"
+                    margin="0.5rem 0 0.5rem auto"
+                    onClick={() => {
+                      setAwards([
+                        ...awards,
+                        {
+                          name: "",
+                          order: awards.length + 1,
+                        },
+                      ]);
+                    }}
+                  >
+                    Agregar
+                  </ButtonAnt>
+                </div>
+              )}
+            </div>
+          </Panel>
+        </Collapse>
       </div>
     </GameCss>
   );
@@ -371,6 +361,21 @@ const GameCss = styled.div`
   max-width: 500px;
   padding: 1rem;
   color: ${(props) => props.theme.basic.white};
+
+  .title {
+    border: none;
+    width: 100%;
+    margin: auto;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: Lato;
+    text-align: center;
+    border-radius: 4px;
+    padding: 10px 10px;
+    color: ${(props) => props.theme.basic.black};
+    background: ${(props) => props.theme.basic.whiteDark};
+    box-shadow: 0 4px 0 ${(props) => props.theme.basic.grayLighten};
+  }
 
   .container-game {
     grid-gap: 5px;
@@ -409,7 +414,7 @@ const GameCss = styled.div`
       padding: 5px 10px;
       font-size: 13px;
       line-height: 16px;
-      background: ${(props) => props.theme.basic.primaryLight};
+      background: ${(props) => props.theme.basic.primaryDarken};
       color: ${(props) => props.theme.basic.whiteLight};
       border-radius: 2px;
 
@@ -470,6 +475,29 @@ const GameCss = styled.div`
       line-height: 16px;
       border: none !important;
     }
+  }
+
+  .ant-collapse {
+    border: none !important;
+
+    .ant-collapse-item {
+      border: none !important;
+    }
+  }
+
+  .ant-collapse-header {
+    font-size: 14px;
+    font-weight: 700;
+    font-family: Lato;
+    text-align: center;
+    border-radius: 4px !important;
+    color: ${(props) => props.theme.basic.black};
+    background: ${(props) => props.theme.basic.whiteDark};
+    box-shadow: 0 4px 0 ${(props) => props.theme.basic.grayLighten};
+  }
+
+  .ant-collapse-content {
+    background: ${(props) => props.theme.basic.secondary} !important;
   }
 
   ${mediaQuery.afterTablet} {

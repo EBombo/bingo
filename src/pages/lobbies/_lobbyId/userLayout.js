@@ -1,24 +1,24 @@
-import React, { useGlobal, useRef, useState } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
 import { mediaQuery } from "../../../constants";
-import { SoundOutlined } from "@ant-design/icons";
+import { config } from "../../../firebase";
+import { Image } from "../../../components/common/Image";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
-  const [isPlay, setIsPlay] = useState(false);
-
-  const audioRef = useRef(null);
+  const [isPlay, setIsPlay] = useState(true);
 
   return (
     <UserLayoutCss>
       <div className="description">1-75 números</div>
-      <div className="title">{props.lobby.game.title}</div>
+      <div className="title">{props.lobby.game.name}</div>
       <div className="right-content">
         {authUser.isAdmin ? (
           <div className="right-container">
             <Popover
+              trigger="click"
               content={
                 <AudioStyled>
                   {audios.map((audio_) => (
@@ -26,12 +26,13 @@ export const UserLayout = (props) => {
                       key={audio_.id}
                       className="item-audio"
                       onClick={() => {
-                        if (audioRef.current) audioRef.current.pause();
+                        if (props.audioRef.current)
+                          props.audioRef.current.pause();
 
                         const currentAudio = new Audio(audio_.audioUrl);
 
-                        audioRef.current = currentAudio;
-                        audioRef.current.play();
+                        props.audioRef.current = currentAudio;
+                        props.audioRef.current.play();
                         setIsPlay(true);
                       }}
                     >
@@ -43,25 +44,19 @@ export const UserLayout = (props) => {
             >
               <button
                 className="nav-button"
-                key={audioRef.current?.paused}
-                onClick={() => {
-                  if (audioRef.current && !audioRef.current?.paused) {
-                    audioRef.current.pause();
-                    return setIsPlay(false);
-                  }
-
-                  const currentAudioToPlay =
-                    props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
-
-                  const currentAudio =
-                    audioRef.current ?? new Audio(currentAudioToPlay);
-
-                  audioRef.current = currentAudio;
-                  audioRef.current.play();
-                  setIsPlay(true);
-                }}
+                key={props.audioRef.current?.paused}
               >
-                {isPlay ? "♫" : "►"}
+                {isPlay ? (
+                  <Image
+                    src={`${config.storageUrl}/resources/sound.svg`}
+                    height="25px"
+                    width="25px"
+                    size="contain"
+                    margin="auto"
+                  />
+                ) : (
+                  "►"
+                )}
               </button>
             </Popover>
             <Popover
@@ -70,20 +65,27 @@ export const UserLayout = (props) => {
                   <Slider
                     defaultValue={30}
                     onChange={(event) => {
-                      if (!audioRef.current) return;
-                      audioRef.current.volume = event / 100;
+                      if (!props.audioRef.current) return;
+                      props.audioRef.current.volume = event / 100;
                     }}
                   />
                 </div>
               }
             >
               <button className="nav-button" disabled={!isPlay}>
-                <SoundOutlined />
+                <Image
+                  src={`${config.storageUrl}/resources/volume.svg`}
+                  height="25px"
+                  width="25px"
+                  size="contain"
+                  margin="auto"
+                />
               </button>
             </Popover>
           </div>
         ) : (
           <Popover
+            trigger="click"
             content={
               <div>
                 <div
@@ -125,6 +127,7 @@ const UserLayoutCss = styled.div`
     justify-content: flex-end;
 
     .icon-menu {
+      cursor: pointer;
       width: 40px;
       display: flex;
       align-items: center;
