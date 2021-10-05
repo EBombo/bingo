@@ -50,7 +50,7 @@ export const ModalAwards = (props) => {
       background="#FAFAFA"
       closable={false}
       footer={null}
-      top="10%"
+      topDesktop="10%"
       visible={props.isVisibleModalAwards}
     >
       {isVisibleModalConfirm && (

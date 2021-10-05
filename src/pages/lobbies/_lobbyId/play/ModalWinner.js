@@ -15,7 +15,7 @@ export const ModalWinner = (props) => {
       background="#FAFAFA"
       footer={null}
       closable={false}
-      top="20%"
+      topDesktop="20%"
       visible={props.isVisibleModalWinner}
       padding="2rem 1rem"
     >

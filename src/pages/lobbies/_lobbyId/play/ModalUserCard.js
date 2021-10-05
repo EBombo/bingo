@@ -45,7 +45,7 @@ export const ModalUserCard = (props) => {
           background="#FAFAFA"
           footer={null}
           closable={false}
-          top="20%"
+          topDesktop="20%"
           width="650px"
           visible={props.isVisibleModalUserCard}
         >
@@ -115,7 +115,7 @@ export const ModalUserCard = (props) => {
             background="#FAFAFA"
             footer={null}
             closable={false}
-            top="20%"
+            topDesktop="20%"
             padding="1rem"
             visible={props.isVisibleModalUserCard}
             width="1100px"
@@ -193,7 +193,7 @@ export const ModalUserCard = (props) => {
             background="#FAFAFA"
             footer={null}
             closable={false}
-            top="20%"
+            topDesktop="20%"
             padding="1rem"
             visible={props.isVisibleModalUserCard}
           >

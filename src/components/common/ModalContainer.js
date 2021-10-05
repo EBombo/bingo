@@ -11,7 +11,7 @@ const ModalContainerCss = styled(Modal)`
   top: ${(props) => (props.top ? props.top : "10px")};
 
   ${mediaQuery.afterTablet} {
-    top: ${(props) => (props.top ? props.top : "50px")};
+    top: ${(props) => (props.topDesktop ? props.topDesktop : "50px")};
     ${(props) => (props.width ? `width:${props.width}!important;` : "")}
   }
 

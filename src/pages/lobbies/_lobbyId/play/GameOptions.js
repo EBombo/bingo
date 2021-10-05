@@ -91,7 +91,7 @@ export const GameOptions = (props) => {
       closable={false}
       padding="1rem"
       width="440px"
-      top="30%"
+      topDesktop="30%"
       visible={isVisibleModalConfirm}
     >
       <ContentModal>

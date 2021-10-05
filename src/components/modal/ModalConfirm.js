@@ -1,4 +1,3 @@
-import { Modal } from "antd";
 import { ButtonAnt } from "../form";
 import { ModalContainer } from "../common/ModalContainer";
 import React from "reactn";
@@ -12,7 +11,7 @@ export const ModalConfirm = (props) => (
     closable={false}
     padding="1rem"
     width="440px"
-    top="30%"
+    topDesktop="30%"
     visible={props.isVisibleModalConfirm}
   >
     <ContentModal>
