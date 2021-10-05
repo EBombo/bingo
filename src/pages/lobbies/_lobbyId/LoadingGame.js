@@ -22,7 +22,7 @@ export const LoadingGame = (props) => {
   }, []);
 
   return (
-    <LoadingGameContainer>
+    <LoadingGameContainer config={config}>
       {authUser.isAdmin ? (
         <>
           <div className="step-one">
@@ -119,6 +119,11 @@ const LoadingGameContainer = styled.div`
   height: 100vh;
   position: relative;
   overflow: hidden;
+  background-image: url("${(props) =>
+    `${props.config.storageUrl}/resources/balls/purple-balls-tablet.svg`}");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   
   .step-one-tablet {
     position: absolute;
@@ -336,6 +341,11 @@ const LoadingGameContainer = styled.div`
       width: 100%;
     }
   }
+  
+  ${mediaQuery.afterTablet} {
+    background-image: url("${(props) =>
+      `${props.config.storageUrl}/resources/balls/purple-balls.svg`}");
+  }
 
   @keyframes loader {
     0% {
@@ -426,18 +436,18 @@ const LoadingGameContainer = styled.div`
     }
   }
 
-@keyframes fadeout {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0;
-  }
-}
+    @keyframes fadeout {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
 `;
