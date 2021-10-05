@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal, useRef, useState } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
 import { mediaQuery } from "../../../constants";
@@ -6,21 +6,8 @@ import { SoundOutlined } from "@ant-design/icons";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
-  const [audios] = useGlobal("audios");
-  const [isPlay, setIsPlay] = useState(false);
-
-  const audioRef = useRef(null);
-
-  useEffect(() => {
-    return;
-    const currentAudioToPlay =
-      props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
-
-    const currentAudio = audioRef.current ?? new Audio(currentAudioToPlay);
-
-    audioRef.current = currentAudio;
-    audioRef.current.play();
-  }, []);
+    const [audios] = useGlobal("audios");
+    const [isPlay, setIsPlay] = useState(true);
 
   return (
     <UserLayoutCss>
@@ -38,12 +25,13 @@ export const UserLayout = (props) => {
                       key={audio_.id}
                       className="item-audio"
                       onClick={() => {
-                        if (audioRef.current) audioRef.current.pause();
+                        if (props.audioRef.current)
+                          props.audioRef.current.pause();
 
                         const currentAudio = new Audio(audio_.audioUrl);
 
-                        audioRef.current = currentAudio;
-                        audioRef.current.play();
+                        props.audioRef.current = currentAudio;
+                        props.audioRef.current.play();
                         setIsPlay(true);
                       }}
                     >
@@ -53,7 +41,10 @@ export const UserLayout = (props) => {
                 </AudioStyled>
               }
             >
-              <button className="nav-button" key={audioRef.current?.paused}>
+              <button
+                className="nav-button"
+                key={props.audioRef.current?.paused}
+              >
                 {isPlay ? "♫" : "►"}
               </button>
             </Popover>
@@ -63,8 +54,8 @@ export const UserLayout = (props) => {
                   <Slider
                     defaultValue={30}
                     onChange={(event) => {
-                      if (!audioRef.current) return;
-                      audioRef.current.volume = event / 100;
+                      if (!props.audioRef.current) return;
+                      props.audioRef.current.volume = event / 100;
                     }}
                   />
                 </div>

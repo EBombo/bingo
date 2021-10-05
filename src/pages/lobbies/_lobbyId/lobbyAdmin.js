@@ -4,7 +4,7 @@ import {
   UnlockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import React, { useEffect, useGlobal, useRef, useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
 import { database, firestore } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
@@ -23,8 +23,6 @@ export const LobbyAdmin = (props) => {
   const [isLoadingLock, setIsLoadingLock] = useState(false);
   const [isLoadingStart, setIsLoadingStart] = useState(false);
 
-  const audioRef = useRef(null);
-
   useEffect(() => {
     if (!props.lobby) return;
 
@@ -41,14 +39,14 @@ export const LobbyAdmin = (props) => {
   }, [props.lobby]);
 
   useEffect(() => {
-    return;
     const currentAudioToPlay =
       props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
 
-    const currentAudio = audioRef.current ?? new Audio(currentAudioToPlay);
+    const currentAudio =
+      props.audioRef.current ?? new Audio(currentAudioToPlay);
 
-    audioRef.current = currentAudio;
-    audioRef.current.play();
+    props.audioRef.current = currentAudio;
+    props.audioRef.current.play();
   }, []);
 
   const updateLobby = async (isLocked = false, gameStarted = null) => {
@@ -90,12 +88,13 @@ export const LobbyAdmin = (props) => {
                     key={audio_.id}
                     className="item-audio"
                     onClick={() => {
-                      if (audioRef.current) audioRef.current.pause();
+                      if (props.audioRef.current)
+                        props.audioRef.current.pause();
 
                       const currentAudio = new Audio(audio_.audioUrl);
 
-                      audioRef.current = currentAudio;
-                      audioRef.current.play();
+                      props.audioRef.current = currentAudio;
+                      props.audioRef.current.play();
                       setIsPlay(true);
                     }}
                   >
@@ -107,7 +106,7 @@ export const LobbyAdmin = (props) => {
           >
             <ButtonBingo
               variant="primary"
-              key={audioRef.current?.paused}
+              key={props.audioRef.current?.paused}
               margin="10px 20px"
             >
               {isPlay ? "♫" : "►"}
@@ -119,8 +118,8 @@ export const LobbyAdmin = (props) => {
                 <Slider
                   defaultValue={30}
                   onChange={(event) => {
-                    if (!audioRef.current) return;
-                    audioRef.current.volume = event / 100;
+                    if (!props.audioRef.current) return;
+                    props.audioRef.current.volume = event / 100;
                   }}
                 />
               </div>
