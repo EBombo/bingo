@@ -19,7 +19,7 @@ export const LobbyAdmin = (props) => {
   const { lobbyId } = router.query;
   const [audios] = useGlobal("audios");
   const [users, setUsers] = useState([]);
-  const [isPlay, setIsPlay] = useState(false);
+  const [isPlay, setIsPlay] = useState(true);
   const [isLoadingLock, setIsLoadingLock] = useState(false);
   const [isLoadingStart, setIsLoadingStart] = useState(false);
 
@@ -39,6 +39,16 @@ export const LobbyAdmin = (props) => {
 
     fetchUsers();
   }, [props.lobby]);
+
+  useEffect(() => {
+    const currentAudioToPlay =
+      props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
+
+    const currentAudio = audioRef.current ?? new Audio(currentAudioToPlay);
+
+    audioRef.current = currentAudio;
+    audioRef.current.play();
+  }, []);
 
   const updateLobby = async (isLocked = false, gameStarted = null) => {
     try {
@@ -71,6 +81,7 @@ export const LobbyAdmin = (props) => {
       <div className="header">
         <div className="left-menus">
           <Popover
+            trigger="click"
             content={
               <AudioStyled>
                 {audios.map((audio_) => (
@@ -97,22 +108,6 @@ export const LobbyAdmin = (props) => {
               variant="primary"
               key={audioRef.current?.paused}
               margin="10px 20px"
-              onClick={() => {
-                if (audioRef.current && !audioRef.current?.paused) {
-                  audioRef.current.pause();
-                  return setIsPlay(false);
-                }
-
-                const currentAudioToPlay =
-                  props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
-
-                const currentAudio =
-                  audioRef.current ?? new Audio(currentAudioToPlay);
-
-                audioRef.current = currentAudio;
-                audioRef.current.play();
-                setIsPlay(true);
-              }}
             >
               {isPlay ? "♫" : "►"}
             </ButtonBingo>
@@ -141,7 +136,7 @@ export const LobbyAdmin = (props) => {
         </div>
 
         <div className="item-pin">
-          <div className="label">Entra a www.ebombo.it</div>
+          <div className="label">Entra a www.ebombo.io</div>
           <div className="pin-label">Pin del juego:</div>
           <div className="pin">
             {props.lobby.isLocked ? <LockOutlined /> : props.lobby?.pin}
