@@ -6,8 +6,8 @@ import { SoundOutlined } from "@ant-design/icons";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
-    const [audios] = useGlobal("audios");
-    const [isPlay, setIsPlay] = useState(true);
+  const [audios] = useGlobal("audios");
+  const [isPlay, setIsPlay] = useState(true);
 
   return (
     <UserLayoutCss>
