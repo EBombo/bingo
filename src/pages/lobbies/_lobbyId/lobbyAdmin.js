@@ -1,18 +1,14 @@
-import {
-  LockOutlined,
-  SoundOutlined,
-  UnlockOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
-import { database, firestore } from "../../../firebase";
+import { config, database, firestore } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
 import { getBingoCard } from "../../../business";
+import { Image } from "../../../components/common/Image";
 
 export const LobbyAdmin = (props) => {
   const router = useRouter();
@@ -40,7 +36,7 @@ export const LobbyAdmin = (props) => {
 
   useEffect(() => {
     const currentAudioToPlay =
-      props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
+      props.lobby.game?.audio?.audioUrl ?? audios[0]?.audioUrl;
 
     const currentAudio =
       props.audioRef.current ?? new Audio(currentAudioToPlay);
@@ -109,7 +105,17 @@ export const LobbyAdmin = (props) => {
               key={props.audioRef.current?.paused}
               margin="10px 20px"
             >
-              {isPlay ? "♫" : "►"}
+              {isPlay ? (
+                <Image
+                  src={`${config.storageUrl}/resources/sound.svg`}
+                  height="25px"
+                  width="25px"
+                  size="contain"
+                  margin="auto"
+                />
+              ) : (
+                "►"
+              )}
             </ButtonBingo>
           </Popover>
           <Popover
@@ -130,7 +136,13 @@ export const LobbyAdmin = (props) => {
               margin="10px 20px"
               disabled={!isPlay}
             >
-              <SoundOutlined />
+              <Image
+                src={`${config.storageUrl}/resources/volume.svg`}
+                height="25px"
+                width="25px"
+                size="contain"
+                margin="auto"
+              />
             </ButtonBingo>
           </Popover>
         </div>
@@ -139,7 +151,19 @@ export const LobbyAdmin = (props) => {
           <div className="label">Entra a www.ebombo.io</div>
           <div className="pin-label">Pin del juego:</div>
           <div className="pin">
-            {props.lobby.isLocked ? <LockOutlined /> : props.lobby?.pin}
+            {props.lobby.isLocked ? (
+              <ButtonBingo variant="primary" margin="10px 20px">
+                <Image
+                  src={`${config.storageUrl}/resources/lock.svg`}
+                  height="25px"
+                  width="25px"
+                  size="contain"
+                  margin="auto"
+                />
+              </ButtonBingo>
+            ) : (
+              props.lobby?.pin
+            )}
           </div>
         </div>
 
@@ -155,7 +179,17 @@ export const LobbyAdmin = (props) => {
               setIsLoadingLock(false);
             }}
           >
-            {props.lobby.isLocked ? <LockOutlined /> : <UnlockOutlined />}
+            {!isLoadingLock && (
+              <Image
+                src={`${config.storageUrl}/resources/${
+                  props.lobby.isLocked ? "lock.svg" : "un-lock.svg"
+                }`}
+                height="25px"
+                width="25px"
+                size="contain"
+                margin="auto"
+              />
+            )}
           </ButtonBingo>
           <ButtonAnt
             className="btn-start"
