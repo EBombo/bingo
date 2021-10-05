@@ -2,7 +2,8 @@ import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
 import { mediaQuery } from "../../../constants";
-import { SoundOutlined } from "@ant-design/icons";
+import { config } from "../../../firebase";
+import { Image } from "../../../components/common/Image";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
@@ -45,7 +46,17 @@ export const UserLayout = (props) => {
                 className="nav-button"
                 key={props.audioRef.current?.paused}
               >
-                {isPlay ? "♫" : "►"}
+                {isPlay ? (
+                  <Image
+                    src={`${config.storageUrl}/resources/sound.svg`}
+                    height="25px"
+                    width="25px"
+                    size="contain"
+                    margin="auto"
+                  />
+                ) : (
+                  "►"
+                )}
               </button>
             </Popover>
             <Popover
@@ -62,7 +73,13 @@ export const UserLayout = (props) => {
               }
             >
               <button className="nav-button" disabled={!isPlay}>
-                <SoundOutlined />
+                <Image
+                  src={`${config.storageUrl}/resources/volume.svg`}
+                  height="25px"
+                  width="25px"
+                  size="contain"
+                  margin="auto"
+                />
               </button>
             </Popover>
           </div>
