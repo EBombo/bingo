@@ -120,23 +120,29 @@ export const GameOptions = (props) => {
   );
 
   return (
-    <GameOptionsContainer hiddenOptions={props.hiddenOptions}>
+    <GameOptionsContainer
+      hiddenOptions={props.hiddenOptions}
+      number={props.lastNumber}
+      green={`${config.storageUrl}/resources/balls/green-ball.png`}
+      blue={`${config.storageUrl}/resources/balls/blue-ball.png`}
+      orange={`${config.storageUrl}/resources/balls/orange-ball.png`}
+      yellow={`${config.storageUrl}/resources/balls/yellow-ball.png`}
+      red={`${config.storageUrl}/resources/balls/red-ball.png`}
+    >
       {modalConfirm()}
-      <div className="out">
-        <div className="in">
-          <p>
-            {props.lastNumber < BOARD_PARAMS.B.value
-              ? get(props, "lobby.game.letters.b", "B")
-              : props.lastNumber < BOARD_PARAMS.I.value
-              ? get(props, "lobby.game.letters.i", "I")
-              : props.lastNumber < BOARD_PARAMS.N.value
-              ? get(props, "lobby.game.letters.n", "N")
-              : props.lastNumber < BOARD_PARAMS.G.value
-              ? get(props, "lobby.game.letters.g", "G")
-              : get(props, "lobby.game.letters.o", "O")}
-          </p>
-          <p>{props.lastNumber}</p>
-        </div>
+      <div className="ball-container">
+        <p>
+          {props.lastNumber < BOARD_PARAMS.B.value
+            ? get(props, "lobby.game.letters.b", "B")
+            : props.lastNumber < BOARD_PARAMS.I.value
+            ? get(props, "lobby.game.letters.i", "I")
+            : props.lastNumber < BOARD_PARAMS.N.value
+            ? get(props, "lobby.game.letters.n", "N")
+            : props.lastNumber < BOARD_PARAMS.G.value
+            ? get(props, "lobby.game.letters.g", "G")
+            : get(props, "lobby.game.letters.o", "O")}
+        </p>
+        <p>{props.lastNumber}</p>
       </div>
       {!props.hiddenOptions && (
         <div className="options">
@@ -217,27 +223,31 @@ const GameOptionsContainer = styled.div`
   border-radius: 5px;
   background: ${(props) => props.theme.basic.blackDarken};
 
-  .out {
+  .ball-container {
     width: 85px;
     height: 85px;
     border-radius: 50%;
-    background: #195d8b;
+    background-image: url("${(props) =>
+      props.number < 16
+        ? props.green
+        : props.number < 31
+        ? props.blue
+        : props.number < 46
+        ? props.orange
+        : props.number < 61
+        ? props.yellow
+        : props.red}");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 
-    .in {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: #fafafa;
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-
-      p {
-        margin: 0;
-      }
+    p {
+      margin: 0;
     }
   }
 
