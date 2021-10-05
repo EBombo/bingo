@@ -1,4 +1,4 @@
-import React, { useGlobal, useRef, useState } from "reactn";
+import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
 import { mediaQuery } from "../../../constants";
@@ -11,6 +11,16 @@ export const UserLayout = (props) => {
 
   const audioRef = useRef(null);
 
+  useEffect(() => {
+    const currentAudioToPlay =
+      props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
+
+    const currentAudio = audioRef.current ?? new Audio(currentAudioToPlay);
+
+    audioRef.current = currentAudio;
+    audioRef.current.play();
+  }, []);
+
   return (
     <UserLayoutCss>
       <div className="description">1-75 números</div>
@@ -19,6 +29,7 @@ export const UserLayout = (props) => {
         {authUser.isAdmin ? (
           <div className="right-container">
             <Popover
+              trigger="click"
               content={
                 <AudioStyled>
                   {audios.map((audio_) => (
@@ -41,26 +52,7 @@ export const UserLayout = (props) => {
                 </AudioStyled>
               }
             >
-              <button
-                className="nav-button"
-                key={audioRef.current?.paused}
-                onClick={() => {
-                  if (audioRef.current && !audioRef.current?.paused) {
-                    audioRef.current.pause();
-                    return setIsPlay(false);
-                  }
-
-                  const currentAudioToPlay =
-                    props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
-
-                  const currentAudio =
-                    audioRef.current ?? new Audio(currentAudioToPlay);
-
-                  audioRef.current = currentAudio;
-                  audioRef.current.play();
-                  setIsPlay(true);
-                }}
-              >
+              <button className="nav-button" key={audioRef.current?.paused}>
                 {isPlay ? "♫" : "►"}
               </button>
             </Popover>
