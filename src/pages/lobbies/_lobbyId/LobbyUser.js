@@ -1,7 +1,7 @@
 import { config, database, firebase } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
 import React, { useEffect, useGlobal } from "reactn";
-import { mediaQuery } from "../../../constants";
+import { Desktop, mediaQuery, Tablet } from "../../../constants";
 import styled from "styled-components";
 import { UserLayout } from "./userLayout";
 
@@ -55,23 +55,64 @@ export const LobbyUser = (props) => {
       });
   }, [props.lobby, authUser]);
 
+  const content = () => (
+    <>
+      <UserLayout {...props} />
+      <div className="main-container">
+        <div className="logo">
+          <Image
+            src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
+            width="180px"
+            height="auto"
+            margin="0"
+          />
+        </div>
+        <div className="message">Ya estas adentro :)</div>
+        <div className="message">¿Ves tu nombre en pantalla?</div>
+        <div className="item-user">{authUser?.nickname}</div>
+      </div>
+    </>
+  );
+
   return (
     <SuccessInscriptionContainer>
-      <UserLayout {...props} />
-      <Image
-        src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
-        width="180px"
-        margin="3rem auto 1rem auto"
-      />
-      <div className="message">Ya estas adentro :)</div>
-      <div className="message">¿Ves tu nombre en pantalla?</div>
-      <div className="item-user">{authUser?.nickname}</div>
+      <Tablet>
+        <Container
+          bgImg={`${config.storageUrl}/resources/balls/purple-balls-tablet.svg`}
+        >
+          {content()}
+        </Container>
+      </Tablet>
+      <Desktop>
+        <Container
+          bgImg={`${config.storageUrl}/resources/balls/purple-balls.svg`}
+        >
+          {content()}
+        </Container>
+      </Desktop>
     </SuccessInscriptionContainer>
   );
 };
 
+const Container = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-image: url("${(props) => props.bgImg}");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+`;
+
 const SuccessInscriptionContainer = styled.div`
   width: 100%;
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+  }
 
   .message {
     font-family: Lato;
