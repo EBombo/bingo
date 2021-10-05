@@ -48,6 +48,7 @@ export const UserLayout = (props) => {
               >
                 {isPlay ? (
                   <Image
+                    cursor="pointer"
                     src={`${config.storageUrl}/resources/sound.svg`}
                     height="25px"
                     width="25px"
@@ -75,6 +76,7 @@ export const UserLayout = (props) => {
               <button className="nav-button" disabled={!isPlay}>
                 <Image
                   src={`${config.storageUrl}/resources/volume.svg`}
+                  cursor="pointer"
                   height="25px"
                   width="25px"
                   size="contain"
