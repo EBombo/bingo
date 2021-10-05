@@ -148,7 +148,11 @@ export const LobbyAdmin = (props) => {
         </div>
 
         <div className="item-pin">
-          <div className="label">Entra a www.ebombo.io</div>
+          <div className="label">
+            {props.lobby.isLocked
+              ? "Este juego esta bloqueado"
+              : "Entra a www.ebombo.io"}
+          </div>
           <div className="pin-label">Pin del juego:</div>
           <div className="pin">
             {props.lobby.isLocked ? (
