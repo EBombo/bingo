@@ -126,6 +126,7 @@ export const Chat = (props) => {
             loading={isLoadingSendMessage}
             htmlType="submit"
             className="btn-submit"
+            color="secondary"
           >
             Enviar
           </ButtonAnt>
@@ -134,6 +135,43 @@ export const Chat = (props) => {
     </Container>
   );
 };
+
+const Content = styled.div`
+  background: ${(props) => props.theme.basic.whiteLight};
+  padding: 0.5rem;
+
+  .chat-body {
+    height: 400px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+
+    ::-webkit-scrollbar-track {
+      background: ${(props) => props.theme.basic.default};
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: ${(props) => props.theme.basic.primary};
+    }
+
+    .chat-empty {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      font-weight: 500;
+      font-size: 1rem;
+      color: ${(props) => props.theme.basic.blackDarken};
+    }
+  }
+
+  ${mediaQuery.afterTablet} {
+    height: calc(100vh - 195px);
+    .chat-body {
+      height: 100%;
+    }
+  }
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -179,48 +217,23 @@ const Container = styled.div`
     width: 100%;
 
     .input-message {
-      border: 2px solid ${(props) => props.theme.basic.primaryLight};
+      height: 42px;
+      font-family: Lato;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 14px;
+      border-radius: 4px;
+      border: none !important;
     }
 
     .btn-submit {
       margin: 10px 0 auto auto;
-    }
-  }
-`;
-
-const Content = styled.div`
-  background: ${(props) => props.theme.basic.whiteLight};
-  padding: 0.5rem;
-
-  .chat-body {
-    height: 400px;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-
-    ::-webkit-scrollbar-track {
-      background: ${(props) => props.theme.basic.default};
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background-color: ${(props) => props.theme.basic.primary};
-    }
-
-    .chat-empty {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      text-align: center;
-      font-weight: 500;
-      font-size: 1rem;
-      color: ${(props) => props.theme.basic.blackDarken};
-    }
-  }
-
-  ${mediaQuery.afterTablet} {
-    height: calc(100vh - 185px);
-    .chat-body {
-      height: 100%;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 18px;
+      padding: 5px 30px !important;
     }
   }
 `;
