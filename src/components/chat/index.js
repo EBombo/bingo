@@ -90,7 +90,7 @@ export const Chat = (props) => {
   return (
     <Container>
       <div className="title" key={`key-title1-${lobbyId}`}>
-        CHAT DEL BINGO
+        Chat del Bingo
       </div>
       <Content>
         <div className="chat-body" ref={chatRef}>
@@ -100,7 +100,12 @@ export const Chat = (props) => {
             <div className="chat-empty">Comienza a chatear</div>
           ) : (
             messages.map((message, index) => (
-              <ChatMessage key={message.id} message={message} />
+              <ChatMessage
+                key={message.id}
+                message={message}
+                previousMessage={index > 1 ? messages[index - 1] : null}
+                index={index}
+              />
             ))
           )}
         </div>
@@ -134,7 +139,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  background: ${(props) => props.theme.basic.whiteLight};
+  background: ${(props) => props.theme.basic.whiteDark};
 
   .chat-info {
     margin-top: 5px;
@@ -153,6 +158,7 @@ const Container = styled.div`
   }
 
   .title {
+    height: 44px;
     display: flex;
     align-items: center;
     color: ${(props) => props.theme.basic.blackDarken};
@@ -162,10 +168,13 @@ const Container = styled.div`
     font-size: 15px;
     line-height: 18px;
     padding: 0.5rem;
-    border-bottom: 2px solid ${(props) => props.theme.basic.grayLighten};
+    border-bottom: 1px solid ${(props) => props.theme.basic.grayLighten};
+    background: ${(props) => props.theme.basic.white};
   }
 
   .footer {
+    background: ${(props) => props.theme.basic.whiteDark};
+    box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.08);
     padding: 0.5rem;
     width: 100%;
 
@@ -180,7 +189,7 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
-  color: ${(props) => props.theme.basic.white};
+  background: ${(props) => props.theme.basic.whiteLight};
   padding: 0.5rem;
 
   .chat-body {
