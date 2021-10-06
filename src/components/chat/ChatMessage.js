@@ -16,6 +16,7 @@ export const ChatMessage = (props) => {
     <Messages
       received={get(authUser, "id", "") !== get(props, "message.user.id", null)}
       sameAsBefore={sameAsBefore}
+      isAdmin={get(props, "message.user.isAdmin", null)}
       key={props.index}
     >
       <div className="header">
@@ -88,7 +89,9 @@ const Messages = styled.div`
     .message {
       margin-top: 5px;
       background: ${(props) =>
-        props.received
+        props.isAdmin
+          ? props.theme.basic.secondary
+          : props.received
           ? props.theme.basic.secondGray
           : props.theme.basic.primary};
       border-radius: ${(props) =>
