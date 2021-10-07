@@ -499,6 +499,15 @@ const GameCss = styled.div`
     color: ${(props) => props.theme.basic.black};
     background: ${(props) => props.theme.basic.whiteDark};
     box-shadow: 0 4px 0 ${(props) => props.theme.basic.grayLighten};
+    text-align: left;
+    position: relative;
+
+    .anticon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
   }
 
   .ant-collapse-content {
