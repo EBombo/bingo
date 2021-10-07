@@ -1,5 +1,7 @@
 export const darkTheme = {
   basic: {
+    success: "#5cb85c",
+    successDark: "#4a934a",
     primary: "#956DFC",
     primaryDark: "#5D449E",
     primaryLight: "#C4ADFF",
@@ -24,7 +26,7 @@ export const darkTheme = {
     grayLight: "#666666",
     grayLighten: "#C4C4C4",
     gray: "#E4E4E4",
-    secondGray: "#EFEFEF"
+    secondGray: "#EFEFEF",
   },
   buttonPrimary: {
     background: "#F2F2F2",
