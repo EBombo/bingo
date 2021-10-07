@@ -136,10 +136,10 @@ export const LobbyAdmin = (props) => {
               onClick={() => {
                 if (props.audioRef.current.volume === 0) {
                   props.audioRef.current.volume = 0.7;
-                  setIsMuted(true);
+                  setIsMuted(false);
                 } else {
                   props.audioRef.current.volume = 0;
-                  setIsMuted(false);
+                  setIsMuted(true);
                 }
               }}
               key={isMuted}
