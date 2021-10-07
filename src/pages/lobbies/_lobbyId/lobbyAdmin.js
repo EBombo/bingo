@@ -118,7 +118,7 @@ export const LobbyAdmin = (props) => {
           </Popover>
           <Popover
             content={
-              <div style={{ width: 100 }}>
+              <SliderContent>
                 <Slider
                   defaultValue={30}
                   onChange={(event) => {
@@ -126,7 +126,7 @@ export const LobbyAdmin = (props) => {
                     props.audioRef.current.volume = event / 100;
                   }}
                 />
-              </div>
+              </SliderContent>
             }
           >
             <ButtonBingo
@@ -242,6 +242,18 @@ export const LobbyAdmin = (props) => {
     </LobbyCss>
   );
 };
+
+const SliderContent = styled.div`
+  width: 100px;
+
+  .ant-slider-track {
+    background-color: ${(props) => props.theme.basic.success} !important;
+  }
+
+  .ant-slider-handle {
+    border: solid 2px ${(props) => props.theme.basic.successDark} !important;
+  }
+`;
 
 const AudioStyled = styled.div`
   width: 100%;

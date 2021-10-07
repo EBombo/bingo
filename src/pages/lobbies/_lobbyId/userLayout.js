@@ -64,7 +64,7 @@ export const UserLayout = (props) => {
             </Popover>
             <Popover
               content={
-                <div style={{ width: 100 }}>
+                <SliderContent>
                   <Slider
                     defaultValue={30}
                     onChange={(event) => {
@@ -72,7 +72,7 @@ export const UserLayout = (props) => {
                       props.audioRef.current.volume = event / 100;
                     }}
                   />
-                </div>
+                </SliderContent>
               }
             >
               <button
@@ -216,5 +216,17 @@ const AudioStyled = styled.div`
       color: ${(props) => props.theme.basic.secondary};
       background: ${(props) => props.theme.basic.primaryLight};
     }
+  }
+`;
+
+const SliderContent = styled.div`
+  width: 100px;
+
+  .ant-slider-track {
+    background-color: ${(props) => props.theme.basic.success} !important;
+  }
+
+  .ant-slider-handle {
+    border: solid 2px ${(props) => props.theme.basic.successDark} !important;
   }
 `;
