@@ -16,6 +16,7 @@ export const LobbyAdmin = (props) => {
   const [audios] = useGlobal("audios");
   const [users, setUsers] = useState([]);
   const [isPlay, setIsPlay] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [isLoadingLock, setIsLoadingLock] = useState(false);
   const [isLoadingStart, setIsLoadingStart] = useState(false);
 
@@ -132,10 +133,24 @@ export const LobbyAdmin = (props) => {
               variant="primary"
               margin="10px 20px"
               disabled={!isPlay}
+              onClick={() => {
+                if (props.audioRef.current.volume === 0) {
+                  props.audioRef.current.volume = 0.7;
+                  setIsMuted(true);
+                } else {
+                  props.audioRef.current.volume = 0;
+                  setIsMuted(false);
+                }
+              }}
+              key={isMuted}
             >
               <Image
                 cursor="pointer"
-                src={`${config.storageUrl}/resources/volume.svg`}
+                src={
+                  isMuted
+                    ? `${config.storageUrl}/resources/mute.svg`
+                    : `${config.storageUrl}/resources/volume.svg`
+                }
                 height="25px"
                 width="25px"
                 size="contain"
