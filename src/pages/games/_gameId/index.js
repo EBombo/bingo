@@ -1,18 +1,11 @@
 import { spinLoaderMin } from "../../../components/common/loader";
-import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { config, firestore } from "../../../firebase";
 import { useFetch } from "../../../hooks/useFetch";
 import defaultTo from "lodash/defaultTo";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import {
-  ButtonAnt,
-  ButtonBingo,
-  Input,
-  Select,
-  Switch,
-} from "../../../components/form";
+import { ButtonAnt, Input, Select, Switch } from "../../../components/form";
 import { useUser } from "../../../hooks";
 import { Image } from "../../../components/common/Image";
 import { mediaQuery } from "../../../constants";
@@ -103,14 +96,6 @@ export const Game = (props) => {
   const createLobby = async (typeOfGame) => {
     setIsLoadingSave(true);
     try {
-      if (showAwards && awards.some((award) => award.name === "")) {
-        return props.showNotification(
-          "UPS",
-          "Debes completar el nombre de todos los premios agregados o deshabilita la opción de premios",
-          "warning"
-        );
-      }
-
       const pin = await generatePin();
 
       const lobbiesRef = firestore.collection("lobbies");
@@ -133,7 +118,9 @@ export const Game = (props) => {
           showChat,
           showParticipants,
           showBoardToUser,
-          awards: showAwards ? awards : null,
+          awards: showAwards
+            ? awards.filter((award) => award.name !== "")
+            : null,
         },
       });
 
@@ -177,27 +164,27 @@ export const Game = (props) => {
           <div className="item">
             <div>Jugadores vs Jugadores</div>
             <div>1:1 dispositivos</div>
-            <ButtonBingo
-              variant="secondary"
-              padding="0 15px"
+            <ButtonAnt
+              color="secondary"
+              margin="auto"
               loading={isLoadingSave}
               disabled={isLoadingSave}
               onClick={() => createLobby("individual")}
             >
               Clásico
-            </ButtonBingo>
+            </ButtonAnt>
           </div>
           <div className="item">
             <div>Equipos vs Equipos</div>
             <div>1 dispositivo</div>
-            <ButtonBingo
-              variant="primary"
-              padding="0 15px"
+            <ButtonAnt
+              color="primary"
+              margin="auto"
               disabled={isLoadingSave || true}
               onClick={() => createLobby("team")}
             >
               Modo equipo
-            </ButtonBingo>
+            </ButtonAnt>
           </div>
         </div>
         <Collapse defaultActiveKey={["1"]}>
@@ -333,6 +320,7 @@ export const Game = (props) => {
                           src={`${config.storageUrl}/resources/close.svg`}
                           height="15px"
                           width="15px"
+                          cursor="pointer"
                           size="contain"
                           margin="0"
                         />

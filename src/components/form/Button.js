@@ -117,7 +117,7 @@ const ButtonAntCss = styled(Button)`
       };  
       border: none;
       `}
-  &:active {
+  &:active, &:focus {
     ${({ variant = "contained", theme, color = "primary" }) =>
       variant === "contained"
         ? `
@@ -215,7 +215,7 @@ const ButtonAntCss = styled(Button)`
         color === "primary"
           ? theme.basic.primaryLight
           : color === "secondary"
-          ? theme.basic.secondaryLight
+          ? theme.basic.primaryLight
           : color === "warning"
           ? theme.basic.warning
           : color === "danger"
@@ -282,25 +282,5 @@ const ButtonAntCss = styled(Button)`
       };  
       border: none;
       `}
-  }
-
-  &:active {
-    ${({ variant = "contained", theme = darkTheme, color = "primary" }) =>
-      variant === "contained" &&
-      `
-        box-shadow: 0 2px ${
-          color === "primary"
-            ? theme.basic.primary
-            : color === "secondary"
-            ? theme.basic.secondary
-            : color === "warning"
-            ? theme.basic.warningDark
-            : color === "danger"
-            ? theme.basic.dangerDark
-            : color === "default"
-            ? "#979797"
-            : color
-        } !important;
-        transform: translateY(2px);`}
   }
 `;
