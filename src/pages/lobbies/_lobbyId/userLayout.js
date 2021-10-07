@@ -4,11 +4,13 @@ import { Popover, Slider } from "antd";
 import { mediaQuery } from "../../../constants";
 import { config } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
+import { ButtonBingo } from "../../../components/form";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
   const [isPlay, setIsPlay] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
 
   return (
     <UserLayoutCss>
@@ -73,10 +75,27 @@ export const UserLayout = (props) => {
                 </div>
               }
             >
-              <button className="nav-button" disabled={!isPlay}>
+              <button
+                className="nav-button"
+                disabled={!isPlay}
+                onClick={() => {
+                  if (props.audioRef.current.volume === 0) {
+                    props.audioRef.current.volume = 0.7;
+                    setIsMuted(false);
+                  } else {
+                    props.audioRef.current.volume = 0;
+                    setIsMuted(true);
+                  }
+                }}
+                key={isMuted}
+              >
                 <Image
-                  src={`${config.storageUrl}/resources/volume.svg`}
                   cursor="pointer"
+                  src={
+                    isMuted
+                      ? `${config.storageUrl}/resources/mute.svg`
+                      : `${config.storageUrl}/resources/volume.svg`
+                  }
                   height="25px"
                   width="25px"
                   size="contain"
