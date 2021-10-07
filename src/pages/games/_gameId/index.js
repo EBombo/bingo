@@ -360,6 +360,10 @@ const GameCss = styled.div`
   padding: 1rem;
   color: ${(props) => props.theme.basic.white};
 
+  ${mediaQuery.afterTablet} {
+    padding: 20px;
+  }
+
   .title {
     border: none;
     width: 100%;
@@ -499,9 +503,5 @@ const GameCss = styled.div`
 
   .ant-collapse-content {
     background: ${(props) => props.theme.basic.secondary} !important;
-  }
-
-  ${mediaQuery.afterTablet} {
-    padding: 20px;
   }
 `;
