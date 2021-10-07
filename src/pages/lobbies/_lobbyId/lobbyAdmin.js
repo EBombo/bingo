@@ -100,11 +100,7 @@ export const LobbyAdmin = (props) => {
               </AudioStyled>
             }
           >
-            <ButtonBingo
-              variant="primary"
-              key={props.audioRef.current?.paused}
-              margin="10px 20px"
-            >
+            <ButtonBingo variant="primary" margin="10px 20px">
               {isPlay ? (
                 <Image
                   cursor="pointer"
@@ -258,9 +254,6 @@ const LobbyCss = styled.div`
     grid-template-columns: 1fr 1fr 1fr;
 
     .right-menus {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-evenly;
       .btn-start {
         margin: 10px 20px !important;
         padding: 10px 30px !important;
@@ -270,6 +263,9 @@ const LobbyCss = styled.div`
     .right-menus,
     .left-menus {
       text-align: center;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-evenly;
     }
 
     .left-menus {
