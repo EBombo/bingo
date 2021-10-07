@@ -218,7 +218,7 @@ export const Game = (props) => {
                 />
               </div>
 
-              <div className="option">
+              <div className="option with-select">
                 <div>
                   <div className="title-opt">Música en el Lobby</div>
                 </div>
@@ -407,6 +407,9 @@ const GameCss = styled.div`
     }
 
     .option {
+      display: grid;
+      grid-template-columns: 5fr 1fr;
+      align-items: center;
       margin: 2px auto;
       padding: 5px 10px;
       font-size: 13px;
@@ -431,10 +434,10 @@ const GameCss = styled.div`
       .ant-switch {
         margin: auto !important;
       }
+    }
 
-      display: grid;
-      grid-template-columns: 5fr 1fr;
-      align-items: center;
+    .with-select {
+      grid-template-columns: 5fr 3fr;
     }
   }
 
