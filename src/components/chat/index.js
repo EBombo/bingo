@@ -114,6 +114,7 @@ export const Chat = (props) => {
         <form className="send-message" onSubmit={handleSubmit(sendMessage)}>
           <Input
             placeholder="Escribe tu mensaje aqui"
+            autoComplete="off"
             className="input-message"
             name="message"
             value={message}
