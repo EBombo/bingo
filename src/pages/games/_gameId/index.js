@@ -501,6 +501,6 @@ const GameCss = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
-    padding: 20px auto 0 auto;
+    padding: 20px;
   }
 `;
