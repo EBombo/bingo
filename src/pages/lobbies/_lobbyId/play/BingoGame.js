@@ -11,6 +11,7 @@ import { firestore } from "../../../../firebase";
 import { AdminPanel } from "./AdminPanel";
 import { UserPanel } from "./UserPanel";
 import { ModalFinalStage } from "./ModalFinalStage";
+import { ModalUserCard } from "./ModalUserCard";
 
 const TABS = {
   BINGO: { value: "bingo" },
@@ -23,6 +24,8 @@ export const BingoGame = (props) => {
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);
   const [isVisibleModalAwards, setIsVisibleModalAwards] = useState(false);
   const [isVisibleModalFinal, setIsVisibleModalFinal] = useState(false);
+  const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (props.lobby.finalStage) setIsVisibleModalFinal(true);
@@ -66,7 +69,14 @@ export const BingoGame = (props) => {
             {...props}
           />
         )}
-
+        {isVisibleModalUserCard && (
+          <ModalUserCard
+            isVisibleModalUserCard={isVisibleModalUserCard}
+            setIsVisibleModalUserCard={setIsVisibleModalUserCard}
+            user={user}
+            {...props}
+          />
+        )}
         {isVisibleModalAwards && (
           <ModalAwards
             awards={defaultTo(props.lobby.settings.awards, [])}
@@ -78,6 +88,8 @@ export const BingoGame = (props) => {
         {isVisibleModalWinner && (
           <ModalWinner
             winner={props.lobby.bingo}
+            setUser={setUser}
+            setIsVisibleModalUserCard={setIsVisibleModalUserCard}
             isVisibleModalWinner={isVisibleModalWinner}
             setIsVisibleModalWinner={setIsVisibleModalWinner}
             {...props}
