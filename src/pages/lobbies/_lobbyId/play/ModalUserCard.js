@@ -13,10 +13,13 @@ export const ModalUserCard = (props) => {
   const [awardSelected, setAwardSelected] = useState(null);
 
   const disqualifyUser = async () => {
+    props.setIsVisibleModalUserCard(false);
+
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       bingo: null,
       updateAt: new Date(),
     });
+
   };
 
   const saveBingoWinner = async () => {
