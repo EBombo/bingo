@@ -241,7 +241,7 @@ const ContentAward = styled.div`
     }
 
     .name {
-      font-family: Open Sans;
+      font-family: Encode Sans, sans-serif;
       font-style: normal;
       font-weight: bold;
       font-size: 14px;
@@ -344,7 +344,7 @@ const ContainerValidate = styled.div`
     }
 
     .name {
-      font-family: Open Sans;
+      font-family: Encode Sans, sans-serif;
       font-style: normal;
       font-weight: bold;
       font-size: 14px;
