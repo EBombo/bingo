@@ -8,6 +8,7 @@ export const darkTheme = {
     primaryDarken: "#754EDA",
     secondary: "#382079",
     secondaryDark: "#170D33",
+    secondaryDarken: "#221545",
     secondaryLight: "#2E2547",
     white: "#ffffff",
     whiteDarken: "#D2D2D2",

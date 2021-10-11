@@ -241,9 +241,6 @@ const BingoGameContainer = styled.div`
     }
 
     .bingo-board {
-      width: 100%;
-      max-width: 430px;
-      overflow: auto;
       margin: 1rem auto;
       padding: 0.5rem;
     }
@@ -349,7 +346,7 @@ const BingoGameContainer = styled.div`
     .bingo {
       padding: 0.5rem 0.5rem 2rem 0.5rem;
       display: grid;
-      grid-template-columns: 300px minmax(600px, auto);
+      grid-template-columns: 250px auto;
       border-bottom: 10px solid ${(props) => props.theme.basic.primary};
       grid-gap: 2rem;
       overflow: auto;
@@ -364,7 +361,6 @@ const BingoGameContainer = styled.div`
 
     .right-container {
       .board-container {
-        max-width: 650px;
         margin: 0;
       }
 

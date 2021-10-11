@@ -55,7 +55,6 @@ export const BingoBoard = (props) => {
     >
       <table className="board">
         <thead>
-          {!!startEffectHead && <tr className="div-animation-head" />}
           <tr>
             <th className="th-header">
               {get(props, "lobby.game.letters.b", "B")}
@@ -83,7 +82,6 @@ export const BingoBoard = (props) => {
           </tr>
         </thead>
         <tbody>
-          {!!startEffectBody && <tr className="div-animation-body" />}
           <tr>
             {range(1, 15).map((number) => (
               <td
@@ -141,28 +139,31 @@ export const BingoBoard = (props) => {
 };
 
 const BoardContainer = styled.div`
-  width: 420px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 
   table {
     display: flex;
-    width: 420px;
-    height: 130px;
+    background: ${(props) => props.theme.basic.secondary};
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
 
     thead {
       position: relative;
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
-      background: ${(props) => props.theme.basic.primaryLight};
+      align-items: center;
+      background: ${(props) => props.theme.basic.secondaryDarken};
       border-radius: 3px;
+      width: 10%;
+      max-width: 70px;
 
       tr {
         z-index: 2;
       }
 
       .th-header {
-        width: 20px;
-        height: 20px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -172,75 +173,8 @@ const BoardContainer = styled.div`
         font-size: 13px;
         line-height: 15px;
         margin: 0;
-        color: ${(props) => props.theme.basic.secondary};
+        color: ${(props) => props.theme.basic.primaryLight};
       }
-
-      /* effects */
-      @keyframes board-animation-head {
-        0% {
-          top: 0;
-        }
-        20% {
-          top: calc(100% - 26px);
-        }
-        40% {
-          top: 0;
-        }
-        60% {
-          top: calc(100% - 26px);
-        }
-        80% {
-          top: 0;
-        }
-        100% {
-          top: ${(props) => 26 * +props.startEffectHead}px;
-        }
-      }
-
-      ${mediaQuery.afterTablet} {
-        @keyframes board-animation-head {
-          0% {
-            top: 0;
-          }
-          20% {
-            top: calc(100% - 42px);
-          }
-          40% {
-            top: 0;
-          }
-          60% {
-            top: calc(100% - 42px);
-          }
-          80% {
-            top: 0;
-          }
-          100% {
-            top: ${(props) => 42 * +props.startEffectHead}px;
-          }
-        }
-      }
-
-      .div-animation-head {
-        z-index: 1;
-        width: 100%;
-        position: absolute;
-        background: ${(props) => props.theme.basic.primary};
-
-        height: 26px;
-        top: ${(props) => 26 * +props.startEffectHead}px;
-
-        ${mediaQuery.afterTablet} {
-          height: 42px;
-          top: ${(props) => 42 * +props.startEffectHead}px;
-        }
-
-        animation: ${(props) =>
-          props.startEffectHead
-            ? `board-animation-head ${(props.animationSpeed / 2).toFixed(2)}s`
-            : "none"};
-      }
-
-      /* effects */
     }
 
     tbody {
@@ -248,19 +182,18 @@ const BoardContainer = styled.div`
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
+      width: 90%;
 
       .td-numbers {
-        width: 20px;
-        height: 20px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         border-radius: 3px;
-        margin: 0 3px;
-        background: transparent;
-        color: ${(props) => props.theme.basic.grayLighten};
+        color: ${(props) => props.theme.basic.secondary};
+        background: ${(props) => props.theme.basic.secondaryDarken};
         font-size: 10px;
         line-height: 15px;
+        height: 20px;
       }
 
       .active {
@@ -270,96 +203,19 @@ const BoardContainer = styled.div`
 
       tr {
         z-index: 2;
+        display: grid;
+        grid-template-columns: repeat(15, 1fr);
+        grid-gap: 2px;
+        margin: 3px;
       }
-
-      /* effects */
-      @keyframes board-animation-body {
-        0% {
-          left: 0;
-        }
-        20% {
-          left: calc(100% - 20px);
-        }
-        40% {
-          left: 0;
-        }
-        60% {
-          left: calc(100% - 20px);
-        }
-        80% {
-          left: 0;
-        }
-        100% {
-          left: ${(props) => 20 * +props.startEffectBody}px;
-        }
-      }
-
-      ${mediaQuery.afterTablet} {
-        @keyframes board-animation-body {
-          0% {
-            left: 0;
-          }
-          20% {
-            left: calc(100% - 40px);
-          }
-          40% {
-            left: 0;
-          }
-          60% {
-            left: calc(100% - 40px);
-          }
-          80% {
-            left: 0;
-          }
-          100% {
-            left: ${(props) => 42 * +props.startEffectBody}px;
-          }
-        }
-      }
-
-      .div-animation-body {
-        z-index: 1;
-
-        position: absolute;
-        background: ${(props) => props.theme.basic.primary};
-
-        top: ${(props) =>
-          props.startEffectHead ? 27 * +props.startEffectHead : 0}px;
-        left: ${(props) =>
-          props.startEffectBody ? 27 * +props.startEffectBody : 0}px;
-        width: 20px;
-        height: 20px;
-
-        ${mediaQuery.afterTablet} {
-          top: ${(props) =>
-            props.startEffectHead ? 42 * +props.startEffectHead : 0}px;
-          left: ${(props) =>
-            props.startEffectBody ? 42 * +props.startEffectBody : 0}px;
-          width: 40px;
-          height: 42px;
-        }
-
-        animation: ${(props) =>
-          props.startEffectBody
-            ? `board-animation-body ${(props.animationSpeed / 2).toFixed(2)}s`
-            : "none"};
-      }
-
-      /* effects */
     }
   }
 
   ${mediaQuery.afterTablet} {
-    width: 650px;
-
+    margin: 0;
     table {
-      width: 650px;
-      height: 210px;
-
       thead {
         .th-header {
-          width: 35px;
-          height: 35px;
           font-size: 26px;
           line-height: 30px;
         }
@@ -371,10 +227,13 @@ const BoardContainer = styled.div`
         justify-content: space-evenly;
 
         .td-numbers {
-          width: 35px;
-          height: 35px;
+          height: 43px;
           font-size: 20px;
           line-height: 26px;
+        }
+
+        tr {
+          margin: 10px;
         }
       }
     }
