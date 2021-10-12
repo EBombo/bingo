@@ -1,14 +1,13 @@
 import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
-import defaultTo from "lodash/defaultTo";
-import { Popover, Progress } from "antd";
-import { darkTheme } from "../../../../theme";
+import { Popover } from "antd";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
+import { UserProgress } from "./UserProgress";
 
 const TAB = {
   CARDS: "cards",
@@ -34,28 +33,6 @@ export const UsersTabs = (props) => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       users: newUsers,
     });
-  };
-
-  const progress = (user) => {
-    try {
-      const userPattern = JSON.parse(user.card);
-
-      let hits = 0;
-      let sizePattern = 0;
-
-      lobbyPattern.forEach((y, indexY) =>
-        y.forEach((x, indexX) => {
-          if (!!x) sizePattern++;
-          if (!!x && numberWinners.includes(userPattern[indexY][indexX])) hits++;
-        })
-      );
-
-      const percentage = (hits / sizePattern) * 100;
-
-      return (percentage || 0).toFixed(0);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const menu = (user) => (
@@ -147,14 +124,7 @@ export const UsersTabs = (props) => {
               <div className="name">{user.nickname}</div>
 
               <div className="card-preview">
-                {defaultTo(JSON.parse(user.card)).map((axiX, indexX) =>
-                  axiX.map((axiY, indexY) => (
-                    <div
-                      className={`matrix-num ${numberWinners.includes(axiY) && "active"}`}
-                      key={`${indexX}-${indexY}`}
-                    />
-                  ))
-                )}
+                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} isCard />
               </div>
 
               {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
@@ -181,7 +151,7 @@ export const UsersTabs = (props) => {
               <div className="name">{user.nickname}</div>
 
               <div className={`progress ${user.progress === 100 && "winner"}`}>
-                <Progress percent={progress(user)} strokeColor={darkTheme.basic.primary} />
+                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} />
               </div>
 
               {props.lobby?.bingo?.id === user.id && (
