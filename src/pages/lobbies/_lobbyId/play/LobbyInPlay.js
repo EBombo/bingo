@@ -274,7 +274,6 @@ const BingoGameContainer = styled.div`
       display: grid;
       grid-template-columns: calc(100% - 300px) 300px;
     `}
-
     .main-container {
       padding: 0;
 
@@ -333,42 +332,46 @@ const BingoGameContainer = styled.div`
       border-bottom: 10px solid ${(props) => props.theme.basic.primary};
       grid-gap: 2rem;
       overflow: auto;
-    }
 
-    .left-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .right-container {
-      .board-container {
-        margin: 0;
-      }
-
-      .awards {
-        padding: 0;
-      }
-
-      .bottom-section {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: 1rem;
+      .left-container {
+        display: flex;
+        flex-direction: column;
         align-items: center;
-        max-width: 800px;
-        margin: 1rem 0;
+        justify-content: center;
+        background: ${(props) => props.theme.basic.secondary};
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+        padding: 0.5rem;
+        border-radius: 4px;
       }
-    }
 
-    .subtitle {
-      font-family: Lato;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 18px;
-      line-height: 22px;
-      color: ${(props) => props.theme.basic.whiteLight};
-      padding: 1rem;
+      .right-container {
+        .board-container {
+          margin: 0;
+        }
+
+        .awards {
+          padding: 0;
+        }
+
+        .bottom-section {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-gap: 1rem;
+          align-items: center;
+          max-width: 800px;
+          margin: 1rem 0;
+        }
+      }
+
+      .subtitle {
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 22px;
+        color: ${(props) => props.theme.basic.whiteLight};
+        padding: 1rem;
+      }
     }
   }
 `;

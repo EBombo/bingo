@@ -1,7 +1,7 @@
 import { UserCard } from "./UserCard";
 import { BingoBoard } from "./BingoBoard";
 import { CardPattern } from "./CardPattern";
-import { GameOptions } from "./GameOptions";
+import { LastBall } from "./LastBall";
 import defaultTo from "lodash/defaultTo";
 import { ButtonAnt } from "../../../../components/form";
 import { LastPlays } from "./LastPlays";
@@ -28,7 +28,7 @@ export const UserPanel = (props) => {
             <div className={`${props.lobby.settings.showBoardToUser ? "flex-container" : "normal"} `}>
               <div className="top-content">
                 <CardPattern caption={"Patrón que se debe llenar"} hiddenOptions key={props.lobby.pattern} {...props} />
-                <GameOptions
+                <LastBall
                   lastNumber={defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}
                   hiddenOptions
                   {...props}
@@ -56,7 +56,7 @@ export const UserPanel = (props) => {
             <UserCard user={authUser} {...props} />
           </div>
           <div className="right-container">
-            <GameOptions
+            <LastBall
               lastNumber={defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}
               hiddenOptions
               {...props}

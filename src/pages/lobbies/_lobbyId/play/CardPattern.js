@@ -53,7 +53,6 @@ export const CardPattern = (props) => {
         <table>
           <thead>
             <tr>
-              <th className="empty" />
               <th>{get(props, "lobby.game.letters.b")}</th>
               <th>{get(props, "lobby.game.letters.i")}</th>
               <th>{get(props, "lobby.game.letters.n")}</th>
@@ -64,7 +63,6 @@ export const CardPattern = (props) => {
           <tbody>
             {pattern.map((element, index) => (
               <tr key={index}>
-                <th>{index + 1}</th>
                 {element.map((value, index_) => (
                   <td
                     onClick={() => {
@@ -104,18 +102,10 @@ export const CardPattern = (props) => {
       )}
       {props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
-          <ButtonAnt
-            color="default"
-            disabled={isLoading}
-            onClick={() => props.cancelAction()}
-          >
+          <ButtonAnt color="default" disabled={isLoading} onClick={() => props.cancelAction()}>
             Cancelar
           </ButtonAnt>
-          <ButtonAnt
-            color="warning"
-            loading={isLoading}
-            onClick={() => savePattern()}
-          >
+          <ButtonAnt color="warning" loading={isLoading} onClick={() => savePattern()}>
             Guardar
           </ButtonAnt>
         </div>
@@ -144,8 +134,7 @@ const PatternContainer = styled.div`
       border-collapse: separate;
       border-spacing: 5px;
       margin: auto;
-      background: ${(props) =>
-        !props.user.isAdmin ? props.theme.basic.primaryLight : "transparent"};
+      background: ${(props) => (!props.user.isAdmin ? props.theme.basic.primaryLight : "transparent")};
       border-radius: 5px;
       
       th {
@@ -156,10 +145,7 @@ const PatternContainer = styled.div`
         height: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
         font-size: ${(props) => (!props.user.isAdmin ? "11px" : "14px;")};
         line-height: ${(props) => (!props.user.isAdmin ? "13px" : "18px")};
-        background: ${(props) =>
-          props.user.isAdmin
-            ? props.theme.basic.primaryLight
-            : props.theme.basic.secondary};
+        background: ${(props) => (props.user.isAdmin ? "transparent" : props.theme.basic.secondary)};
         color: ${(props) => props.theme.basic.white};
         border-radius: 3px;
       }
@@ -205,8 +191,8 @@ const PatternContainer = styled.div`
     max-width: 260px;
     
     .caption{
-      font-size: 18px;
-      line-height: 22px;
+      font-size: 14px;
+      line-height: 16px;
     }
     
     .table-container {

@@ -13,16 +13,9 @@ export const ButtonAnt = forwardRef((props, ref) => (
 
 const ButtonAntCss = styled(Button)`
   padding: ${(props) =>
-    props.size === "small"
-      ? "10px"
-      : props.size === "medium"
-      ? "6px 20px"
-      : props.size === "big"
-      ? "10px 30px"
-      : ""};
+    props.size === "small" ? "10px" : props.size === "medium" ? "6px 20px" : props.size === "big" ? "10px 30px" : ""};
   margin: ${(props) => props.margin || 0};
-  border-radius: ${(props) =>
-    props.borderRadius ? props.borderRadius : "4px"};
+  border-radius: ${(props) => (props.borderRadius ? props.borderRadius : "4px")};
   cursor: pointer;
   width: ${(props) => props.width};
   height: ${(props) => (props.height ? props.height : "auto")};
@@ -140,12 +133,14 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.danger
           : color === "default"
           ? theme.basic.whiteDark
+          : color === "success"
+          ? theme.basic.success
           : color
       };
         color: ${
           color === "white"
             ? theme.basic.secondaryLight
-            : color === "default"
+            : color === "default" || color === "success"
             ? theme.basic.blackDarken
             : color === "warning"
             ? theme.basic.blackDarken
@@ -163,6 +158,8 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.dangerDark
           : color === "default"
           ? "#979797"
+          : color === "success"
+          ? theme.basic.successDark
           : color
       };
       `
@@ -230,12 +227,14 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.danger
           : color === "default"
           ? theme.basic.whiteDark
+          : color === "success"
+          ? theme.basic.successLight
           : `${color}90`
       };
       color: ${
         color === "white"
           ? theme.basic.secondaryLight
-          : color === "default"
+          : color === "default" || color === "success"
           ? theme.basic.blackDarken
           : color === "warning"
           ? theme.basic.blackDarken

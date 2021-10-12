@@ -3,9 +3,9 @@ import { RoundsLastNumber } from "./RoundsLastNumber";
 import defaultTo from "lodash/defaultTo";
 import { CardPattern } from "./CardPattern";
 import { BingoBoard } from "./BingoBoard";
-import { GameOptions } from "./GameOptions";
+import { LastBall } from "./LastBall";
 import { LastPlays } from "./LastPlays";
-import { Desktop, Tablet } from "../../../../constants";
+import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { Chat } from "../../../../components/chat";
 import { SliderControls } from "./SliderControls";
 import { ButtonAnt } from "../../../../components/form";
@@ -13,8 +13,12 @@ import { mapKeys } from "lodash/object";
 import { firestore } from "../../../../firebase";
 import { timeoutPromise } from "../../../../utils/promised";
 import { createBoard } from "../../../../business";
+import { useInterval } from "../../../../hooks/useInterval";
+import { ModalContainer } from "../../../../components/common/ModalContainer";
+import styled from "styled-components";
 
 export const AdminPanel = (props) => {
+  const [reproductionSpeed] = useGlobal("reproductionSpeed");
   const [animationSpeed] = useGlobal("animationSpeed");
   const [isAutomatic, setIsAutomatic] = useGlobal("isAutomatic");
   const [loading, setLoading] = useState(false);
@@ -23,11 +27,7 @@ export const AdminPanel = (props) => {
 
   const startGame = async (callback) => {
     if (!props.lobby.pattern)
-      return props.showNotification(
-        "UPS",
-        "Define un patrón antes de empezar el bingo",
-        "warning"
-      );
+      return props.showNotification("UPS", "Define un patrón antes de empezar el bingo", "warning");
 
     setLoading(true);
 
@@ -78,33 +78,51 @@ export const AdminPanel = (props) => {
     setIsLoadingCalledNumber(false);
   };
 
+  useInterval(callNumber, isAutomatic && !props.lobby.bingo ? (reproductionSpeed + animationSpeed) * 1000 : null);
+
+  const modalConfirm = () => (
+    <ModalContainer
+      background="#FAFAFA"
+      footer={null}
+      closable={false}
+      padding="1rem"
+      width="440px"
+      topDesktop="30%"
+      visible={isVisibleModalConfirm}
+    >
+      <ContentModal>
+        <div className="title">¿Seguro que quieres reiniciar el tablero?</div>
+        <div className="description">Si lo reinicias, no podrás deshacerlo.</div>
+        <div className="btns-container">
+          <ButtonAnt color="default" disabled={loading} onClick={() => setIsVisibleModalConfirm(false)}>
+            Cancelar
+          </ButtonAnt>
+          <ButtonAnt color="danger" loading={loading} onClick={() => startGame(setIsVisibleModalConfirm)}>
+            Reiniciar
+          </ButtonAnt>
+        </div>
+      </ContentModal>
+    </ModalContainer>
+  );
+
   return (
     <>
+      {modalConfirm()}
       <Desktop>
         <div className="bingo">
           <div className="left-container">
-            {/*<RoundsLastNumber*/}
-            {/*  key={defaultTo(props.lobby.lastPlays, []).length}*/}
-            {/*  {...props}*/}
-            {/*/>*/}
-            <CardPattern
-              caption={"Patrón que se debe llenar"}
-              key={props.lobby.pattern}
-              {...props}
-            />
-            <div className="btn-container">
-              <ButtonAnt
-                variant="contained"
-                color="default"
-                width="100%"
-                disabled={
-                  isLoadingCalledNumber || isAutomatic || props.lobby.bingo
-                }
-                onClick={() => setIsVisibleModalConfirm(true)}
-              >
-                Reiniciar tablero
-              </ButtonAnt>
-            </div>
+            <CardPattern caption={"Patrón que se debe llenar"} key={props.lobby.pattern} {...props} />
+
+            <ButtonAnt
+              variant="contained"
+              color="default"
+              width="auto"
+              margin="1rem auto"
+              disabled={isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
+              onClick={() => setIsVisibleModalConfirm(true)}
+            >
+              Reiniciar tablero
+            </ButtonAnt>
           </div>
           <div className="right-container">
             <div className="board-container">
@@ -112,12 +130,8 @@ export const AdminPanel = (props) => {
             </div>
             <div className="bottom-section">
               <div className="ball-called">
-                <GameOptions
-                  lastNumber={
-                    defaultTo(props.lobby.lastPlays, []).length > 0
-                      ? props.lobby.lastPlays[0]
-                      : 0
-                  }
+                <LastBall
+                  lastNumber={defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}
                   {...props}
                 />
               </div>
@@ -126,23 +140,13 @@ export const AdminPanel = (props) => {
                   <ButtonAnt
                     width="100%"
                     onClick={() => callNumber()}
-                    disabled={
-                      loading ||
-                      isLoadingCalledNumber ||
-                      isAutomatic ||
-                      props.lobby.bingo
-                    }
+                    disabled={loading || isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
                     loading={isLoadingCalledNumber}
                   >
                     LLamar número
                   </ButtonAnt>
                 ) : (
-                  <ButtonAnt
-                    width="100%"
-                    color="success"
-                    onClick={() => startGame()}
-                    disabled={loading}
-                  >
+                  <ButtonAnt width="100%" color="success" onClick={() => startGame()} disabled={loading}>
                     Iniciar Juego
                   </ButtonAnt>
                 )}
@@ -152,25 +156,15 @@ export const AdminPanel = (props) => {
                   color="default"
                   width="100%"
                   className="btn-automatic"
-                  disabled={
-                    !props.lobby.startGame ||
-                    isLoadingCalledNumber ||
-                    props.lobby.bingo
-                  }
+                  disabled={!props.lobby.startGame || isLoadingCalledNumber || props.lobby.bingo}
                   onClick={() => setIsAutomatic(!isAutomatic)}
                 >
-                  {isAutomatic
-                    ? "Detener Rep. automática"
-                    : "Reproducción automática"}
+                  {isAutomatic ? "Detener Rep. automática" : "Reproducción automática"}
                 </ButtonAnt>
 
                 <SliderControls {...props} />
 
-                <ButtonAnt
-                  color="default"
-                  width="100%"
-                  onClick={() => props.setIsVisibleModalAwards(true)}
-                >
+                <ButtonAnt color="default" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
                   Ver Premios
                 </ButtonAnt>
               </div>
@@ -198,25 +192,15 @@ export const AdminPanel = (props) => {
         </div>
         <div className="pattern-rounds">
           <CardPattern caption={"Patrón que se debe llenar"} {...props} />
-          <RoundsLastNumber
-            key={defaultTo(props.lobby.lastPlays, []).length}
-            {...props}
-          />
+          <RoundsLastNumber key={defaultTo(props.lobby.lastPlays, []).length} {...props} />
         </div>
         <div className="options-container">
-          <GameOptions
-            lastNumber={
-              defaultTo(props.lobby.lastPlays, []).length > 0
-                ? props.lobby.lastPlays[0]
-                : 0
-            }
+          <LastBall
+            lastNumber={defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}
             {...props}
           />
         </div>
-        <div
-          className="awards"
-          onClick={() => props.setIsVisibleModalAwards(true)}
-        >
+        <div className="awards" onClick={() => props.setIsVisibleModalAwards(true)}>
           Premios
         </div>
         <div className="last-plays-container">
@@ -232,3 +216,42 @@ export const AdminPanel = (props) => {
     </>
   );
 };
+
+const ContentModal = styled.div`
+  width: 100%;
+
+  .title {
+    font-family: Encode Sans, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    color: ${(props) => props.theme.basic.blackDarken};
+    text-align: center;
+  }
+
+  .description {
+    margin: 1rem 0;
+    color: ${(props) => props.theme.basic.blackDarken};
+    text-align: center;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+  .btns-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 1rem 0;
+  }
+
+  ${mediaQuery.afterTablet} {
+    .title {
+      font-size: 18px;
+      line-height: 22px;
+    }
+  }
+`;
