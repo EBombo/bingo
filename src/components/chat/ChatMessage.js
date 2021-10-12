@@ -100,7 +100,7 @@ const Messages = styled.div`
         props.isAdmin
           ? props.theme.basic.secondary
           : props.received
-          ? props.theme.basic.secondGray
+          ? props.theme.basic.primary
           : props.theme.basic.primary};
       border-radius: ${(props) =>
         props.received
@@ -116,10 +116,7 @@ const Messages = styled.div`
       font-weight: normal;
       font-size: 14px;
       line-height: 17px;
-      color: ${(props) =>
-        props.received
-          ? props.theme.basic.blackDarken
-          : props.theme.basic.white};
+      color: ${(props) => props.theme.basic.white};
     }
   }
 
