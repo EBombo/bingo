@@ -18,7 +18,7 @@ const TABS = {
   USERS: { value: "users" },
 };
 
-export const LobbyPlay = (props) => {
+export const LobbyInPlay = (props) => {
   const [authUser] = useGlobal("user");
   const [tabletTab, setTabletTab] = useState("bingo");
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);

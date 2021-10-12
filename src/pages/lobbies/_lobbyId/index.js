@@ -5,7 +5,7 @@ import { spinLoaderMin } from "../../../components/common/loader";
 import { LobbyAdmin } from "./lobbyAdmin";
 import { LobbyUser } from "./LobbyUser";
 import { LobbyLoading } from "./LobbyLoading";
-import { LobbyPlay } from "./play/LobbyPlay";
+import { LobbyInPlay } from "./play/LobbyInPlay";
 import { useUser } from "../../../hooks";
 
 export const Lobby = (props) => {
@@ -61,7 +61,7 @@ export const Lobby = (props) => {
     ...props,
   };
 
-  if (lobby?.isPlaying) return <LobbyPlay {...additionalProps} />;
+  if (lobby?.isPlaying) return <LobbyInPlay {...additionalProps} />;
 
   if (lobby?.startAt) return <LobbyLoading {...additionalProps} />;
 
