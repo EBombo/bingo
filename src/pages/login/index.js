@@ -48,47 +48,49 @@ const Login = (props) => {
     router.push(`/lobbies/${lobby.id}`);
   }, [lobby, nickname, email]);
 
-  const fetchLobby = async (pin, callback) => {
-    const lobbyRef = await firestore
-      .collection("lobbies")
-      .where("pin", "==", pin.toString())
-      .where("isLocked", "==", false)
-      .limit(1)
-      .get();
+  const fetchLobby = async (pin) => {
+    try {
+      const lobbyRef = await firestore
+        .collection("lobbies")
+        .where("pin", "==", pin.toString())
+        .limit(1)
+        .get();
 
-    if (lobbyRef.empty) {
-      props.showNotification(
-        "UPS",
-        "No encontramos tu sala, intenta nuevamente",
-        "warning"
-      );
-      return setIsLoading(false);
+      if (lobbyRef.empty)
+        throw Error("No encontramos tu sala, intenta nuevamente");
+
+      const currentLobby = snapshotToArray(lobbyRef)[0];
+
+      const usersIds = Object.keys(currentLobby?.users ?? {});
+
+      if (!usersIds.includes(authUser?.id) && currentLobby?.isLocked)
+        throw Error("Este juego esta cerrado");
+
+      if (currentLobby.isClosed) {
+        await setAuthUser({ id: firestore.collection("users").doc().id });
+        setLobby(null);
+        setEmail(null);
+        setNickname(null);
+      }
+
+      setLobby(currentLobby);
+    } catch (error) {
+      props.showNotification("UPS", error.message, "warning");
     }
-    const currentLobby = snapshotToArray(lobbyRef)[0];
-
-    if (currentLobby.isClosed) {
-      await setAuthUser({ id: firestore.collection("users").doc().id });
-      setLobby(null);
-      setEmail(null);
-      setNickname(null);
-      return callback && callback(false);
-    }
-
-    setLobby(currentLobby);
-    callback && callback(false);
+    setIsLoading(false);
   };
 
   useEffect(() => {
     if (lobby || !authUser?.lobby?.pin) return;
 
     setIsLoading(true);
-    fetchLobby(authUser.lobby.pin, setIsLoading);
+    fetchLobby(authUser.lobby.pin);
   }, [authUser?.lobby?.pin]);
 
   const validatePin = async (data) => {
     setIsLoading(true);
 
-    await fetchLobby(data.pin, setIsLoading);
+    await fetchLobby(data.pin);
   };
 
   return (
@@ -187,7 +189,7 @@ const LoginContainer = styled.div`
 
   ${mediaQuery.afterTablet} {
     background-image: url("${(props) =>
-        `${props.config.storageUrl}/resources/balls/purple-balls.svg`}");
+      `${props.config.storageUrl}/resources/balls/purple-balls.svg`}");
   }
 `;
 
