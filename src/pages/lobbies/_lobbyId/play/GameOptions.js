@@ -144,80 +144,12 @@ export const GameOptions = (props) => {
         </p>
         <p>{props.lastNumber}</p>
       </div>
-      {!props.hiddenOptions && (
-        <div className="options">
-          <div className="btn-container">
-            {props.lobby.startGame ? (
-              <ButtonAnt
-                width="100%"
-                onClick={() => callNumber()}
-                disabled={
-                  loading ||
-                  isLoadingCalledNumber ||
-                  isAutomatic ||
-                  props.lobby.bingo
-                }
-                loading={isLoadingCalledNumber}
-              >
-                LLamar número
-              </ButtonAnt>
-            ) : (
-              <ButtonAnt
-                width="100%"
-                onClick={() => startGame()}
-                disabled={loading}
-              >
-                Iniciar Juego
-                <Image
-                  src={`${config.storageUrl}/resources/white-play.svg`}
-                  height="15px"
-                  width="15px"
-                  size="contain"
-                  margin="0"
-                />
-              </ButtonAnt>
-            )}
-          </div>
-          <div className="btn-container">
-            <ButtonAnt
-              color="default"
-              width="100%"
-              className="btn-automatic"
-              disabled={
-                !props.lobby.startGame ||
-                isLoadingCalledNumber ||
-                props.lobby.bingo
-              }
-              onClick={() => setIsAutomatic(!isAutomatic)}
-            >
-              {isAutomatic
-                ? "Detener Rep. automática"
-                : "Reproducción automática"}
-            </ButtonAnt>
-          </div>
-          <div className="btn-container">
-            <ButtonAnt
-              variant="contained"
-              color="default"
-              width="100%"
-              disabled={
-                isLoadingCalledNumber || isAutomatic || props.lobby.bingo
-              }
-              onClick={() => setIsVisibleModalConfirm(true)}
-            >
-              Reiniciar tablero
-            </ButtonAnt>
-          </div>
-        </div>
-      )}
     </GameOptionsContainer>
   );
 };
 
 const GameOptionsContainer = styled.div`
-  width: ${(props) => (props.hiddenOptions ? "105px" : "325px")};
-  display: grid;
-  grid-template-columns: 85px 220px;
+  width: 100%;
   align-items: center;
   padding: 0.5rem;
   border-radius: 5px;

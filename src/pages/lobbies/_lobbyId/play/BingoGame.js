@@ -370,17 +370,11 @@ const BingoGameContainer = styled.div`
 
       .bottom-section {
         display: grid;
-        grid-template-columns: 335px auto;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 1rem;
         align-items: center;
         max-width: 800px;
         margin: 1rem 0;
-
-        .last-plays-container {
-          margin: 1rem;
-          display: inline-flex;
-          overflow: auto;
-          max-width: 100%;
-        }
       }
     }
 

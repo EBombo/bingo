@@ -51,8 +51,8 @@ export const LastPlays = (props) => {
 };
 
 const Container = styled.div`
-  width: 430px;
-
+  width: 100%;
+  
   .balls {
     display: flex;
     align-items: center;

@@ -233,7 +233,7 @@ const BoardContainer = styled.div`
         }
 
         tr {
-          margin: 10px;
+          margin: 5px;
         }
       }
     }
