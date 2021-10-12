@@ -4,8 +4,8 @@ import { useRouter } from "next/router";
 import { spinLoaderMin } from "../../../components/common/loader";
 import { LobbyAdmin } from "./lobbyAdmin";
 import { LobbyUser } from "./LobbyUser";
-import { LoadingGame } from "./LoadingGame";
-import { BingoGame } from "./play/BingoGame";
+import { LobbyLoading } from "./LobbyLoading";
+import { LobbyPlay } from "./play/LobbyPlay";
 import { useUser } from "../../../hooks";
 
 export const Lobby = (props) => {
@@ -37,11 +37,7 @@ export const Lobby = (props) => {
 
         // Lobby not found.
         if (!currentLobby) {
-          props.showNotification(
-            "UPS",
-            "No encontramos tu sala, intenta nuevamente",
-            "warning"
-          );
+          props.showNotification("UPS", "No encontramos tu sala, intenta nuevamente", "warning");
           logout();
         }
 
@@ -56,8 +52,7 @@ export const Lobby = (props) => {
     return () => sub && sub();
   }, [lobbyId]);
 
-  if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby)
-    return spinLoaderMin();
+  if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby) return spinLoaderMin();
 
   const additionalProps = {
     audioRef: audioRef,
@@ -66,9 +61,9 @@ export const Lobby = (props) => {
     ...props,
   };
 
-  if (lobby?.isPlaying) return <BingoGame {...additionalProps} />;
+  if (lobby?.isPlaying) return <LobbyPlay {...additionalProps} />;
 
-  if (lobby?.startAt) return <LoadingGame {...additionalProps} />;
+  if (lobby?.startAt) return <LobbyLoading {...additionalProps} />;
 
   if (authUser?.isAdmin) return <LobbyAdmin {...additionalProps} />;
 

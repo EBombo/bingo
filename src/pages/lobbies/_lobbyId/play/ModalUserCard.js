@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { ButtonAnt } from "../../../../components/form";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
-import { BingoCard } from "./BingoCard";
+import { UserCard } from "./UserCard";
 import { BingoBoard } from "./BingoBoard";
 import { firestore } from "../../../../firebase";
 import defaultTo from "lodash/defaultTo";
@@ -37,11 +37,7 @@ export const ModalUserCard = (props) => {
   };
 
   const modalContent = () => {
-    if (
-      isVisibleAssignAward &&
-      props.lobby.bingo &&
-      props.user.id === props.lobby.bingo.id
-    ) {
+    if (isVisibleAssignAward && props.lobby.bingo && props.user.id === props.lobby.bingo.id) {
       return (
         <ModalContainer
           background="#FAFAFA"
@@ -57,17 +53,13 @@ export const ModalUserCard = (props) => {
                 <div className="top-container">
                   <div className="name">{props.user.nickname}</div>
                   <div className="btn-container">
-                    <ButtonAnt
-                      color="danger"
-                      className="disqualify"
-                      onClick={() => disqualifyUser()}
-                    >
+                    <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
                       Descalificar
                     </ButtonAnt>
                   </div>
                 </div>
                 <div className="card-container">
-                  <BingoCard user={props.user} {...props} />
+                  <UserCard user={props.user} {...props} />
                 </div>
               </div>
               {props.lobby.settings.awards && (
@@ -75,10 +67,7 @@ export const ModalUserCard = (props) => {
                   <div className="subtitle">Escoge el premio</div>
                   <div className="awards">
                     {props.lobby.settings.awards.map((award, index) => (
-                      <div
-                        className="award-content"
-                        key={`${award.name}-${index}`}
-                      >
+                      <div className="award-content" key={`${award.name}-${index}`}>
                         <input
                           type="checkbox"
                           name="award[1][]"
@@ -95,15 +84,10 @@ export const ModalUserCard = (props) => {
               )}
             </div>
             <div className="btns-container">
-              <ButtonAnt
-                color="default"
-                onClick={() => props.setIsVisibleModalUserCard(false)}
-              >
+              <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
                 Volver
               </ButtonAnt>
-              <ButtonAnt onClick={() => saveBingoWinner()}>
-                Guardar y anunciar
-              </ButtonAnt>
+              <ButtonAnt onClick={() => saveBingoWinner()}>Guardar y anunciar</ButtonAnt>
             </div>
           </ContentAward>
         </ModalContainer>
@@ -127,62 +111,44 @@ export const ModalUserCard = (props) => {
                 <div className="board-container">
                   <BingoBoard {...props} isView />
                   <div className="action-container">
-                    <ButtonAnt
-                      color="default"
-                      onClick={() => props.setIsVisibleModalUserCard(false)}
-                    >
+                    <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
                       Volver
                     </ButtonAnt>
-                    <ButtonAnt onClick={() => setIsVisibleAssignAward(true)}>
-                      Bingo
-                    </ButtonAnt>
+                    <ButtonAnt onClick={() => setIsVisibleAssignAward(true)}>Bingo</ButtonAnt>
                   </div>
                 </div>
                 <div className="card-container">
                   <div className="top-container">
                     <div className="name">{props.user.nickname}</div>
                     <div className="btn-container">
-                      <ButtonAnt
-                        color="danger"
-                        className="disqualify"
-                        onClick={() => disqualifyUser()}
-                      >
+                      <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
                         Descalificar
                       </ButtonAnt>
                     </div>
                   </div>
-                  <BingoCard user={props.user} {...props} />
+                  <UserCard user={props.user} {...props} />
                 </div>
               </Desktop>
               <Tablet>
                 <div className="top-container">
                   <div className="name">{props.user.nickname}</div>
                   <div className="btn-container">
-                    <ButtonAnt
-                      color="danger"
-                      className="disqualify"
-                      onClick={() => disqualifyUser()}
-                    >
+                    <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
                       Descalificar
                     </ButtonAnt>
                   </div>
                 </div>
                 <div className="card-container">
-                  <BingoCard user={props.user} {...props} />
+                  <UserCard user={props.user} {...props} />
                 </div>
                 <div className="board-container">
                   <BingoBoard {...props} isView />
                 </div>
                 <div className="action-container">
-                  <ButtonAnt
-                    color="default"
-                    onClick={() => props.setIsVisibleModalUserCard(false)}
-                  >
+                  <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
                     Volver
                   </ButtonAnt>
-                  <ButtonAnt onClick={() => setIsVisibleAssignAward(true)}>
-                    Bingo
-                  </ButtonAnt>
+                  <ButtonAnt onClick={() => setIsVisibleAssignAward(true)}>Bingo</ButtonAnt>
                 </div>
               </Tablet>
             </ContainerValidate>
@@ -202,13 +168,10 @@ export const ModalUserCard = (props) => {
             <Content>
               <div className="title-card">Cartilla {props.user.nickname}</div>
               <div className="card-container">
-                <BingoCard user={props.user} {...props} />
+                <UserCard user={props.user} {...props} />
               </div>
               <div className="btn-container">
-                <ButtonAnt
-                  color="default"
-                  onClick={() => props.setIsVisibleModalUserCard(false)}
-                >
+                <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
                   Cerrar
                 </ButtonAnt>
               </div>

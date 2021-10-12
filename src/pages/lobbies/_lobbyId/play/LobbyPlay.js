@@ -18,7 +18,7 @@ const TABS = {
   USERS: { value: "users" },
 };
 
-export const BingoGame = (props) => {
+export const LobbyPlay = (props) => {
   const [authUser] = useGlobal("user");
   const [tabletTab, setTabletTab] = useState("bingo");
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);
@@ -42,11 +42,7 @@ export const BingoGame = (props) => {
 
   useEffect(() => {
     const currentUserId = authUser.id;
-    if (
-      props.lobby?.users?.[currentUserId] ||
-      props.lobby.game.usersIds.includes(currentUserId)
-    )
-      return;
+    if (props.lobby?.users?.[currentUserId] || props.lobby.game.usersIds.includes(currentUserId)) return;
 
     props.logout();
   }, [props.lobby.users]);
@@ -98,11 +94,7 @@ export const BingoGame = (props) => {
         <Desktop>
           <div className="main-container">
             {authUser.isAdmin ? (
-              <AdminPanel
-                {...props}
-                tabletTab={tabletTab}
-                setIsVisibleModalAwards={setIsVisibleModalAwards}
-              />
+              <AdminPanel {...props} tabletTab={tabletTab} setIsVisibleModalAwards={setIsVisibleModalAwards} />
             ) : (
               <UserPanel
                 {...props}
@@ -129,17 +121,13 @@ export const BingoGame = (props) => {
             {(authUser.isAdmin || props.lobby.settings?.showParticipants) && (
               <div className="tablet-tabs">
                 <div
-                  className={`tab ${
-                    tabletTab === TABS.BINGO.value && "active"
-                  }`}
+                  className={`tab ${tabletTab === TABS.BINGO.value && "active"}`}
                   onClick={() => setTabletTab(TABS.BINGO.value)}
                 >
                   Bingo
                 </div>
                 <div
-                  className={`tab ${
-                    tabletTab === TABS.USERS.value && "active"
-                  }`}
+                  className={`tab ${tabletTab === TABS.USERS.value && "active"}`}
                   onClick={() => setTabletTab(TABS.USERS.value)}
                 >
                   Participantes
@@ -147,11 +135,7 @@ export const BingoGame = (props) => {
               </div>
             )}
             {tabletTab === "bingo" && authUser.isAdmin && (
-              <AdminPanel
-                {...props}
-                tabletTab={tabletTab}
-                setIsVisibleModalAwards={setIsVisibleModalAwards}
-              />
+              <AdminPanel {...props} tabletTab={tabletTab} setIsVisibleModalAwards={setIsVisibleModalAwards} />
             )}
             {tabletTab === "bingo" && !authUser.isAdmin && (
               <UserPanel
@@ -162,10 +146,9 @@ export const BingoGame = (props) => {
               />
             )}
           </div>
-          {tabletTab === "users" &&
-            (authUser.isAdmin || props.lobby.settings.showParticipants) && (
-              <UsersTabs {...props} />
-            )}
+          {tabletTab === "users" && (authUser.isAdmin || props.lobby.settings.showParticipants) && (
+            <UsersTabs {...props} />
+          )}
         </Tablet>
       </BingoGameContainer>
     </>

@@ -1,4 +1,4 @@
-import { BingoCard } from "./BingoCard";
+import { UserCard } from "./UserCard";
 import { BingoBoard } from "./BingoBoard";
 import { CardPattern } from "./CardPattern";
 import { GameOptions } from "./GameOptions";
@@ -17,7 +17,7 @@ export const UserPanel = (props) => {
       <Desktop>
         <div className="user-content">
           <div className="left-user-content">
-            <BingoCard user={authUser} {...props} />
+            <UserCard user={authUser} {...props} />
           </div>
           <div className="right-user-content">
             {props.lobby.settings.showBoardToUser && (
@@ -25,26 +25,11 @@ export const UserPanel = (props) => {
                 <BingoBoard {...props} />
               </div>
             )}
-            <div
-              className={`${
-                props.lobby.settings.showBoardToUser
-                  ? "flex-container"
-                  : "normal"
-              } `}
-            >
+            <div className={`${props.lobby.settings.showBoardToUser ? "flex-container" : "normal"} `}>
               <div className="top-content">
-                <CardPattern
-                  caption={"Patrón que se debe llenar"}
-                  hiddenOptions
-                  key={props.lobby.pattern}
-                  {...props}
-                />
+                <CardPattern caption={"Patrón que se debe llenar"} hiddenOptions key={props.lobby.pattern} {...props} />
                 <GameOptions
-                  lastNumber={
-                    defaultTo(props.lobby.lastPlays, []).length > 0
-                      ? props.lobby.lastPlays[0]
-                      : 0
-                  }
+                  lastNumber={defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}
                   hiddenOptions
                   {...props}
                 />
@@ -68,33 +53,21 @@ export const UserPanel = (props) => {
         )}
         <div className="top-container-user">
           <div className="bingo-card-container">
-            <BingoCard user={authUser} {...props} />
+            <UserCard user={authUser} {...props} />
           </div>
           <div className="right-container">
             <GameOptions
-              lastNumber={
-                defaultTo(props.lobby.lastPlays, []).length > 0
-                  ? props.lobby.lastPlays[0]
-                  : 0
-              }
+              lastNumber={defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}
               hiddenOptions
               {...props}
             />
-            <CardPattern
-              key={props.lobby.pattern}
-              caption={"Patrón que se debe llenar"}
-              hiddenOptions
-              {...props}
-            />
+            <CardPattern key={props.lobby.pattern} caption={"Patrón que se debe llenar"} hiddenOptions {...props} />
           </div>
         </div>
 
         <div className="buttons-container">
           <ButtonAnt onClick={() => props.callBingo()}>Bingo</ButtonAnt>
-          <ButtonAnt
-            color="default"
-            onClick={() => props.setIsVisibleModalAwards(true)}
-          >
+          <ButtonAnt color="default" onClick={() => props.setIsVisibleModalAwards(true)}>
             Ver premios
           </ButtonAnt>
         </div>

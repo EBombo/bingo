@@ -65,5 +65,8 @@
   },
   "resolutions": {
     "styled-components": "^5"
+  },
+  "prettier": {
+    "printWidth": 120
   }
 }
