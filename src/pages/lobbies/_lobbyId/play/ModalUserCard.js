@@ -19,7 +19,6 @@ export const ModalUserCard = (props) => {
       bingo: null,
       updateAt: new Date(),
     });
-
   };
 
   const saveBingoWinner = async () => {
@@ -255,6 +254,7 @@ const ContentAward = styled.div`
     align-items: center;
     margin: 1rem 0;
     flex-direction: column;
+
     button {
       width: 150px;
       margin: 0.5rem 0;
@@ -374,6 +374,7 @@ const ContainerValidate = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .card-container {
       max-width: 320px;
     }
