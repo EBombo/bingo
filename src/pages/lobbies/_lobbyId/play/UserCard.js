@@ -1,7 +1,8 @@
-import React, { useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
 import { generateMatrix } from "../../../../business";
+import { firebase, firestore } from "../../../../firebase";
 
 export const UserCard = (props) => {
   const [authUser] = useGlobal("user");
@@ -9,11 +10,53 @@ export const UserCard = (props) => {
 
   const userId = props.user ? props.user?.id : authUser?.id;
 
-  const selectNumber = (row, col) => {
+  useEffect(() => {
+    if (props?.lobby?.settings?.cardAutofill) return;
+
+    const fetchMyWiningCard = async () => {
+      const userQuery = await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(userId).get();
+
+      if (!userQuery.exists) return;
+
+      const user = userQuery.data();
+
+      if (!user?.myWinningCard) return;
+
+      const userCard = JSON.parse(props.lobby.users[userId]?.card ?? "[]");
+      const newMatrix = [...matrix];
+
+      // Auto fill user card with "myWinningCard" [array].
+      userCard.forEach((axisY, indexY) =>
+        axisY.forEach((axisX, indexX) => {
+          if (user.myWinningCard.includes(axisX)) newMatrix[indexY][indexX] = true;
+        })
+      );
+
+      setMatrix(newMatrix);
+    };
+
+    fetchMyWiningCard();
+  }, []);
+
+  const selectNumber = async (row, col, number) => {
     const newMatrix = [...matrix];
     newMatrix[row][col] = newMatrix[row][col] ? null : true;
     setMatrix(newMatrix);
+
+    const myWinningCard = newMatrix[row][col]
+      ? firebase.firestore.FieldValue.arrayUnion(number)
+      : firebase.firestore.FieldValue.arrayRemove(number);
+
+    await updateUser(myWinningCard);
   };
+
+  const updateUser = async (myWinningCard) =>
+    await firestore
+      .collection("lobbies")
+      .doc(props.lobby.id)
+      .collection("users")
+      .doc(userId)
+      .set({ myWinningCard }, { merge: true });
 
   return (
     <CardContainer
@@ -43,7 +86,7 @@ export const UserCard = (props) => {
                   ) : (
                     <div
                       className={`${matrix[row][col] ? "active" : "number"} to-fill`}
-                      onClick={() => selectNumber(row, col)}
+                      onClick={async () => await selectNumber(row, col, num)}
                     >
                       {num}
                     </div>
