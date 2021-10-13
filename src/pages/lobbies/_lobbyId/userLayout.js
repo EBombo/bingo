@@ -4,7 +4,6 @@ import { Popover, Slider } from "antd";
 import { mediaQuery } from "../../../constants";
 import { config } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
-import { ButtonBingo } from "../../../components/form";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
@@ -15,7 +14,7 @@ export const UserLayout = (props) => {
   return (
     <UserLayoutCss>
       <div className="description">1-75 números</div>
-      <div className="title">{props.lobby.game.name}</div>
+      <div className="title no-wrap">{props.lobby.game.name}</div>
       <div className="right-content">
         {authUser.isAdmin ? (
           <div className="right-container">
@@ -28,8 +27,7 @@ export const UserLayout = (props) => {
                       key={audio_.id}
                       className="item-audio"
                       onClick={() => {
-                        if (props.audioRef.current)
-                          props.audioRef.current.pause();
+                        if (props.audioRef.current) props.audioRef.current.pause();
 
                         const currentAudio = new Audio(audio_.audioUrl);
 
@@ -44,10 +42,7 @@ export const UserLayout = (props) => {
                 </AudioStyled>
               }
             >
-              <button
-                className="nav-button"
-                key={props.audioRef.current?.paused}
-              >
+              <button className="nav-button" key={props.audioRef.current?.paused}>
                 {isPlay ? (
                   <Image
                     cursor="pointer"
@@ -92,9 +87,7 @@ export const UserLayout = (props) => {
                 <Image
                   cursor="pointer"
                   src={
-                    isMuted
-                      ? `${config.storageUrl}/resources/mute.svg`
-                      : `${config.storageUrl}/resources/volume.svg`
+                    isMuted ? `${config.storageUrl}/resources/mute.svg` : `${config.storageUrl}/resources/volume.svg`
                   }
                   height="25px"
                   width="25px"
@@ -109,10 +102,7 @@ export const UserLayout = (props) => {
             trigger="click"
             content={
               <div>
-                <div
-                  onClick={() => props.logout()}
-                  style={{ cursor: "pointer" }}
-                >
+                <div onClick={() => props.logout()} style={{ cursor: "pointer" }}>
                   Salir
                 </div>
               </div>
@@ -133,7 +123,7 @@ export const UserLayout = (props) => {
 const UserLayoutCss = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
   align-items: center;
   background: ${(props) => props.theme.basic.whiteDark};
   padding: 0.5rem;
