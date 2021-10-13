@@ -180,8 +180,11 @@ const PatternContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    flex-direction: column;
     
     button {
+      width: 80%;
+      margin-bottom: 10px;
       font-size: 14px;
       line-height: 18px;
     }
@@ -189,6 +192,15 @@ const PatternContainer = styled.div`
   
   ${mediaQuery.afterTablet}{
     max-width: 260px;
+
+    .btns-container{
+      flex-direction: row;
+
+      button {
+        width: auto;
+        margin-bottom: 0;
+      }
+    }
     
     .caption{
       font-size: 14px;

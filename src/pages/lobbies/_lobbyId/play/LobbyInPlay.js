@@ -229,10 +229,40 @@ const BingoGameContainer = styled.div`
     }
 
     .pattern-rounds {
-      display: flex;
+      display: grid;
       align-items: center;
-      justify-content: space-evenly;
+      grid-template-columns: repeat(2, 50%);
       margin: 1rem 0;
+
+      .left-container {
+        .card-pattern-container {
+          background: ${(props) => props.theme.basic.secondary};
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+          border-radius: 4px;
+          padding: 0.5rem 1rem;
+          margin: 0 auto;
+          max-width: 250px;
+        }
+      }
+
+      .right-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5rem;
+        .last-plays {
+          width: 100%;
+          max-width: 200px;
+        }
+
+        .btns-container {
+          width: 100%;
+
+          button {
+            padding: 1rem;
+          }
+        }
+      }
     }
 
     .options-container {
