@@ -135,21 +135,24 @@ export const AdminPanel = (props) => {
                   {...props}
                 />
               </div>
-              <div className="btn-container">
+              <div className="middle-container">
                 {props.lobby.startGame ? (
                   <ButtonAnt
                     width="100%"
                     onClick={() => callNumber()}
+                    margin="0 0 1rem 0"
                     disabled={loading || isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
                     loading={isLoadingCalledNumber}
                   >
-                    LLamar número
+                    LLamar bolilla
                   </ButtonAnt>
                 ) : (
                   <ButtonAnt width="100%" color="success" onClick={() => startGame()} disabled={loading}>
                     Iniciar Juego
                   </ButtonAnt>
                 )}
+
+                <LastPlays {...props} />
               </div>
               <div className="controlers">
                 <ButtonAnt
@@ -178,9 +181,7 @@ export const AdminPanel = (props) => {
               {/*  >*/}
               {/*    Premios*/}
               {/*  </div>*/}
-              {/*  <div className="last-plays-container">*/}
-              {/*    <LastPlays {...props} />*/}
-              {/*  </div>*/}
+
               {/*</div>*/}
             </div>
           </div>
