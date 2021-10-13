@@ -58,7 +58,7 @@ export const ModalAwards = (props) => {
           isVisibleModalConfirm={isVisibleModalConfirm}
           setIsVisibleModalConfirm={setIsVisibleModalConfirm}
           title="¿Estás seguro que deseas volver?"
-          description={"Si vuelves no se guardaran los cambios"}
+          description={"Si vuelves no se guardaran los cambios."}
           action={() => props.setIsVisibleModalAwards(false)}
           buttonName={"Volver"}
           {...props}

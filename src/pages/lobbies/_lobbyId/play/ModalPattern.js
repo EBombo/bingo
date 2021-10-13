@@ -16,7 +16,9 @@ export const ModalPattern = (props) => {
     >
       <Content>
         <div className="title">
-          Si cambia el patrón podría ya haber un ganador
+          {!props.lobby.startGame
+            ? "Por favor llene el patrón para empezart el juego."
+            : "Si cambia el patrón podría ya haber un ganador."}
         </div>
         <CardPattern
           isEdit

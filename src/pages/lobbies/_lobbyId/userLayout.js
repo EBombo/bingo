@@ -9,11 +9,12 @@ export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
   const [isPlay, setIsPlay] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
 
   return (
     <UserLayoutCss>
       <div className="description">1-75 números</div>
-      <div className="title">{props.lobby.game.name}</div>
+      <div className="title no-wrap">{props.lobby.game.name}</div>
       <div className="right-content">
         {authUser.isAdmin ? (
           <div className="right-container">
@@ -26,8 +27,7 @@ export const UserLayout = (props) => {
                       key={audio_.id}
                       className="item-audio"
                       onClick={() => {
-                        if (props.audioRef.current)
-                          props.audioRef.current.pause();
+                        if (props.audioRef.current) props.audioRef.current.pause();
 
                         const currentAudio = new Audio(audio_.audioUrl);
 
@@ -42,10 +42,7 @@ export const UserLayout = (props) => {
                 </AudioStyled>
               }
             >
-              <button
-                className="nav-button"
-                key={props.audioRef.current?.paused}
-              >
+              <button className="nav-button" key={props.audioRef.current?.paused}>
                 {isPlay ? (
                   <Image
                     cursor="pointer"
@@ -62,7 +59,7 @@ export const UserLayout = (props) => {
             </Popover>
             <Popover
               content={
-                <div style={{ width: 100 }}>
+                <SliderContent>
                   <Slider
                     defaultValue={30}
                     onChange={(event) => {
@@ -70,13 +67,28 @@ export const UserLayout = (props) => {
                       props.audioRef.current.volume = event / 100;
                     }}
                   />
-                </div>
+                </SliderContent>
               }
             >
-              <button className="nav-button" disabled={!isPlay}>
+              <button
+                className="nav-button"
+                disabled={!isPlay}
+                onClick={() => {
+                  if (props.audioRef.current.volume === 0) {
+                    props.audioRef.current.volume = 0.7;
+                    setIsMuted(false);
+                  } else {
+                    props.audioRef.current.volume = 0;
+                    setIsMuted(true);
+                  }
+                }}
+                key={isMuted}
+              >
                 <Image
-                  src={`${config.storageUrl}/resources/volume.svg`}
                   cursor="pointer"
+                  src={
+                    isMuted ? `${config.storageUrl}/resources/mute.svg` : `${config.storageUrl}/resources/volume.svg`
+                  }
                   height="25px"
                   width="25px"
                   size="contain"
@@ -90,10 +102,7 @@ export const UserLayout = (props) => {
             trigger="click"
             content={
               <div>
-                <div
-                  onClick={() => props.logout()}
-                  style={{ cursor: "pointer" }}
-                >
+                <div onClick={() => props.logout()} style={{ cursor: "pointer" }}>
                   Salir
                 </div>
               </div>
@@ -114,7 +123,7 @@ export const UserLayout = (props) => {
 const UserLayoutCss = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
   align-items: center;
   background: ${(props) => props.theme.basic.whiteDark};
   padding: 0.5rem;
@@ -197,5 +206,17 @@ const AudioStyled = styled.div`
       color: ${(props) => props.theme.basic.secondary};
       background: ${(props) => props.theme.basic.primaryLight};
     }
+  }
+`;
+
+const SliderContent = styled.div`
+  width: 100px;
+
+  .ant-slider-track {
+    background-color: ${(props) => props.theme.basic.success} !important;
+  }
+
+  .ant-slider-handle {
+    border: solid 2px ${(props) => props.theme.basic.successDark} !important;
   }
 `;

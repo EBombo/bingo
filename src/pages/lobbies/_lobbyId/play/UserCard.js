@@ -1,19 +1,62 @@
-import React, { useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
 import { generateMatrix } from "../../../../business";
+import { firebase, firestore } from "../../../../firebase";
 
-export const BingoCard = (props) => {
+export const UserCard = (props) => {
   const [authUser] = useGlobal("user");
   const [matrix, setMatrix] = useState(generateMatrix());
 
   const userId = props.user ? props.user?.id : authUser?.id;
 
-  const selectNumber = (row, col) => {
+  useEffect(() => {
+    if (props?.lobby?.settings?.cardAutofill) return;
+
+    const fetchMyWiningCard = async () => {
+      const userQuery = await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(userId).get();
+
+      if (!userQuery.exists) return;
+
+      const user = userQuery.data();
+
+      if (!user?.myWinningCard) return;
+
+      const userCard = JSON.parse(props.lobby.users[userId]?.card ?? "[]");
+      const newMatrix = [...matrix];
+
+      // Auto fill user card with "myWinningCard" [array].
+      userCard.forEach((axisY, indexY) =>
+        axisY.forEach((axisX, indexX) => {
+          if (user.myWinningCard.includes(axisX)) newMatrix[indexY][indexX] = true;
+        })
+      );
+
+      setMatrix(newMatrix);
+    };
+
+    fetchMyWiningCard();
+  }, []);
+
+  const selectNumber = async (row, col, number) => {
     const newMatrix = [...matrix];
     newMatrix[row][col] = newMatrix[row][col] ? null : true;
     setMatrix(newMatrix);
+
+    const myWinningCard = newMatrix[row][col]
+      ? firebase.firestore.FieldValue.arrayUnion(number)
+      : firebase.firestore.FieldValue.arrayRemove(number);
+
+    await updateUser(myWinningCard);
   };
+
+  const updateUser = async (myWinningCard) =>
+    await firestore
+      .collection("lobbies")
+      .doc(props.lobby.id)
+      .collection("users")
+      .doc(userId)
+      .set({ myWinningCard }, { merge: true });
 
   return (
     <CardContainer
@@ -34,36 +77,24 @@ export const BingoCard = (props) => {
           </tr>
         </thead>
         <tbody className="tbody">
-          {JSON.parse(props.lobby.users[userId]?.card ?? "[]").map(
-            (arrNums, row) => (
-              <tr key={`key-${row}`}>
-                {arrNums.map((num, col) => (
-                  <td key={`key-${num}-${col}-${matrix}`}>
-                    {props.lobby.settings.cardAutofill || authUser.isAdmin ? (
-                      <div
-                        className={`${
-                          props.lobby.board &&
-                          props.lobby.board[num] &&
-                          `active`
-                        }`}
-                      >
-                        {num}
-                      </div>
-                    ) : (
-                      <div
-                        className={`${
-                          matrix[row][col] ? "active" : "number"
-                        } to-fill`}
-                        onClick={() => selectNumber(row, col)}
-                      >
-                        {num}
-                      </div>
-                    )}
-                  </td>
-                ))}
-              </tr>
-            )
-          )}
+          {JSON.parse(props.lobby.users[userId]?.card ?? "[]").map((arrNums, row) => (
+            <tr key={`key-${row}`}>
+              {arrNums.map((num, col) => (
+                <td key={`key-${num}-${col}-${matrix}`}>
+                  {props.lobby.settings.cardAutofill || authUser.isAdmin ? (
+                    <div className={`${props.lobby.board && props.lobby.board[num] && `active`}`}>{num}</div>
+                  ) : (
+                    <div
+                      className={`${matrix[row][col] ? "active" : "number"} to-fill`}
+                      onClick={async () => await selectNumber(row, col, num)}
+                    >
+                      {num}
+                    </div>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </CardContainer>
@@ -71,10 +102,7 @@ export const BingoCard = (props) => {
 };
 
 const CardContainer = styled.div`
-  background: ${(props) =>
-    props.backgroundColor
-      ? props.backgroundColor
-      : props.theme.basic.secondary};
+  background: ${(props) => (props.backgroundColor ? props.backgroundColor : props.theme.basic.secondary)};
   border-radius: 3px;
   padding: 0.5rem;
 
@@ -84,8 +112,7 @@ const CardContainer = styled.div`
     font-weight: 700;
     font-size: 15px;
     line-height: 18px;
-    color: ${(props) =>
-      props.titleColor ? props.titleColor : props.theme.basic.white};
+    color: ${(props) => (props.titleColor ? props.titleColor : props.theme.basic.white)};
     text-align: center;
     padding: 0.5rem;
   }
@@ -123,10 +150,8 @@ const CardContainer = styled.div`
           font-weight: bold;
           font-size: 13px;
           line-height: 15px;
-          color: ${(props) =>
-            props.numberColor ? props.numberColor : props.theme.basic.white};
-          background: ${(props) =>
-            props.blocksColor ? props.blocksColor : props.theme.basic.primary};
+          color: ${(props) => (props.numberColor ? props.numberColor : props.theme.basic.white)};
+          background: ${(props) => (props.blocksColor ? props.blocksColor : props.theme.basic.primary)};
           justify-content: center;
 
           .active {

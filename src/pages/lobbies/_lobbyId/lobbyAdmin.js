@@ -16,6 +16,7 @@ export const LobbyAdmin = (props) => {
   const [audios] = useGlobal("audios");
   const [users, setUsers] = useState([]);
   const [isPlay, setIsPlay] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [isLoadingLock, setIsLoadingLock] = useState(false);
   const [isLoadingStart, setIsLoadingStart] = useState(false);
 
@@ -100,11 +101,7 @@ export const LobbyAdmin = (props) => {
               </AudioStyled>
             }
           >
-            <ButtonBingo
-              variant="primary"
-              key={props.audioRef.current?.paused}
-              margin="10px 20px"
-            >
+            <ButtonBingo variant="primary" margin="10px 20px">
               {isPlay ? (
                 <Image
                   cursor="pointer"
@@ -121,7 +118,7 @@ export const LobbyAdmin = (props) => {
           </Popover>
           <Popover
             content={
-              <div style={{ width: 100 }}>
+              <SliderContent>
                 <Slider
                   defaultValue={30}
                   onChange={(event) => {
@@ -129,17 +126,31 @@ export const LobbyAdmin = (props) => {
                     props.audioRef.current.volume = event / 100;
                   }}
                 />
-              </div>
+              </SliderContent>
             }
           >
             <ButtonBingo
               variant="primary"
               margin="10px 20px"
               disabled={!isPlay}
+              onClick={() => {
+                if (props.audioRef.current.volume === 0) {
+                  props.audioRef.current.volume = 0.7;
+                  setIsMuted(false);
+                } else {
+                  props.audioRef.current.volume = 0;
+                  setIsMuted(true);
+                }
+              }}
+              key={isMuted}
             >
               <Image
                 cursor="pointer"
-                src={`${config.storageUrl}/resources/volume.svg`}
+                src={
+                  isMuted
+                    ? `${config.storageUrl}/resources/mute.svg`
+                    : `${config.storageUrl}/resources/volume.svg`
+                }
                 height="25px"
                 width="25px"
                 size="contain"
@@ -232,6 +243,18 @@ export const LobbyAdmin = (props) => {
   );
 };
 
+const SliderContent = styled.div`
+  width: 100px;
+
+  .ant-slider-track {
+    background-color: ${(props) => props.theme.basic.success} !important;
+  }
+
+  .ant-slider-handle {
+    border: solid 2px ${(props) => props.theme.basic.successDark} !important;
+  }
+`;
+
 const AudioStyled = styled.div`
   width: 100%;
 
@@ -258,9 +281,6 @@ const LobbyCss = styled.div`
     grid-template-columns: 1fr 1fr 1fr;
 
     .right-menus {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-evenly;
       .btn-start {
         margin: 10px 20px !important;
         padding: 10px 30px !important;
@@ -270,6 +290,9 @@ const LobbyCss = styled.div`
     .right-menus,
     .left-menus {
       text-align: center;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-evenly;
     }
 
     .left-menus {

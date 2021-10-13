@@ -1,14 +1,13 @@
 import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
-import defaultTo from "lodash/defaultTo";
-import { Popover, Progress } from "antd";
-import { darkTheme } from "../../../../theme";
+import { Popover } from "antd";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
+import { UserProgress } from "./UserProgress";
 
 const TAB = {
   CARDS: "cards",
@@ -27,34 +26,13 @@ export const UsersTabs = (props) => {
   const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
   const removeUser = async (userId) => {
-    const newUsers = { ...props.lobby.users };
+    const newUsers = {
+      ...props.lobby.users,
+    };
     delete newUsers[userId];
-    await firestore
-      .doc(`lobbies/${props.lobby.id}`)
-      .update({ users: newUsers });
-  };
-
-  const progress = (user) => {
-    try {
-      const userPattern = JSON.parse(user.card);
-
-      let hits = 0;
-      let sizePattern = 0;
-
-      lobbyPattern.forEach((y, indexY) =>
-        y.forEach((x, indexX) => {
-          if (!!x) sizePattern++;
-          if (!!x && numberWinners.includes(userPattern[indexY][indexX]))
-            hits++;
-        })
-      );
-
-      const percentage = (hits / sizePattern) * 100;
-
-      return (percentage || 0).toFixed(0);
-    } catch (error) {
-      console.error(error);
-    }
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      users: newUsers,
+    });
   };
 
   const menu = (user) => (
@@ -63,7 +41,10 @@ export const UsersTabs = (props) => {
       placement="bottom"
       content={
         <div
-          style={{ display: "flex", cursor: "pointer" }}
+          style={{
+            display: "flex",
+            cursor: "pointer",
+          }}
           onClick={() => setIsVisibleModalConfirm(true)}
         >
           <Image
@@ -74,7 +55,13 @@ export const UsersTabs = (props) => {
             size="contain"
             margin="auto 5px"
           />{" "}
-          <div style={{ margin: "auto" }}>Remover jugador</div>
+          <div
+            style={{
+              margin: "auto",
+            }}
+          >
+            Remover jugador
+          </div>
         </div>
       }
     >
@@ -108,16 +95,10 @@ export const UsersTabs = (props) => {
         />
       )}
       <div className="tabs-container">
-        <div
-          className={`tab ${tab === TAB.CARDS && "active"}`}
-          onClick={() => setTab(TAB.CARDS)}
-        >
+        <div className={`tab ${tab === TAB.CARDS && "active"}`} onClick={() => setTab(TAB.CARDS)}>
           Cuadrícula
         </div>
-        <div
-          className={`tab ${tab === TAB.TABLE && "active"}`}
-          onClick={() => setTab(TAB.TABLE)}
-        >
+        <div className={`tab ${tab === TAB.TABLE && "active"}`} onClick={() => setTab(TAB.TABLE)}>
           Tabla
         </div>
       </div>
@@ -126,9 +107,7 @@ export const UsersTabs = (props) => {
         {users.map((user, index) =>
           tab === TAB.CARDS ? (
             <div
-              className={`user-card ${
-                props.lobby?.bingo?.id === user.id && `winner`
-              }`}
+              className={`user-card ${props.lobby?.bingo?.id === user.id && `winner`}`}
               key={`${user.nickname}-${index}`}
             >
               {props.lobby?.bingo?.id === user.id && (
@@ -145,16 +124,7 @@ export const UsersTabs = (props) => {
               <div className="name">{user.nickname}</div>
 
               <div className="card-preview">
-                {defaultTo(JSON.parse(user.card)).map((axiX, indexX) =>
-                  axiX.map((axiY, indexY) => (
-                    <div
-                      className={`matrix-num ${
-                        numberWinners.includes(axiY) && "active"
-                      }`}
-                      key={`${indexX}-${indexY}`}
-                    />
-                  ))
-                )}
+                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} isCard />
               </div>
 
               {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
@@ -175,18 +145,13 @@ export const UsersTabs = (props) => {
             </div>
           ) : (
             <div
-              className={`user-progress ${
-                props.lobby?.bingo?.id === user.id && `winner`
-              }`}
+              className={`user-progress ${props.lobby?.bingo?.id === user.id && `winner`}`}
               key={`${user.nickname}-${index}`}
             >
               <div className="name">{user.nickname}</div>
 
               <div className={`progress ${user.progress === 100 && "winner"}`}>
-                <Progress
-                  percent={progress(user)}
-                  strokeColor={darkTheme.basic.primary}
-                />
+                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} />
               </div>
 
               {props.lobby?.bingo?.id === user.id && (
@@ -346,6 +311,7 @@ const TabsContainer = styled.div`
         justify-content: space-evenly;
         height: 25px;
         cursor: pointer;
+
         div {
           width: 5px;
           height: 5px;
@@ -354,6 +320,7 @@ const TabsContainer = styled.div`
         }
       }
     }
+
     &-table {
       width: 100%;
       display: flex;
@@ -381,8 +348,10 @@ const TabsContainer = styled.div`
           display: flex;
           align-items: center;
           justify-content: center;
+
           .ant-progress {
             max-width: 250px;
+
             .ant-progress-inner {
               background: ${(props) => props.theme.basic.grayDark} !important;
             }
@@ -401,6 +370,7 @@ const TabsContainer = styled.div`
             height: 25px;
             cursor: pointer;
             margin-left: 10px;
+
             div {
               width: 5px;
               height: 5px;
