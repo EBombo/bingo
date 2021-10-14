@@ -20,6 +20,13 @@ export const CardPattern = (props) => {
     if (props.lobby.pattern) return setPattern(JSON.parse(props.lobby.pattern));
   }, [props.lobby.pattern, props.apagon]);
 
+  // This hook is used to open modal.
+  useEffect(() => {
+    if (!props.openModalPattern || isVisibleModalPattern) return;
+
+    setIsVisibleModalPattern(props.openModalPattern);
+  }, [props.openModalPattern]);
+
   const editPattern = (row, col) => {
     const newPattern = [...pattern];
     newPattern[row][col] = newPattern[row][col] ? null : true;
@@ -32,9 +39,17 @@ export const CardPattern = (props) => {
       updateAt: new Date(),
     });
 
-    if (props.continueGame) {
-      await props.continueGame();
-    }
+    // This functions is used to open modal.
+    props.setOpenModalPattern && props.setOpenModalPattern(false);
+
+    if (props.continueGame) await props.continueGame();
+  };
+
+  // This mapping is used to prevent loop.
+  const propsToChild = {
+    ...props,
+    openModalPattern: false,
+    setOpenModalPattern: null,
   };
 
   return (
@@ -45,7 +60,7 @@ export const CardPattern = (props) => {
           isVisibleModalPattern={isVisibleModalPattern}
           setIsVisibleModalPattern={setIsVisibleModalPattern}
           continueGame={() => setIsVisibleModalPattern(false)}
-          {...props}
+          {...propsToChild}
         />
       )}
       <div className="caption">{props.caption}</div>
@@ -102,7 +117,14 @@ export const CardPattern = (props) => {
       )}
       {props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
-          <ButtonAnt color="default" disabled={isLoading} onClick={() => props.cancelAction()}>
+          <ButtonAnt
+            color="default"
+            disabled={isLoading}
+            onClick={() => {
+              props.cancelAction();
+              props.setOpenModalPattern && props.setOpenModalPattern(false);
+            }}
+          >
             Cancelar
           </ButtonAnt>
           <ButtonAnt color="warning" loading={isLoading} onClick={() => savePattern()}>

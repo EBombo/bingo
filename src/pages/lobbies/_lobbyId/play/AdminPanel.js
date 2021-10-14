@@ -20,13 +20,16 @@ export const AdminPanel = (props) => {
   const [animationSpeed] = useGlobal("animationSpeed");
   const [isAutomatic, setIsAutomatic] = useGlobal("isAutomatic");
   const [loading, setLoading] = useState(false);
+  const [openModalPattern, setOpenModalPattern] = useState(false);
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [lastNumber, setLastNumber] = useState(0);
 
   const startGame = async (callback) => {
-    if (!props.lobby.pattern)
+    if (!props.lobby.pattern) {
+      setOpenModalPattern(true);
       return props.showNotification("UPS", "Define un patrón antes de empezar el bingo", "warning");
+    }
 
     setLoading(true);
 
@@ -110,7 +113,13 @@ export const AdminPanel = (props) => {
       <Desktop>
         <div className="bingo">
           <div className="left-container">
-            <CardPattern caption={"Patrón que se debe llenar"} key={props.lobby.pattern} {...props} />
+            <CardPattern
+              caption={"Patrón que se debe llenar"}
+              key={props.lobby.pattern}
+              {...props}
+              openModalPattern={openModalPattern}
+              setOpenModalPattern={setOpenModalPattern}
+            />
 
             <ButtonAnt
               variant="contained"
@@ -178,7 +187,12 @@ export const AdminPanel = (props) => {
         <div className="pattern-rounds">
           <div className="left-container">
             <div className="card-pattern-container">
-              <CardPattern caption={"Patrón que se debe llenar"} {...props} />
+              <CardPattern
+                caption={"Patrón que se debe llenar"}
+                {...props}
+                openModalPattern={openModalPattern}
+                setOpenModalPattern={setOpenModalPattern}
+              />
             </div>
             <ButtonAnt
               variant="contained"

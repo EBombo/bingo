@@ -4,31 +4,25 @@ import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { CardPattern } from "./CardPattern";
 import { mediaQuery } from "../../../../constants";
 
-export const ModalPattern = (props) => {
-  return (
-    <ModalContainer
-      background="#FAFAFA"
-      footer={null}
-      closable={false}
-      topDesktop="20%"
-      padding="1rem"
-      visible={props.isVisibleModalPattern}
-    >
-      <Content>
-        <div className="title">
-          {!props.lobby.startGame
-            ? "Por favor llene el patrón para empezart el juego."
-            : "Si cambia el patrón podría ya haber un ganador."}
-        </div>
-        <CardPattern
-          isEdit
-          cancelAction={() => props.setIsVisibleModalPattern(false)}
-          {...props}
-        />
-      </Content>
-    </ModalContainer>
-  );
-};
+export const ModalPattern = (props) => (
+  <ModalContainer
+    background="#FAFAFA"
+    footer={null}
+    closable={false}
+    topDesktop="20%"
+    padding="1rem"
+    visible={props.isVisibleModalPattern}
+  >
+    <Content>
+      <div className="title">
+        {!props.lobby.startGame
+          ? "Por favor llene el patrón para empezart el juego."
+          : "Si cambia el patrón podría ya haber un ganador."}
+      </div>
+      <CardPattern isEdit cancelAction={() => props.setIsVisibleModalPattern(false)} {...props} />
+    </Content>
+  </ModalContainer>
+);
 
 const Content = styled.div`
   width: 100%;
