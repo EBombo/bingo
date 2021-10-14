@@ -103,12 +103,7 @@ export const LobbyInPlay = (props) => {
                 setIsVisibleModalAwards={setIsVisibleModalAwards}
               />
             )}
-            {(authUser.isAdmin || props.lobby.settings?.showParticipants) && (
-              <>
-                <div className="subtitle">Participantes</div>
-                <UsersTabs {...props} />
-              </>
-            )}
+            {(authUser.isAdmin || props.lobby.settings?.showParticipants) && <UsersTabs {...props} />}
           </div>
           {props.lobby?.settings?.showChat && (
             <div className="chat-container">
