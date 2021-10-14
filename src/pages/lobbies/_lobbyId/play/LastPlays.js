@@ -8,11 +8,11 @@ import { fadeInLeftBig } from "react-animations";
 
 export const LastPlays = (props) => {
   const [animationSpeed] = useGlobal("animationSpeed");
-  const [lastPlays, setLastPlays] = useState(props.lobby?.lastPlays?.slice(0, 4) || []);
+  const [lastPlays, setLastPlays] = useState(props.lobby?.lastPlays || []);
 
   useEffect(() => {
     const initialize = async () => {
-      const newLastPlays = props.lobby?.lastPlays?.slice(0, 4) || [];
+      const newLastPlays = props.lobby?.lastPlays || [];
 
       newLastPlays?.length && (await timeoutPromise(animationSpeed * 1000));
 
@@ -25,7 +25,7 @@ export const LastPlays = (props) => {
   return (
     <Container>
       <div className="balls">
-        {lastPlays.map((number) => (
+        {lastPlays.slice(0, 4).map((number) => (
           <BallContainer number={number} key={number}>
             <div className="middle-container">
               <div className="inner-container">
@@ -46,6 +46,54 @@ export const LastPlays = (props) => {
           </BallContainer>
         ))}
       </div>
+      {props.showMore && (
+        <div className="balls">
+          {lastPlays.slice(5, 9).map((number) => (
+            <BallContainer number={number} key={number}>
+              <div className="middle-container">
+                <div className="inner-container">
+                  <div className="letter">
+                    {number < BOARD_PARAMS.B.value
+                      ? get(props, "lobby.game.letters.b", "B")
+                      : number < BOARD_PARAMS.I.value
+                      ? get(props, "lobby.game.letters.i", "I")
+                      : number < BOARD_PARAMS.N.value
+                      ? get(props, "lobby.game.letters.n", "N")
+                      : number < BOARD_PARAMS.G.value
+                      ? get(props, "lobby.game.letters.g", "G")
+                      : get(props, "lobby.game.letters.o", "O")}
+                  </div>
+                  <div className="number">{number}</div>
+                </div>
+              </div>
+            </BallContainer>
+          ))}
+        </div>
+      )}
+      {props.showMore && (
+          <div className="balls">
+            {lastPlays.slice(9, 13).map((number) => (
+                <BallContainer number={number} key={number}>
+                  <div className="middle-container">
+                    <div className="inner-container">
+                      <div className="letter">
+                        {number < BOARD_PARAMS.B.value
+                            ? get(props, "lobby.game.letters.b", "B")
+                            : number < BOARD_PARAMS.I.value
+                                ? get(props, "lobby.game.letters.i", "I")
+                                : number < BOARD_PARAMS.N.value
+                                    ? get(props, "lobby.game.letters.n", "N")
+                                    : number < BOARD_PARAMS.G.value
+                                        ? get(props, "lobby.game.letters.g", "G")
+                                        : get(props, "lobby.game.letters.o", "O")}
+                      </div>
+                      <div className="number">{number}</div>
+                    </div>
+                  </div>
+                </BallContainer>
+            ))}
+          </div>
+      )}
     </Container>
   );
 };

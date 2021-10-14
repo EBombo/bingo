@@ -162,25 +162,22 @@ const BingoGameContainer = styled.div`
       justify-content: center;
       margin: 1rem 0;
       padding: 0.5rem;
+    }
 
-      .bingo-card-container {
-        max-width: 250px;
-        margin: 0 auto;
-      }
-
-      .right-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-      }
+    .bingo-card-container {
+      margin: 0 auto;
     }
 
     .buttons-container {
-      margin: 1rem 0;
-      display: flex;
+      margin: 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 1rem;
       align-items: center;
-      justify-content: space-evenly;
+
+      button {
+        width: 100%;
+      }
     }
 
     .tablet-tabs {
@@ -305,15 +302,23 @@ const BingoGameContainer = styled.div`
       .user-content {
         display: grid;
         padding: 0.5rem 0.5rem 2rem 0.5rem;
-        grid-template-columns: 400px minmax(650px, auto);
+        grid-template-columns: auto auto;
         grid-gap: 1rem;
-        overflow: auto;
+        border-bottom: 10px solid ${(props) => props.theme.basic.primary};
 
         .left-user-content {
           display: flex;
           align-items: center;
           justify-content: center;
           flex-direction: column;
+          button {
+            width: 100%;
+            max-width: 350px;
+            margin: 1rem auto;
+            padding: 1rem;
+            font-size: 25px;
+            line-height: 30px;
+          }
         }
 
         .right-user-content {
@@ -322,25 +327,27 @@ const BingoGameContainer = styled.div`
           justify-content: center;
           flex-direction: column;
 
-          .flex-container {
-            display: grid;
-            grid-template-columns: 270px 430px;
-            grid-gap: 1rem;
-            justify-content: space-between;
-            margin-top: 1rem;
+          .board-container {
+            width: 100%;
           }
 
-          .top-content {
+          .bottom-section {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-          }
-
-          .buttons-container {
             width: 100%;
             margin: 1rem 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-evenly;
+
+            .last-plays-container {
+              margin: 0;
+            }
+
+            .pattern {
+              background: ${(props) => props.theme.basic.secondary};
+              box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+              border-radius: 4px;
+              padding: 0.5rem 1rem;
+            }
           }
         }
       }

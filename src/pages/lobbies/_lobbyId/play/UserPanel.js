@@ -18,46 +18,52 @@ export const UserPanel = (props) => {
         <div className="user-content">
           <div className="left-user-content">
             <UserCard user={authUser} {...props} />
+            <ButtonAnt color="success" onClick={() => props.callBingo()}>
+              Bingo
+            </ButtonAnt>
           </div>
           <div className="right-user-content">
             <div className="board-container">
-              <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
+              <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={!props.lobby.settings.showBoardToUser} />
             </div>
-            <div className={`${props.lobby.settings.showBoardToUser ? "flex-container" : "normal"} `}>
-              <div className="top-content">
-                <CardPattern caption={"Patrón que se debe llenar"} hiddenOptions key={props.lobby.pattern} {...props} />
-                <LastBall lastNumber={lastNumber} hiddenOptions {...props} />
-              </div>
+            <div className="bottom-section">
+              <LastBall lastNumber={lastNumber} vertical {...props} />
               <div className="last-plays-container">
-                <div className="buttons-container">
-                  <ButtonAnt onClick={() => props.callBingo()}>Bingo</ButtonAnt>
-                  <ButtonAnt color="default">Ver premios</ButtonAnt>
-                </div>
-                <LastPlays {...props} />
+                <LastPlays showMore {...props} />
+              </div>
+              <div className="pattern">
+                <CardPattern caption={"Patrón que se debe llenar"} hiddenOptions key={props.lobby.pattern} {...props} />
+                <ButtonAnt color="default" width="100%">
+                  Ver premios
+                </ButtonAnt>
               </div>
             </div>
           </div>
         </div>
       </Desktop>
       <Tablet>
-        <div className="bingo-board">
-          <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
-        </div>
         <div className="top-container-user">
-          <div className="bingo-card-container">
-            <UserCard user={authUser} {...props} />
-          </div>
-          <div className="right-container">
-            <LastBall lastNumber={lastNumber} hiddenOptions {...props} />
+          <div className="left-side">
             <CardPattern key={props.lobby.pattern} caption={"Patrón que se debe llenar"} hiddenOptions {...props} />
           </div>
+          <div className="right-side">
+            <LastBall lastNumber={lastNumber} {...props} />
+            <LastPlays {...props} />
+          </div>
         </div>
-
+        <div className="bingo-card-container">
+          <UserCard user={authUser} {...props} />
+        </div>
         <div className="buttons-container">
-          <ButtonAnt onClick={() => props.callBingo()}>Bingo</ButtonAnt>
+          <ButtonAnt color="success" onClick={() => props.callBingo()}>
+            Bingo
+          </ButtonAnt>
           <ButtonAnt color="default" onClick={() => props.setIsVisibleModalAwards(true)}>
             Ver premios
           </ButtonAnt>
+        </div>
+        <div className="bingo-board">
+          <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
         </div>
         {props.lobby?.settings?.showChat && (
           <div className="chat-container">

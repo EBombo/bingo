@@ -130,25 +130,25 @@ const PatternContainer = styled.div`
       border-collapse: separate;
       border-spacing: 5px;
       margin: auto;
-      background: ${(props) => (!props.user.isAdmin ? props.theme.basic.primaryLight : "transparent")};
+      background: transparent;
       border-radius: 5px;
       
       th {
         font-family: Encode Sans;
         font-style: normal;
         font-weight: bold;
-        width: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
-        height: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
-        font-size: ${(props) => (!props.user.isAdmin ? "11px" : "14px;")};
-        line-height: ${(props) => (!props.user.isAdmin ? "13px" : "18px")};
-        background: ${(props) => (props.user.isAdmin ? "transparent" : props.theme.basic.secondary)};
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+        line-height: 18px;
+        background: transparent;
         color: ${(props) => props.theme.basic.white};
         border-radius: 3px;
       }
 
       td {
-        width: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
-        height: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
+        width: 25px;
+        height: 25px;
         background: ${(props) => props.theme.basic.primary};
         border-radius: 3px;
         position: relative;
@@ -159,8 +159,8 @@ const PatternContainer = styled.div`
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: ${(props) => (!props.user.isAdmin ? "10px" : "15px")};
-          height: ${(props) => (!props.user.isAdmin ? "10px" : "15px")};
+          width: 15px;
+          height: 15px;
           border-radius: 50%;
           background: ${(props) => props.theme.basic.secondary};
         }
@@ -209,21 +209,21 @@ const PatternContainer = styled.div`
         border-spacing: 5px;
 
         th {
-          width: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
-          height: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
-          font-size: ${(props) => (!props.user.isAdmin ? "11px" : "26px;")};
-          line-height: ${(props) => (!props.user.isAdmin ? "13px" : "32px")};
+          width: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
+          height: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
+          font-size: ${(props) => (!props.user.isAdmin ? "14px" : "26px;")};
+          line-height: ${(props) => (!props.user.isAdmin ? "18px" : "32px")};
         }
 
         td {
-          width: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
-          height: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
+          width: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
+          height: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
           font-size: 26px;
           line-height: 32px;
 
           .selected {
-            width: ${(props) => (!props.user.isAdmin ? "10px" : "20px")};
-            height: ${(props) => (!props.user.isAdmin ? "10px" : "20px")};
+            width: ${(props) => (!props.user.isAdmin ? "15px" : "20px")};
+            height: ${(props) => (!props.user.isAdmin ? "15px" : "20px")};
           }
         }
       }

@@ -102,24 +102,28 @@ export const UserCard = (props) => {
 };
 
 const CardContainer = styled.div`
+  width: 350px;
   background: ${(props) => (props.backgroundColor ? props.backgroundColor : props.theme.basic.secondary)};
   border-radius: 3px;
   padding: 0.5rem;
+  margin: 0 auto;
 
   .card-title {
     font-family: Lato;
     font-style: normal;
     font-weight: 700;
-    font-size: 15px;
-    line-height: 18px;
     color: ${(props) => (props.titleColor ? props.titleColor : props.theme.basic.white)};
     text-align: center;
     padding: 0.5rem;
+    font-size: 28px;
+    line-height: 35px;
+    font-weight: 700;
+    padding: 1rem 0;
   }
 
   table {
     border-collapse: separate;
-    border-spacing: 2.5px;
+    border-spacing: 5px;
     margin: 0 auto;
 
     thead {
@@ -129,10 +133,10 @@ const CardContainer = styled.div`
           width: 30px;
           text-align: center;
           font-family: Lato;
+          font-weight: 700;
+          font-size: 32px;
+          line-height: 36px;
           font-style: normal;
-          font-weight: bold;
-          font-size: 15px;
-          line-height: 18px;
           color: ${(props) => props.theme.basic.whiteLight};
         }
       }
@@ -141,15 +145,15 @@ const CardContainer = styled.div`
     tbody {
       tr {
         td {
-          width: 30px;
-          height: 30px;
+          width: 50px;
+          height: 50px;
           margin-right: 5px;
           text-align: center;
           font-family: Lato;
+          font-weight: 700;
+          font-size: 32px;
+          line-height: 36px;
           font-style: normal;
-          font-weight: bold;
-          font-size: 13px;
-          line-height: 15px;
           color: ${(props) => (props.numberColor ? props.numberColor : props.theme.basic.white)};
           background: ${(props) => (props.blocksColor ? props.blocksColor : props.theme.basic.primary)};
           justify-content: center;
@@ -177,23 +181,13 @@ const CardContainer = styled.div`
     padding: 0.5rem 1rem;
 
     .card-title {
-      font-size: 28px;
-      line-height: 35px;
-      font-weight: 700;
-      padding: 1rem 0;
+      
     }
 
     table {
-      border-collapse: separate;
-      border-spacing: 5px;
-
       thead {
         tr {
           th {
-            font-weight: 700;
-            font-size: 32px;
-            line-height: 36px;
-            color: ${(props) => props.theme.basic.whiteLight};
           }
         }
       }
@@ -201,11 +195,6 @@ const CardContainer = styled.div`
       tbody {
         tr {
           td {
-            width: 50px;
-            height: 50px;
-            font-weight: 700;
-            font-size: 32px;
-            line-height: 36px;
           }
         }
       }
