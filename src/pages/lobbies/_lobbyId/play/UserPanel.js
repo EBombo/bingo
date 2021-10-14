@@ -65,11 +65,9 @@ export const UserPanel = (props) => {
         <div className="bingo-board">
           <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
         </div>
-        {props.lobby?.settings?.showChat && (
-          <div className="chat-container">
-            <Chat title={"CHAT DEL BINGO"} />
-          </div>
-        )}
+        <div className="chat-container">
+          <Chat title={"CHAT DEL BINGO"} />
+        </div>
       </Tablet>
     </>
   );

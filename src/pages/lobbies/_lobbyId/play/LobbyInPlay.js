@@ -57,7 +57,7 @@ export const LobbyInPlay = (props) => {
     <>
       <UserLayout {...props} />
 
-      <BingoGameContainer chat={props.lobby?.settings?.showChat}>
+      <BingoGameContainer>
         {isVisibleModalFinal && (
           <ModalFinalStage
             isVisibleModalFinal={isVisibleModalFinal}
@@ -105,11 +105,10 @@ export const LobbyInPlay = (props) => {
             )}
             {(authUser.isAdmin || props.lobby.settings?.showParticipants) && <UsersTabs {...props} />}
           </div>
-          {props.lobby?.settings?.showChat && (
-            <div className="chat-container">
-              <Chat title={"CHAT DEL BINGO"} />
-            </div>
-          )}
+
+          <div className="chat-container">
+            <Chat title={"CHAT DEL BINGO"} />
+          </div>
         </Desktop>
         <Tablet>
           <div className="main-container">
@@ -290,12 +289,9 @@ const BingoGameContainer = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
-    ${(props) =>
-      props.chat &&
-      `
-      display: grid;
-      grid-template-columns: calc(100% - 300px) 300px;
-    `}
+    display: grid;
+    grid-template-columns: calc(100% - 300px) 300px;
+
     .main-container {
       padding: 0;
 

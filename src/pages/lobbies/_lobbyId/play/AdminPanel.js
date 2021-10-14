@@ -263,11 +263,9 @@ export const AdminPanel = (props) => {
         <ButtonAnt color="default" width="90%" margin="1rem auto" onClick={() => props.setIsVisibleModalAwards(true)}>
           Ver Premios
         </ButtonAnt>
-        {props.lobby?.settings?.showChat && (
-          <div className="chat-container">
-            <Chat title={"CHAT DEL BINGO"} />
-          </div>
-        )}
+        <div className="chat-container">
+          <Chat title={"CHAT DEL BINGO"} />
+        </div>
       </Tablet>
     </>
   );
