@@ -1,5 +1,4 @@
 import React, { useGlobal, useState } from "reactn";
-import { RoundsLastNumber } from "./RoundsLastNumber";
 import defaultTo from "lodash/defaultTo";
 import { CardPattern } from "./CardPattern";
 import { BingoBoard } from "./BingoBoard";

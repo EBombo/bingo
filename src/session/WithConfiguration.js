@@ -1,12 +1,5 @@
 import React, { setGlobal, useEffect, useGlobal, useState } from "reactn";
-import {
-  collectionToDate,
-  useEnvironment,
-  useLanguageCode,
-  useLocation,
-  useSettings,
-  useUser,
-} from "../hooks";
+import { collectionToDate, useEnvironment, useLanguageCode, useLocation, useSettings, useUser } from "../hooks";
 import { config, firestore, version } from "../firebase";
 import get from "lodash/get";
 import { darkTheme, lightTheme } from "../theme";
@@ -18,12 +11,9 @@ import { spinLoader } from "../components/common/loader";
 import dynamic from "next/dynamic";
 import { ANIMATION, SPEED } from "../business";
 
-const UpdateVersion = dynamic(
-  () => import("../components/versions/UpdateVersion"),
-  {
-    loading: () => spinLoader(),
-  }
-);
+const UpdateVersion = dynamic(() => import("../components/versions/UpdateVersion"), {
+  loading: () => spinLoader(),
+});
 
 export const WithConfiguration = (props) => {
   const [authUser] = useGlobal("user");
@@ -46,9 +36,7 @@ export const WithConfiguration = (props) => {
       setEnvironment(config.firebase.projectId);
 
       await setGlobal({
-        user: authUserLS
-          ? collectionToDate(authUserLS)
-          : { id: firestore.collection("users").doc().id },
+        user: authUserLS ? collectionToDate(authUserLS) : { id: firestore.collection("users").doc().id },
         settings: collectionToDate({ ...settingsLS, version }),
         location,
         audios: [],
@@ -69,8 +57,7 @@ export const WithConfiguration = (props) => {
         serverTime: new Date(),
         currentCurrency: "s/.",
         isAdmin: false,
-        theme:
-          get(authUserLS, "theme") === "lightTheme" ? lightTheme : darkTheme,
+        theme: get(authUserLS, "theme") === "lightTheme" ? lightTheme : darkTheme,
       });
 
       moment.locale(languageCode);

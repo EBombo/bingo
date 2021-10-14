@@ -4,11 +4,15 @@ import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
 import { timeoutPromise } from "../../../../utils/promised";
 import { getHead } from "../../../../business";
+import { useInterval } from "../../../../hooks/useInterval";
 
 export const BingoBoard = (props) => {
   const [animationSpeed] = useGlobal("animationSpeed");
-  const [startEffectHead, setStartEffectHead] = useState(null);
-  const [startEffectBody, setStartEffectBody] = useState(null);
+
+  const [posY, setPosY] = useState(-1);
+  const [posX, setPosX] = useState(-1);
+  const [startEffectHead, setStartEffectHead] = useState(false);
+  const [startEffectBody, setStartEffectBody] = useState(false);
 
   const [currentBoard, setCurrentBoard] = useState(props.lobby.board ?? {});
 
@@ -26,15 +30,17 @@ export const BingoBoard = (props) => {
       const position = getHead(lastNumber);
 
       const positionOnScreenY = position?.index ?? 0;
-      setStartEffectHead(String(positionOnScreenY));
+      setStartEffectHead(true);
       await timeoutPromise((animationSpeed / 2) * 1000);
+      setStartEffectHead(false);
+      setPosY(positionOnScreenY);
 
-      const positionOnScreenX = lastNumber - position.min;
-      setStartEffectBody(String(positionOnScreenX));
+      const positionOnScreenX = lastNumber;
+      setPosX(position.min);
+      setStartEffectBody(true);
       await timeoutPromise((animationSpeed / 2) * 1000);
-
-      setStartEffectHead(null);
-      setStartEffectBody(null);
+      setPosX(positionOnScreenX);
+      setStartEffectBody(false);
 
       setCurrentBoard(props.lobby.board);
     };
@@ -42,50 +48,45 @@ export const BingoBoard = (props) => {
     initialize();
   }, [props.lobby.board]);
 
+  const effectY = () => setPosY(posY + (posY < 5 ? 1 : -5));
+  useInterval(effectY, startEffectHead ? animationSpeed * 50 : null);
+
+  const effectX = () => {
+    const max = posX + 15;
+    setPosX(posX + (posX < max ? 1 : -15));
+  };
+  useInterval(effectX, startEffectBody ? animationSpeed * 50 : null);
+
   const range = (start, end) =>
     Array(end - start + 1)
       .fill()
       .map((_, idx) => start + idx);
 
   return (
-    <BoardContainer
-      startEffectHead={startEffectHead}
-      animationSpeed={animationSpeed}
-      startEffectBody={startEffectBody}
-    >
+    <BoardContainer>
       <table className="board">
         <thead>
           <tr>
-            <th className="th-header">
-              {get(props, "lobby.game.letters.b", "B")}
-            </th>
+            <th className={`th-header  ${posY === 0 ? "activey" : ""}`}>{get(props, "lobby.game.letters.b", "B")}</th>
           </tr>
           <tr>
-            <th className="th-header">
-              {get(props, "lobby.game.letters.i", "I")}
-            </th>
+            <th className={`th-header ${posY === 1 ? "activey" : ""}`}>{get(props, "lobby.game.letters.i", "I")}</th>
           </tr>
           <tr>
-            <th className="th-header">
-              {get(props, "lobby.game.letters.n", "N")}
-            </th>
+            <th className={`th-header ${posY === 2 ? "activey" : ""}`}>{get(props, "lobby.game.letters.n", "N")}</th>
           </tr>
           <tr>
-            <th className="th-header">
-              {get(props, "lobby.game.letters.g", "G")}
-            </th>
+            <th className={`th-header ${posY === 3 ? "activey" : ""}`}>{get(props, "lobby.game.letters.g", "G")}</th>
           </tr>
           <tr>
-            <th className="th-header">
-              {get(props, "lobby.game.letters.o", "O")}
-            </th>
+            <th className={`th-header ${posY === 4 ? "activey" : ""}`}>{get(props, "lobby.game.letters.o", "O")}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             {range(1, 15).map((number) => (
               <td
-                className={`td-numbers ${currentBoard[number] && `active`}`}
+                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`}`}
                 key={number}
               >
                 {number}
@@ -95,7 +96,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(16, 30).map((number) => (
               <td
-                className={`td-numbers ${currentBoard[number] && `active`}`}
+                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`}`}
                 key={number}
               >
                 {number}
@@ -105,7 +106,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(31, 45).map((number) => (
               <td
-                className={`td-numbers ${currentBoard[number] && `active`}`}
+                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`}`}
                 key={number}
               >
                 {number}
@@ -115,7 +116,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(46, 60).map((number) => (
               <td
-                className={`td-numbers ${currentBoard[number] && `active`}`}
+                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`}`}
                 key={number}
               >
                 {number}
@@ -125,7 +126,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(61, 75).map((number) => (
               <td
-                className={`td-numbers ${currentBoard[number] && `active`}`}
+                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`}`}
                 key={number}
               >
                 {number}
@@ -146,7 +147,7 @@ const BoardContainer = styled.div`
   table {
     display: flex;
     background: ${(props) => props.theme.basic.secondary};
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 
     thead {
       position: relative;
@@ -161,19 +162,27 @@ const BoardContainer = styled.div`
 
       tr {
         z-index: 2;
-      }
 
-      .th-header {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-family: Encode Sans, sans-serif;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 13px;
-        line-height: 15px;
-        margin: 0;
-        color: ${(props) => props.theme.basic.primaryLight};
+        .th-header {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-family: Encode Sans, sans-serif;
+          font-style: normal;
+          color: ${(props) => props.theme.basic.primaryLight};
+          font-weight: bold;
+          font-size: 1rem;
+          line-height: 15px;
+          margin: 0;
+
+          ${mediaQuery.afterTablet} {
+            font-size: 1.5rem;
+          }
+        }
+
+        .activey {
+          color: ${(props) => props.theme.basic.success};
+        }
       }
     }
 
@@ -184,35 +193,40 @@ const BoardContainer = styled.div`
       justify-content: space-evenly;
       width: 90%;
 
-      .td-numbers {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 3px;
-        color: ${(props) => props.theme.basic.secondary};
-        background: ${(props) => props.theme.basic.secondaryDarken};
-        font-size: 10px;
-        line-height: 15px;
-        height: 20px;
-      }
-
-      .active {
-        background: ${(props) => props.theme.basic.primary};
-        color: ${(props) => props.theme.basic.whiteDark};
-      }
-
       tr {
         z-index: 2;
         display: grid;
         grid-template-columns: repeat(15, 1fr);
         grid-gap: 2px;
         margin: 3px;
+
+        .td-numbers {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 3px;
+          color: ${(props) => props.theme.basic.secondary};
+          background: ${(props) => props.theme.basic.secondaryDarken};
+          font-size: 10px;
+          line-height: 15px;
+          height: 20px;
+        }
+
+        .active {
+          background: ${(props) => props.theme.basic.primary};
+          color: ${(props) => props.theme.basic.whiteDark};
+        }
+
+        .activex {
+          color: ${(props) => props.theme.basic.white};
+        }
       }
     }
   }
 
   ${mediaQuery.afterTablet} {
     margin: 0;
+
     table {
       thead {
         .th-header {
@@ -226,14 +240,14 @@ const BoardContainer = styled.div`
         flex-direction: column;
         justify-content: space-evenly;
 
-        .td-numbers {
-          height: 43px;
-          font-size: 20px;
-          line-height: 26px;
-        }
-
         tr {
           margin: 5px;
+
+          .td-numbers {
+            height: 43px;
+            font-size: 20px;
+            line-height: 26px;
+          }
         }
       }
     }
