@@ -1,5 +1,4 @@
 import React, { useGlobal, useState } from "reactn";
-import defaultTo from "lodash/defaultTo";
 import { CardPattern } from "./CardPattern";
 import { BingoBoard } from "./BingoBoard";
 import { LastBall } from "./LastBall";
@@ -23,6 +22,7 @@ export const AdminPanel = (props) => {
   const [loading, setLoading] = useState(false);
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
+  const [lastNumber, setLastNumber] = useState(0);
 
   const startGame = async (callback) => {
     if (!props.lobby.pattern)
@@ -125,14 +125,11 @@ export const AdminPanel = (props) => {
           </div>
           <div className="right-container">
             <div className="board-container">
-              <BingoBoard {...props} />
+              <BingoBoard {...props} setLastNumber={setLastNumber} />
             </div>
             <div className="bottom-section">
               <div className="ball-called">
-                <LastBall
-                  lastNumber={defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}
-                  {...props}
-                />
+                <LastBall lastNumber={lastNumber} {...props} />
               </div>
               <div className="middle-container">
                 {props.lobby.startGame ? (
@@ -176,7 +173,7 @@ export const AdminPanel = (props) => {
       </Desktop>
       <Tablet>
         <div className="bingo-board">
-          <BingoBoard {...props} />
+          <BingoBoard {...props} setLastNumber={setLastNumber} />
         </div>
         <div className="pattern-rounds">
           <div className="left-container">
@@ -205,11 +202,7 @@ export const AdminPanel = (props) => {
             </ButtonAnt>
           </div>
           <div className="right-container">
-            <LastBall
-              lastNumber={defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}
-              vertical
-              {...props}
-            />
+            <LastBall lastNumber={lastNumber} vertical {...props} />
             <div className="last-plays">
               <LastPlays {...props} />
             </div>

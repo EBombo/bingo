@@ -43,6 +43,7 @@ export const BingoBoard = (props) => {
       setPosX(positionOnScreenX);
 
       setCurrentBoard(props.lobby.board);
+      props.setLastNumber(props.lobby?.lastPlays?.[0] ?? 0);
     };
 
     initialize();

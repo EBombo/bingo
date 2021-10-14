@@ -1,29 +1,46 @@
-import React from "reactn";
-import styled from "styled-components";
-import { config, firestore } from "../../../../firebase";
+import React, { useEffect, useState } from "reactn";
+import styled, { keyframes } from "styled-components";
 import get from "lodash/get";
-import { BOARD_PARAMS, createBoard } from "../../../../business";
+import { BOARD_PARAMS } from "../../../../business";
+import { fadeInDownBig, fadeInLeftBig, fadeOutDownBig, fadeOutRightBig } from "react-animations";
+import { timeoutPromise } from "../../../../utils/promised";
 
 export const LastBall = (props) => {
+  const [lastNumber, setLastNumber] = useState(props.lastNumber);
+  const [outEffect, setOutEffect] = useState(false);
+
+  useEffect(() => {
+    if (!props.lastNumber) return;
+
+    const initialize = async () => {
+      setOutEffect(true);
+      await timeoutPromise(200);
+      setOutEffect(false);
+      setLastNumber(props.lastNumber);
+    };
+
+    initialize();
+  }, [props.lastNumber]);
+
   return (
-    <LastBallContainer number={props.lastNumber} vertical={props.vertical}>
+    <LastBallContainer number={lastNumber} vertical={props.vertical} outEffect={outEffect}>
       <div className="ball-container">
         <div className="middle-container">
           <div className="inner-container">
             <div className="letter">
-              {props.lastNumber === 0
+              {lastNumber === 0
                 ? 0
-                : props.lastNumber < BOARD_PARAMS.B.value
+                : lastNumber < BOARD_PARAMS.B.value
                 ? get(props, "lobby.game.letters.b", "B")
-                : props.lastNumber < BOARD_PARAMS.I.value
+                : lastNumber < BOARD_PARAMS.I.value
                 ? get(props, "lobby.game.letters.i", "I")
-                : props.lastNumber < BOARD_PARAMS.N.value
+                : lastNumber < BOARD_PARAMS.N.value
                 ? get(props, "lobby.game.letters.n", "N")
-                : props.lastNumber < BOARD_PARAMS.G.value
+                : lastNumber < BOARD_PARAMS.G.value
                 ? get(props, "lobby.game.letters.g", "G")
                 : get(props, "lobby.game.letters.o", "O")}
             </div>
-            <div className="number">{props.lastNumber}</div>
+            <div className="number">{lastNumber}</div>
           </div>
         </div>
       </div>
@@ -31,15 +48,22 @@ export const LastBall = (props) => {
   );
 };
 
+const slideInLeftAnimation = keyframes`${fadeInLeftBig}`;
+const slideOutRightAnimation = keyframes`${fadeOutRightBig}`;
+
+const slideInDownAnimation = keyframes`${fadeInDownBig}`;
+const slideOutDownAnimation = keyframes`${fadeOutDownBig}`;
+
 const LastBallContainer = styled.div`
   width: ${(props) => (props.vertical ? "125px" : "100%")};
   height: ${(props) => (props.vertical ? "190px" : "130px")};
   background: #221545;
-  box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.25);
   border-radius: 100px;
   padding: 5px;
-  display: ${(props) => (props.vertical ? "flex-start" : "center")};
   max-width: 200px;
+  display: ${(props) => (props.vertical ? "flex-start" : "center")};
+  clip-path: ${(props) => (props.vertical ? "ellipse(62% 51% at 50% 50%)" : "ellipse(50% 60% at 50% 50%)")};
 
   .ball-container {
     width: 120px;
@@ -56,6 +80,16 @@ const LastBallContainer = styled.div`
         ? props.theme.ballsColors.g
         : props.theme.ballsColors.o};
     position: relative;
+    animation: 1s
+      ${(props) =>
+        props.vertical
+          ? props.outEffect
+            ? slideOutDownAnimation
+            : slideInDownAnimation
+          : props.outEffect
+          ? slideOutRightAnimation
+          : slideInLeftAnimation};
+
     .middle-container {
       width: 77%;
       height: 77%;
