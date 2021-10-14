@@ -49,7 +49,6 @@ export const CardPattern = (props) => {
   const propsToChild = {
     ...props,
     openModalPattern: false,
-    setOpenModalPattern: null,
   };
 
   return (
