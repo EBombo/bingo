@@ -31,3 +31,4 @@ options:
   # TODO: Deploy hosting [front / back].
   # TODO: Format all files "npx prettier --write ."
   # TODO: Add tests
+  # TODO: Clonar el storage de dev a prod.
