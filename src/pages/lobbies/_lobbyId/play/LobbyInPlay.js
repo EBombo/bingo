@@ -301,6 +301,7 @@ const BingoGameContainer = styled.div`
         grid-template-columns: auto auto;
         grid-gap: 1rem;
         border-bottom: 10px solid ${(props) => props.theme.basic.primary};
+        overflow: auto;
 
         .left-user-content {
           display: flex;
@@ -328,14 +329,16 @@ const BingoGameContainer = styled.div`
           }
 
           .bottom-section {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: auto minmax(250px, auto) minmax(200px, auto);
+            grid-gap: 1rem;
             align-items: center;
             width: 100%;
             margin: 1rem 0;
 
             .last-plays-container {
               margin: 0;
+              min-width: 250px;
             }
 
             .pattern {
