@@ -3,6 +3,7 @@ import styled from "styled-components";
 import get from "lodash/get";
 import { BOARD_PARAMS } from "../../../../business";
 import { timeoutPromise } from "../../../../utils/promised";
+import { mediaQuery } from "../../../../constants";
 
 export const LastPlays = (props) => {
   const [animationSpeed] = useGlobal("animationSpeed");
@@ -50,17 +51,18 @@ export const LastPlays = (props) => {
 
 const Container = styled.div`
   width: 100%;
-  max-width: 100%;
-  overflow: hidden;
 
   .balls {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 3px;
     align-items: center;
-    height: 70px;
-    background: #221545;
+    height: 53px;
+    background: ${(props) => props.theme.basic.secondaryDarken};
     box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
     border-radius: 100px;
     padding: 5px;
+    margin-top: 1rem;
   }
 
   .label {
@@ -72,11 +74,19 @@ const Container = styled.div`
     line-height: 12px;
     color: #a3a3a3;
   }
+
+  ${mediaQuery.afterTablet} {
+    .balls {
+      width: 250px;
+      height: 70px;
+      grid-gap: 3px;
+    }
+  }
 `;
 
 const BallContainer = styled.div`
-  width: 55px;
-  height: 55px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   background: ${(props) =>
     props.number < 16
@@ -90,11 +100,10 @@ const BallContainer = styled.div`
       : props.theme.ballsColors.o};
 
   position: relative;
-  margin: 0 5px 0 0;
 
   .middle-container {
-    width: 38px;
-    height: 38px;
+    width: 77%;
+    height: 77%;
     border-radius: 50%;
     background: ${(props) =>
       props.number < 16
@@ -113,8 +122,8 @@ const BallContainer = styled.div`
   }
 
   .inner-container {
-    width: 35px;
-    height: 35px;
+    width: 75%;
+    height: 75%;
     border-radius: 50%;
     background: linear-gradient(191.91deg, #ffffff 7.17%, #ededed 91.29%);
     position: absolute;
@@ -130,9 +139,19 @@ const BallContainer = styled.div`
     .letter {
       font-family: Lato;
       font-style: normal;
-      font-size: 12px;
-      line-height: 14px;
+      font-size: 9px;
+      line-height: 11px;
       color: ${(props) => props.theme.basic.blackDarken};
+    }
+  }
+
+  ${mediaQuery.afterTablet} {
+    .inner-container {
+      .number,
+      .letter {
+        font-size: 12px;
+        line-height: 14px;
+      }
     }
   }
 `;

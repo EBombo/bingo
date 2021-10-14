@@ -1,6 +1,6 @@
 import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
-import { mediaQuery } from "../../../../constants";
+import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { Popover } from "antd";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
@@ -8,6 +8,7 @@ import { Image } from "../../../../components/common/Image";
 import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 import { UserProgress } from "./UserProgress";
+import { ButtonAnt, Input } from "../../../../components/form";
 
 const TAB = {
   CARDS: "cards",
@@ -94,14 +95,40 @@ export const UsersTabs = (props) => {
           {...props}
         />
       )}
-      <div className="tabs-container">
-        <div className={`tab ${tab === TAB.CARDS && "active"}`} onClick={() => setTab(TAB.CARDS)}>
-          Cuadrícula
+      <Desktop>
+        <div className="tabs-container-desktop">
+          <div className="left-side">Participantes ({Object.keys(props.lobby.users).length})</div>
+          <div className="right-side">
+            <ButtonAnt
+              className={`tab ${tab === TAB.CARDS && "active"}`}
+              color="default"
+              margin="0 0.5rem"
+              onClick={() => setTab(TAB.CARDS)}
+            >
+              Cuadrícula
+            </ButtonAnt>
+            <ButtonAnt
+              className={`tab ${tab === TAB.TABLE && "active"}`}
+              color="default"
+              margin="0 0.5rem"
+              onClick={() => setTab(TAB.TABLE)}
+            >
+              Tabla
+            </ButtonAnt>
+            <Input type="search" className="input-search" placeholder="Buscar por nombre" />
+          </div>
         </div>
-        <div className={`tab ${tab === TAB.TABLE && "active"}`} onClick={() => setTab(TAB.TABLE)}>
-          Tabla
+      </Desktop>
+      <Tablet>
+        <div className="tabs-container">
+          <ButtonAnt color="default" margin="0 0.5rem" onClick={() => setTab(TAB.CARDS)}>
+            Cuadrícula
+          </ButtonAnt>
+          <ButtonAnt color="default" margin="0 0.5rem" onClick={() => setTab(TAB.TABLE)}>
+            Tabla
+          </ButtonAnt>
         </div>
-      </div>
+      </Tablet>
 
       <div className={`user-tab-${tab}`}>
         {users.map((user, index) =>
@@ -205,10 +232,13 @@ const TabsContainer = styled.div`
   }
 
   .tabs-container {
-    height: 32px;
-    background: ${(props) => props.theme.basic.whiteDark};
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    button {
+      padding: 5px !important;
+    }
 
     .tab {
       padding: 0.5rem 1rem;
@@ -394,34 +424,53 @@ const TabsContainer = styled.div`
       border-radius: 4px;
     }
 
-    .tabs-container {
-      height: 32px;
-      background: transparent;
+    .tabs-container-desktop {
+      height: 48px;
+      background: ${(props) => props.theme.basic.secondary};
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       display: flex;
       align-items: center;
-      border-bottom: 2px solid ${(props) => props.theme.basic.whiteLight};
+      justify-content: space-between;
+      padding: 0 1rem;
+      margin-bottom: 1rem;
 
-      .tab {
-        padding: 0.5rem 1rem;
-        font-size: 15px;
-        line-height: 18px;
+      .left-side {
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 22px;
         color: ${(props) => props.theme.basic.whiteLight};
       }
 
-      .active {
-        color: ${(props) => props.theme.basic.primaryLight};
-      }
+      .right-side {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
 
-      .active::after {
-        width: 80%;
-        height: 2px;
-        background: ${(props) => props.theme.basic.primaryLight};
-      }
-    }
+        button {
+          font-family: Lato;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 14px;
+          padding: 5px 20px !important;
+        }
 
-    .user-tab {
-      &-cards {
-        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        .input-search {
+          background: ${(props) => props.theme.basic.secondaryDarken};
+          box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+          border-radius: 4px;
+          font-family: Lato;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 11px;
+          line-height: 13px;
+          color: ${(props) => props.theme.basic.primary};
+          height: 30px;
+          border: none;
+          width: 300px;
+        }
       }
     }
   }

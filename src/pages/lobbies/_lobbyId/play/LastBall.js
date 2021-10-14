@@ -1,74 +1,139 @@
-import React from "reactn";
-import styled from "styled-components";
-import { config, firestore } from "../../../../firebase";
+import React, { useEffect, useState } from "reactn";
+import styled, { keyframes } from "styled-components";
 import get from "lodash/get";
-import { BOARD_PARAMS, createBoard } from "../../../../business";
+import { BOARD_PARAMS } from "../../../../business";
+import { fadeInDownBig, fadeInLeftBig, fadeOutDownBig, fadeOutRightBig } from "react-animations";
+import { timeoutPromise } from "../../../../utils/promised";
 
 export const LastBall = (props) => {
+  const [lastNumber, setLastNumber] = useState(props.lastNumber);
+  const [outEffect, setOutEffect] = useState(false);
+
+  useEffect(() => {
+    if (!props.lastNumber) return;
+
+    const initialize = async () => {
+      setOutEffect(true);
+      await timeoutPromise(200);
+      setOutEffect(false);
+      setLastNumber(props.lastNumber);
+    };
+
+    initialize();
+  }, [props.lastNumber]);
+
   return (
-    <LastBallContainer
-      hiddenOptions={props.hiddenOptions}
-      number={props.lastNumber}
-      green={`${config.storageUrl}/resources/balls/green-ball.png`}
-      blue={`${config.storageUrl}/resources/balls/blue-ball.png`}
-      orange={`${config.storageUrl}/resources/balls/orange-ball.png`}
-      yellow={`${config.storageUrl}/resources/balls/yellow-ball.png`}
-      red={`${config.storageUrl}/resources/balls/red-ball.png`}
-    >
+    <LastBallContainer number={lastNumber} vertical={props.vertical} outEffect={outEffect}>
       <div className="ball-container">
-        <p>
-          {props.lastNumber < BOARD_PARAMS.B.value
-            ? get(props, "lobby.game.letters.b", "B")
-            : props.lastNumber < BOARD_PARAMS.I.value
-            ? get(props, "lobby.game.letters.i", "I")
-            : props.lastNumber < BOARD_PARAMS.N.value
-            ? get(props, "lobby.game.letters.n", "N")
-            : props.lastNumber < BOARD_PARAMS.G.value
-            ? get(props, "lobby.game.letters.g", "G")
-            : get(props, "lobby.game.letters.o", "O")}
-        </p>
-        <p>{props.lastNumber}</p>
+        <div className="middle-container">
+          <div className="inner-container">
+            <div className="letter">
+              {lastNumber === 0
+                ? 0
+                : lastNumber < BOARD_PARAMS.B.value
+                ? get(props, "lobby.game.letters.b", "B")
+                : lastNumber < BOARD_PARAMS.I.value
+                ? get(props, "lobby.game.letters.i", "I")
+                : lastNumber < BOARD_PARAMS.N.value
+                ? get(props, "lobby.game.letters.n", "N")
+                : lastNumber < BOARD_PARAMS.G.value
+                ? get(props, "lobby.game.letters.g", "G")
+                : get(props, "lobby.game.letters.o", "O")}
+            </div>
+            <div className="number">{lastNumber}</div>
+          </div>
+        </div>
       </div>
     </LastBallContainer>
   );
 };
 
+const slideInLeftAnimation = keyframes`${fadeInLeftBig}`;
+const slideOutRightAnimation = keyframes`${fadeOutRightBig}`;
+
+const slideInDownAnimation = keyframes`${fadeInDownBig}`;
+const slideOutDownAnimation = keyframes`${fadeOutDownBig}`;
+
 const LastBallContainer = styled.div`
-  width: 100%;
-  height: 130px;
+  width: ${(props) => (props.vertical ? "125px" : "100%")};
+  height: ${(props) => (props.vertical ? "190px" : "130px")};
   background: #221545;
-  box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.25);
   border-radius: 100px;
   padding: 5px;
-  display: flex;
-  align-items: center;
   max-width: 200px;
+  display: ${(props) => (props.vertical ? "flex-start" : "center")};
+  clip-path: ${(props) => (props.vertical ? "ellipse(62% 51% at 50% 50%)" : "ellipse(50% 60% at 50% 50%)")};
 
   .ball-container {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background-image: url("${(props) =>
+    background: ${(props) =>
       props.number < 16
-        ? props.green
+        ? props.theme.ballsColors.b
         : props.number < 31
-        ? props.blue
+        ? props.theme.ballsColors.i
         : props.number < 46
-        ? props.orange
+        ? props.theme.ballsColors.n
         : props.number < 61
-        ? props.yellow
-        : props.red}");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+        ? props.theme.ballsColors.g
+        : props.theme.ballsColors.o};
+    position: relative;
+    animation: 1s
+      ${(props) =>
+        props.vertical
+          ? props.outEffect
+            ? slideOutDownAnimation
+            : slideInDownAnimation
+          : props.outEffect
+          ? slideOutRightAnimation
+          : slideInLeftAnimation};
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    .middle-container {
+      width: 77%;
+      height: 77%;
+      border-radius: 50%;
+      background: ${(props) =>
+        props.number < 16
+          ? props.theme.ballsColors.borderB
+          : props.number < 31
+          ? props.theme.ballsColors.borderI
+          : props.number < 46
+          ? props.theme.ballsColors.borderN
+          : props.number < 61
+          ? props.theme.ballsColors.borderG
+          : props.theme.ballsColors.borderO};
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
 
-    p {
-      margin: 0;
+    .inner-container {
+      width: 75%;
+      height: 75%;
+      border-radius: 50%;
+      background: linear-gradient(191.91deg, #ffffff 7.17%, #ededed 91.29%);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      .number,
+      .letter {
+        font-family: "Lato", sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-style: normal;
+        font-size: 22px;
+        line-height: 24px;
+        color: ${(props) => props.theme.basic.blackDarken};
+      }
     }
   }
 
