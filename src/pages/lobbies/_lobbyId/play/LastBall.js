@@ -12,14 +12,15 @@ export const LastBall = (props) => {
   useEffect(() => {
     if (!props.lastNumber) return;
 
-    const initialize = async () => {
+    const initializeAnimation = async () => {
       setOutEffect(true);
       await timeoutPromise(200);
       setOutEffect(false);
+
       setLastNumber(props.lastNumber);
     };
 
-    initialize();
+    initializeAnimation();
   }, [props.lastNumber]);
 
   return (
@@ -91,8 +92,8 @@ const LastBallContainer = styled.div`
           : slideInLeftAnimation};
 
     .middle-container {
-      width: 77%;
-      height: 77%;
+      width: 72%;
+      height: 72%;
       border-radius: 50%;
       background: ${(props) =>
         props.number < 16
@@ -111,8 +112,8 @@ const LastBallContainer = styled.div`
     }
 
     .inner-container {
-      width: 75%;
-      height: 75%;
+      width: 85%;
+      height: 85%;
       border-radius: 50%;
       background: linear-gradient(191.91deg, #ffffff 7.17%, #ededed 91.29%);
       position: absolute;
@@ -126,10 +127,7 @@ const LastBallContainer = styled.div`
 
       .number,
       .letter {
-        font-family: "Lato", sans-serif;
-        font-style: normal;
         font-weight: bold;
-        font-style: normal;
         font-size: 22px;
         line-height: 24px;
         color: ${(props) => props.theme.basic.blackDarken};

@@ -105,8 +105,8 @@ const BallContainer = styled.div`
   position: relative;
 
   .middle-container {
-    width: 77%;
-    height: 77%;
+    width: 72%;
+    height: 72%;
     border-radius: 50%;
     background: ${(props) =>
       props.number < 16
@@ -125,8 +125,8 @@ const BallContainer = styled.div`
   }
 
   .inner-container {
-    width: 75%;
-    height: 75%;
+    width: 85%;
+    height: 85%;
     border-radius: 50%;
     background: linear-gradient(191.91deg, #ffffff 7.17%, #ededed 91.29%);
     position: absolute;
@@ -140,8 +140,7 @@ const BallContainer = styled.div`
 
     .number,
     .letter {
-      font-family: Lato;
-      font-style: normal;
+      font-weight: bold;
       font-size: 9px;
       line-height: 11px;
       color: ${(props) => props.theme.basic.blackDarken};
@@ -152,6 +151,7 @@ const BallContainer = styled.div`
     .inner-container {
       .number,
       .letter {
+        font-weight: bold;
         font-size: 12px;
         line-height: 14px;
       }
