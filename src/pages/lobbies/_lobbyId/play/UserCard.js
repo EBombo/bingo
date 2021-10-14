@@ -81,7 +81,7 @@ export const UserCard = (props) => {
             <tr key={`key-${row}`}>
               {arrNums.map((num, col) => (
                 <td key={`key-${num}-${col}-${matrix}`}>
-                  {props.lobby.settings.cardAutofill || authUser.isAdmin ? (
+                  {props.lobby.settings.cardAutofill ? (
                     <div className={`${props.lobby.board && props.lobby.board[num] && `active`}`}>{num}</div>
                   ) : (
                     <div
@@ -181,7 +181,6 @@ const CardContainer = styled.div`
     padding: 0.5rem 1rem;
 
     .card-title {
-      
     }
 
     table {

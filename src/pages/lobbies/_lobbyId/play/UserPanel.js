@@ -24,7 +24,7 @@ export const UserPanel = (props) => {
           </div>
           <div className="right-user-content">
             <div className="board-container">
-              <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={!props.lobby.settings.showBoardToUser} />
+              <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
             </div>
             <div className="bottom-section">
               <LastBall lastNumber={lastNumber} vertical {...props} />
