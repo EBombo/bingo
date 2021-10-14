@@ -109,7 +109,7 @@ export const ModalUserCard = (props) => {
             <ContainerValidate>
               <Desktop>
                 <div className="board-container">
-                  <BingoBoard {...props} isView />
+                  <BingoBoard {...props} isView isVisible />
                   <div className="action-container">
                     <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
                       Volver
@@ -142,7 +142,7 @@ export const ModalUserCard = (props) => {
                   <UserCard user={props.user} {...props} />
                 </div>
                 <div className="board-container">
-                  <BingoBoard {...props} isView />
+                  <BingoBoard {...props} isView isVisible />
                 </div>
                 <div className="action-container">
                   <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
