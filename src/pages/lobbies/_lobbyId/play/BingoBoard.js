@@ -39,8 +39,8 @@ export const BingoBoard = (props) => {
       setPosX(position.min);
       setStartEffectBody(true);
       await timeoutPromise((animationSpeed / 2) * 1000);
-      setPosX(positionOnScreenX);
       setStartEffectBody(false);
+      setPosX(positionOnScreenX);
 
       setCurrentBoard(props.lobby.board);
     };
