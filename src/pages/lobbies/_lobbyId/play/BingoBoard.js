@@ -20,6 +20,7 @@ export const BingoBoard = (props) => {
     //animation
     if (props.isView) return setCurrentBoard(props.lobby.board ?? {});
     if (!props.lobby.board) return setCurrentBoard({});
+    if (JSON.stringify(currentBoard) === JSON.stringify(props.lobby.board)) return;
 
     const initialize = async () => {
       if (!props.lobby.lastPlays[0]) return setCurrentBoard({});
