@@ -125,7 +125,7 @@ export const AdminPanel = (props) => {
           </div>
           <div className="right-container">
             <div className="board-container">
-              <BingoBoard {...props} setLastNumber={setLastNumber} />
+              <BingoBoard {...props} setLastNumber={setLastNumber} isVisible />
             </div>
             <div className="bottom-section">
               <div className="ball-called">
@@ -173,7 +173,7 @@ export const AdminPanel = (props) => {
       </Desktop>
       <Tablet>
         <div className="bingo-board">
-          <BingoBoard {...props} setLastNumber={setLastNumber} />
+          <BingoBoard {...props} setLastNumber={setLastNumber} isVisible />
         </div>
         <div className="pattern-rounds">
           <div className="left-container">

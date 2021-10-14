@@ -44,7 +44,7 @@ export const BingoBoard = (props) => {
       setPosX(positionOnScreenX);
 
       setCurrentBoard(props.lobby.board);
-      props.setLastNumber(props.lobby?.lastPlays?.[0] ?? 0);
+      props.setLastNumber && props.setLastNumber(props.lobby?.lastPlays?.[0] ?? 0);
     };
 
     initialize();
@@ -63,6 +63,8 @@ export const BingoBoard = (props) => {
     Array(end - start + 1)
       .fill()
       .map((_, idx) => start + idx);
+
+  if (!props.isVisible) return null;
 
   return (
     <BoardContainer>

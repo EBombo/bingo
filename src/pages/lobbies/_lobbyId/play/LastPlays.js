@@ -1,9 +1,10 @@
 import React, { useEffect, useGlobal, useState } from "reactn";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import get from "lodash/get";
 import { BOARD_PARAMS } from "../../../../business";
 import { timeoutPromise } from "../../../../utils/promised";
 import { mediaQuery } from "../../../../constants";
+import { fadeInLeftBig } from "react-animations";
 
 export const LastPlays = (props) => {
   const [animationSpeed] = useGlobal("animationSpeed");
@@ -84,6 +85,8 @@ const Container = styled.div`
   }
 `;
 
+const slideInLeftAnimation = keyframes`${fadeInLeftBig}`;
+
 const BallContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -98,7 +101,7 @@ const BallContainer = styled.div`
       : props.number < 61
       ? props.theme.ballsColors.g
       : props.theme.ballsColors.o};
-
+  animation: 1s ${slideInLeftAnimation};
   position: relative;
 
   .middle-container {
