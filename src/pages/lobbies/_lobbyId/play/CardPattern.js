@@ -3,14 +3,11 @@ import styled from "styled-components";
 import get from "lodash/get";
 import { ButtonAnt } from "../../../../components/form";
 import { mediaQuery } from "../../../../constants";
-import { ModalPattern } from "./ModalPattern";
 import { firestore } from "../../../../firebase";
 import { generateMatrix } from "../../../../business";
 
 export const CardPattern = (props) => {
-  const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [apagon, setApagon] = useState(false);
   const [pattern, setPattern] = useState(generateMatrix());
   const [authUser] = useGlobal("user");
 
@@ -20,13 +17,6 @@ export const CardPattern = (props) => {
     if (props.lobby.pattern) return setPattern(JSON.parse(props.lobby.pattern));
   }, [props.lobby.pattern, props.apagon]);
 
-  // This hook is used to open modal.
-  useEffect(() => {
-    if (!props.openModalPattern || isVisibleModalPattern) return;
-
-    setIsVisibleModalPattern(props.openModalPattern);
-  }, [props.openModalPattern]);
-
   const editPattern = (row, col) => {
     const newPattern = [...pattern];
     newPattern[row][col] = newPattern[row][col] ? null : true;
@@ -34,34 +24,20 @@ export const CardPattern = (props) => {
   };
 
   const savePattern = async () => {
+    setIsLoading(true);
+
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       pattern: JSON.stringify(pattern),
       updateAt: new Date(),
     });
 
-    // This functions is used to open modal.
-    props.setOpenModalPattern && props.setOpenModalPattern(false);
-
     if (props.continueGame) await props.continueGame();
-  };
 
-  // This mapping is used to prevent loop.
-  const propsToChild = {
-    ...props,
-    openModalPattern: false,
+    setIsLoading(false);
   };
 
   return (
     <PatternContainer user={authUser} isEdit={props.isEdit}>
-      {isVisibleModalPattern && (
-        <ModalPattern
-          apagon={apagon}
-          isVisibleModalPattern={isVisibleModalPattern}
-          setIsVisibleModalPattern={setIsVisibleModalPattern}
-          continueGame={() => setIsVisibleModalPattern(false)}
-          {...propsToChild}
-        />
-      )}
       <div className="caption">{props.caption}</div>
       <div className="table-container">
         <table>
@@ -97,8 +73,8 @@ export const CardPattern = (props) => {
         <div className="btns-container">
           <ButtonAnt
             onClick={() => {
-              setApagon(true);
-              setIsVisibleModalPattern(true);
+              props.setApagon(true);
+              props.setIsVisibleModalPattern(true);
             }}
           >
             Apágon
@@ -106,8 +82,8 @@ export const CardPattern = (props) => {
           <ButtonAnt
             color="default"
             onClick={() => {
-              setApagon(false);
-              setIsVisibleModalPattern(true);
+              props.setApagon(false);
+              props.setIsVisibleModalPattern(true);
             }}
           >
             Editar
@@ -121,7 +97,6 @@ export const CardPattern = (props) => {
             disabled={isLoading}
             onClick={() => {
               props.cancelAction();
-              props.setOpenModalPattern && props.setOpenModalPattern(false);
             }}
           >
             Cancelar

@@ -14,20 +14,23 @@ import { createBoard } from "../../../../business";
 import { useInterval } from "../../../../hooks/useInterval";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
 import styled from "styled-components";
+import { ModalPattern } from "./ModalPattern";
 
 export const AdminPanel = (props) => {
+  const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
+  const [apagon, setApagon] = useState(false);
+
   const [reproductionSpeed] = useGlobal("reproductionSpeed");
   const [animationSpeed] = useGlobal("animationSpeed");
   const [isAutomatic, setIsAutomatic] = useGlobal("isAutomatic");
   const [loading, setLoading] = useState(false);
-  const [openModalPattern, setOpenModalPattern] = useState(false);
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [lastNumber, setLastNumber] = useState(0);
 
   const startGame = async (callback) => {
     if (!props.lobby.pattern) {
-      setOpenModalPattern(true);
+      setIsVisibleModalPattern(true);
       return props.showNotification("UPS", "Define un patrón antes de empezar el bingo", "warning");
     }
 
@@ -107,18 +110,32 @@ export const AdminPanel = (props) => {
     </ModalContainer>
   );
 
+  const modalPattern = () => (
+    <ModalPattern
+      apagon={apagon}
+      setApagon={setApagon}
+      isVisibleModalPattern={isVisibleModalPattern}
+      setIsVisibleModalPattern={setIsVisibleModalPattern}
+      continueGame={() => setIsVisibleModalPattern(false)}
+      {...props}
+    />
+  );
+
   return (
     <>
       {modalConfirm()}
+      {isVisibleModalPattern && modalPattern()}
       <Desktop>
         <div className="bingo">
           <div className="left-container">
             <CardPattern
-              caption={"Patrón que se debe llenar"}
               key={props.lobby.pattern}
+              caption={"Patrón que se debe llenar"}
+              apagon={apagon}
+              setApagon={setApagon}
+              isVisibleModalPattern={isVisibleModalPattern}
+              setIsVisibleModalPattern={setIsVisibleModalPattern}
               {...props}
-              openModalPattern={openModalPattern}
-              setOpenModalPattern={setOpenModalPattern}
             />
 
             <ButtonAnt
@@ -188,10 +205,13 @@ export const AdminPanel = (props) => {
           <div className="left-container">
             <div className="card-pattern-container">
               <CardPattern
+                key={props.lobby.pattern}
                 caption={"Patrón que se debe llenar"}
+                apagon={apagon}
+                setApagon={setApagon}
+                isVisibleModalPattern={isVisibleModalPattern}
+                setIsVisibleModalPattern={setIsVisibleModalPattern}
                 {...props}
-                openModalPattern={openModalPattern}
-                setOpenModalPattern={setOpenModalPattern}
               />
             </div>
             <ButtonAnt
