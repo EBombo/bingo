@@ -2,15 +2,15 @@ import { UserCard } from "./UserCard";
 import { BingoBoard } from "./BingoBoard";
 import { CardPattern } from "./CardPattern";
 import { LastBall } from "./LastBall";
-import defaultTo from "lodash/defaultTo";
 import { ButtonAnt } from "../../../../components/form";
 import { LastPlays } from "./LastPlays";
-import React, { useGlobal } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import { Chat } from "../../../../components/chat";
 import { Desktop, Tablet } from "../../../../constants";
 
 export const UserPanel = (props) => {
   const [authUser] = useGlobal("user");
+  const [lastNumber, setLastNumber] = useState(0);
 
   return (
     <>
@@ -20,19 +20,13 @@ export const UserPanel = (props) => {
             <UserCard user={authUser} {...props} />
           </div>
           <div className="right-user-content">
-            {props.lobby.settings.showBoardToUser && (
-              <div className="board-container">
-                <BingoBoard {...props} />
-              </div>
-            )}
+            <div className="board-container">
+              <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
+            </div>
             <div className={`${props.lobby.settings.showBoardToUser ? "flex-container" : "normal"} `}>
               <div className="top-content">
                 <CardPattern caption={"Patrón que se debe llenar"} hiddenOptions key={props.lobby.pattern} {...props} />
-                <LastBall
-                  lastNumber={defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}
-                  hiddenOptions
-                  {...props}
-                />
+                <LastBall lastNumber={lastNumber} hiddenOptions {...props} />
               </div>
               <div className="last-plays-container">
                 <div className="buttons-container">
@@ -46,21 +40,15 @@ export const UserPanel = (props) => {
         </div>
       </Desktop>
       <Tablet>
-        {props.lobby.settings.showBoardToUser && (
-          <div className="bingo-board">
-            <BingoBoard {...props} />
-          </div>
-        )}
+        <div className="bingo-board">
+          <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
+        </div>
         <div className="top-container-user">
           <div className="bingo-card-container">
             <UserCard user={authUser} {...props} />
           </div>
           <div className="right-container">
-            <LastBall
-              lastNumber={defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}
-              hiddenOptions
-              {...props}
-            />
+            <LastBall lastNumber={lastNumber} hiddenOptions {...props} />
             <CardPattern key={props.lobby.pattern} caption={"Patrón que se debe llenar"} hiddenOptions {...props} />
           </div>
         </div>
