@@ -16,7 +16,7 @@ export const LobbyLoading = (props) => {
         });
 
       updateLobby();
-    }, 15000);
+    }, 20000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -360,16 +360,19 @@ const LoadingGameContainer = styled.div`
       width: 52%;
     }
     66% {
-      width: 50%;
+      width: 43%;
     }
     71% {
-      width: 41%;
+      width: 35%;
     }
     75% {
       width: 24%;
     }
-    94% {
+    80% {
       width: 10%;
+    }
+    90% {
+      width: 5%;
     }
     100% {
       width: 0;
