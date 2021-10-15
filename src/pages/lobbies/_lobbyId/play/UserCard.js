@@ -102,7 +102,8 @@ export const UserCard = (props) => {
 };
 
 const CardContainer = styled.div`
-  width: 350px;
+  width: 100%;
+  max-width: 350px;
   background: ${(props) => (props.backgroundColor ? props.backgroundColor : props.theme.basic.secondary)};
   border-radius: 3px;
   padding: 0.5rem;
@@ -114,10 +115,8 @@ const CardContainer = styled.div`
     font-weight: 700;
     color: ${(props) => (props.titleColor ? props.titleColor : props.theme.basic.white)};
     text-align: center;
-    padding: 0.5rem;
     font-size: 28px;
     line-height: 35px;
-    font-weight: 700;
     padding: 1rem 0;
   }
 
