@@ -16,7 +16,7 @@ export const LobbyLoading = (props) => {
         });
 
       updateLobby();
-    }, 19000);
+    }, 20000);
 
     return () => clearTimeout(timer);
   }, []);
