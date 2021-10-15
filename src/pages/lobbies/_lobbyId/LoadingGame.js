@@ -120,7 +120,7 @@ const LoadingGameContainer = styled.div`
   position: relative;
   overflow: hidden;
   background-image: url("${(props) =>
-    `${props.config.storageUrl}/resources/balls/purple-balls-tablet.svg`}");
+    `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -344,7 +344,7 @@ const LoadingGameContainer = styled.div`
   
   ${mediaQuery.afterTablet} {
     background-image: url("${(props) =>
-      `${props.config.storageUrl}/resources/balls/purple-balls.svg`}");
+      `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
   }
 
   @keyframes loader {

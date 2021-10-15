@@ -78,14 +78,14 @@ export const LobbyUser = (props) => {
     <SuccessInscriptionContainer>
       <Tablet>
         <Container
-          bgImg={`${config.storageUrl}/resources/balls/purple-balls-tablet.svg`}
+          bgImg={`${config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}
         >
           {content()}
         </Container>
       </Tablet>
       <Desktop>
         <Container
-          bgImg={`${config.storageUrl}/resources/balls/purple-balls.svg`}
+          bgImg={`${config.storageUrl}/resources/balls/coral-pattern.svg`}
         >
           {content()}
         </Container>
