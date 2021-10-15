@@ -17,13 +17,8 @@ export const UserProgress = (props) => {
         .collection("users")
         .doc(props.user.id)
         .onSnapshot((userOnShapShot) => {
-          if (!userOnShapShot.exists) return;
-
           const user = userOnShapShot.data();
-
-          if (!user?.myWinningCard) return;
-
-          setNumberWinners(user.myWinningCard);
+          setNumberWinners(user?.myWinningCard ?? []);
         });
 
     const sub = fetchMyWiningCard();
