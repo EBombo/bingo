@@ -99,9 +99,10 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   background-image: url("${(props) => props.bgImg}");
-  background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-repeat: repeat;
+  background-size: 120% 100%;
+  animation: right-to-left-shift 20s linear infinite alternate;
 `;
 
 const SuccessInscriptionContainer = styled.div`

@@ -119,9 +119,10 @@ const LoadingGameContainer = styled.div`
   overflow: hidden;
   background-image: url("${(props) =>
     `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-position: center;
-  background-size: cover;
+  background-size: 120% 100%;
+  animation: right-to-left-shift 20s linear infinite alternate;
   
   .step-one-tablet {
     position: absolute;

@@ -165,9 +165,10 @@ const LoginContainer = styled.div`
   height: 100vh;
   background-image: url("${(props) =>
     `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-position: center;
-  background-size: cover;
+  background-size: 120% 100%;
+  animation: right-to-left-shift 20s linear infinite alternate;
 
   .main-container {
     padding: 10px;
