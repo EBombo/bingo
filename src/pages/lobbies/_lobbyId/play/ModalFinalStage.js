@@ -175,7 +175,7 @@ const Content = styled.div`
         text-align: center;
       }
       .card-container {
-        max-width: 200px;
+        overflow-x: auto;
         margin: 0 auto;
       }
     }
