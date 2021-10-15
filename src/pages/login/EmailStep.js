@@ -53,7 +53,7 @@ export const EmailStep = (props) => {
           margin="10px auto"
           variant="default"
           disabled={props.isLoading}
-          placeholder="Ingresa tu mail"
+          placeholder="Ingresa tu email"
         />
         <ButtonBingo width="100%" disabled={props.isLoading} htmlType="submit">
           Ingresar
