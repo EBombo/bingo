@@ -1,14 +1,17 @@
-import React, { useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
-import { Popover } from "antd";
+import { Input, Popover } from "antd";
+import orderBy from "lodash/orderBy";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 import { UserProgress } from "./UserProgress";
-import { ButtonAnt, Input } from "../../../../components/form";
+import { ButtonAnt } from "../../../../components/form";
+
+const { Search } = Input;
 
 const TAB = {
   CARDS: "cards",
@@ -21,8 +24,18 @@ export const UsersTabs = (props) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
+  const [users, setUsers] = useState([]);
 
-  const users = Object.values(props.lobby.users ?? {});
+  useEffect(() => {
+    resetUsers();
+  }, []);
+
+  const resetUsers = () => {
+    let newUsers = Object.values(props.lobby.users ?? {});
+    newUsers = orderBy(newUsers, ["nickname"], ["desc"]);
+    setUsers(newUsers);
+  };
+
   const numberWinners = getNumberBoard(props.lobby.board ?? {});
   const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
@@ -34,6 +47,13 @@ export const UsersTabs = (props) => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       users: newUsers,
     });
+  };
+
+  const filterUsers = (value) => {
+    if (value === "") return resetUsers();
+
+    const newUsers = users.filter((user) => user.nickname === value);
+    setUsers(newUsers);
   };
 
   const menu = (user) => (
@@ -100,7 +120,7 @@ export const UsersTabs = (props) => {
           <div className="left-side">Participantes ({Object.keys(props.lobby.users).length})</div>
           <div className="right-side">
             <ButtonAnt
-              className={`tab ${tab === TAB.CARDS && "active"}`}
+              className={`btn-tab ${tab === TAB.CARDS && "active"}`}
               color="default"
               margin="0 0.5rem"
               onClick={() => setTab(TAB.CARDS)}
@@ -108,23 +128,37 @@ export const UsersTabs = (props) => {
               Cuadrícula
             </ButtonAnt>
             <ButtonAnt
-              className={`tab ${tab === TAB.TABLE && "active"}`}
+              className={`btn-tab ${tab === TAB.TABLE && "active"}`}
               color="default"
               margin="0 0.5rem"
               onClick={() => setTab(TAB.TABLE)}
             >
               Tabla
             </ButtonAnt>
-            <Input type="search" className="input-search" placeholder="Buscar por nombre" />
+            <Input.Search
+              className="input-search"
+              placeholder="Buscar por nombre"
+              onSearch={(value) => filterUsers(value, event)}
+            />
           </div>
         </div>
       </Desktop>
       <Tablet>
         <div className="tabs-container">
-          <ButtonAnt color="default" margin="0 0.5rem" onClick={() => setTab(TAB.CARDS)}>
+          <ButtonAnt
+            className={`btn-tab ${tab === TAB.TABLE && "active"}`}
+            color="default"
+            margin="0 0.5rem"
+            onClick={() => setTab(TAB.CARDS)}
+          >
             Cuadrícula
           </ButtonAnt>
-          <ButtonAnt color="default" margin="0 0.5rem" onClick={() => setTab(TAB.TABLE)}>
+          <ButtonAnt
+            className={`btn-tab ${tab === TAB.TABLE && "active"}`}
+            color="default"
+            margin="0 0.5rem"
+            onClick={() => setTab(TAB.TABLE)}
+          >
             Tabla
           </ButtonAnt>
         </div>
@@ -448,7 +482,7 @@ const TabsContainer = styled.div`
         align-items: center;
         justify-content: space-evenly;
 
-        button {
+        .btn-tab {
           font-family: Lato;
           font-style: normal;
           font-weight: bold;
@@ -458,18 +492,29 @@ const TabsContainer = styled.div`
         }
 
         .input-search {
-          background: ${(props) => props.theme.basic.secondaryDarken};
           box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-          border-radius: 4px;
-          font-family: Lato;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 11px;
-          line-height: 13px;
-          color: ${(props) => props.theme.basic.primary};
-          height: 30px;
-          border: none;
           width: 300px;
+
+          input,
+          button {
+            border: none;
+            background: ${(props) => props.theme.basic.secondaryDarken};
+            font-family: Lato;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 11px;
+            line-height: 13px;
+            color: ${(props) => props.theme.basic.primary};
+            border-radius: 4px 0 0 4px;
+            height: 30px;
+          }
+
+          button {
+            border-radius: 0 4px 4px 0;
+            svg {
+              color: ${(props) => props.theme.basic.primary};
+            }
+          }
         }
       }
     }

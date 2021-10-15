@@ -11,9 +11,7 @@ export const ModalAwards = (props) => {
   const [authUser] = useGlobal("user");
   const [isSaving, setIsSaving] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
-  const [awards, setAwards] = useState(
-    defaultTo(props.lobby.settings.awards, [])
-  );
+  const [awards, setAwards] = useState(defaultTo(props.lobby.settings.awards, []));
   const [award, setAward] = useState("");
 
   const deleteAward = async (index) => {
@@ -48,10 +46,10 @@ export const ModalAwards = (props) => {
   return (
     <ModalContainer
       background="#FAFAFA"
-      closable={false}
       footer={null}
       topDesktop="10%"
       visible={props.isVisibleModalAwards}
+      onCancel={() => props.setIsVisibleModalAwards(false)}
     >
       {isVisibleModalConfirm && (
         <ModalConfirm
@@ -101,8 +99,7 @@ export const ModalAwards = (props) => {
                 onChange={(event) =>
                   setAward({
                     name: event.target.value,
-                    order:
-                      defaultTo(props.lobby.settings.awards, []).length + 1,
+                    order: defaultTo(props.lobby.settings.awards, []).length + 1,
                   })
                 }
               />
@@ -111,10 +108,7 @@ export const ModalAwards = (props) => {
               </ButtonAnt>
             </form>
             <div className="btns-container">
-              <ButtonAnt
-                color="default"
-                onClick={() => setIsVisibleModalConfirm(true)}
-              >
+              <ButtonAnt color="default" onClick={() => setIsVisibleModalConfirm(true)}>
                 Cancelar
               </ButtonAnt>
               <ButtonAnt loading={isSaving} onClick={() => saveAwards()}>
