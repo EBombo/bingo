@@ -1,7 +1,7 @@
-import React, { useGlobal, useState, useEffect } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
-import { Popover } from "antd";
+import { Input, Popover } from "antd";
 import orderBy from "lodash/orderBy";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
@@ -10,7 +10,6 @@ import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 import { UserProgress } from "./UserProgress";
 import { ButtonAnt } from "../../../../components/form";
-import { Input } from "antd";
 
 const { Search } = Input;
 
@@ -50,14 +49,11 @@ export const UsersTabs = (props) => {
     });
   };
 
-  const filterUsers = (value, event) => {
-    let newUsers;
-    if (value !== "") {
-      newUsers = users.filter((user) => user.nickname === value);
-      setUsers(newUsers);
-    } else {
-      resetUsers();
-    }
+  const filterUsers = (value) => {
+    if (value === "") return resetUsers();
+
+    const newUsers = users.filter((user) => user.nickname === value);
+    setUsers(newUsers);
   };
 
   const menu = (user) => (
@@ -142,7 +138,7 @@ export const UsersTabs = (props) => {
             <Input.Search
               className="input-search"
               placeholder="Buscar por nombre"
-              onSearch={(value, event) => filterUsers(value, event)}
+              onSearch={(value) => filterUsers(value, event)}
             />
           </div>
         </div>
