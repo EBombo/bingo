@@ -61,7 +61,7 @@ export const ModalFinalStage = (props) => {
 
     const board = createBoard();
 
-    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+    const promiseNewCards = firestore.doc(`lobbies/${props.lobby.id}`).update({
       round: 0,
       lastPlays: [],
       board,
@@ -69,6 +69,13 @@ export const ModalFinalStage = (props) => {
       updateAt: new Date(),
       users: newUsers,
     });
+
+    const promisesRemoveUsers = Object.keys(props.lobby.users).map(
+      async (userId) =>
+        await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(userId).delete()
+    );
+
+    await Promise.all([promiseNewCards, ...promisesRemoveUsers]);
 
     props.setIsVisibleModalFinal(false);
   };

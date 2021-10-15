@@ -53,6 +53,7 @@ export const LobbyInPlay = (props) => {
       updateAt: new Date(),
     });
 
+  // TODO: Consider to refactoring, <Admin> & <User>.
   return (
     <>
       <UserLayout {...props} />
