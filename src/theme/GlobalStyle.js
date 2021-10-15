@@ -202,6 +202,18 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  @keyframes right-to-left-shift {
+    0% {
+      background-position: 0 0;
+    }
+    50% {
+      background-position: 50% 0;
+    }
+    100% {
+      background-position: 35% 0;
+    }
+  }
+
   /*------------ANIMATION---------------*/
 
 
