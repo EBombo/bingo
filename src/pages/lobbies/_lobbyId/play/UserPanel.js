@@ -33,7 +33,7 @@ export const UserPanel = (props) => {
               </div>
               <div className="pattern">
                 <CardPattern caption={"Patrón que se debe llenar"} hiddenOptions key={props.lobby.pattern} {...props} />
-                <ButtonAnt color="default" width="100%">
+                <ButtonAnt color="default" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
                   Ver premios
                 </ButtonAnt>
               </div>
