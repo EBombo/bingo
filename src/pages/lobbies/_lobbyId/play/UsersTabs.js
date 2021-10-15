@@ -2,6 +2,7 @@ import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { Popover } from "antd";
+import orderBy from "lodash/orderBy";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
@@ -22,7 +23,9 @@ export const UsersTabs = (props) => {
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
 
-  const users = Object.values(props.lobby.users ?? {});
+  let users = Object.values(props.lobby.users ?? {});
+  users = orderBy(users, ["nickname"], ["desc"]);
+
   const numberWinners = getNumberBoard(props.lobby.board ?? {});
   const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
