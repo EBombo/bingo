@@ -4,6 +4,7 @@ import { mediaQuery } from "../../../constants";
 import React, { useEffect, useGlobal } from "reactn";
 import { config, firestore } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
+import { animatedBackground } from "../../../theme";
 
 export const LobbyLoading = (props) => {
   const [authUser] = useGlobal("user");
@@ -117,12 +118,8 @@ const LoadingGameContainer = styled.div`
   height: 100vh;
   position: relative;
   overflow: hidden;
-  background-image: url("${(props) =>
-    `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
-  background-repeat: repeat;
-  background-position: center;
-  background-size: 120% 100%;
-  animation: right-to-left-shift 20s linear infinite alternate;
+
+  ${(props) => animatedBackground({ backgroundUrl: `${props.config.storageUrl}/resources/background-pattern-test.svg`})};
   
   .step-one-tablet {
     position: absolute;
@@ -341,11 +338,6 @@ const LoadingGameContainer = styled.div`
     }
   }
   
-  ${mediaQuery.afterTablet} {
-    background-image: url("${(props) =>
-      `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
-  }
-
   @keyframes loader {
     0% {
       width: 100%;

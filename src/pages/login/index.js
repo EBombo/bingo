@@ -10,7 +10,7 @@ import styled from "styled-components";
 import { object, string } from "yup";
 import { useRouter } from "next/router";
 import { useUser } from "../../hooks";
-import { mediaQuery } from "../../constants";
+import { animatedBackground } from "../../theme";
 
 const Login = (props) => {
   const router = useRouter();
@@ -163,12 +163,7 @@ const LoginContainer = styled.div`
   color: ${(props) => props.theme.basic.white};
   width: 100%;
   height: 100vh;
-  background-image: url("${(props) =>
-    `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
-  background-repeat: repeat;
-  background-position: center;
-  background-size: 120% 100%;
-  animation: right-to-left-shift 20s linear infinite alternate;
+  ${(props) => animatedBackground({ backgroundUrl: `${props.config.storageUrl}/resources/background-pattern-test.svg`})};
 
   .main-container {
     padding: 10px;
@@ -186,11 +181,6 @@ const LoginContainer = styled.div`
       -webkit-appearance: none;
       margin: 0;
     }
-  }
-
-  ${mediaQuery.afterTablet} {
-    background-image: url("${(props) =>
-        `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
   }
 `;
 

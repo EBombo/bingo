@@ -4,6 +4,7 @@ import React, { useEffect, useGlobal } from "reactn";
 import { Desktop, mediaQuery, Tablet } from "../../../constants";
 import styled from "styled-components";
 import { UserLayout } from "./userLayout";
+import { animatedBackground } from "../../../theme";
 
 export const LobbyUser = (props) => {
   const [authUser] = useGlobal("user");
@@ -78,14 +79,14 @@ export const LobbyUser = (props) => {
     <SuccessInscriptionContainer>
       <Tablet>
         <Container
-          bgImg={`${config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}
+          bgImg={`${config.storageUrl}/resources/background-pattern-test.svg`}
         >
           {content()}
         </Container>
       </Tablet>
       <Desktop>
         <Container
-          bgImg={`${config.storageUrl}/resources/balls/coral-pattern.svg`}
+          bgImg={`${config.storageUrl}/resources/background-pattern-test.svg`}
         >
           {content()}
         </Container>
@@ -98,11 +99,7 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100vh;
-  background-image: url("${(props) => props.bgImg}");
-  background-position: center;
-  background-repeat: repeat;
-  background-size: 120% 100%;
-  animation: right-to-left-shift 20s linear infinite alternate;
+  ${(props) => animatedBackground({ backgroundUrl: `${props.bgImg}`})};
 `;
 
 const SuccessInscriptionContainer = styled.div`
