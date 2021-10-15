@@ -186,7 +186,7 @@ export const Game = (props) => {
             </ButtonAnt>
           </div>
         </div>
-        <Collapse defaultActiveKey={["1"]}>
+        <Collapse defaultActiveKey={["1"]} accordion>
           <Panel header="Opciones del juego" key="1">
             <div className="options">
               <div className="title">Recomendado</div>
