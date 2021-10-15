@@ -3,14 +3,11 @@ import styled from "styled-components";
 import get from "lodash/get";
 import { ButtonAnt } from "../../../../components/form";
 import { mediaQuery } from "../../../../constants";
-import { ModalPattern } from "./ModalPattern";
 import { firestore } from "../../../../firebase";
 import { generateMatrix } from "../../../../business";
 
 export const CardPattern = (props) => {
-  const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [apagon, setApagon] = useState(false);
   const [pattern, setPattern] = useState(generateMatrix());
   const [authUser] = useGlobal("user");
 
@@ -27,33 +24,25 @@ export const CardPattern = (props) => {
   };
 
   const savePattern = async () => {
+    setIsLoading(true);
+
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       pattern: JSON.stringify(pattern),
       updateAt: new Date(),
     });
 
-    if (props.continueGame) {
-      await props.continueGame();
-    }
+    if (props.continueGame) await props.continueGame();
+
+    setIsLoading(false);
   };
 
   return (
     <PatternContainer user={authUser} isEdit={props.isEdit}>
-      {isVisibleModalPattern && (
-        <ModalPattern
-          apagon={apagon}
-          isVisibleModalPattern={isVisibleModalPattern}
-          setIsVisibleModalPattern={setIsVisibleModalPattern}
-          continueGame={() => setIsVisibleModalPattern(false)}
-          {...props}
-        />
-      )}
       <div className="caption">{props.caption}</div>
       <div className="table-container">
         <table>
           <thead>
             <tr>
-              <th className="empty" />
               <th>{get(props, "lobby.game.letters.b")}</th>
               <th>{get(props, "lobby.game.letters.i")}</th>
               <th>{get(props, "lobby.game.letters.n")}</th>
@@ -64,7 +53,6 @@ export const CardPattern = (props) => {
           <tbody>
             {pattern.map((element, index) => (
               <tr key={index}>
-                <th>{index + 1}</th>
                 {element.map((value, index_) => (
                   <td
                     onClick={() => {
@@ -85,8 +73,8 @@ export const CardPattern = (props) => {
         <div className="btns-container">
           <ButtonAnt
             onClick={() => {
-              setApagon(true);
-              setIsVisibleModalPattern(true);
+              props.setApagon(true);
+              props.setIsVisibleModalPattern(true);
             }}
           >
             Apágon
@@ -94,8 +82,8 @@ export const CardPattern = (props) => {
           <ButtonAnt
             color="default"
             onClick={() => {
-              setApagon(false);
-              setIsVisibleModalPattern(true);
+              props.setApagon(false);
+              props.setIsVisibleModalPattern(true);
             }}
           >
             Editar
@@ -107,15 +95,13 @@ export const CardPattern = (props) => {
           <ButtonAnt
             color="default"
             disabled={isLoading}
-            onClick={() => props.cancelAction()}
+            onClick={() => {
+              props.cancelAction();
+            }}
           >
             Cancelar
           </ButtonAnt>
-          <ButtonAnt
-            color="warning"
-            loading={isLoading}
-            onClick={() => savePattern()}
-          >
+          <ButtonAnt color="warning" loading={isLoading} onClick={() => savePattern()}>
             Guardar
           </ButtonAnt>
         </div>
@@ -144,29 +130,25 @@ const PatternContainer = styled.div`
       border-collapse: separate;
       border-spacing: 5px;
       margin: auto;
-      background: ${(props) =>
-        !props.user.isAdmin ? props.theme.basic.primaryLight : "transparent"};
+      background: transparent;
       border-radius: 5px;
       
       th {
         font-family: Encode Sans;
         font-style: normal;
         font-weight: bold;
-        width: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
-        height: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
-        font-size: ${(props) => (!props.user.isAdmin ? "11px" : "14px;")};
-        line-height: ${(props) => (!props.user.isAdmin ? "13px" : "18px")};
-        background: ${(props) =>
-          props.user.isAdmin
-            ? props.theme.basic.primaryLight
-            : props.theme.basic.secondary};
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+        line-height: 18px;
+        background: transparent;
         color: ${(props) => props.theme.basic.white};
         border-radius: 3px;
       }
 
       td {
-        width: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
-        height: ${(props) => (!props.user.isAdmin ? "15px" : "25px")};
+        width: 25px;
+        height: 25px;
         background: ${(props) => props.theme.basic.primary};
         border-radius: 3px;
         position: relative;
@@ -177,8 +159,8 @@ const PatternContainer = styled.div`
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: ${(props) => (!props.user.isAdmin ? "10px" : "15px")};
-          height: ${(props) => (!props.user.isAdmin ? "10px" : "15px")};
+          width: 15px;
+          height: 15px;
           border-radius: 50%;
           background: ${(props) => props.theme.basic.secondary};
         }
@@ -194,8 +176,11 @@ const PatternContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    flex-direction: column;
     
     button {
+      width: 80%;
+      margin-bottom: 10px;
       font-size: 14px;
       line-height: 18px;
     }
@@ -203,10 +188,19 @@ const PatternContainer = styled.div`
   
   ${mediaQuery.afterTablet}{
     max-width: 260px;
+
+    .btns-container{
+      flex-direction: row;
+
+      button {
+        width: auto;
+        margin-bottom: 0;
+      }
+    }
     
     .caption{
-      font-size: 18px;
-      line-height: 22px;
+      font-size: 14px;
+      line-height: 16px;
     }
     
     .table-container {
@@ -215,21 +209,21 @@ const PatternContainer = styled.div`
         border-spacing: 5px;
 
         th {
-          width: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
-          height: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
-          font-size: ${(props) => (!props.user.isAdmin ? "11px" : "26px;")};
-          line-height: ${(props) => (!props.user.isAdmin ? "13px" : "32px")};
+          width: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
+          height: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
+          font-size: ${(props) => (!props.user.isAdmin ? "14px" : "26px;")};
+          line-height: ${(props) => (!props.user.isAdmin ? "18px" : "32px")};
         }
 
         td {
-          width: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
-          height: ${(props) => (!props.user.isAdmin ? "15px" : "35px")};
+          width: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
+          height: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
           font-size: 26px;
           line-height: 32px;
 
           .selected {
-            width: ${(props) => (!props.user.isAdmin ? "10px" : "20px")};
-            height: ${(props) => (!props.user.isAdmin ? "10px" : "20px")};
+            width: ${(props) => (!props.user.isAdmin ? "15px" : "20px")};
+            height: ${(props) => (!props.user.isAdmin ? "15px" : "20px")};
           }
         }
       }

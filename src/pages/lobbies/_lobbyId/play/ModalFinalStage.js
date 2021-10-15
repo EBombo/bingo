@@ -2,15 +2,11 @@ import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
-import { BingoCard } from "./BingoCard";
+import { UserCard } from "./UserCard";
 import { ButtonAnt } from "../../../../components/form";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
-import {
-  createBoard,
-  generateMatrix,
-  getBingoCard,
-} from "../../../../business";
+import { createBoard, generateMatrix, getBingoCard } from "../../../../business";
 import { ModalPattern } from "./ModalPattern";
 
 export const ModalFinalStage = (props) => {
@@ -57,18 +53,15 @@ export const ModalFinalStage = (props) => {
   };
 
   const newCards = async () => {
-    const newUsers = Object.values(props.lobby.users).reduce(
-      (usersSum, user) => {
-        const card = getBingoCard();
-        const newUser = { ...user, card: JSON.stringify(card) };
-        return { ...usersSum, [newUser.id]: newUser };
-      },
-      {}
-    );
+    const newUsers = Object.values(props.lobby.users).reduce((usersSum, user) => {
+      const card = getBingoCard();
+      const newUser = { ...user, card: JSON.stringify(card) };
+      return { ...usersSum, [newUser.id]: newUser };
+    }, {});
 
     const board = createBoard();
 
-    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+    const promiseNewCards = firestore.doc(`lobbies/${props.lobby.id}`).update({
       round: 0,
       lastPlays: [],
       board,
@@ -77,15 +70,19 @@ export const ModalFinalStage = (props) => {
       users: newUsers,
     });
 
+    const promisesRemoveUsers = Object.keys(props.lobby.users).map(
+      async (userId) =>
+        await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(userId).delete()
+    );
+
+    await Promise.all([promiseNewCards, ...promisesRemoveUsers]);
+
     props.setIsVisibleModalFinal(false);
   };
 
   const adminContent = () => (
     <AdminContent>
-      <ButtonAnt
-        color="secondary"
-        onClick={() => setIsVisibleModalPattern(true)}
-      >
+      <ButtonAnt color="secondary" onClick={() => setIsVisibleModalPattern(true)}>
         Continuar juego
       </ButtonAnt>
       <ButtonAnt color="secondary" onClick={() => blackout()}>
@@ -105,9 +102,7 @@ export const ModalFinalStage = (props) => {
 
   const userContent = () => (
     <UserContent>
-      <div className="description">
-        Esperando que el administrador continue el juego...
-      </div>
+      <div className="description">Esperando que el administrador continue el juego...</div>
       <Image
         src={`${config.storageUrl}/resources/pacman.gif`}
         height="85px"
@@ -138,26 +133,16 @@ export const ModalFinalStage = (props) => {
         <div className="title">Ganador</div>
         <div className="main-container">
           <div className="left-container">
-            <div className="winner-name">
-              {props.lobby.winners[props.lobby.winners.length - 1].nickname}
-            </div>
+            <div className="winner-name">{props.lobby.winners[props.lobby.winners.length - 1].nickname}</div>
             <div className="card-container">
-              <BingoCard
-                user={props.lobby.winners[props.lobby.winners.length - 1]}
-                {...props}
-              />
+              <UserCard user={props.lobby.winners[props.lobby.winners.length - 1]} {...props} />
             </div>
           </div>
           <div className="right-container">
             {props.lobby.winners[props.lobby.winners.length - 1].award && (
               <>
                 <div className="award">Premio</div>
-                <div className="award-name">
-                  {
-                    props.lobby.winners[props.lobby.winners.length - 1].award
-                      .name
-                  }
-                </div>
+                <div className="award-name">{props.lobby.winners[props.lobby.winners.length - 1].award.name}</div>
               </>
             )}
             {authUser.isAdmin ? adminContent() : userContent()}
@@ -197,7 +182,7 @@ const Content = styled.div`
         text-align: center;
       }
       .card-container {
-        max-width: 200px;
+        overflow-x: auto;
         margin: 0 auto;
       }
     }

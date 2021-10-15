@@ -25,10 +25,14 @@ export const ModalWinner = (props) => {
         {authUser.isAdmin ? (
           <div className="btn-container">
             <ButtonAnt
-              color="default"
-              onClick={() => props.setIsVisibleModalWinner(false)}
+              color="secondary"
+              onClick={() => {
+                props.setUser(props.winner);
+                props.setIsVisibleModalUserCard(true);
+                props.setIsVisibleModalWinner(false);
+              }}
             >
-              Cerrar
+              Ver cartilla
             </ButtonAnt>
           </div>
         ) : (

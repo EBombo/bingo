@@ -67,7 +67,7 @@ export const LobbyUser = (props) => {
             margin="0"
           />
         </div>
-        <div className="message">Ya estas adentro :)</div>
+        <div className="message">Ya estás adentro :)</div>
         <div className="message">¿Ves tu nombre en pantalla?</div>
         <div className="item-user">{authUser?.nickname}</div>
       </div>

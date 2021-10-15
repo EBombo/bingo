@@ -6,8 +6,7 @@ import { ANIMATION, SPEED } from "../../../../business";
 export const SliderControls = () => {
   const [isAutomatic] = useGlobal("isAutomatic");
   const [animationSpeed, setAnimationSpeed] = useGlobal("animationSpeed");
-  const [reproductionSpeed, setReproductionSpeed] =
-    useGlobal("reproductionSpeed");
+  const [reproductionSpeed, setReproductionSpeed] = useGlobal("reproductionSpeed");
 
   // TODO: Consider only showing when "isAutomatic" is active.
   //if (!isAutomatic) return null;
@@ -15,7 +14,7 @@ export const SliderControls = () => {
   return (
     <SliderControlsCss>
       <div className="slider-auto">
-        <div className="description">Velocidad de la animación</div>
+        <div className="description">Vel. animación</div>
         <div>
           <Slider
             onChange={(value) => setAnimationSpeed(value)}
@@ -27,9 +26,7 @@ export const SliderControls = () => {
       </div>
       {isAutomatic && (
         <div className="slider-auto">
-          <div className="description">
-            Velocidad de reproducción automática
-          </div>
+          <div className="description">Vel. reproducción</div>
           <div>
             <Slider
               onChange={(value) => setReproductionSpeed(value)}
@@ -55,7 +52,6 @@ const SliderControlsCss = styled.div`
 
   .slider-auto {
     display: grid;
-    grid-template-columns: 200px 100px;
-    width: 90%;
+    grid-template-columns: repeat(2, 1fr);
   }
 `;

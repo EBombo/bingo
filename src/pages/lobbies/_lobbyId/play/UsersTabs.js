@@ -1,14 +1,17 @@
-import React, { useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
-import { mediaQuery } from "../../../../constants";
-import defaultTo from "lodash/defaultTo";
-import { Popover, Progress } from "antd";
-import { darkTheme } from "../../../../theme";
+import { Desktop, mediaQuery, Tablet } from "../../../../constants";
+import { Input, Popover } from "antd";
+import orderBy from "lodash/orderBy";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
+import { UserProgress } from "./UserProgress";
+import { ButtonAnt } from "../../../../components/form";
+
+const { Search } = Input;
 
 const TAB = {
   CARDS: "cards",
@@ -21,40 +24,36 @@ export const UsersTabs = (props) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
+  const [users, setUsers] = useState([]);
 
-  const users = Object.values(props.lobby.users ?? {});
+  useEffect(() => {
+    resetUsers();
+  }, []);
+
+  const resetUsers = () => {
+    let newUsers = Object.values(props.lobby.users ?? {});
+    newUsers = orderBy(newUsers, ["nickname"], ["desc"]);
+    setUsers(newUsers);
+  };
+
   const numberWinners = getNumberBoard(props.lobby.board ?? {});
   const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
   const removeUser = async (userId) => {
-    const newUsers = { ...props.lobby.users };
+    const newUsers = {
+      ...props.lobby.users,
+    };
     delete newUsers[userId];
-    await firestore
-      .doc(`lobbies/${props.lobby.id}`)
-      .update({ users: newUsers });
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      users: newUsers,
+    });
   };
 
-  const progress = (user) => {
-    try {
-      const userPattern = JSON.parse(user.card);
+  const filterUsers = (value) => {
+    if (value === "") return resetUsers();
 
-      let hits = 0;
-      let sizePattern = 0;
-
-      lobbyPattern.forEach((y, indexY) =>
-        y.forEach((x, indexX) => {
-          if (!!x) sizePattern++;
-          if (!!x && numberWinners.includes(userPattern[indexY][indexX]))
-            hits++;
-        })
-      );
-
-      const percentage = (hits / sizePattern) * 100;
-
-      return (percentage || 0).toFixed(0);
-    } catch (error) {
-      console.error(error);
-    }
+    const newUsers = users.filter((user) => user.nickname.includes(value));
+    setUsers(newUsers);
   };
 
   const menu = (user) => (
@@ -63,7 +62,10 @@ export const UsersTabs = (props) => {
       placement="bottom"
       content={
         <div
-          style={{ display: "flex", cursor: "pointer" }}
+          style={{
+            display: "flex",
+            cursor: "pointer",
+          }}
           onClick={() => setIsVisibleModalConfirm(true)}
         >
           <Image
@@ -74,7 +76,13 @@ export const UsersTabs = (props) => {
             size="contain"
             margin="auto 5px"
           />{" "}
-          <div style={{ margin: "auto" }}>Remover jugador</div>
+          <div
+            style={{
+              margin: "auto",
+            }}
+          >
+            Remover jugador
+          </div>
         </div>
       }
     >
@@ -107,28 +115,60 @@ export const UsersTabs = (props) => {
           {...props}
         />
       )}
-      <div className="tabs-container">
-        <div
-          className={`tab ${tab === TAB.CARDS && "active"}`}
-          onClick={() => setTab(TAB.CARDS)}
-        >
-          Cuadrícula
+      <Desktop>
+        <div className="tabs-container-desktop">
+          <div className="left-side">Participantes ({Object.keys(props.lobby.users).length})</div>
+          <div className="right-side">
+            <ButtonAnt
+              className={`btn-tab ${tab === TAB.CARDS && "active"}`}
+              color="default"
+              margin="0 0.5rem"
+              onClick={() => setTab(TAB.CARDS)}
+            >
+              Cuadrícula
+            </ButtonAnt>
+            <ButtonAnt
+              className={`btn-tab ${tab === TAB.TABLE && "active"}`}
+              color="default"
+              margin="0 0.5rem"
+              onClick={() => setTab(TAB.TABLE)}
+            >
+              Tabla
+            </ButtonAnt>
+            <Input.Search
+              className="input-search"
+              placeholder="Buscar por nombre"
+              onSearch={(value) => filterUsers(value, event)}
+            />
+          </div>
         </div>
-        <div
-          className={`tab ${tab === TAB.TABLE && "active"}`}
-          onClick={() => setTab(TAB.TABLE)}
-        >
-          Tabla
+      </Desktop>
+      <Tablet>
+        <div className="tabs-container">
+          <ButtonAnt
+            className={`btn-tab ${tab === TAB.TABLE && "active"}`}
+            color="default"
+            margin="0 0.5rem"
+            onClick={() => setTab(TAB.CARDS)}
+          >
+            Cuadrícula
+          </ButtonAnt>
+          <ButtonAnt
+            className={`btn-tab ${tab === TAB.TABLE && "active"}`}
+            color="default"
+            margin="0 0.5rem"
+            onClick={() => setTab(TAB.TABLE)}
+          >
+            Tabla
+          </ButtonAnt>
         </div>
-      </div>
+      </Tablet>
 
       <div className={`user-tab-${tab}`}>
         {users.map((user, index) =>
           tab === TAB.CARDS ? (
             <div
-              className={`user-card ${
-                props.lobby?.bingo?.id === user.id && `winner`
-              }`}
+              className={`user-card ${props.lobby?.bingo?.id === user.id && `winner`}`}
               key={`${user.nickname}-${index}`}
             >
               {props.lobby?.bingo?.id === user.id && (
@@ -145,16 +185,7 @@ export const UsersTabs = (props) => {
               <div className="name">{user.nickname}</div>
 
               <div className="card-preview">
-                {defaultTo(JSON.parse(user.card)).map((axiX, indexX) =>
-                  axiX.map((axiY, indexY) => (
-                    <div
-                      className={`matrix-num ${
-                        numberWinners.includes(axiY) && "active"
-                      }`}
-                      key={`${indexX}-${indexY}`}
-                    />
-                  ))
-                )}
+                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} isCard />
               </div>
 
               {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
@@ -175,18 +206,13 @@ export const UsersTabs = (props) => {
             </div>
           ) : (
             <div
-              className={`user-progress ${
-                props.lobby?.bingo?.id === user.id && `winner`
-              }`}
+              className={`user-progress ${props.lobby?.bingo?.id === user.id && `winner`}`}
               key={`${user.nickname}-${index}`}
             >
               <div className="name">{user.nickname}</div>
 
               <div className={`progress ${user.progress === 100 && "winner"}`}>
-                <Progress
-                  percent={progress(user)}
-                  strokeColor={darkTheme.basic.primary}
-                />
+                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} />
               </div>
 
               {props.lobby?.bingo?.id === user.id && (
@@ -240,10 +266,13 @@ const TabsContainer = styled.div`
   }
 
   .tabs-container {
-    height: 32px;
-    background: ${(props) => props.theme.basic.whiteDark};
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    button {
+      padding: 5px !important;
+    }
 
     .tab {
       padding: 0.5rem 1rem;
@@ -346,6 +375,7 @@ const TabsContainer = styled.div`
         justify-content: space-evenly;
         height: 25px;
         cursor: pointer;
+
         div {
           width: 5px;
           height: 5px;
@@ -354,6 +384,7 @@ const TabsContainer = styled.div`
         }
       }
     }
+
     &-table {
       width: 100%;
       display: flex;
@@ -381,8 +412,10 @@ const TabsContainer = styled.div`
           display: flex;
           align-items: center;
           justify-content: center;
+
           .ant-progress {
             max-width: 250px;
+
             .ant-progress-inner {
               background: ${(props) => props.theme.basic.grayDark} !important;
             }
@@ -401,6 +434,7 @@ const TabsContainer = styled.div`
             height: 25px;
             cursor: pointer;
             margin-left: 10px;
+
             div {
               width: 5px;
               height: 5px;
@@ -424,34 +458,64 @@ const TabsContainer = styled.div`
       border-radius: 4px;
     }
 
-    .tabs-container {
-      height: 32px;
-      background: transparent;
+    .tabs-container-desktop {
+      height: 48px;
+      background: ${(props) => props.theme.basic.secondary};
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       display: flex;
       align-items: center;
-      border-bottom: 2px solid ${(props) => props.theme.basic.whiteLight};
+      justify-content: space-between;
+      padding: 0 1rem;
+      margin-bottom: 1rem;
 
-      .tab {
-        padding: 0.5rem 1rem;
-        font-size: 15px;
-        line-height: 18px;
+      .left-side {
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 22px;
         color: ${(props) => props.theme.basic.whiteLight};
       }
 
-      .active {
-        color: ${(props) => props.theme.basic.primaryLight};
-      }
+      .right-side {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
 
-      .active::after {
-        width: 80%;
-        height: 2px;
-        background: ${(props) => props.theme.basic.primaryLight};
-      }
-    }
+        .btn-tab {
+          font-family: Lato;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 14px;
+          padding: 5px 20px !important;
+        }
 
-    .user-tab {
-      &-cards {
-        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        .input-search {
+          box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+          width: 300px;
+
+          input,
+          button {
+            border: none;
+            background: ${(props) => props.theme.basic.secondaryDarken};
+            font-family: Lato;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 11px;
+            line-height: 13px;
+            color: ${(props) => props.theme.basic.primary};
+            border-radius: 4px 0 0 4px;
+            height: 30px;
+          }
+
+          button {
+            border-radius: 0 4px 4px 0;
+            svg {
+              color: ${(props) => props.theme.basic.primary};
+            }
+          }
+        }
       }
     }
   }

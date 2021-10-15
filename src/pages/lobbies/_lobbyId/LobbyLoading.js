@@ -5,7 +5,7 @@ import React, { useEffect, useGlobal } from "reactn";
 import { config, firestore } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
 
-export const LoadingGame = (props) => {
+export const LobbyLoading = (props) => {
   const [authUser] = useGlobal("user");
 
   useEffect(() => {
@@ -39,9 +39,7 @@ export const LoadingGame = (props) => {
             <div className="step-one-description">Entra a www.ebombo.io</div>
           </div>
           <div className="step-two">
-            <div className="step-two-name">
-              {get(props, "lobby.game.name", "")}
-            </div>
+            <div className="step-two-name">{get(props, "lobby.game.name", "")}</div>
           </div>
           <div className="step-three">
             <div className="main-container">
