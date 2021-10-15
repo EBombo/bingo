@@ -52,7 +52,7 @@ export const UsersTabs = (props) => {
   const filterUsers = (value) => {
     if (value === "") return resetUsers();
 
-    const newUsers = users.filter((user) => user.nickname === value);
+    const newUsers = users.filter((user) => user.nickname.includes(value));
     setUsers(newUsers);
   };
 
