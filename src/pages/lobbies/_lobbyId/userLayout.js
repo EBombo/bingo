@@ -4,6 +4,7 @@ import { Popover, Slider } from "antd";
 import { mediaQuery } from "../../../constants";
 import { config } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
+import get from "lodash/get";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
@@ -64,6 +65,7 @@ export const UserLayout = (props) => {
                     defaultValue={30}
                     onChange={(event) => {
                       if (!props.audioRef.current) return;
+
                       props.audioRef.current.volume = event / 100;
                     }}
                   />
@@ -74,13 +76,15 @@ export const UserLayout = (props) => {
                 className="nav-button"
                 disabled={!isPlay}
                 onClick={() => {
-                  if (props.audioRef.current?.volume === 0) {
-                    props.audioRef.current?.volume = 0.7;
-                    setIsMuted(false);
-                  } else {
-                    props.audioRef.current?.volume = 0;
-                    setIsMuted(true);
+                    if (!props.audioRef.current) return;
+
+                  if (props.audioRef.current.volume === 0) {
+                    props.audioRef.current.volume = 0.7;
+                    return setIsMuted(false);
                   }
+                    props.audioRef.current.volume = 0;
+                    setIsMuted(true);
+                  
                 }}
                 key={isMuted}
               >
