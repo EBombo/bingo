@@ -13,11 +13,7 @@ export const Select = ({ variant = "default", optionsdom, ...props }) => (
     <StyledSelect {...props} variant={variant}>
       {optionsdom
         ? optionsdom.map((option) => (
-            <AntSelect.Option
-              key={option.key}
-              className={variant}
-              value={option.code}
-            >
+            <AntSelect.Option key={option.key} className={variant} value={option.code}>
               {option.name}
             </AntSelect.Option>
           ))
@@ -63,7 +59,6 @@ const StyledSelect = styled(AntSelect)`
       }
     }
   }
-  
 `;
 
 const Label = styled.label`
@@ -73,10 +68,7 @@ const Label = styled.label`
   line-height: 16px;
   font-size: ${sizes.font.mini};
 
-  color: ${(props) =>
-    props.variant === "primary"
-      ? props.theme.basic.primary
-      : props.theme.basic.default};
+  color: ${(props) => (props.variant === "primary" ? props.theme.basic.primary : props.theme.basic.default)};
 
   ${(props) =>
     props.required &&

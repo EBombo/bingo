@@ -5,12 +5,7 @@ export const RightDrawer = (props) => {
   const [openRightDrawer, setOpenRightDrawer] = useGlobal("openRightDrawer");
 
   return (
-    <DrawerContainer
-      placement="right"
-      onClose={() => setOpenRightDrawer(false)}
-      visible={openRightDrawer}
-      {...props}
-    >
+    <DrawerContainer placement="right" onClose={() => setOpenRightDrawer(false)} visible={openRightDrawer} {...props}>
       {props.children}
     </DrawerContainer>
   );

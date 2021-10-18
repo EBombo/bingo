@@ -51,15 +51,8 @@ const ForgotPassword = (props) => {
         {emailSent ? (
           <React.Fragment>
             <h1 className="title">!Excellent!</h1>
-            <p className="forgot-password-note">
-              We have sent you an email with instructions to reset your
-              password.
-            </p>
-            <Anchor
-              variant="primary"
-              onClick={() => cancelButton()}
-              disabled={errorMessage}
-            >
+            <p className="forgot-password-note">We have sent you an email with instructions to reset your password.</p>
+            <Anchor variant="primary" onClick={() => cancelButton()} disabled={errorMessage}>
               Volver
             </Anchor>
           </React.Fragment>
@@ -67,15 +60,10 @@ const ForgotPassword = (props) => {
           <React.Fragment>
             <h1 className="title">Cambiar contraseña</h1>
             <p className="forgot-password-note">
-              Por favor, introduce la dirección de correo electrónico asociada a
-              tu cuenta. Te enviaremos un correo electrónico que te permitirá
-              crear una nueva contraseña.
+              Por favor, introduce la dirección de correo electrónico asociada a tu cuenta. Te enviaremos un correo
+              electrónico que te permitirá crear una nueva contraseña.
             </p>
-            <form
-              onSubmit={handleSubmit(recoverPassword)}
-              className="login-form form-forgot-password"
-              noValidate
-            >
+            <form onSubmit={handleSubmit(recoverPassword)} className="login-form form-forgot-password" noValidate>
               {errorMessage ? <h3>{errorMessage}</h3> : <br />}
               <Input
                 required

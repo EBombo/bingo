@@ -22,12 +22,7 @@ export const FileUpload = (props) => {
   }, [props.file]);
 
   const manageFile = async (event) => {
-    if (
-      !event.target.files ||
-      event.target.files.length === 0 ||
-      !event.target.files[0]
-    )
-      return setPreviewFile(null);
+    if (!event.target.files || event.target.files.length === 0 || !event.target.files[0]) return setPreviewFile(null);
 
     setLoading(true);
 
@@ -52,9 +47,7 @@ export const FileUpload = (props) => {
   const actionFile = async (file, fileSuffix, type) => {
     setPreviewFile(file.name);
 
-    return props.afterUpload
-      ? await uploadFile(file, fileSuffix, null, type)
-      : file;
+    return props.afterUpload ? await uploadFile(file, fileSuffix, null, type) : file;
   };
 
   const resizeImage = async (file, fileSuffix, type) => {
@@ -70,12 +63,7 @@ export const FileUpload = (props) => {
 
       return props.afterUpload
         ? {
-            url: await uploadFile(
-              images64.split(",")[1],
-              fileSuffix,
-              size,
-              type
-            ),
+            url: await uploadFile(images64.split(",")[1], fileSuffix, size, type),
             file,
             size,
             type,
@@ -93,35 +81,15 @@ export const FileUpload = (props) => {
     return await Promise.all(promisesImages);
   };
 
-  const uploadFile = async (
-    fileBase64,
-    fileSuffix,
-    size,
-    type,
-    fileName = `${props.fileName}_${size}`
-  ) =>
-    await uploadToStorageAndGetURL(
-      fileBase64,
-      props.filePath,
-      fileName,
-      fileSuffix,
-      props.bucket,
-      null,
-      type
-    );
+  const uploadFile = async (fileBase64, fileSuffix, size, type, fileName = `${props.fileName}_${size}`) =>
+    await uploadToStorageAndGetURL(fileBase64, props.filePath, fileName, fileSuffix, props.bucket, null, type);
 
   return (
     <UploadContainer>
       {previewFile ? (
         <div className="image-container">
           {get(props, "accept", "image/*").includes("image") ? (
-            <Image
-              src={previewFile}
-              height="100px"
-              width="100px"
-              margin="0"
-              borderRadius="5px"
-            />
+            <Image src={previewFile} height="100px" width="100px" margin="0" borderRadius="5px" />
           ) : (
             <>
               {previewFile} <Icon type="check-circle" />
@@ -134,11 +102,7 @@ export const FileUpload = (props) => {
         </div>
       )}
       <div className="input-container">
-        <ButtonAnt
-          onClick={() => inputRef.current.click()}
-          loading={loading}
-          key={loading}
-        >
+        <ButtonAnt onClick={() => inputRef.current.click()} loading={loading} key={loading}>
           {props.buttonLabel || "Subir Imagen"}
         </ButtonAnt>
         <input

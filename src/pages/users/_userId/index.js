@@ -41,11 +41,7 @@ export const UserProfile = (props) => {
       <div>Apellido: {user.lastName}</div>
       <div>Correo: {user.email}</div>
       {canEdit && (
-        <ButtonAnt
-          onClick={() => router.push(`/users/${userId}/edit`)}
-          variant="primary"
-          margin="0"
-        >
+        <ButtonAnt onClick={() => router.push(`/users/${userId}/edit`)} variant="primary" margin="0">
           Editar Perfil
         </ButtonAnt>
       )}

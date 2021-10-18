@@ -21,10 +21,8 @@ const ImageCss = styled.div`
   filter: ${(props) => (props.filter ? props.filter : "none")};
 
   ${mediaQuery.afterMobile} {
-    height: ${(props) =>
-      props.desktopHeight ? props.desktopHeight : props.height};
-    width: ${(props) =>
-      props.desktopWidth ? props.desktopWidth : props.width};
+    height: ${(props) => (props.desktopHeight ? props.desktopHeight : props.height)};
+    width: ${(props) => (props.desktopWidth ? props.desktopWidth : props.width)};
   }
 
   img {

@@ -49,9 +49,7 @@ export const Chat = (props) => {
 
   const scrollToBottom = () => {
     if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current
-        ? chatRef.current.scrollHeight
-        : null;
+      chatRef.current.scrollTop = chatRef.current ? chatRef.current.scrollHeight : null;
     }
   };
 
@@ -70,15 +68,11 @@ export const Chat = (props) => {
       setIsLoadingSendMessage(true);
       setMessage("");
 
-      const { error } = await Fetch(
-        `${config.serverUrl}/api/messages`,
-        "POST",
-        {
-          message: data.message,
-          user: authUser,
-          lobbyId,
-        }
-      );
+      const { error } = await Fetch(`${config.serverUrl}/api/messages`, "POST", {
+        message: data.message,
+        user: authUser,
+        lobbyId,
+      });
 
       if (error) return setMessage(message);
     } catch (error) {

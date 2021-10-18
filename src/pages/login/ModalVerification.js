@@ -17,15 +17,10 @@ export const ModalVerification = (props) => (
     <ContentModal>
       <div className="title">Identificación del jugador grabada</div>
       <div className="description">
-        La próxima vez que jueges no va a ser necesario que coloques tu
-        identificación de jugador otra vez, asi que puedes ingresar rápidamente.
-        Lo puedes cambiar en ajustes en cualquier momento.
+        La próxima vez que jueges no va a ser necesario que coloques tu identificación de jugador otra vez, asi que
+        puedes ingresar rápidamente. Lo puedes cambiar en ajustes en cualquier momento.
       </div>
-      <ButtonBingo
-        variant="secondary"
-        width="200px"
-        onClick={() => props.setIsVisibleModalVerification(props.email)}
-      >
+      <ButtonBingo variant="secondary" width="200px" onClick={() => props.setIsVisibleModalVerification(props.email)}>
         Ok
       </ButtonBingo>
     </ContentModal>

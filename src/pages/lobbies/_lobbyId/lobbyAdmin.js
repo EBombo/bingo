@@ -36,11 +36,9 @@ export const LobbyAdmin = (props) => {
   }, [props.lobby]);
 
   useEffect(() => {
-    const currentAudioToPlay =
-      props.lobby.game?.audio?.audioUrl ?? audios[0]?.audioUrl;
+    const currentAudioToPlay = props.lobby.game?.audio?.audioUrl ?? audios[0]?.audioUrl;
 
-    const currentAudio =
-      props.audioRef.current ?? new Audio(currentAudioToPlay);
+    const currentAudio = props.audioRef.current ?? new Audio(currentAudioToPlay);
 
     props.audioRef.current = currentAudio;
     props.audioRef.current.play();
@@ -85,8 +83,7 @@ export const LobbyAdmin = (props) => {
                     key={audio_.id}
                     className="item-audio"
                     onClick={() => {
-                      if (props.audioRef.current)
-                        props.audioRef.current.pause();
+                      if (props.audioRef.current) props.audioRef.current.pause();
 
                       const currentAudio = new Audio(audio_.audioUrl);
 
@@ -149,11 +146,7 @@ export const LobbyAdmin = (props) => {
             >
               <Image
                 cursor="pointer"
-                src={
-                  isMuted
-                    ? `${config.storageUrl}/resources/mute.svg`
-                    : `${config.storageUrl}/resources/volume.svg`
-                }
+                src={isMuted ? `${config.storageUrl}/resources/mute.svg` : `${config.storageUrl}/resources/volume.svg`}
                 height="25px"
                 width="25px"
                 size="contain"
@@ -164,11 +157,7 @@ export const LobbyAdmin = (props) => {
         </div>
 
         <div className="item-pin">
-          <div className="label">
-            {props.lobby.isLocked
-              ? "Este juego esta bloqueado"
-              : "Entra a www.ebombo.io"}
-          </div>
+          <div className="label">{props.lobby.isLocked ? "Este juego esta bloqueado" : "Entra a www.ebombo.io"}</div>
           <div className="pin-label">Pin del juego:</div>
           <div className="pin">
             {props.lobby.isLocked ? (
@@ -202,9 +191,7 @@ export const LobbyAdmin = (props) => {
           >
             {!isLoadingLock && (
               <Image
-                src={`${config.storageUrl}/resources/${
-                  props.lobby.isLocked ? "lock.svg" : "un-lock.svg"
-                }`}
+                src={`${config.storageUrl}/resources/${props.lobby.isLocked ? "lock.svg" : "un-lock.svg"}`}
                 cursor="pointer"
                 height="25px"
                 width="25px"

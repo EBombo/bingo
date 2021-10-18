@@ -50,21 +50,15 @@ const Login = (props) => {
 
   const fetchLobby = async (pin) => {
     try {
-      const lobbyRef = await firestore
-        .collection("lobbies")
-        .where("pin", "==", pin.toString())
-        .limit(1)
-        .get();
+      const lobbyRef = await firestore.collection("lobbies").where("pin", "==", pin.toString()).limit(1).get();
 
-      if (lobbyRef.empty)
-        throw Error("No encontramos tu sala, intenta nuevamente");
+      if (lobbyRef.empty) throw Error("No encontramos tu sala, intenta nuevamente");
 
       const currentLobby = snapshotToArray(lobbyRef)[0];
 
       const usersIds = Object.keys(currentLobby?.users ?? {});
 
-      if (!usersIds.includes(authUser?.id) && currentLobby?.isLocked)
-        throw Error("Este juego esta cerrado");
+      if (!usersIds.includes(authUser?.id) && currentLobby?.isLocked) throw Error("Este juego esta cerrado");
 
       if (currentLobby.isClosed) {
         await setAuthUser({ id: firestore.collection("users").doc().id });
@@ -116,12 +110,7 @@ const Login = (props) => {
                 disabled={isLoading}
                 placeholder="Pin del juego"
               />
-              <ButtonBingo
-                width="100%"
-                disabled={isLoading}
-                loading={isLoading}
-                htmlType="submit"
-              >
+              <ButtonBingo width="100%" disabled={isLoading} loading={isLoading} htmlType="submit">
                 Ingresar
               </ButtonBingo>
             </div>
@@ -142,8 +131,7 @@ const Login = (props) => {
           : null}
 
         {lobby ? (
-          (lobby.settings.userIdentity && email && !nickname) ||
-          (!lobby.settings.userIdentity && !nickname) ? (
+          (lobby.settings.userIdentity && email && !nickname) || (!lobby.settings.userIdentity && !nickname) ? (
             <NicknameStep
               lobby={lobby}
               nickname={nickname}
@@ -163,8 +151,7 @@ const LoginContainer = styled.div`
   color: ${(props) => props.theme.basic.white};
   width: 100%;
   height: 100vh;
-  background-image: url("${(props) =>
-    `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
+  background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
   background-repeat: repeat;
   background-position: center;
   background-size: 120% 100%;
@@ -189,8 +176,7 @@ const LoginContainer = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
-    background-image: url("${(props) =>
-        `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
+    background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
   }
 `;
 
