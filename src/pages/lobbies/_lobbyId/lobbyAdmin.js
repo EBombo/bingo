@@ -123,6 +123,7 @@ export const LobbyAdmin = (props) => {
                   defaultValue={30}
                   onChange={(event) => {
                     if (!props.audioRef.current) return;
+
                     props.audioRef.current.volume = event / 100;
                   }}
                 />
@@ -134,13 +135,15 @@ export const LobbyAdmin = (props) => {
               margin="10px 20px"
               disabled={!isPlay}
               onClick={() => {
+                  if (!props.audioRef.current) return;
+
                 if (props.audioRef.current.volume === 0) {
                   props.audioRef.current.volume = 0.7;
-                  setIsMuted(false);
-                } else {
+                  return setIsMuted(false);
+                }
                   props.audioRef.current.volume = 0;
                   setIsMuted(true);
-                }
+                
               }}
               key={isMuted}
             >

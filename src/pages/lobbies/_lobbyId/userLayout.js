@@ -74,11 +74,11 @@ export const UserLayout = (props) => {
                 className="nav-button"
                 disabled={!isPlay}
                 onClick={() => {
-                  if (props.audioRef.current.volume === 0) {
-                    props.audioRef.current.volume = 0.7;
+                  if (props.audioRef.current?.volume === 0) {
+                    props.audioRef.current?.volume = 0.7;
                     setIsMuted(false);
                   } else {
-                    props.audioRef.current.volume = 0;
+                    props.audioRef.current?.volume = 0;
                     setIsMuted(true);
                   }
                 }}
