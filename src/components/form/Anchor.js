@@ -2,12 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 export const Anchor = (props) => (
-  <AnchorTag
-    href={props.url}
-    target={props.target || "_blank"}
-    rel="noreferrer"
-    {...props}
-  >
+  <AnchorTag href={props.url} target={props.target || "_blank"} rel="noreferrer" {...props}>
     {props.children}
   </AnchorTag>
 );

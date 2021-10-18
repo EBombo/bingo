@@ -11,11 +11,7 @@ export const RoundsLastNumber = (props) => {
         <div className="description">Número de rondas</div>
       </div>
       <div className="item">
-        <div className="number">
-          {defaultTo(props.lobby.lastPlays, []).length > 0
-            ? props.lobby.lastPlays[0]
-            : 0}
-        </div>
+        <div className="number">{defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}</div>
         <div className="description">Jugada anterior</div>
       </div>
     </Container>

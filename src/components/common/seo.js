@@ -7,11 +7,7 @@ export const SEOMeta = (props) =>
   isEmpty(props.seo) ? null : (
     <Head>
       <title>{get(props, "seo.title", "Welcome")}</title>
-      {get(props, "seo.description") && (
-        <meta name="description" content={props.seo.description} />
-      )}
-      {get(props, "seo.keywords") && (
-        <meta name="keywords" content={props.seo.keywords} />
-      )}
+      {get(props, "seo.description") && <meta name="description" content={props.seo.description} />}
+      {get(props, "seo.keywords") && <meta name="keywords" content={props.seo.keywords} />}
     </Head>
   );

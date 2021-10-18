@@ -61,28 +61,19 @@ export const createBoard = () =>
     {}
   );
 
-export const generateMatrix = (value = null) =>
-  Array.from(Array(5), () => new Array(5).fill(value));
+export const generateMatrix = (value = null) => Array.from(Array(5), () => new Array(5).fill(value));
 
 export const getNumberBoard = (board) =>
-  Object.keys(board).reduce(
-    (sum, key) => (board[key] ? [...sum, +key] : sum),
-    []
-  );
+  Object.keys(board).reduce((sum, key) => (board[key] ? [...sum, +key] : sum), []);
 
 export const getHead = (number) => {
-  if (number >= BOARD_PARAMS.B.min && number <= BOARD_PARAMS.B.max)
-    return BOARD_PARAMS.B;
+  if (number >= BOARD_PARAMS.B.min && number <= BOARD_PARAMS.B.max) return BOARD_PARAMS.B;
 
-  if (number >= BOARD_PARAMS.I.min && number <= BOARD_PARAMS.I.max)
-    return BOARD_PARAMS.I;
+  if (number >= BOARD_PARAMS.I.min && number <= BOARD_PARAMS.I.max) return BOARD_PARAMS.I;
 
-  if (number >= BOARD_PARAMS.N.min && number <= BOARD_PARAMS.N.max)
-    return BOARD_PARAMS.N;
+  if (number >= BOARD_PARAMS.N.min && number <= BOARD_PARAMS.N.max) return BOARD_PARAMS.N;
 
-  if (number >= BOARD_PARAMS.G.min && number <= BOARD_PARAMS.G.max)
-    return BOARD_PARAMS.G;
+  if (number >= BOARD_PARAMS.G.min && number <= BOARD_PARAMS.G.max) return BOARD_PARAMS.G;
 
-  if (number >= BOARD_PARAMS.O.min && number <= BOARD_PARAMS.O.max)
-    return BOARD_PARAMS.O;
+  if (number >= BOARD_PARAMS.O.min && number <= BOARD_PARAMS.O.max) return BOARD_PARAMS.O;
 };

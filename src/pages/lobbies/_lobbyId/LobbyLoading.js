@@ -117,8 +117,7 @@ const LoadingGameContainer = styled.div`
   height: 100vh;
   position: relative;
   overflow: hidden;
-  background-image: url("${(props) =>
-    `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
+  background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
   background-repeat: repeat;
   background-position: center;
   background-size: 120% 100%;
@@ -342,8 +341,7 @@ const LoadingGameContainer = styled.div`
   }
   
   ${mediaQuery.afterTablet} {
-    background-image: url("${(props) =>
-      `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
+    background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
   }
 
   @keyframes loader {

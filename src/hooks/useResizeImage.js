@@ -21,12 +21,7 @@ export const useResizeImage = () => {
         let image = new Image();
         image.src = dataUrl;
         image.onload = () => {
-          let ImgBase64_ = resizeImage.resize(
-            image,
-            resizeWidth,
-            resizeHeight,
-            type
-          );
+          let ImgBase64_ = resizeImage.resize(image, resizeWidth, resizeHeight, type);
 
           if (type === "gif") ImgBase64_ = dataUrl;
 
@@ -37,7 +32,6 @@ export const useResizeImage = () => {
     });
 
   return {
-    resize: (file, resizeWidth, resizeHeight) =>
-      resize(file, resizeWidth, resizeHeight),
+    resize: (file, resizeWidth, resizeHeight) => resize(file, resizeWidth, resizeHeight),
   };
 };

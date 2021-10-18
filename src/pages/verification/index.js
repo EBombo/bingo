@@ -46,9 +46,8 @@ const Verify = (props) => {
           Hola <b>{get(authUser, "name")}</b>{" "}
         </span>
         <span className="text-title-modal">
-          Verifique su cuenta en su correo, si el correo no aparece por favor
-          revisar en <b>Spam</b>, sino le llegó el correo vuelva a reenviar uno
-          nuevo.
+          Verifique su cuenta en su correo, si el correo no aparece por favor revisar en <b>Spam</b>, sino le llegó el
+          correo vuelva a reenviar uno nuevo.
         </span>
         <span className="message-verified-email">{messageResendCodeEmail}</span>
       </div>

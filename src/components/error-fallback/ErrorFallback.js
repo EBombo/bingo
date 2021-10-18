@@ -31,10 +31,7 @@ export const ErrorFallback = (props) => {
             Intentar nuevamente
           </ButtonAnt>
         )}
-        <ButtonAnt
-          variant="default"
-          onClick={() => (window.location.href = "/")}
-        >
+        <ButtonAnt variant="default" onClick={() => (window.location.href = "/")}>
           Volver al inicio
         </ButtonAnt>
       </div>

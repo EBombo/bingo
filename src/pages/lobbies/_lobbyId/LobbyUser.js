@@ -12,9 +12,7 @@ export const LobbyUser = (props) => {
     if (!props.lobby) return;
     if (!authUser) return;
 
-    const userStatusDatabaseRef = database.ref(
-      `lobbies/${props.lobby.id}/users/${authUser.id}`
-    );
+    const userStatusDatabaseRef = database.ref(`lobbies/${props.lobby.id}/users/${authUser.id}`);
 
     const user = {
       email: authUser?.email ?? null,
@@ -60,12 +58,7 @@ export const LobbyUser = (props) => {
       <UserLayout {...props} />
       <div className="main-container">
         <div className="logo">
-          <Image
-            src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
-            width="180px"
-            height="auto"
-            margin="0"
-          />
+          <Image src={`${config.storageUrl}/resources/white-icon-ebombo.png`} width="180px" height="auto" margin="0" />
         </div>
         <div className="message">Ya estás adentro :)</div>
         <div className="message">¿Ves tu nombre en pantalla?</div>
@@ -77,18 +70,10 @@ export const LobbyUser = (props) => {
   return (
     <SuccessInscriptionContainer>
       <Tablet>
-        <Container
-          bgImg={`${config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}
-        >
-          {content()}
-        </Container>
+        <Container bgImg={`${config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}>{content()}</Container>
       </Tablet>
       <Desktop>
-        <Container
-          bgImg={`${config.storageUrl}/resources/balls/coral-pattern.svg`}
-        >
-          {content()}
-        </Container>
+        <Container bgImg={`${config.storageUrl}/resources/balls/coral-pattern.svg`}>{content()}</Container>
       </Desktop>
     </SuccessInscriptionContainer>
   );

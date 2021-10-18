@@ -39,8 +39,7 @@ export const useFetch = () => {
 
     if (authUser) newToken = await auth.currentUser.getIdToken();
 
-    if (token || authUser)
-      headers.Authorization = `Bearer ${defaultTo(token, newToken)}`;
+    if (token || authUser) headers.Authorization = `Bearer ${defaultTo(token, newToken)}`;
 
     return headers;
   };

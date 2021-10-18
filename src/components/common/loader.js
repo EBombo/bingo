@@ -23,18 +23,10 @@ export const LogoSpin = () => (
   <SpinLoaderLogo>
     <div className="logo-spin">
       <div className="item-preloader">
-        <img
-          src={`${config.storageUrl}/resources/${window.location.hostname}.png`}
-          alt="Preloader bombo"
-        />
+        <img src={`${config.storageUrl}/resources/${window.location.hostname}.png`} alt="Preloader bombo" />
         <label htmlFor="cargando..." style={{ display: "flex" }}>
           <span>Cargando</span>
-          <marquee
-            loop
-            scrolldelay="300"
-            direction="right"
-            style={{ width: "10px" }}
-          >
+          <marquee loop scrolldelay="300" direction="right" style={{ width: "10px" }}>
             . . .
           </marquee>
         </label>

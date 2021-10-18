@@ -18,10 +18,7 @@ export const ModalConfirm = (props) => (
       <div className="title">{props.title}</div>
       <div className="description">{props.description}</div>
       <div className="btns-container">
-        <ButtonAnt
-          color="default"
-          onClick={() => props.setIsVisibleModalConfirm(false)}
-        >
+        <ButtonAnt color="default" onClick={() => props.setIsVisibleModalConfirm(false)}>
           Cancelar
         </ButtonAnt>
         <ButtonAnt color="danger" onClick={props.action}>

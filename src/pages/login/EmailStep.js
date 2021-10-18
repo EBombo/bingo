@@ -27,22 +27,15 @@ export const EmailStep = (props) => {
         <ModalVerification
           email={email}
           isVisibleModalVerification={!!email}
-          setIsVisibleModalVerification={(email) =>
-            props.setEmailVerification(email)
-          }
+          setIsVisibleModalVerification={(email) => props.setEmailVerification(email)}
           {...props}
         />
       )}
-      <Image
-        src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
-        width="180px"
-        margin="10px auto"
-      />
+      <Image src={`${config.storageUrl}/resources/white-icon-ebombo.png`} width="180px" margin="10px auto" />
       <div className="login-container">
         <div className="subtitle">Añadir identificación del jugador</div>
         <div className="description">
-          El anfitrión del juego a pedido que coloques tu mail cómo una medida
-          de identificación para entrar al juego
+          El anfitrión del juego a pedido que coloques tu mail cómo una medida de identificación para entrar al juego
         </div>
         <InputBingo
           ref={register}
