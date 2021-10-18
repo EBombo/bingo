@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev && cross-env NODE_ENV=development",
+    "dev": "next dev -p 3001 && cross-env NODE_ENV=development",
     "build:prod": "next build && cross-env NODE_ENV=production",
     "build": "next build",
     "start": "next start -p ${PORT:-5000}",
