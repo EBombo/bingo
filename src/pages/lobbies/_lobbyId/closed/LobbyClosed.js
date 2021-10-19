@@ -1,10 +1,9 @@
 import { fadeOutUpBig } from "react-animations";
 import React, { useEffect, useState } from "reactn";
 import styled, { keyframes } from "styled-components";
-import { config } from "../../../../firebase";
 import { timeoutPromise } from "../../../../utils/promised";
-import { Image } from "../../../../components/common/Image";
 import { mediaQuery } from "../../../../constants";
+import { Winner } from "./Winner";
 
 export const LobbyClosed = (props) => {
   const [isVisibleTitle, setIsVisibleTitle] = useState(true);
@@ -27,17 +26,8 @@ export const LobbyClosed = (props) => {
 
       {!isVisibleTitle && (
         <div className="winners">
-          {props.lobby.winners.map((winner, index) => (
-            <div key={index} className="winner">
-              <Image
-                src={`${config.storageUrl}/resources/icon-${index + 1}.svg`}
-                height="100px"
-                width="100px"
-                zIndex="1"
-                margin="auto"
-              />
-              <div className="tab">{winner.nickname}</div>
-            </div>
+          {props.lobby.winners?.map((winner, index) => (
+            <Winner winner={winner} index={index} key={index} />
           ))}
         </div>
       )}
@@ -65,21 +55,7 @@ const LobbyClosedCss = styled.div`
     margin: auto;
 
     ${mediaQuery.afterTablet} {
-      width: 60vw;
-    }
-
-    .winner {
-      display: grid;
-      grid-template-columns: 1fr 4fr;
-
-      .tab {
-        padding: 10px 15px;
-        margin: auto 0 auto -30px;
-        height: fit-content;
-        border-radius: 0 10px 10px 0;
-        color: ${(props) => props.theme.basic.black};
-        background: ${(props) => props.theme.basic.white};
-      }
+      width: 70vw;
     }
   }
 `;
