@@ -51,7 +51,7 @@ const Messages = styled.div`
       ? "auto 0 auto auto"
       : "10px 0 auto auto"};
 
-  animation: 1s ${(props) => (props.received ? slideInLeftAnimation : slideInRightAnimation)};
+  animation: 0s ${(props) => (props.received ? slideInLeftAnimation : slideInRightAnimation)};
 
   .header {
     display: flex;
