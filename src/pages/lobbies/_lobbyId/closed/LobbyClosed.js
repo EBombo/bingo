@@ -1,7 +1,9 @@
+import { fadeOutUpBig } from "react-animations";
 import React, { useEffect, useState } from "reactn";
 import styled, { keyframes } from "styled-components";
-import { fadeOutUpBig } from "react-animations";
+import { config } from "../../../../firebase";
 import { timeoutPromise } from "../../../../utils/promised";
+import { Image } from "../../../../components/common/Image";
 
 export const LobbyClosed = (props) => {
     const [isVisibleTitle, setIsVisibleTitle] = useState(true);
@@ -25,7 +27,27 @@ export const LobbyClosed = (props) => {
                 {props.lobby.game.title}
             </div>
         }
-    </LobbyClosedCss>
+        {
+            !isVisibleTitle
+            && <div className="winners">
+                {
+                    props
+                        .lobby
+                        .winners
+                        .map((winner, index) => {
+                            return <div key={index} className="winner">
+                                <Image src={`${config.storageUrl}/resources/icon-${index + 1}.svg`}
+                                    height="100px"
+                                    width="100px" />
+                                <div className="tab">
+                                    {winner.nickname}
+                                </div>
+                            </div>
+                        })
+                }
+            </div>
+        }
+    </LobbyClosedCss >
 }
 
 const fadeOutUpBiganimation = keyframes`${fadeOutUpBig}`;
