@@ -54,7 +54,7 @@ export const ModalUserCard = (props) => {
                   <div className="name">{props.user.nickname}</div>
                   <div className="btn-container">
                     <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
-                      Descalificar
+                      Invalidar
                     </ButtonAnt>
                   </div>
                 </div>
@@ -122,7 +122,7 @@ export const ModalUserCard = (props) => {
                     <div className="name">{props.user.nickname}</div>
                     <div className="btn-container">
                       <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
-                        Descalificar
+                        Invalidar
                       </ButtonAnt>
                     </div>
                   </div>
@@ -134,7 +134,7 @@ export const ModalUserCard = (props) => {
                   <div className="name">{props.user.nickname}</div>
                   <div className="btn-container">
                     <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
-                      Descalificar
+                      Invalidar
                     </ButtonAnt>
                   </div>
                 </div>
