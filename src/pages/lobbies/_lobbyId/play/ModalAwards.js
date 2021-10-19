@@ -141,13 +141,14 @@ const AwardsContainer = styled.div`
     font-size: 15px;
     line-height: 18px;
     color: ${(props) => props.theme.basic.blackDarken};
+    margin-top: 0.5rem;
     margin-bottom: 5px;
   }
 
   .award {
     .content {
       display: grid;
-      grid-template-columns: auto 60px;
+      grid-template-columns: 80% 20%;
       grid-gap: 15px;
       align-items: center;
     }
@@ -155,7 +156,7 @@ const AwardsContainer = styled.div`
 
   form {
     display: grid;
-    grid-template-columns: auto 80px;
+    grid-template-columns: 80% 20%;
     grid-gap: 15px;
     align-items: center;
   }

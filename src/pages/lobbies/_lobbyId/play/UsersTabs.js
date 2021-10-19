@@ -120,7 +120,7 @@ export const UsersTabs = (props) => {
           <div className="left-side">Participantes ({Object.keys(props.lobby.users).length})</div>
           <div className="right-side">
             <ButtonAnt
-              className={`btn-tab ${tab === TAB.CARDS && "active"}`}
+              className={`btn-tab ${tab === TAB.CARDS ? "active" : "" }`}
               color="default"
               margin="0 0.5rem"
               onClick={() => setTab(TAB.CARDS)}
@@ -128,7 +128,7 @@ export const UsersTabs = (props) => {
               Cuadrícula
             </ButtonAnt>
             <ButtonAnt
-              className={`btn-tab ${tab === TAB.TABLE && "active"}`}
+              className={`btn-tab ${tab === TAB.TABLE ? "active" : ""}`}
               color="default"
               margin="0 0.5rem"
               onClick={() => setTab(TAB.TABLE)}
@@ -146,7 +146,7 @@ export const UsersTabs = (props) => {
       <Tablet>
         <div className="tabs-container">
           <ButtonAnt
-            className={`btn-tab ${tab === TAB.TABLE && "active"}`}
+            className={`btn-tab ${tab === TAB.CARDS ? "active" : "" }`}
             color="default"
             margin="0 0.5rem"
             onClick={() => setTab(TAB.CARDS)}
@@ -154,7 +154,7 @@ export const UsersTabs = (props) => {
             Cuadrícula
           </ButtonAnt>
           <ButtonAnt
-            className={`btn-tab ${tab === TAB.TABLE && "active"}`}
+            className={`btn-tab ${tab === TAB.TABLE ? "active" : ""}`}
             color="default"
             margin="0 0.5rem"
             onClick={() => setTab(TAB.TABLE)}
@@ -287,20 +287,6 @@ const TabsContainer = styled.div`
       color: ${(props) => props.theme.basic.secondary};
     }
 
-    .active {
-      color: ${(props) => props.theme.basic.primary};
-    }
-
-    .active::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80%;
-      height: 2px;
-      background: ${(props) => props.theme.basic.primary};
-    }
   }
 
   .user-tab {
@@ -482,15 +468,6 @@ const TabsContainer = styled.div`
         align-items: center;
         justify-content: space-evenly;
 
-        .btn-tab {
-          font-family: Lato;
-          font-style: normal;
-          font-weight: bold;
-          font-size: 12px;
-          line-height: 14px;
-          padding: 5px 20px !important;
-        }
-
         .input-search {
           box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
           width: 300px;
@@ -519,4 +496,18 @@ const TabsContainer = styled.div`
       }
     }
   }
+  
+  .btn-tab {
+    font-family: Lato, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14px;
+    padding: 5px 20px !important;
+
+    &.active {
+      color: ${(props) => props.theme.basic.primary};
+    }
+  }
+
 `;

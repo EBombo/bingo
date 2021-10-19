@@ -61,6 +61,7 @@ export const UserCard = (props) => {
   return (
     <CardContainer
       backgroundColor={props.lobby.game.backgroundColor}
+      backgroundImg={props.lobby.game.backgroundImg}
       titleColor={props.lobby.game.titleColor}
       blocksColor={props.lobby.game.blocksColor}
       numberColor={props.lobby.game.numberColor}
@@ -104,7 +105,13 @@ export const UserCard = (props) => {
 const CardContainer = styled.div`
   width: 100%;
   max-width: 350px;
-  background: ${(props) => (props.backgroundColor ? props.backgroundColor : props.theme.basic.secondary)};
+  background: ${(props) => {
+    if (props.backgroundImg) return `url(${props.backgroundImg})`;
+    if (props.backgroundColor) return props.backgroundColor;
+
+    return props.theme.basic.secondary;
+  }};
+  background-position: center;
   border-radius: 3px;
   padding: 0.5rem;
   margin: 0 auto;
