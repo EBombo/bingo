@@ -59,7 +59,7 @@ const WinnerCss = styled.div`
 
     .award {
       font-size: 1rem;
-      margin: -10px 0 auto -30px;
+      margin: -10px 0 auto ${(props) => (props.isList ? "0" : "-30px")};
       border-radius: 0 0 5px 5px;
       padding: 15px 15px 15px 3rem;
       color: ${(props) => props.theme.basic.secondary};

@@ -1,7 +1,7 @@
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal, useMemo, useState } from "reactn";
 import styled, { keyframes } from "styled-components";
 import { timeoutPromise } from "../../../../utils/promised";
-import { mediaQuery } from "../../../../constants";
+import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { Winner } from "./Winner";
 import { ButtonAnt, ButtonBingo } from "../../../../components/form";
 import {
@@ -59,6 +59,81 @@ export const LobbyClosed = (props) => {
     setShowWinnersAnimation(false);
   };
 
+  const itemAttendees = useMemo(() => {
+    return (
+      <div className="item flex">
+        <div className="metric">
+          <Image src={`${config.storageUrl}/resources/attendees.png`} width="55px" desktopWidth="75px" />
+          <div>
+            <div className="number">{Object.keys(props.lobby.users)?.length ?? 0}</div>
+            <div className="label">asistentes</div>
+          </div>
+        </div>
+      </div>
+    );
+  }, [props.lobby.users]);
+
+  const itemPlayAgain = useMemo(() => {
+    return (
+      <div className="item flex">
+        <div className="content-center">
+          ¿Se divirtieron?
+          <ButtonAnt
+            variant="contained"
+            color="success"
+            margin="auto"
+            onClick={() => {
+              const userId = authUser.id;
+              const redirectUrl = `${window.location.origin}/games/${props.lobby.game.id}?userId=${userId}`;
+              window.open(redirectUrl, "blank");
+            }}
+          >
+            Jugar de nuevo
+          </ButtonAnt>
+        </div>
+      </div>
+    );
+  }, [authUser.id]);
+
+  const itemMessages = useMemo(() => {
+    return (
+      <div className="item flex">
+        <div className="metric">
+          <Image src={`${config.storageUrl}/resources/messages.png`} width="55px" desktopWidth="75px" />
+          <div>
+            <div className="number">{props.lobby.totalMessages ?? 0}</div>
+            <div className="label">mensages</div>
+          </div>
+        </div>
+      </div>
+    );
+  }, [props.lobby.totalMessages]);
+
+  const itemOptions = useMemo(() => {
+    return (
+      <div className="item">
+        <ButtonAnt
+          variant="contained"
+          color="primary"
+          margin="20px auto"
+          width="80%"
+          onClick={initializeTransitionToListWinners}
+        >
+          Ver reporte completo
+        </ButtonAnt>
+        <ButtonAnt
+          variant="contained"
+          color="primary"
+          margin="20px auto"
+          width="80%"
+          onClick={initializeTransitionToWinners}
+        >
+          Volver al inicio
+        </ButtonAnt>
+      </div>
+    );
+  }, []);
+
   if (showWinners)
     return (
       <LobbyWinnersCss>
@@ -79,70 +154,42 @@ export const LobbyClosed = (props) => {
         <div className="item">
           <Image
             src={`${config.storageUrl}/resources/coap.png`}
-            height="80%"
+            desktopHeight="80%"
+            height="200px"
             margin="-15% auto 15px auto"
             size="contain"
           />
-          <ButtonAnt variant="contained" color="primary" margin="auto" onClick={initializeTransitionToWinners}>
+          <ButtonAnt
+            variant="contained"
+            color="primary"
+            margin="auto auto 15px auto"
+            onClick={initializeTransitionToWinners}
+          >
             Volver al podio
           </ButtonAnt>
         </div>
+
         <div className="child">
-          <div className="item flex">
-            <div className="metric">
-              <Image src={`${config.storageUrl}/resources/attendees.png`} width="75px" />
-              <div>
-                <div className="number">{Object.keys(props.lobby.users)?.length ?? 0}</div>
-                <div className="label">asistentes</div>
-              </div>
+          <Desktop>
+            {itemAttendees}
+
+            {itemPlayAgain}
+
+            {itemMessages}
+
+            {itemOptions}
+          </Desktop>
+          <Tablet>
+            <div className="metric-child">
+              {itemAttendees}
+
+              {itemMessages}
             </div>
-          </div>
-          <div className="item flex">
-            <div className="content-center">
-              ¿Se divirtieron?
-              <ButtonAnt
-                variant="contained"
-                color="success"
-                margin="auto"
-                onClick={() => {
-                  const userId = authUser.id;
-                  const redirectUrl = `${window.location.origin}/games/${props.lobby.game.id}?userId=${userId}`;
-                  window.open(redirectUrl, "blank");
-                }}
-              >
-                Jugar de nuevo
-              </ButtonAnt>
-            </div>
-          </div>
-          <div className="item flex">
-            <div className="metric">
-              <Image src={`${config.storageUrl}/resources/messages.png`} width="75px" />
-              <div>
-                <div className="number">{props.lobby.totalMessages ?? 0}</div>
-                <div className="label">mensages</div>
-              </div>
-            </div>
-          </div>
-          <div className="item">
-            <ButtonAnt
-              variant="contained"
-              color="primary"
-              margin="20px auto"
-              width="80%"
-              onClick={initializeTransitionToListWinners}
-            >
-              Ver reporte completo
-            </ButtonAnt>
-            <ButtonAnt
-              variant="contained"
-              color="primary"
-              margin="20px auto"
-              width="80%"
-              onClick={initializeTransitionToWinners}
-            >
-              Volver al inicio
-            </ButtonAnt>
-          </div>
+
+            {itemPlayAgain}
+
+            {itemOptions}
+          </Tablet>
         </div>
       </div>
     </LobbyResumeCss>
@@ -249,19 +296,34 @@ const LobbyResumeCss = styled.div`
   }
 
   .resume {
-    width: 90%;
-    margin: auto;
+    width: auto;
+    margin: 50px 15px;
     display: grid;
-    height: 300px;
     grid-gap: 20px;
-    grid-template-columns: 1.5fr 3fr;
     animation: 1s ${(props) => (props.showResumeAnimation ? fadeOutRightBigAnimation : fadeInRightBigAnimation)};
+
+    ${mediaQuery.afterTablet} {
+      width: 70%;
+      height: 300px;
+      margin: auto;
+      grid-template-columns: 1.5fr 3fr;
+    }
 
     .child {
       display: grid;
       grid-gap: 20px;
-      grid-template-columns: 1.3fr 1fr;
-      grid-template-rows: 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1.3fr;
+
+      .metric-child {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      ${mediaQuery.afterTablet} {
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1.3fr 1fr;
+      }
 
       .metric {
         margin: auto 5%;
