@@ -59,8 +59,8 @@ export const LobbyClosed = (props) => {
     setShowWinnersAnimation(false);
   };
 
-  const itemAttendees = useMemo(() => {
-    return (
+  const itemAttendees = useMemo(
+    () => (
       <div className="item flex">
         <div className="metric">
           <Image src={`${config.storageUrl}/resources/attendees.png`} width="55px" desktopWidth="75px" />
@@ -70,11 +70,12 @@ export const LobbyClosed = (props) => {
           </div>
         </div>
       </div>
-    );
-  }, [props.lobby.users]);
+    ),
+    [props.lobby.users]
+  );
 
-  const itemPlayAgain = useMemo(() => {
-    return (
+  const itemPlayAgain = useMemo(
+    () => (
       <div className="item flex">
         <div className="content-center">
           ¿Se divirtieron?
@@ -92,11 +93,12 @@ export const LobbyClosed = (props) => {
           </ButtonAnt>
         </div>
       </div>
-    );
-  }, [authUser.id]);
+    ),
+    [authUser.id]
+  );
 
-  const itemMessages = useMemo(() => {
-    return (
+  const itemMessages = useMemo(
+    () => (
       <div className="item flex">
         <div className="metric">
           <Image src={`${config.storageUrl}/resources/messages.png`} width="55px" desktopWidth="75px" />
@@ -106,11 +108,12 @@ export const LobbyClosed = (props) => {
           </div>
         </div>
       </div>
-    );
-  }, [props.lobby.totalMessages]);
+    ),
+    [props.lobby.totalMessages]
+  );
 
-  const itemOptions = useMemo(() => {
-    return (
+  const itemOptions = useMemo(
+    () => (
       <div className="item">
         <ButtonAnt
           variant="contained"
@@ -131,8 +134,9 @@ export const LobbyClosed = (props) => {
           Volver al inicio
         </ButtonAnt>
       </div>
-    );
-  }, []);
+    ),
+    []
+  );
 
   if (showWinners)
     return (
@@ -168,26 +172,19 @@ export const LobbyClosed = (props) => {
             Volver al podio
           </ButtonAnt>
         </div>
-
         <div className="child">
           <Desktop>
             {itemAttendees}
-
             {itemPlayAgain}
-
             {itemMessages}
-
             {itemOptions}
           </Desktop>
           <Tablet>
             <div className="metric-child">
               {itemAttendees}
-
               {itemMessages}
             </div>
-
             {itemPlayAgain}
-
             {itemOptions}
           </Tablet>
         </div>
