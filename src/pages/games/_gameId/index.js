@@ -18,7 +18,7 @@ export const Game = (props) => {
   const [, setLSAuthUser] = useUser();
   const [audios] = useGlobal("audios");
   const [game, setGame] = useState(null);
-  const { tokenId, gameId } = router.query;
+  const { userId, tokenId, gameId } = router.query;
   const [, setAuthUser] = useGlobal("user");
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingSave, setIsLoadingSave] = useState(false);
@@ -37,12 +37,12 @@ export const Game = (props) => {
   const [showAwards, setShowAwards] = useState(false);
 
   useEffect(() => {
-    if (!tokenId || !gameId) return;
+    if ((!tokenId && !userId) || !gameId) return;
 
     const verifyUser = async () => {
       try {
         const url = `${config.serverUrlEvents}/api/tokens`;
-        const { response, error } = await Fetch(url, "POST", { tokenId });
+        const { response, error } = await Fetch(url, "POST", { tokenId, userId });
 
         if (error) {
           props.showNotification("ERROR", "Error al validar la cuenta");
