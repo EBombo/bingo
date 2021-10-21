@@ -33,9 +33,7 @@ const UserLayout = (props) => {
   const router = useRouter();
   const { userAcls } = useAcl();
   const [authUser] = useGlobal("user");
-  const [isVisibleLoginModal, setIsVisibleLoginModal] = useGlobal(
-    "isVisibleLoginModal"
-  );
+  const [isVisibleLoginModal, setIsVisibleLoginModal] = useGlobal("isVisibleLoginModal");
   const [, setOpenRightDrawer] = useGlobal("openRightDrawer");
   //const [openLeftDrawer, setOpenLeftDrawer] = useGlobal("openLeftDrawer");
   const [isVisibleForgotPassword] = useGlobal("isVisibleForgotPassword");
@@ -47,21 +45,13 @@ const UserLayout = (props) => {
         onCancel={() => setIsVisibleLoginModal(false)}
         footer={null}
       >
-        {isVisibleForgotPassword ? (
-          <ForgotPassword {...props} />
-        ) : (
-          <Login {...props} />
-        )}
+        {isVisibleForgotPassword ? <ForgotPassword {...props} /> : <Login {...props} />}
       </ModalContainer>
     ) : null;
 
   const verifiedModalResendEmail = () =>
     authUser && !authUser.isVerified ? (
-      <ModalContainer
-        footer={null}
-        closable={false}
-        visible={!authUser.isVerified}
-      >
+      <ModalContainer footer={null} closable={false} visible={!authUser.isVerified}>
         <Verify logOut={signOut} />
       </ModalContainer>
     ) : null;
@@ -95,25 +85,16 @@ const UserLayout = (props) => {
           <SingIn>
             {!authUser && (
               <>
-                <Anchor
-                  onClick={() => setIsVisibleLoginModal(true)}
-                  variant="primary"
-                >
+                <Anchor onClick={() => setIsVisibleLoginModal(true)} variant="primary">
                   Iniciar sesion
                 </Anchor>
-                <Anchor
-                  onClick={() => router.push("/register")}
-                  variant="primary"
-                >
+                <Anchor onClick={() => router.push("/register")} variant="primary">
                   Registrate
                 </Anchor>
               </>
             )}
             {authUser && (
-              <div
-                className="menu-icon-nav"
-                onClick={() => setOpenRightDrawer(true)}
-              >
+              <div className="menu-icon-nav" onClick={() => setOpenRightDrawer(true)}>
                 <MenuOutlined />
               </div>
             )}

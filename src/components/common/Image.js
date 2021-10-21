@@ -19,12 +19,11 @@ const ImageCss = styled.div`
   cursor: ${(props) => props.cursor || "default"};
   ${(props) => (props.opacity ? "background-color: rgba(0,0,0,0.3);" : "")}
   filter: ${(props) => (props.filter ? props.filter : "none")};
+  ${(props) => (props.zIndex ? `z-index:${props.zIndex};` : "")}
 
   ${mediaQuery.afterMobile} {
-    height: ${(props) =>
-      props.desktopHeight ? props.desktopHeight : props.height};
-    width: ${(props) =>
-      props.desktopWidth ? props.desktopWidth : props.width};
+    height: ${(props) => (props.desktopHeight ? props.desktopHeight : props.height)};
+    width: ${(props) => (props.desktopWidth ? props.desktopWidth : props.width)};
   }
 
   img {

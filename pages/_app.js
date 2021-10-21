@@ -19,10 +19,7 @@ const MyApp = ({ Component, pageProps }) => {
 
   useEffect(() => {
     const initialize = async () => {
-      const audiosRef = await firestoreEvents
-        .collection("audios")
-        .where("deleted", "==", false)
-        .get();
+      const audiosRef = await firestoreEvents.collection("audios").where("deleted", "==", false).get();
 
       setAudios(snapshotToArray(audiosRef));
     };
@@ -30,30 +27,21 @@ const MyApp = ({ Component, pageProps }) => {
     initialize();
   }, []);
 
-  const showNotificationAnt = (message, description, type = "error") =>
-    notification[type]({ message, description });
+  const showNotificationAnt = (message, description, type = "error") => notification[type]({ message, description });
 
   return (
-    <ThemeProvider
-      theme={get(authUserLS, "theme") === "lightTheme" ? lightTheme : darkTheme}
-    >
+    <ThemeProvider theme={get(authUserLS, "theme") === "lightTheme" ? lightTheme : darkTheme}>
       <GlobalStyle />
       <Head>
-        <title>Welcome</title>
+        <title>Bingo</title>
         <meta charSet="UTF-8" />
         <meta name="google" value="notranslate" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1.0,user-scalable=0, shrink-to-fit=no"
         />
-        <link
-          rel="shortcut icon"
-          href={`${config.storageUrl}/resources/icons/icon-72x72.png`}
-        />
-        <link
-          rel="shortcut icon"
-          href={`${config.storageUrl}/resources/icons/icon-512x512.png`}
-        />
+        <link rel="shortcut icon" href={`${config.storageUrl}/resources/icons/icon-72x72.png`} />
+        <link rel="shortcut icon" href={`${config.storageUrl}/resources/icons/icon-512x512.png`} />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="144x144"
@@ -69,35 +57,14 @@ const MyApp = ({ Component, pageProps }) => {
           sizes="72x72"
           href={`${config.storageUrl}/resources/icons/icon-512x512.png`}
         />
-        <link
-          rel="apple-touch-icon-precomposed"
-          href={`${config.storageUrl}/resources/icons/icon-512x512.png`}
-        />
-        <meta
-          property="og:image"
-          content={`${config.storageUrl}/resources/icons/icon-512x512.png`}
-        />
+        <link rel="apple-touch-icon-precomposed" href={`${config.storageUrl}/resources/icons/icon-512x512.png`} />
+        <meta property="og:image" content={`${config.storageUrl}/resources/icons/icon-512x512.png`} />
         <link rel="manifest" href={`${config.serverUrl}/api/manifest`} />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@700&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap"
-          rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet" />
       </Head>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <WithConfiguration>

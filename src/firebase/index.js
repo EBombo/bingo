@@ -25,13 +25,9 @@ let storageEvents;
 let authEvents;
 
 try {
-    hostName =
-        process.env.NODE_ENV === "development"
-            ? "localhost"
-            : get(process, "env.GCLOUD_PROJECT", "");
+    hostName = process.env.NODE_ENV === "development" ? "localhost" : get(process, "env.GCLOUD_PROJECT", "");
 
-    if (typeof window !== "undefined")
-        hostName = window.location.hostname.replace("subdomain.", "");
+    if (typeof window !== "undefined") hostName = window.location.hostname.replace("subdomain.", "");
 
     console.log("projectId", hostName, process.env.NODE_ENV);
 } catch (error) {
@@ -52,7 +48,6 @@ if (
 
     console.log("prod", version);
 }
-console.log("config", config)
 
 if (isEmpty(firebase.apps)) {
     try {

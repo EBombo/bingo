@@ -1,2 +1,1 @@
-export const aclRoutes = (props) =>
-  props.userAcls.filter((userAcl) => !userAcl.includes("#"));
+export const aclRoutes = (props) => props.userAcls.filter((userAcl) => !userAcl.includes("#"));

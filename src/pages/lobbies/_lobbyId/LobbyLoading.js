@@ -118,8 +118,11 @@ const LoadingGameContainer = styled.div`
   height: 100vh;
   position: relative;
   overflow: hidden;
-
-  ${(props) => animatedBackground({ backgroundUrl: `${props.config.storageUrl}/resources/background-pattern-test.svg`})};
+  background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
+  background-repeat: repeat;
+  background-position: center;
+  background-size: 120% 100%;
+  animation: right-to-left-shift 20s linear infinite alternate;
   
   .step-one-tablet {
     position: absolute;
@@ -338,6 +341,10 @@ const LoadingGameContainer = styled.div`
     }
   }
   
+  ${mediaQuery.afterTablet} {
+    background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
+  }
+
   @keyframes loader {
     0% {
       width: 100%;

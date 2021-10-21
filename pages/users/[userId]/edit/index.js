@@ -4,13 +4,10 @@ import dynamic from "next/dynamic";
 import { spinLoader } from "../../../../src/components/common/loader";
 import { UserPrivateRoute } from "../../../../src/routes/UserPrivateRoute";
 
-const UserLayout = dynamic(
-  () => import("../../../../src/components/UserLayout"),
-  {
-    ssr: false,
-    loading: () => spinLoader(),
-  }
-);
+const UserLayout = dynamic(() => import("../../../../src/components/UserLayout"), {
+  ssr: false,
+  loading: () => spinLoader(),
+});
 
 const EditProfileContainer = (props) => (
   <UserPrivateRoute>

@@ -44,9 +44,7 @@ export const ModalWinner = (props) => {
               size="contain"
               margin="auto"
             />
-            <div className="description">
-              Esperando que el administrador continúe el juego...
-            </div>
+            <div className="description">Esperando que el administrador continúe el juego...</div>
           </div>
         )}
       </WinnerContainer>

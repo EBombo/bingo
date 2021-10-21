@@ -8,10 +8,7 @@ import { mediaQuery } from "../../constants";
 
 export const ChatMessage = (props) => {
   const [authUser] = useGlobal("user");
-  const [sameAsBefore] = useState(
-    get(props, "previousMessage.user.id", null) ===
-      get(props, "message.user.id", null)
-  );
+  const [sameAsBefore] = useState(get(props, "previousMessage.user.id", null) === get(props, "message.user.id", null));
 
   return (
     <Messages
@@ -23,9 +20,7 @@ export const ChatMessage = (props) => {
       <div className="header">
         {!sameAsBefore && (
           <div className="nickname">
-            {`${get(props, "message.user.nickname", "")} ${
-              props.message.user.isAdmin ? "[ADMIN]" : ""
-            }`}
+            {`${get(props, "message.user.nickname", "")} ${props.message.user.isAdmin ? "[ADMIN]" : ""}`}
           </div>
         )}
       </div>
@@ -33,9 +28,7 @@ export const ChatMessage = (props) => {
         <div className="message">
           <Linkify>{props.message.message}</Linkify>
         </div>
-        <div className="time">
-          {moment(props.message.createAt.toDate()).format("hh:mma")}
-        </div>
+        <div className="time">{moment(props.message.createAt.toDate()).format("hh:mma")}</div>
       </div>
     </Messages>
   );
@@ -58,9 +51,7 @@ const Messages = styled.div`
       ? "auto 0 auto auto"
       : "10px 0 auto auto"};
 
-  animation: 1s
-    ${(props) =>
-      props.received ? slideInLeftAnimation : slideInRightAnimation};
+  animation: 0s ${(props) => (props.received ? slideInLeftAnimation : slideInRightAnimation)};
 
   .header {
     display: flex;
@@ -102,13 +93,7 @@ const Messages = styled.div`
           ? props.theme.basic.primary
           : props.theme.basic.primary};
       border-radius: ${(props) =>
-        props.received
-          ? props.sameAsBefore
-            ? "4px"
-            : "0 4px 4px 4px"
-          : props.sameAsBefore
-          ? "4px"
-          : "4px 0 4px 4px"};
+        props.received ? (props.sameAsBefore ? "4px" : "0 4px 4px 4px") : props.sameAsBefore ? "4px" : "4px 0 4px 4px"};
       padding: 5px;
       font-family: Lato;
       font-style: normal;

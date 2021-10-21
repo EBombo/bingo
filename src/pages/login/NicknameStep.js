@@ -32,10 +32,7 @@ export const NicknameStep = (props) => {
     try {
       if (users.some((user) => user.nickname === data.nickname)) {
         setIsValidating(false);
-        props.showNotification(
-          "ERROR",
-          "El nickname ya se encuentra registrado"
-        );
+        props.showNotification("ERROR", "El nickname ya se encuentra registrado");
         return;
       }
 
@@ -53,9 +50,7 @@ export const NicknameStep = (props) => {
   };
 
   const fetchUsers = async () => {
-    const userStatusDatabaseRef = database.ref(
-      `lobbies/${props.lobby.id}/users`
-    );
+    const userStatusDatabaseRef = database.ref(`lobbies/${props.lobby.id}/users`);
     userStatusDatabaseRef.on("value", (snapshot) => {
       let users_ = Object.values(snapshot.val() ?? {});
       users_ = users_.filter((user) => user.state.includes("online"));
@@ -66,11 +61,7 @@ export const NicknameStep = (props) => {
   return (
     <NicknameForm onSubmit={handleSubmit(validateNickname)}>
       {isValidating && <ValidateNickname {...props} />}
-      <Image
-        src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
-        width="180px"
-        margin="10px auto"
-      />
+      <Image src={`${config.storageUrl}/resources/white-icon-ebombo.png`} width="180px" margin="10px auto" />
       <div className="login-container">
         <InputBingo
           ref={register}

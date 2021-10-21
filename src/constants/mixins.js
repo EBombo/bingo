@@ -22,16 +22,7 @@ export const btnPrimary = (fonSize, fontWeight, margin, width, height) => {
           margin: ${margin};`;
 };
 
-export const btnPrimaryGeneral = (
-  fonSize,
-  fontWeight,
-  margin,
-  width,
-  height,
-  color,
-  bgColor,
-  borderRadius
-) => {
+export const btnPrimaryGeneral = (fonSize, fontWeight, margin, width, height, color, bgColor, borderRadius) => {
   return `display: flex;
     justify-content: center;
     align-items: center;
@@ -81,13 +72,7 @@ export const btnDashedLive = (fonSize, fontWeight, margin, width, height) => {
             height: ${height};`;
 };
 
-export const moneyBombo = (
-  widthHeight,
-  fontSize,
-  borderSize,
-  borderRadius,
-  colorMoney
-) => {
+export const moneyBombo = (widthHeight, fontSize, borderSize, borderRadius, colorMoney) => {
   return `padding: 8px;
             font-weight: 600;
             display: flex;
@@ -160,12 +145,7 @@ export const inputAutoFill = (cursorColor, borderColor, textColor, bgColor) => {
                 }`;
 };
 
-export const selectAutoFill = (
-  cursorColor,
-  borderColor,
-  textColor,
-  bgColor
-) => {
+export const selectAutoFill = (cursorColor, borderColor, textColor, bgColor) => {
   return `&:-webkit-autofill,
             &:-webkit-autofill:hover,
             &:-webkit-autofill:focus {
@@ -225,14 +205,7 @@ export const walletButton = (background, colorOne, colorTwo) => {
             }`;
 };
 
-export const iconCaptainDynamic = (
-  width,
-  height,
-  bgColor,
-  color,
-  fontSize,
-  fontWeight
-) => {
+export const iconCaptainDynamic = (width, height, bgColor, color, fontSize, fontWeight) => {
   return `width:${width};
             height: ${height};
             background: ${bgColor};

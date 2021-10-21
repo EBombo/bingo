@@ -14,9 +14,7 @@ const UpdateVersion = () => (
         width={"96px"}
         height={"26px"}
       />
-      <h2 className="title">
-        Por favor actualiza a la última versión de la plataforma
-      </h2>
+      <h2 className="title">Por favor actualiza a la última versión de la plataforma</h2>
       <ButtonAnt onClick={() => document.location.reload(true)} fontSize="18px">
         ACTUALIZAR
       </ButtonAnt>

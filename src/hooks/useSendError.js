@@ -19,11 +19,7 @@ export const useSendError = () => {
       error.url = `${hostName}${pathname}`;
       error.userId = get(authUser, "id", null);
 
-      const response = await Fetch(
-        `${config.serverUrl}/error-boundary`,
-        "POST",
-        error
-      );
+      const response = await Fetch(`${config.serverUrl}/error-boundary`, "POST", error);
 
       if (response.error) throw Error(response.error.statusText);
 
