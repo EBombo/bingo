@@ -31,6 +31,8 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.primary
           : color === "secondary"
           ? theme.basic.secondary
+          : color === "secondaryDark"
+          ? theme.basic.secondaryDarken
           : color === "warning"
           ? theme.basic.warning
           : color === "danger"
@@ -56,6 +58,8 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.primaryDark
           : color === "secondary"
           ? theme.basic.secondaryDark
+          : color === "secondaryDark"
+          ? theme.basic.secondaryDarken
           : color === "warning"
           ? theme.basic.warningDark
           : color === "danger"
@@ -75,6 +79,8 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.primary
           : color === "secondary"
           ? theme.basic.secondary
+          : color === "secondaryDark"
+          ? theme.basic.secondaryDarken
           : color === "warning"
           ? theme.basic.warning
           : color === "danger"
@@ -90,6 +96,8 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.primary
           : color === "secondary"
           ? theme.basic.secondary
+          : color === "secondaryDark"
+          ? theme.basic.secondaryDarken
           : color === "warning"
           ? theme.basic.warning
           : color === "danger"
@@ -127,6 +135,8 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.primary
           : color === "secondary"
           ? theme.basic.secondary
+          : color === "secondaryDark"
+          ? theme.basic.secondaryDarken
           : color === "warning"
           ? theme.basic.warning
           : color === "danger"
@@ -152,6 +162,8 @@ const ButtonAntCss = styled(Button)`
           ? theme.basic.primaryDark
           : color === "secondary"
           ? theme.basic.secondaryDark
+          : color === "secondaryDark"
+          ? theme.basic.secondaryDarken
           : color === "warning"
           ? theme.basic.warningDark
           : color === "danger"

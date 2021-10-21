@@ -128,20 +128,22 @@ export const AdminPanel = (props) => {
       <Desktop>
         <div className="bingo">
           <div className="left-container">
-            <CardPattern
-              key={props.lobby.pattern}
-              caption={"Patrón que se debe llenar"}
-              apagon={apagon}
-              setApagon={setApagon}
-              isVisibleModalPattern={isVisibleModalPattern}
-              setIsVisibleModalPattern={setIsVisibleModalPattern}
-              {...props}
-            />
+            <div className="card-pattern-container">
+              <CardPattern
+                key={props.lobby.pattern}
+                caption={"Patrón que se debe llenar"}
+                apagon={apagon}
+                setApagon={setApagon}
+                isVisibleModalPattern={isVisibleModalPattern}
+                setIsVisibleModalPattern={setIsVisibleModalPattern}
+                {...props}
+              />
+            </div>
 
             <ButtonAnt
               variant="contained"
-              color="default"
-              width="auto"
+              color="secondaryDark"
+              width="100%"
               margin="1rem auto"
               disabled={isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
               onClick={() => setIsVisibleModalConfirm(true)}

@@ -366,14 +366,13 @@ const BingoGameContainer = styled.div`
       overflow: auto;
 
       .left-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: ${(props) => props.theme.basic.secondary};
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
-        padding: 0.5rem;
-        border-radius: 4px;
+        .card-pattern-container {
+          background: ${(props) => props.theme.basic.secondary};
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+          padding: 1rem;
+          border-radius: 4px;
+        }
+        
       }
 
       .right-container {
