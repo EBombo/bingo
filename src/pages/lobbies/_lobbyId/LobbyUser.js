@@ -84,7 +84,8 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100vh;
-  ${(props) => animatedBackground({ backgroundUrl: `${props.bgImg}`})};
+  background-size: contain;
+  background-position: center;
 `;
 
 const SuccessInscriptionContainer = styled.div`

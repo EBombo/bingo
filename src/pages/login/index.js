@@ -152,10 +152,8 @@ const LoginContainer = styled.div`
   width: 100%;
   height: 100vh;
   background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
-  background-repeat: repeat;
   background-position: center;
-  background-size: 120% 100%;
-  animation: right-to-left-shift 20s linear infinite alternate;
+  background-size: contain;
 
   .main-container {
     padding: 10px;
@@ -175,9 +173,6 @@ const LoginContainer = styled.div`
     }
   }
 
-  ${mediaQuery.afterTablet} {
-    background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
-  }
 `;
 
 export default Login;
