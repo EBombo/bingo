@@ -96,12 +96,13 @@ export const CardPattern = (props) => {
             color="default"
             disabled={isLoading}
             onClick={() => {
+              if (props.apagon) props.setApagon(false);
               props.cancelAction();
             }}
           >
             Cancelar
           </ButtonAnt>
-          <ButtonAnt color="warning" loading={isLoading} onClick={() => savePattern()}>
+          <ButtonAnt color="success" loading={isLoading} onClick={() => savePattern()}>
             Guardar
           </ButtonAnt>
         </div>
@@ -190,11 +191,11 @@ const PatternContainer = styled.div`
     max-width: 260px;
 
     .btns-container{
-      flex-direction: row;
+      flex-direction: ${(props) => (props.isEdit ? "column" : "row")};
 
       button {
-        width: auto;
-        margin-bottom: 0;
+        width: ${(props) => (props.isEdit ? "100%" : "auto")};
+        margin-bottom: ${(props) => (props.isEdit ? "1rem" : "0")};
       }
     }
     
