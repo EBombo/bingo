@@ -152,7 +152,7 @@ export const LobbyInPlay = (props) => {
 
 const BingoGameContainer = styled.div`
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 50px);
 
   .main-container {
     .top-container-user {
@@ -295,6 +295,7 @@ const BingoGameContainer = styled.div`
 
     .main-container {
       padding: 0;
+      overflow: auto;
 
       .user-content {
         display: grid;
