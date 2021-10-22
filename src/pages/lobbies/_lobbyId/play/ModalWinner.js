@@ -6,6 +6,7 @@ import { ButtonAnt } from "../../../../components/form";
 import { mediaQuery } from "../../../../constants";
 import { config } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
+import { Ribbon } from './Ribbon'
 
 export const ModalWinner = (props) => {
   const [authUser] = useGlobal("user");
@@ -17,15 +18,19 @@ export const ModalWinner = (props) => {
       closable={false}
       topDesktop="20%"
       visible={props.isVisibleModalWinner}
-      padding="2rem 1rem"
+      padding="2rem 0rem"
     >
       <WinnerContainer>
-        <div className="title">¡Bingo!</div>
+        <Ribbon
+          title="¡BINGO!"
+          overflowDesktopWidth={70}
+          overflowWidth={10}
+        ></Ribbon>
         <div className="name">{get(props, "winner.nickname", "")}</div>
         {authUser.isAdmin ? (
           <div className="btn-container">
             <ButtonAnt
-              color="secondary"
+              color="primary"
               onClick={() => {
                 props.setUser(props.winner);
                 props.setIsVisibleModalUserCard(true);
@@ -69,7 +74,7 @@ const WinnerContainer = styled.div`
   }
 
   .name {
-    font-family: Encode Sans, sans-serif;
+    font-family: Open Sans, sans-serif;
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
@@ -92,6 +97,19 @@ const WinnerContainer = styled.div`
       line-height: 22px;
       text-align: center;
       color: ${(props) => props.theme.basic.blackDarken};
+    }
+  }
+
+  .btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap-reverse;
+
+    & ButtonAnt {
+      display: inline-block;
+      margin: 0.5rem 0.5rem;
+      min-width: 150px;
     }
   }
 
