@@ -219,7 +219,7 @@ const Container = styled.div`
       font-size: 12px;
       line-height: 14px;
       border-radius: 4px;
-      border: none !important;
+      border: 2px solid ${(props) => props.theme.basic.primaryDark};
     }
 
     .btn-submit {
