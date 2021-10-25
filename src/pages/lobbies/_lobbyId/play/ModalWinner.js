@@ -6,7 +6,7 @@ import { ButtonAnt } from "../../../../components/form";
 import { mediaQuery } from "../../../../constants";
 import { config } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
-import { Ribbon } from './Ribbon'
+import { Ribbon } from "./Ribbon";
 
 export const ModalWinner = (props) => {
   const [authUser] = useGlobal("user");
@@ -21,11 +21,7 @@ export const ModalWinner = (props) => {
       padding="2rem 0rem"
     >
       <WinnerContainer>
-        <Ribbon
-          title="¡BINGO!"
-          overflowDesktopWidth={70}
-          overflowWidth={10}
-        ></Ribbon>
+        <Ribbon title="¡BINGO!" overflowDesktopWidth={70} overflowWidth={10} />
         <div className="name">{get(props, "winner.nickname", "")}</div>
         {authUser.isAdmin ? (
           <div className="btn-container">
