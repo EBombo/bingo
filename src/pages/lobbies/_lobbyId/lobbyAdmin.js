@@ -132,15 +132,14 @@ export const LobbyAdmin = (props) => {
               margin="10px 20px"
               disabled={!isPlay}
               onClick={() => {
-                  if (!props.audioRef.current) return;
+                if (!props.audioRef.current) return;
 
                 if (props.audioRef.current.volume === 0) {
                   props.audioRef.current.volume = 0.7;
                   return setIsMuted(false);
                 }
-                  props.audioRef.current.volume = 0;
-                  setIsMuted(true);
-                
+                props.audioRef.current.volume = 0;
+                setIsMuted(true);
               }}
               key={isMuted}
             >

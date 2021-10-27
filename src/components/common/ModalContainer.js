@@ -4,10 +4,10 @@ import { Modal } from "antd";
 import { mediaQuery } from "../../constants";
 
 export const ModalContainer = (props) => (
-  <ModalContainerCss
-    {...props}
-    maskStyle={{"transition": "none"}}
-  >{props.children}</ModalContainerCss>);
+  <ModalContainerCss {...props} maskStyle={{ transition: "none" }}>
+    {props.children}
+  </ModalContainerCss>
+);
 
 const ModalContainerCss = styled(Modal)`
   top: ${(props) => (props.top ? props.top : "10px")};

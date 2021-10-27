@@ -373,7 +373,6 @@ const BingoGameContainer = styled.div`
           padding: 1rem;
           border-radius: 4px;
         }
-        
       }
 
       .right-container {

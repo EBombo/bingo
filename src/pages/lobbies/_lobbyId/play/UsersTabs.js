@@ -120,7 +120,7 @@ export const UsersTabs = (props) => {
           <div className="left-side">Participantes ({Object.keys(props.lobby.users).length})</div>
           <div className="right-side">
             <ButtonAnt
-              className={`btn-tab ${tab === TAB.CARDS ? "active" : "" }`}
+              className={`btn-tab ${tab === TAB.CARDS ? "active" : ""}`}
               color="default"
               margin="0 0.5rem"
               onClick={() => setTab(TAB.CARDS)}
@@ -146,7 +146,7 @@ export const UsersTabs = (props) => {
       <Tablet>
         <div className="tabs-container">
           <ButtonAnt
-            className={`btn-tab ${tab === TAB.CARDS ? "active" : "" }`}
+            className={`btn-tab ${tab === TAB.CARDS ? "active" : ""}`}
             color="default"
             margin="0 0.5rem"
             onClick={() => setTab(TAB.CARDS)}
@@ -286,7 +286,6 @@ const TabsContainer = styled.div`
       cursor: pointer;
       color: ${(props) => props.theme.basic.secondary};
     }
-
   }
 
   .user-tab {
@@ -496,7 +495,7 @@ const TabsContainer = styled.div`
       }
     }
   }
-  
+
   .btn-tab {
     font-family: Lato, sans-serif;
     font-style: normal;
@@ -509,5 +508,4 @@ const TabsContainer = styled.div`
       color: ${(props) => props.theme.basic.primary};
     }
   }
-
 `;

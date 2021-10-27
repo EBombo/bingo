@@ -10,7 +10,6 @@ import styled from "styled-components";
 import { object, string } from "yup";
 import { useRouter } from "next/router";
 import { useUser } from "../../hooks";
-import { animatedBackground } from "../../theme";
 
 const Login = (props) => {
   const router = useRouter();
@@ -172,7 +171,6 @@ const LoginContainer = styled.div`
       margin: 0;
     }
   }
-
 `;
 
 export default Login;
