@@ -33,11 +33,7 @@ export const LobbyInPlay = (props) => {
   }, [props.lobby.finalStage]);
 
   useEffect(() => {
-    if (!props.lobby.bingo) {
-      setIsVisibleModalWinner(false);
-    } else {
-      setIsVisibleModalWinner(true);
-    }
+    setIsVisibleModalWinner(!!props.lobby.bingo);
   }, [props.lobby.bingo]);
 
   useEffect(() => {
