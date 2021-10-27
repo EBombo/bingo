@@ -86,7 +86,11 @@ export const AdminPanel = (props) => {
     setIsLoadingCalledNumber(false);
   };
 
-  useInterval(callNumber, isAutomatic && !props.lobby.bingo ? (reproductionSpeed + animationSpeed) * 1000 : null);
+  useInterval(
+    callNumber,
+    // Prevent auto play.
+    isAutomatic && !props.lobby.bingo && !props.isVisibleModalFinal ? (reproductionSpeed + animationSpeed) * 1000 : null
+  );
 
   const modalConfirm = () => (
     <ModalContainer

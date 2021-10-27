@@ -91,7 +91,12 @@ export const LobbyInPlay = (props) => {
         <Desktop>
           <div className="main-container">
             {authUser.isAdmin ? (
-              <AdminPanel {...props} tabletTab={tabletTab} setIsVisibleModalAwards={setIsVisibleModalAwards} />
+              <AdminPanel
+                {...props}
+                tabletTab={tabletTab}
+                setIsVisibleModalAwards={setIsVisibleModalAwards}
+                isVisibleModalFinal={isVisibleModalFinal}
+              />
             ) : (
               <UserPanel
                 {...props}
