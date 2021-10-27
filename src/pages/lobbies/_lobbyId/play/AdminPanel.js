@@ -62,7 +62,7 @@ export const AdminPanel = (props) => {
       if (!value) missingNumbers.push(key);
     });
 
-    const randomIndex = Math.round(Math.random() * missingNumbers.length);
+    const randomIndex = Math.floor(Math.random() * missingNumbers.length);
 
     const numberCalled = missingNumbers[randomIndex];
 
@@ -74,7 +74,7 @@ export const AdminPanel = (props) => {
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       updateAt: new Date(),
-      round: props.lobby.round + 1,
+      round: +props.lobby.round + 1,
       lastPlays: newLastPlays,
       board: newBoard,
     });

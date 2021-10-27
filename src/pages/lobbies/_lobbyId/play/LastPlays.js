@@ -18,7 +18,11 @@ export const LastPlays = (props) => {
       if (newLastPlays?.length) await timeoutPromise(animationSpeed * 1000);
 
       // Prevent work as a pointer.
-      setLastPlays([...newLastPlays]);
+      const currentLastPlays = [...newLastPlays];
+
+      // Prevent delete undefined.
+      currentLastPlays?.length && currentLastPlays.shift();
+      setLastPlays(currentLastPlays);
     };
 
     initialize();
