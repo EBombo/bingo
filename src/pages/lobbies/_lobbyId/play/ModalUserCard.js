@@ -84,7 +84,7 @@ export const ModalUserCard = (props) => {
               )}
             </div>
             <div className="btns-container">
-              <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
+              <ButtonAnt color="default" onClick={() => setIsVisibleAssignAward(false)}>
                 Volver
               </ButtonAnt>
               <ButtonAnt onClick={() => saveBingoWinner()}>Guardar y anunciar</ButtonAnt>
@@ -111,9 +111,13 @@ export const ModalUserCard = (props) => {
                 <div className="board-container">
                   <BingoBoard {...props} isView isVisible />
                   <div className="action-container">
-                    <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
-                      Volver
-                    </ButtonAnt>
+                    <div />
+                    {/* TODO: Consider remove this btn.*/}
+                    {/*
+                      <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
+                        Volver
+                      </ButtonAnt>
+                    */}
                     <ButtonAnt onClick={() => setIsVisibleAssignAward(true)}>Bingo</ButtonAnt>
                   </div>
                 </div>
@@ -145,9 +149,11 @@ export const ModalUserCard = (props) => {
                   <BingoBoard {...props} isView isVisible />
                 </div>
                 <div className="action-container">
-                  <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
-                    Volver
-                  </ButtonAnt>
+                  {/* TODO: Consider remove this btn.*/}
+                  {/*<ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
+                      Volver
+                    </ButtonAnt>*/}
+                  asd
                   <ButtonAnt onClick={() => setIsVisibleAssignAward(true)}>Bingo</ButtonAnt>
                 </div>
               </Tablet>
