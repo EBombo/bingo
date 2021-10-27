@@ -115,6 +115,7 @@ export const UsersTabs = (props) => {
           {...props}
         />
       )}
+      {/* TODO: Consider refactoring to use mediaQuery and not use <Desktop> & <Tablet> */}
       <Desktop>
         <div className="tabs-container-desktop">
           <div className="left-side">Participantes ({Object.keys(props.lobby.users).length})</div>
@@ -163,6 +164,7 @@ export const UsersTabs = (props) => {
           </ButtonAnt>
         </div>
       </Tablet>
+      {/* TODO: Consider refactoring to use mediaQuery and not use <Desktop> & <Tablet> */}
 
       <div className={`user-tab-${tab}`}>
         {users.map((user, index) =>
@@ -297,14 +299,16 @@ const TabsContainer = styled.div`
       padding: 1rem;
 
       .user-card {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        background: ${(props) => props.theme.basic.whiteDark};
+        display: grid;
         padding: 0.5rem;
         border-radius: 3px;
+        align-items: center;
+        justify-content: space-around;
+        grid-template-columns: 1fr 1fr 1fr 15px;
+        background: ${(props) => props.theme.basic.whiteDark};
 
         .name {
+          text-align: center;
           font-family: Encode Sans, sans-serif;
           font-style: normal;
           font-weight: bold;

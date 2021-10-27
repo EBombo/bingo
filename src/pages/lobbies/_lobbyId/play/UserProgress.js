@@ -5,7 +5,18 @@ import { Progress } from "antd";
 
 export const UserProgress = (props) => {
   const [numberWinners, setNumberWinners] = useState(props.numberWinners);
-  const [userCard] = useState(JSON.parse(props.user.card));
+  const [userCard, setUserCard] = useState(JSON.parse(props.user.card));
+
+  useEffect(() => {
+    // This useEffect is just to work with auto fill.
+    if (!props.lobby.settings.cardAutofill) return;
+
+    const currentUsers = Object.values(props.lobby.users);
+    const currentUser = currentUsers.find((user) => user.id === props.user.id);
+
+    setNumberWinners(props.numberWinners);
+    setUserCard(JSON.parse(currentUser.card));
+  }, [props.lobby.users, props.numberWinners]);
 
   useEffect(() => {
     if (props.lobby?.settings?.cardAutofill) return null;

@@ -92,6 +92,9 @@ export const CardPattern = (props) => {
       )}
       {props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
+          <ButtonAnt color="success" loading={isLoading} onClick={() => savePattern()}>
+            Guardar
+          </ButtonAnt>
           <ButtonAnt
             color="default"
             disabled={isLoading}
@@ -101,9 +104,6 @@ export const CardPattern = (props) => {
             }}
           >
             Cancelar
-          </ButtonAnt>
-          <ButtonAnt color="success" loading={isLoading} onClick={() => savePattern()}>
-            Guardar
           </ButtonAnt>
         </div>
       )}
