@@ -66,6 +66,9 @@ export const AdminPanel = (props) => {
 
     const numberCalled = missingNumbers[randomIndex];
 
+    // Prevent undefined number.
+    if (!numberCalled) setIsLoadingCalledNumber(false);
+
     newBoard[numberCalled] = true;
 
     const newLastPlays = props.lobby.lastPlays;
@@ -165,10 +168,16 @@ export const AdminPanel = (props) => {
                     width="100%"
                     onClick={() => callNumber()}
                     margin="0 0 1rem 0"
-                    disabled={loading || isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
+                    disabled={
+                      loading ||
+                      isLoadingCalledNumber ||
+                      isAutomatic ||
+                      props.lobby.bingo ||
+                      Object.values(props.lobby.board ?? {}).every((num) => num)
+                    }
                     loading={isLoadingCalledNumber}
                   >
-                    LLamar bolilla
+                    Llamar bolilla
                   </ButtonAnt>
                 ) : (
                   <ButtonAnt width="100%" color="success" onClick={() => startGame()} disabled={loading}>
