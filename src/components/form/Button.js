@@ -177,7 +177,7 @@ const ButtonAntCss = styled(Button)`
       `
         : variant === "outlined"
         ? `
-      background: transparent;
+      background: transparent!important;
       color: ${
         color === "primary"
           ? theme.basic.primary
@@ -190,7 +190,7 @@ const ButtonAntCss = styled(Button)`
           : color === "default"
           ? theme.basic.blackDarken
           : color
-      };
+      }!important;
       border: 1px solid ${
         color === "primary"
           ? theme.basic.primary
@@ -206,7 +206,7 @@ const ButtonAntCss = styled(Button)`
       };
       `
         : `
-      background: transparent;
+      background: transparent!important;
       color: ${
         color === "primary"
           ? theme.basic.primary
@@ -219,7 +219,7 @@ const ButtonAntCss = styled(Button)`
           : color === "default"
           ? theme.basic.blackDarken
           : color
-      };  
+      }!important;  
       border: none;
       `}
   }
