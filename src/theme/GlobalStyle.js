@@ -49,8 +49,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   /*-------------- FIX SALTO DE LINEA GENERAL ----------------*/
-
-  /*-------------- FIX SALTO DE LINEA GENERAL ----------------*/
   .no-wrap {
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
