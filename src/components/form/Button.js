@@ -146,7 +146,7 @@ const ButtonAntCss = styled(Button)`
           : color === "success"
           ? theme.basic.success
           : color
-      };
+      }!important;
         color: ${
           color === "white"
             ? theme.basic.secondaryLight
@@ -155,7 +155,7 @@ const ButtonAntCss = styled(Button)`
             : color === "warning"
             ? theme.basic.blackDarken
             : theme.basic.white
-        };
+        }!important;
       border: none;
       box-shadow: 0 4px ${
         color === "primary"
@@ -242,7 +242,7 @@ const ButtonAntCss = styled(Button)`
           : color === "success"
           ? theme.basic.successLight
           : `${color}90`
-      };
+      }!important;
       color: ${
         color === "white"
           ? theme.basic.secondaryLight
@@ -251,7 +251,7 @@ const ButtonAntCss = styled(Button)`
           : color === "warning"
           ? theme.basic.blackDarken
           : theme.basic.white
-      };
+      }!important;
       border: none;
       `
         : variant === "outlined"
