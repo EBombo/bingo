@@ -82,7 +82,7 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     background: ${(props) => props.theme.basic.secondary};
-    font-family: 'Encode Sans', sans-serif;
+    font-family: Lato;
     overflow: auto !important;
   }
 

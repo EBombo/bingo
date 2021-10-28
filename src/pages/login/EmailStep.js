@@ -35,7 +35,7 @@ export const EmailStep = (props) => {
       <div className="login-container">
         <div className="subtitle">Añadir identificación del jugador</div>
         <div className="description">
-          El anfitrión del juego a pedido que coloques tu mail cómo una medida de identificación para entrar al juego
+          El anfitrión del juego ha pedido que coloques tu mail cómo una medida de identificación para entrar al juego
         </div>
         <InputBingo
           ref={register}

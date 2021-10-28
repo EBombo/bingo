@@ -158,7 +158,6 @@ const Content = styled.div`
 
   .title {
     text-align: center;
-    font-family: Open Sans;
     font-style: normal;
     font-weight: bold;
     font-size: 36px;
@@ -172,7 +171,6 @@ const Content = styled.div`
 
     .left-container {
       .winner-name {
-        font-family: Open Sans;
         font-style: normal;
         font-weight: bold;
         font-size: 18px;
@@ -188,7 +186,6 @@ const Content = styled.div`
     }
     .right-container {
       .award {
-        font-family: Encode Sans;
         font-style: normal;
         font-weight: bold;
         font-size: 12px;
@@ -199,7 +196,6 @@ const Content = styled.div`
       }
 
       .award-name {
-        font-family: Encode Sans;
         font-style: normal;
         font-weight: bold;
         font-size: 15px;

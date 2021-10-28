@@ -359,7 +359,6 @@ const Content = styled.div`
   width: 100%;
 
   .title-card {
-    font-family: Open Sans;
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
