@@ -10,6 +10,7 @@ export const UserLayout = (props) => {
   const [audios] = useGlobal("audios");
   const [isPlay, setIsPlay] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(30);
 
   return (
     <UserLayoutCss>
@@ -32,6 +33,7 @@ export const UserLayout = (props) => {
                         const currentAudio = new Audio(audio_.audioUrl);
 
                         props.audioRef.current = currentAudio;
+                        props.audioRef.current.volume = volume / 100;
                         props.audioRef.current.play();
                         setIsPlay(true);
                       }}
@@ -62,10 +64,11 @@ export const UserLayout = (props) => {
                 <SliderContent>
                   <Slider
                     defaultValue={30}
-                    onChange={(event) => {
+                    onChange={(value) => {
                       if (!props.audioRef.current) return;
 
-                      props.audioRef.current.volume = event / 100;
+                      props.audioRef.current.volume = value / 100;
+                      setVolume(value);
                     }}
                   />
                 </SliderContent>
