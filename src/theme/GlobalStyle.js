@@ -56,6 +56,12 @@ export const GlobalStyle = createGlobalStyle`
     text-overflow: ellipsis !important;
     overflow: hidden !important;
   }
+  
+  .pre-wrap {
+    white-space: normal !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+  }
 
   /*-------------- FIX SALTO DE LINEA GENERAL ----------------*/
 

@@ -25,7 +25,7 @@ export const ChatMessage = (props) => {
         )}
       </div>
       <div className="message-content">
-        <div className="message">
+        <div className="message pre-wrap">
           <Linkify>{props.message.message}</Linkify>
         </div>
         <div className="time">{moment(props.message.createAt.toDate()).format("hh:mma")}</div>
