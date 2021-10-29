@@ -32,7 +32,6 @@ export const AdminPanel = (props) => {
   const startGame = async (callback) => {
     if (!props.lobby.pattern) {
       setIsVisibleModalPattern(true);
-      return props.showNotification("UPS", "Define un patrón antes de empezar el bingo", "warning");
     }
 
     setLoading(true);
