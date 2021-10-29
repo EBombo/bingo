@@ -268,7 +268,7 @@ export const AdminPanel = (props) => {
                   LLamar bolilla
                 </ButtonAnt>
               ) : (
-                <ButtonAnt width="100%" color="success" onClick={() => startGame()} disabled={loading}>
+                <ButtonAnt width="100%" color="success" onClick={() => startGame()} disabled={loading} margin="1rem 0">
                   Iniciar Juego
                 </ButtonAnt>
               )}
