@@ -211,7 +211,6 @@ const Content = styled.div`
     .main-container {
       display: grid;
       grid-template-columns: 320px auto;
-      grid-gap: 0.5rem;
 
       .left-container {
         .winner-name {
@@ -232,9 +231,8 @@ const Content = styled.div`
 `;
 
 const AdminContent = styled.div`
-  width: 100%;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-evenly;
   flex-direction: column;
   height: 80%;
