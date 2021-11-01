@@ -265,7 +265,7 @@ export const AdminPanel = (props) => {
                   disabled={loading || isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
                   loading={isLoadingCalledNumber}
                 >
-                  LLamar bolilla
+                  Llamar bolilla
                 </ButtonAnt>
               ) : (
                 <ButtonAnt width="100%" color="success" onClick={() => startGame()} disabled={loading}>
