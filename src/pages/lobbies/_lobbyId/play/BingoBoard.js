@@ -211,6 +211,7 @@ const BoardContainer = styled.div`
           border-radius: 3px;
           color: ${(props) => props.theme.basic.secondary};
           background: ${(props) => props.theme.basic.secondaryDarken};
+          box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
           font-size: 10px;
           line-height: 15px;
           height: 20px;

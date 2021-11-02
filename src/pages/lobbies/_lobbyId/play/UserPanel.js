@@ -32,7 +32,7 @@ export const UserPanel = (props) => {
                 <LastPlays showMore {...props} />
               </div>
               <div className="pattern">
-                <CardPattern caption={"Patrón que se debe llenar"} hiddenOptions key={props.lobby.pattern} {...props} />
+                <CardPattern caption={"Patrón a completar"} hiddenOptions key={props.lobby.pattern} {...props} />
                 <ButtonAnt color="default" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
                   Ver premios
                 </ButtonAnt>
@@ -44,7 +44,9 @@ export const UserPanel = (props) => {
       <Tablet>
         <div className="top-container-user">
           <div className="left-side">
-            <CardPattern key={props.lobby.pattern} caption={"Patrón que se debe llenar"} hiddenOptions {...props} />
+            <div className="pattern">
+              <CardPattern key={props.lobby.pattern} caption={"Patrón que se debe llenar"} hiddenOptions {...props} />
+            </div>
           </div>
           <div className="right-side">
             <LastBall lastNumber={lastNumber} {...props} />
