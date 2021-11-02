@@ -323,7 +323,6 @@ const ContainerValidate = styled.div`
   }
 
   .card-container {
-    max-width: 200px;
     margin: 1rem auto;
   }
 
