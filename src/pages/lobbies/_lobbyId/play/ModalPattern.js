@@ -8,15 +8,15 @@ export const ModalPattern = (props) => (
   <ModalContainer
     background="#331E6C"
     footer={null}
-    closable={false}
     topDesktop="20%"
     padding="1rem"
     visible={props.isVisibleModalPattern}
+    onCancel={() => props.setIsVisibleModalPattern(false)}
   >
     <Content>
       <div className="title">
         {!props.lobby.startGame
-          ? "Por favor llene el patrón para empezart el juego"
+          ? "Por favor llene el patrón para empezar el juego"
           : "Si cambia el patrón podría ya haber un ganador"}
       </div>
       <div className="card-container">

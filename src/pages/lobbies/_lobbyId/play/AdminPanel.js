@@ -32,7 +32,6 @@ export const AdminPanel = (props) => {
   const startGame = async (callback) => {
     if (!props.lobby.pattern) {
       setIsVisibleModalPattern(true);
-      return props.showNotification("UPS", "Define un patrón antes de empezar el bingo", "warning");
     }
 
     setLoading(true);
@@ -265,10 +264,10 @@ export const AdminPanel = (props) => {
                   disabled={loading || isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
                   loading={isLoadingCalledNumber}
                 >
-                  LLamar bolilla
+                  Llamar bolilla
                 </ButtonAnt>
               ) : (
-                <ButtonAnt width="100%" color="success" onClick={() => startGame()} disabled={loading}>
+                <ButtonAnt width="100%" color="success" onClick={() => startGame()} disabled={loading} margin="1rem 0">
                   Iniciar Juego
                 </ButtonAnt>
               )}

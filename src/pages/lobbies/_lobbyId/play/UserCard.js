@@ -9,6 +9,7 @@ export const UserCard = (props) => {
   const [matrix, setMatrix] = useState(generateMatrix());
 
   const userId = props.user ? props.user?.id : authUser?.id;
+  const isAuthUser = props.user && props.user?.id === authUser?.id;
 
   useEffect(() => {
     if (props?.lobby?.settings?.cardAutofill) return;
@@ -84,13 +85,15 @@ export const UserCard = (props) => {
                 <td key={`key-${num}-${col}-${matrix}`}>
                   {props.lobby.settings.cardAutofill ? (
                     <div className={`${props.lobby.board && props.lobby.board[num] && `active`}`}>{num}</div>
-                  ) : (
+                  ) : isAuthUser ? (
                     <div
                       className={`${matrix[row][col] ? "active" : "number"} to-fill`}
                       onClick={async () => await selectNumber(row, col, num)}
                     >
                       {num}
                     </div>
+                  ) : (
+                    <div className={`${matrix[row][col] ? "active" : "number"}`}>{num}</div>
                   )}
                 </td>
               ))}
