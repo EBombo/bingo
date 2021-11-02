@@ -338,8 +338,9 @@ const GameCss = styled.div`
     grid-template-columns: 1fr 1fr;
 
     .item {
+      font-family: Lato;
       padding: 15px;
-      font-size: 11px;
+      font-size: 15px;
       line-height: 2rem;
       border-radius: 4px;
       text-align: center;
