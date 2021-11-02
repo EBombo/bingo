@@ -78,8 +78,8 @@ const Messages = styled.div`
       font-family: Lato;
       font-style: normal;
       font-weight: normal;
-      font-size: 13px;
-      line-height: 16px;
+      font-size: 10px;
+      line-height: 13px;
       color: ${(props) => props.theme.basic.grayDark};
       margin: ${(props) => (props.received ? "0 0 0 5px" : "0 5px 0 0")};
     }
