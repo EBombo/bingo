@@ -150,7 +150,7 @@ const PatternContainer = styled.div`
       td {
         width: 25px;
         height: 25px;
-        background: ${(props) => props.theme.basic.primary};
+        background: ${(props) => props.theme.basic.secondaryDarken};
         border-radius: 3px;
         position: relative;
         cursor: ${(props) => (props.isEdit ? "pointer" : "default")};
@@ -163,7 +163,7 @@ const PatternContainer = styled.div`
           width: 15px;
           height: 15px;
           border-radius: 50%;
-          background: ${(props) => props.theme.basic.secondary};
+          background: ${(props) => props.theme.basic.whiteDark};
         }
       }
 
