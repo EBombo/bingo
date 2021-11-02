@@ -180,9 +180,9 @@ const BingoGameContainer = styled.div`
 
     .buttons-container {
       margin: 1rem;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-gap: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
       align-items: center;
 
       button {
