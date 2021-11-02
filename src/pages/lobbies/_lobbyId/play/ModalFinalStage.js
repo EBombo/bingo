@@ -214,7 +214,7 @@ const Content = styled.div`
 
       .left-container {
         .winner-name {
-          text-align: left;
+          text-align: center;
         }
         .card-container {
           max-width: 320px;
