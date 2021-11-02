@@ -163,6 +163,15 @@ const BingoGameContainer = styled.div`
       justify-content: center;
       margin: 1rem 0;
       padding: 0.5rem;
+
+      .pattern {
+        background: ${(props) => props.theme.basic.secondary};
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+        margin: 0 auto;
+        max-width: 220px;
+      }
     }
 
     .bingo-card-container {
