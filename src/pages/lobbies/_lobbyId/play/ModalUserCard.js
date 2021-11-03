@@ -124,7 +124,10 @@ export const ModalUserCard = (props) => {
                 <div className="card-container">
                   <div className="top-container">
                     <div className="name">{props.user.nickname}</div>
-                    <div className="btn-container">
+                    <div className="btns-container">
+                      <ButtonAnt color="warning" className="disqualify" onClick={() => disqualifyUser()}>
+                        Invalidar
+                      </ButtonAnt>
                       <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
                         Invalidar
                       </ButtonAnt>
@@ -136,7 +139,10 @@ export const ModalUserCard = (props) => {
               <Tablet>
                 <div className="top-container">
                   <div className="name">{props.user.nickname}</div>
-                  <div className="btn-container">
+                  <div className="btns-container">
+                    <ButtonAnt color="warning" className="disqualify" onClick={() => disqualifyUser()}>
+                      Invalidar
+                    </ButtonAnt>
                     <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
                       Invalidar
                     </ButtonAnt>
@@ -197,7 +203,7 @@ const ContentAward = styled.div`
     justify-content: space-between;
     margin: 1rem 0;
 
-    .btn-container {
+    .btns-container {
       .disqualify {
         font-family: Lato !important;
         font-style: normal !important;
