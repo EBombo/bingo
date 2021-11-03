@@ -5,6 +5,7 @@ import { LastBall } from "./LastBall";
 import { ButtonAnt } from "../../../../components/form";
 import { LastPlays } from "./LastPlays";
 import React, { useGlobal, useState } from "reactn";
+import defaultTo from "lodash/defaultTo";
 import { Chat } from "../../../../components/chat";
 import { Desktop, Tablet } from "../../../../constants";
 
@@ -18,7 +19,11 @@ export const UserPanel = (props) => {
         <div className="user-content">
           <div className="left-user-content">
             <UserCard user={authUser} {...props} />
-            <ButtonAnt color="success" onClick={() => props.callBingo()}>
+            <ButtonAnt
+              color="success"
+              onClick={() => props.callBingo()}
+              disabled={defaultTo(props.lobby.bannedUsersId, []).includes(authUser.id) || !props.lobby.startGame}
+            >
               Bingo
             </ButtonAnt>
           </div>
@@ -59,7 +64,11 @@ export const UserPanel = (props) => {
           <UserCard user={authUser} {...props} />
         </div>
         <div className="buttons-container">
-          <ButtonAnt color="success" onClick={() => props.callBingo()}>
+          <ButtonAnt
+            color="success"
+            onClick={() => props.callBingo()}
+            disabled={defaultTo(props.lobby.bannedUsersId, []).includes(authUser.id) || !props.lobby.startGame}
+          >
             Bingo
           </ButtonAnt>
           {props.lobby.settings.awards?.length && (

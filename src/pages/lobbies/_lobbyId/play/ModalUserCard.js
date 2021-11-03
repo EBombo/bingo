@@ -7,10 +7,12 @@ import { UserCard } from "./UserCard";
 import { BingoBoard } from "./BingoBoard";
 import { firestore } from "../../../../firebase";
 import defaultTo from "lodash/defaultTo";
+import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 
 export const ModalUserCard = (props) => {
   const [isVisibleAssignAward, setIsVisibleAssignAward] = useState(false);
   const [awardSelected, setAwardSelected] = useState(null);
+  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
 
   const disqualifyUser = async () => {
     props.setIsVisibleModalUserCard(false);
@@ -18,6 +20,18 @@ export const ModalUserCard = (props) => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       bingo: null,
       updateAt: new Date(),
+    });
+  };
+
+  const bannedUser = async () => {
+    props.setIsVisibleModalUserCard(false);
+
+    const bannedUsersId = [...defaultTo(props.lobby.bannedUsersId, []), props.user.id];
+
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      bingo: null,
+      updateAt: new Date(),
+      bannedUsersId,
     });
   };
 
@@ -107,6 +121,15 @@ export const ModalUserCard = (props) => {
             width="1100px"
           >
             <ContainerValidate>
+              <ModalConfirm
+                isVisibleModalConfirm={isVisibleModalConfirm}
+                setIsVisibleModalConfirm={setIsVisibleModalConfirm}
+                title="El usuario sera bloqueado permanentemente. Deseas continuar? "
+                description={"Si vuelves no se guardaran los cambios."}
+                action={() => bannedUser()}
+                buttonName={"Suspender"}
+                {...props}
+              />
               <Desktop>
                 <div className="board-container">
                   <BingoBoard {...props} isView isVisible />
@@ -125,11 +148,21 @@ export const ModalUserCard = (props) => {
                   <div className="top-container">
                     <div className="name">{props.user.nickname}</div>
                     <div className="btns-container">
-                      <ButtonAnt color="warning" className="disqualify" onClick={() => disqualifyUser()}>
+                      <ButtonAnt
+                        color="warning"
+                        className="disqualify"
+                        margin={"0 5px"}
+                        onClick={() => disqualifyUser()}
+                      >
                         Invalidar
                       </ButtonAnt>
-                      <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
-                        Invalidar
+                      <ButtonAnt
+                        color="danger"
+                        className="disqualify"
+                        margin={"0 5px"}
+                        onClick={() => setIsVisibleModalConfirm(true)}
+                      >
+                        Suspender
                       </ButtonAnt>
                     </div>
                   </div>
@@ -143,8 +176,8 @@ export const ModalUserCard = (props) => {
                     <ButtonAnt color="warning" className="disqualify" onClick={() => disqualifyUser()}>
                       Invalidar
                     </ButtonAnt>
-                    <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
-                      Invalidar
+                    <ButtonAnt color="danger" className="disqualify" onClick={() => setIsVisibleModalConfirm(true)}>
+                      Suspender
                     </ButtonAnt>
                   </div>
                 </div>
@@ -159,7 +192,6 @@ export const ModalUserCard = (props) => {
                   {/*<ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
                       Volver
                     </ButtonAnt>*/}
-                  asd
                   <ButtonAnt onClick={() => setIsVisibleAssignAward(true)}>Bingo</ButtonAnt>
                 </div>
               </Tablet>
@@ -203,17 +235,6 @@ const ContentAward = styled.div`
     justify-content: space-between;
     margin: 1rem 0;
 
-    .btns-container {
-      .disqualify {
-        font-family: Lato !important;
-        font-style: normal !important;
-        font-weight: bold !important;
-        font-size: 12px !important;
-        line-height: 14px !important;
-        padding: 5px 10px !important;
-      }
-    }
-
     .name {
       font-family: Encode Sans, sans-serif;
       font-style: normal;
@@ -221,18 +242,6 @@ const ContentAward = styled.div`
       font-size: 14px;
       line-height: 18px;
       color: ${(props) => props.theme.basic.blackDarken};
-    }
-  }
-
-  .btns-container {
-    display: flex;
-    align-items: center;
-    margin: 1rem 0;
-    flex-direction: column;
-
-    button {
-      width: 150px;
-      margin: 0.5rem 0;
     }
   }
 
@@ -307,7 +316,10 @@ const ContainerValidate = styled.div`
     justify-content: space-between;
     margin: 1rem 0;
 
-    .btn-container {
+    .btns-container {
+      display: flex;
+      align-items: center;
+
       .disqualify {
         font-family: Lato !important;
         font-style: normal !important;
@@ -315,6 +327,7 @@ const ContainerValidate = styled.div`
         font-size: 12px !important;
         line-height: 14px !important;
         padding: 5px 10px !important;
+        margin: 0 5px !important;
       }
     }
 
