@@ -123,7 +123,7 @@ const CardContainer = styled.div`
     font-family: Lato;
     font-style: normal;
     font-weight: 700;
-    color: ${(props) => (props.titleColor ? props.titleColor : props.theme.basic.white)};
+    color: ${(props) => (props.titleColor ? props.titleColor : props.theme.basic.secondary)};
     text-align: center;
     font-size: 28px;
     line-height: 35px;
@@ -146,7 +146,7 @@ const CardContainer = styled.div`
           font-size: 32px;
           line-height: 36px;
           font-style: normal;
-          color: ${(props) => props.theme.basic.whiteLight};
+          color: ${(props) => (props.titleColor ? props.titleColor : props.theme.basic.secondary)};
         }
       }
     }
@@ -164,17 +164,18 @@ const CardContainer = styled.div`
           line-height: 36px;
           font-style: normal;
           color: ${(props) => (props.numberColor ? props.numberColor : props.theme.basic.white)};
-          background: ${(props) => (props.blocksColor ? props.blocksColor : props.theme.basic.primary)};
+          background: ${(props) => (props.blocksColor ? props.blocksColor : props.theme.basic.secondary)};
           justify-content: center;
 
           .active {
             width: 90%;
             height: 90%;
             border-radius: 50%;
-            background: ${(props) => props.theme.basic.primaryLight};
+            background: ${(props) => props.theme.basic.success};
             display: flex;
             align-items: center;
             justify-content: center;
+            color: ${props => props.theme.basic.blackDarken};
             margin: 0 auto;
           }
 

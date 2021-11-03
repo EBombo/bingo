@@ -17,7 +17,7 @@ export const LobbyLoading = (props) => {
         });
 
       updateLobby();
-    }, 20000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -53,26 +53,6 @@ export const LobbyLoading = (props) => {
               </div>
             </div>
           </div>
-          <div className="step-four">
-            <div className="step-four-image">
-              <Image
-                src={`${config.storageUrl}/resources/amount.svg`}
-                height="35px"
-                width="35px"
-                desktopHeight="55px"
-                desktopWidth="55px"
-                size="contain"
-                margin="0"
-                className="amount-logo"
-              />
-            </div>
-            <div className="step-four-description">BINGO</div>
-            <div className="progress-bar">
-              <div className="bar">
-                <div className="progress" />
-              </div>
-            </div>
-          </div>
         </>
       ) : (
         <>
@@ -86,26 +66,6 @@ export const LobbyLoading = (props) => {
               size="contain"
               margin="1rem auto"
             />
-          </div>
-          <div className="step-four">
-            <div className="step-four-image">
-              <Image
-                src={`${config.storageUrl}/resources/amount.svg`}
-                height="35px"
-                width="35px"
-                desktopHeight="55px"
-                desktopWidth="55px"
-                size="contain"
-                margin="0"
-                className="amount-logo"
-              />
-            </div>
-            <div className="step-four-description">BINGO</div>
-            <div className="progress-bar">
-              <div className="bar">
-                <div className="progress" />
-              </div>
-            </div>
           </div>
         </>
       )}
@@ -127,8 +87,6 @@ const LoadingGameContainer = styled.div`
     top: 20%;
     left: 0;
     right: 0;
-    animation: fadeout 11s forwards;
-    -webkit-animation: fadeout 11s forwards;
     
     &-title {
       font-family: Lato;
@@ -263,120 +221,9 @@ const LoadingGameContainer = styled.div`
       }
     }
   }
-
-  .step-four {
-    position: absolute;
-    top: 20%;
-    left: 0;
-    right: 0;
-    animation: fadein 20s forwards;
-    -webkit-animation: fadein 20s forwards;
-    
-    &-image {
-      background: ${(props) => props.theme.basic.primary};
-      width: 65px;
-      height: 65px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 1;
-      transform: translateY(20%) rotate(45deg);
-      
-      .amount-logo {
-        transform: rotate(-45deg);
-      }
-      
-      ${mediaQuery.afterTablet} {
-        width: 105px;
-        height: 105px;
-      }
-    }
-
-    &-description {
-      height: 50px;
-      position: relative;
-      z-index: 1;
-      background: ${(props) => props.theme.basic.whiteLight};
-      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-      font-family: Lato;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 30px;
-      line-height: 36px;
-      color: ${(props) => props.theme.basic.blackDarken};
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-
-      ${mediaQuery.afterTablet} {
-        font-size: 48px;
-        line-height: 58px;
-      }
-    }
-    
-    .progress-bar{
-      width: 80%;
-      border-radius: 40px;
-      overflow: hidden;
-      margin: 1rem auto;
-    }
-
-    .bar {
-      background: ${(props) => props.theme.basic.grayLighten};
-    }
-
-    .progress {
-      animation: loader 8s ease forwards;
-      animation-delay: 11s;
-      -webkit-animation-delay: 11s;
-      -o-animation-delay: 11s;
-      background: ${(props) => props.theme.basic.whiteLight};
-      padding: 20px;
-      width: 100%;
-    }
-  }
   
   ${mediaQuery.afterTablet} {
     background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
-  }
-
-  @keyframes loader {
-    0% {
-      width: 100%;
-    }
-    20% {
-      width: 86%;
-    }
-    25% {
-      width: 76%;
-    }
-    43% {
-      width: 60%;
-    }
-    56% {
-      width: 52%;
-    }
-    66% {
-      width: 43%;
-    }
-    71% {
-      width: 35%;
-    }
-    75% {
-      width: 24%;
-    }
-    80% {
-      width: 10%;
-    }
-    90% {
-      width: 5%;
-    }
-    100% {
-      width: 0;
-    }
   }
 
   @keyframes time {
@@ -434,19 +281,4 @@ const LoadingGameContainer = styled.div`
       opacity: 0;
     }
   }
-
-    @keyframes fadeout {
-      0% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 1;
-      }
-      80% {
-        opacity: 0.8;
-      }
-      100% {
-        opacity: 0;
-      }
-    }
 `;

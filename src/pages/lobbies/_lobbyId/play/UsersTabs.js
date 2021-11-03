@@ -303,7 +303,7 @@ const TabsContainer = styled.div`
         padding: 0.5rem;
         border-radius: 3px;
         align-items: center;
-        justify-content: space-around;
+        justify-items: center;
         grid-template-columns: 1fr 1fr 1fr 15px;
         background: ${(props) => props.theme.basic.whiteDark};
 

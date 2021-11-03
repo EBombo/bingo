@@ -33,9 +33,11 @@ export const UserPanel = (props) => {
               </div>
               <div className="pattern">
                 <CardPattern caption={"Patrón a completar"} hiddenOptions key={props.lobby.pattern} {...props} />
-                <ButtonAnt color="default" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
-                  Ver premios
-                </ButtonAnt>
+                {props.lobby.settings.awards?.length && (
+                  <ButtonAnt color="default" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
+                    Ver premios
+                  </ButtonAnt>
+                )}
               </div>
             </div>
           </div>
@@ -60,9 +62,11 @@ export const UserPanel = (props) => {
           <ButtonAnt color="success" onClick={() => props.callBingo()}>
             Bingo
           </ButtonAnt>
-          <ButtonAnt color="default" onClick={() => props.setIsVisibleModalAwards(true)}>
-            Ver premios
-          </ButtonAnt>
+          {props.lobby.settings.awards?.length && (
+            <ButtonAnt color="default" margin={"0 0 0 1rem"} onClick={() => props.setIsVisibleModalAwards(true)}>
+              Ver premios
+            </ButtonAnt>
+          )}
         </div>
         <div className="bingo-board">
           <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />

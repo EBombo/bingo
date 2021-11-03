@@ -25,26 +25,26 @@ export const LastBall = (props) => {
 
   return (
     <LastBallContainer number={lastNumber} vertical={props.vertical} outEffect={outEffect}>
-      <div className="ball-container">
-        <div className="middle-container">
-          <div className="inner-container">
-            <div className="letter">
-              {lastNumber === 0
-                ? 0
-                : lastNumber < BOARD_PARAMS.B.value
-                ? get(props, "lobby.game.letters.b", "B")
-                : lastNumber < BOARD_PARAMS.I.value
-                ? get(props, "lobby.game.letters.i", "I")
-                : lastNumber < BOARD_PARAMS.N.value
-                ? get(props, "lobby.game.letters.n", "N")
-                : lastNumber < BOARD_PARAMS.G.value
-                ? get(props, "lobby.game.letters.g", "G")
-                : get(props, "lobby.game.letters.o", "O")}
+      {lastNumber > 0 && (
+        <div className="ball-container">
+          <div className="middle-container">
+            <div className="inner-container">
+              <div className="letter">
+                {lastNumber < BOARD_PARAMS.B.value
+                  ? get(props, "lobby.game.letters.b", "B")
+                  : lastNumber < BOARD_PARAMS.I.value
+                  ? get(props, "lobby.game.letters.i", "I")
+                  : lastNumber < BOARD_PARAMS.N.value
+                  ? get(props, "lobby.game.letters.n", "N")
+                  : lastNumber < BOARD_PARAMS.G.value
+                  ? get(props, "lobby.game.letters.g", "G")
+                  : get(props, "lobby.game.letters.o", "O")}
+              </div>
+              <div className="number">{lastNumber}</div>
             </div>
-            <div className="number">{lastNumber}</div>
           </div>
         </div>
-      </div>
+      )}
     </LastBallContainer>
   );
 };
