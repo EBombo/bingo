@@ -184,7 +184,7 @@ export const UsersTabs = (props) => {
                 </div>
               )}
 
-              <div className="name">{user.nickname}</div>
+              <div className={`name ${(authUser.id == user.id) && "auth-user"}`}>{user.nickname}</div>
 
               <div className="card-preview">
                 <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} isCard />
@@ -211,7 +211,7 @@ export const UsersTabs = (props) => {
               className={`user-progress ${props.lobby?.bingo?.id === user.id && `winner`}`}
               key={`${user.nickname}-${index}`}
             >
-              <div className="name">{user.nickname}</div>
+              <div className={`name ${(authUser.id == user.id) && "auth-user"}`}>{user.nickname}</div>
 
               <div className={`progress ${user.progress === 100 && "winner"}`}>
                 <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} />
@@ -314,6 +314,9 @@ const TabsContainer = styled.div`
           font-weight: bold;
           font-size: 13px;
           line-height: 18px;
+          &.auth-user {
+            color: ${(props) => props.theme.basic.primary};
+          }
         }
       }
 
@@ -394,6 +397,9 @@ const TabsContainer = styled.div`
           font-weight: bold;
           font-size: 13px;
           line-height: 18px;
+          &.auth-user {
+            color: ${(props) => props.theme.basic.primary};
+          }
         }
 
         .progress {
