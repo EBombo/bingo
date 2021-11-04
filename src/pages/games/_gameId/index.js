@@ -207,6 +207,7 @@ export const Game = (props) => {
                 </div>
                 <Select
                   defaultValue={game?.audio?.id ?? audios[0]?.id}
+                  key={game?.audio?.id ?? audios[0]?.id}
                   optionsdom={audios.map((audio) => ({
                     key: audio.id,
                     code: audio.id,
