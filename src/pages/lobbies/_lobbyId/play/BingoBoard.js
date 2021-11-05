@@ -90,7 +90,9 @@ export const BingoBoard = (props) => {
           <tr>
             {range(1, 15).map((number) => (
               <td
-                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${(number == props.lastNumber) && `last-number`}`}
+                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
+                  number === props.lastNumber && `last-number`
+                }`}
                 key={number}
               >
                 {number}
@@ -100,7 +102,9 @@ export const BingoBoard = (props) => {
           <tr>
             {range(16, 30).map((number) => (
               <td
-                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${(number == props.lastNumber) && `last-number`}`}
+                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
+                  number === props.lastNumber && `last-number`
+                }`}
                 key={number}
               >
                 {number}
@@ -110,7 +114,9 @@ export const BingoBoard = (props) => {
           <tr>
             {range(31, 45).map((number) => (
               <td
-                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${(number == props.lastNumber)  && `last-number`}`}
+                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
+                  number === props.lastNumber && `last-number`
+                }`}
                 key={number}
               >
                 {number}
@@ -120,7 +126,9 @@ export const BingoBoard = (props) => {
           <tr>
             {range(46, 60).map((number) => (
               <td
-                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${(number == props.lastNumber) && `last-number`}`}
+                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
+                  number === props.lastNumber && `last-number`
+                }`}
                 key={number}
               >
                 {number}
@@ -130,7 +138,9 @@ export const BingoBoard = (props) => {
           <tr>
             {range(61, 75).map((number) => (
               <td
-                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${(number == props.lastNumber) && `last-number`}`}
+                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
+                  number === props.lastNumber && `last-number`
+                }`}
                 key={number}
               >
                 {number}
