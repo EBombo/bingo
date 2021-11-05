@@ -10,6 +10,7 @@ import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 export const ModalAwards = (props) => {
   const [authUser] = useGlobal("user");
   const [isSaving, setIsSaving] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [awards, setAwards] = useState(defaultTo(props.lobby.settings.awards, []));
   const [award, setAward] = useState("");
@@ -18,6 +19,7 @@ export const ModalAwards = (props) => {
     const newAwards = [...awards];
     newAwards.splice(index, 1);
     setAwards(newAwards);
+    setIsUpdating(true);
   };
 
   const addAward = async () => {
@@ -25,6 +27,7 @@ export const ModalAwards = (props) => {
     newAwards.push(award);
     setAwards(newAwards);
     setAward("");
+    setIsUpdating(true);
   };
 
   const saveAwards = async () => {
@@ -40,6 +43,7 @@ export const ModalAwards = (props) => {
     });
 
     setIsSaving(false);
+    setIsUpdating(false);
     props.setIsVisibleModalAwards(false);
   };
 
@@ -108,7 +112,9 @@ export const ModalAwards = (props) => {
               </ButtonAnt>
             </form>
             <div className="btns-container">
-              <ButtonAnt color="default" onClick={() => setIsVisibleModalConfirm(true)}>
+          <ButtonAnt
+            color="default"
+            onClick={() => isUpdating ? setIsVisibleModalConfirm(true) : props.setIsVisibleModalAwards(false)}>
                 Cancelar
               </ButtonAnt>
               <ButtonAnt loading={isSaving} onClick={() => saveAwards()}>
