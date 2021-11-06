@@ -112,9 +112,10 @@ export const ModalAwards = (props) => {
               </ButtonAnt>
             </form>
             <div className="btns-container">
-          <ButtonAnt
-            color="default"
-            onClick={() => isUpdating ? setIsVisibleModalConfirm(true) : props.setIsVisibleModalAwards(false)}>
+              <ButtonAnt
+                color="default"
+                onClick={() => (isUpdating ? setIsVisibleModalConfirm(true) : props.setIsVisibleModalAwards(false))}
+              >
                 Cancelar
               </ButtonAnt>
               <ButtonAnt loading={isSaving} onClick={() => saveAwards()}>
