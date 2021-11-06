@@ -60,7 +60,7 @@ export const LobbyLoading = (props) => {
             <div className="step-one-tablet-title">¡Prepárate!</div>
 
             <Image
-              src={`${config.storageUrl}/resources/pacman.gif`}
+              src={`${config.storageUrl}/resources/white_spinner.gif`}
               height="75px"
               width="75px"
               size="contain"

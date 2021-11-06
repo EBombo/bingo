@@ -160,7 +160,7 @@ export const AdminPanel = (props) => {
           </div>
           <div className="right-container">
             <div className="board-container">
-              <BingoBoard {...props} setLastNumber={setLastNumber} isVisible />
+              <BingoBoard {...props} lastNumber={lastNumber} setLastNumber={setLastNumber} isVisible />
             </div>
             <div className="bottom-section">
               <div className="ball-called">
