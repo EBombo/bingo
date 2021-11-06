@@ -9,7 +9,7 @@ export const ValidateNickname = (props) => {
     <ValidatingContainer>
       <div className="title">Verificando tu apodo...</div>
       <Image
-        src={`${config.storageUrl}/resources/pacman.gif`}
+        src={`${config.storageUrl}/resources/white_spinner.gif`}
         height="75px"
         width="75px"
         size="contain"

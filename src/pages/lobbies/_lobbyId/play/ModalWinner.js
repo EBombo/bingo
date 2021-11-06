@@ -39,7 +39,7 @@ export const ModalWinner = (props) => {
         ) : (
           <div className="user-waiting">
             <Image
-              src={`${config.storageUrl}/resources/pacman.gif`}
+              src={`${config.storageUrl}/resources/spinner.gif`}
               height="75px"
               width="75px"
               size="contain"

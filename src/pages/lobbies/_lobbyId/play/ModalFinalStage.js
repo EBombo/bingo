@@ -104,7 +104,7 @@ export const ModalFinalStage = (props) => {
     <UserContent>
       <div className="description">Esperando que el administrador continue el juego...</div>
       <Image
-        src={`${config.storageUrl}/resources/pacman.gif`}
+        src={`${config.storageUrl}/resources/spinner.gif`}
         height="85px"
         width="85px"
         size="contain"
