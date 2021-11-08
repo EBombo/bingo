@@ -20,8 +20,9 @@ export const Lobby = (props) => {
   const audioRef = useRef(null);
 
   const logout = async () => {
-    await setAuthUser({ id: firestore.collection("users").doc().id });
-    setAuthUserLs(null);
+    const userId = firestore.collection("users").doc().id;
+    await setAuthUser({ id: userId });
+    setAuthUserLs({ id: userId });
     router.push("/");
   };
 
@@ -44,6 +45,9 @@ export const Lobby = (props) => {
 
         // If the game is closed logout user.
         if (currentLobby?.isClosed && !authUser?.isAdmin) logout();
+
+        setAuthUserLs({ ...authUser, lobby: currentLobby });
+        setAuthUser({ ...authUser, lobby: currentLobby });
 
         setLobby(currentLobby);
         setLoading(false);
