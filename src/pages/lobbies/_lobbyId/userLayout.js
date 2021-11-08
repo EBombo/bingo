@@ -63,6 +63,7 @@ export const UserLayout = (props) => {
               content={
                 <SliderContent>
                   <Slider
+                    value={volume}
                     defaultValue={30}
                     onChange={(value) => {
                       if (!props.audioRef.current) return;
@@ -81,9 +82,12 @@ export const UserLayout = (props) => {
                   if (!props.audioRef.current) return;
 
                   if (props.audioRef.current.volume === 0) {
-                    props.audioRef.current.volume = 0.7;
+                    props.audioRef.current.volume = 30 / 100;
+                    setVolume(30);
+
                     return setIsMuted(false);
                   }
+                  setVolume(0);
                   props.audioRef.current.volume = 0;
                   setIsMuted(true);
                 }}
