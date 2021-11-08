@@ -121,6 +121,7 @@ export const LobbyAdmin = (props) => {
               <SliderContent>
                 <Slider
                   defaultValue={30}
+                  value={volume}
                   onChange={(value) => {
                     if (!props.audioRef.current) return;
 
@@ -139,9 +140,12 @@ export const LobbyAdmin = (props) => {
                 if (!props.audioRef.current) return;
 
                 if (props.audioRef.current.volume === 0) {
-                  props.audioRef.current.volume = volume / 100;
+                  props.audioRef.current.volume = 0.3;
+                  setVolume(30);
+
                   return setIsMuted(false);
                 }
+                setVolume(0);
                 props.audioRef.current.volume = 0;
                 setIsMuted(true);
               }}
