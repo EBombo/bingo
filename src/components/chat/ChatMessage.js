@@ -1,6 +1,5 @@
 import React, { useGlobal, useState } from "reactn";
-import styled, { keyframes } from "styled-components";
-import { slideInLeft, slideInRight } from "react-animations";
+import styled from "styled-components";
 import get from "lodash/get";
 import Linkify from "react-linkify";
 import moment from "moment";
@@ -34,9 +33,6 @@ export const ChatMessage = (props) => {
   );
 };
 
-const slideInLeftAnimation = keyframes`${slideInLeft}`;
-const slideInRightAnimation = keyframes`${slideInRight}`;
-
 const Messages = styled.div`
   width: 100%;
   display: flex;
@@ -50,8 +46,6 @@ const Messages = styled.div`
       : props.sameAsBefore
       ? "auto 0 auto auto"
       : "10px 0 auto auto"};
-
-  animation: 0s ${(props) => (props.received ? slideInLeftAnimation : slideInRightAnimation)};
 
   .header {
     display: flex;
