@@ -65,7 +65,7 @@ export const Chat = (props) => {
       setIsLoadingSendMessage(true);
       setMessage("");
 
-      // TODO: Add "data.message" to "messages" value to optimize load messages.
+      // TODO: Consider add "data.message" to "messages" to optimize load messages.
 
       const { error } = await Fetch(`${config.serverUrl}/api/messages`, "POST", {
         message: data.message,
