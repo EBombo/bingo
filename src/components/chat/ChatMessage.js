@@ -23,6 +23,7 @@ export const ChatMessage = (props) => {
           </div>
         )}
       </div>
+
       <div className="message-content">
         <div className="message pre-wrap">
           <Linkify>{props.message.message}</Linkify>
