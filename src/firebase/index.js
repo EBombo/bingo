@@ -24,6 +24,8 @@ let firestoreEvents;
 let storageEvents;
 let authEvents;
 
+let firestoreBomboGames;
+
 try {
   hostName = process.env.NODE_ENV === "development" ? "localhost" : get(process, "env.GCLOUD_PROJECT", "");
 
@@ -80,6 +82,15 @@ if (isEmpty(firebase.apps)) {
   } catch (error) {
     console.error("error initializeApp", error);
   }
+  // Allow connection with bombo-games firebase
+  try {
+    firebase.initializeApp(config.firebaseBomboGames, "bombo-games");
+    firestoreBomboGames = firebase.app("bombo-games").firestore();
+
+    firestoreBomboGames.settings({ ignoreUndefinedProperties: true });
+  } catch (error) {
+    console.error("error initializeApp", error);
+  }
 }
 
 if (hostName === "localhost") {
@@ -89,6 +100,7 @@ if (hostName === "localhost") {
 }
 
 export {
+  firestoreBomboGames,
   analyticsEvents,
   firestoreEvents,
   storageEvents,
