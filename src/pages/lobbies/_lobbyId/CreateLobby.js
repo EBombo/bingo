@@ -11,7 +11,7 @@ import { Image } from "../../../components/common/Image";
 import { mediaQuery } from "../../../constants";
 import { Collapse } from "antd";
 
-export const Game = (props) => {
+export const CreateLobby = (props) => {
   const router = useRouter();
   const { Panel } = Collapse;
   const { Fetch } = useFetch();
