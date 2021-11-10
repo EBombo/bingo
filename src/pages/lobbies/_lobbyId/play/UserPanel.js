@@ -4,7 +4,7 @@ import { CardPattern } from "./CardPattern";
 import { LastBall } from "./LastBall";
 import { ButtonAnt } from "../../../../components/form";
 import { LastPlays } from "./LastPlays";
-import React, { useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import defaultTo from "lodash/defaultTo";
 import { Chat } from "../../../../components/chat";
 import { Desktop, Tablet } from "../../../../constants";
@@ -12,6 +12,10 @@ import { Desktop, Tablet } from "../../../../constants";
 export const UserPanel = (props) => {
   const [authUser] = useGlobal("user");
   const [lastNumber, setLastNumber] = useState(0);
+
+  useEffect(() => {
+    if (!props.lobby.lastPlays?.length || []) setLastNumber(0);
+  }, [props.lobby]);
 
   return (
     <>
@@ -32,7 +36,7 @@ export const UserPanel = (props) => {
               <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
             </div>
             <div className="bottom-section">
-              <LastBall lastNumber={lastNumber} vertical {...props} />
+              <LastBall lastNumber={lastNumber} key={lastNumber} vertical {...props} />
               <div className="last-plays-container">
                 <LastPlays showMore {...props} />
               </div>
@@ -56,7 +60,7 @@ export const UserPanel = (props) => {
             </div>
           </div>
           <div className="right-side">
-            <LastBall lastNumber={lastNumber} {...props} />
+            <LastBall lastNumber={lastNumber} key={lastNumber} {...props} />
             <LastPlays {...props} />
           </div>
         </div>
