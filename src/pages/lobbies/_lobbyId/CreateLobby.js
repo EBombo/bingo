@@ -144,7 +144,7 @@ export const CreateLobby = (props) => {
   };
 
   const validatePin = async (pin) => {
-    const gamesRef = await firestore.collection("games").where("pin", "==", pin).get();
+    const gamesRef = await firestoreBomboGames.collection("lobbies").where("pin", "==", pin).get();
 
     return gamesRef.empty;
   };
