@@ -175,7 +175,7 @@ const CardContainer = styled.div`
             display: flex;
             align-items: center;
             justify-content: center;
-            color: ${props => props.theme.basic.blackDarken};
+            color: ${(props) => props.theme.basic.blackDarken};
             margin: 0 auto;
           }
 
