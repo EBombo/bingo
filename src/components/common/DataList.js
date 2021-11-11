@@ -1,4 +1,18 @@
+import { config } from "../../firebase";
+
 export const userLinks = [];
+
+export const avatars = [
+  `${config.storageUrl}/resources/avatars/dog.svg`,
+  `${config.storageUrl}/resources/avatars/fox.svg`,
+  `${config.storageUrl}/resources/avatars/deer.svg`,
+  `${config.storageUrl}/resources/avatars/cat.svg`,
+  `${config.storageUrl}/resources/avatars/cow.svg`,
+  `${config.storageUrl}/resources/avatars/pig.svg`,
+  `${config.storageUrl}/resources/avatars/monkey.svg`,
+  `${config.storageUrl}/resources/avatars/chicken.svg`,
+  `${config.storageUrl}/resources/avatars/panda.svg`,
+];
 
 export const adminMenus = [
   {

@@ -6,6 +6,9 @@ import { Image } from "../../components/common/Image";
 import { ButtonBingo, InputBingo } from "../../components/form";
 import { object, string } from "yup";
 import { useForm } from "react-hook-form";
+import { Carousel } from "../../components/common/Carousel";
+import { avatars } from "../../components/common/DataList";
+import { darkTheme } from "../../theme";
 
 export const PinStep = (props) => {
   const [, setAuthUserLs] = useUser();
@@ -36,6 +39,23 @@ export const PinStep = (props) => {
           src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
           width="180px"
           margin="3rem auto 2rem auto"
+        />
+        <Carousel
+          showArrows
+          hideDots
+          components={avatars.map((avatar, index) => (
+            <div className="avatar-container" key={index}>
+              <Image
+                src={avatar}
+                height="150px"
+                width="150px"
+                borderRadius="50%"
+                size="cover"
+                margin="auto"
+                border={`3px solid ${darkTheme.basic.whiteLight}`}
+              />
+            </div>
+          ))}
         />
         <div className="login-container">
           <InputBingo
