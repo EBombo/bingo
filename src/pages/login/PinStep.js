@@ -49,7 +49,7 @@ export const PinStep = (props) => {
           index={avatarIdx}
           setIndex={setAvatarIdx}
           components={avatars.map((avatar, index) => (
-            <div className="avatar-container" key={index}>
+            <div className="avatar-container" key={`${index}-${avatar}`}>
               <Image
                 src={avatar}
                 height="150px"

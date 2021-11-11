@@ -12,7 +12,10 @@ export const Arrows = (props) => {
           height="31px"
           width="40px"
           size="contain"
-          onClick={() => props.prev()}
+          onClick={() => {
+            props.prev();
+            props.slider.current.prev();
+          }}
         />
       )}
 
@@ -27,13 +30,17 @@ export const Arrows = (props) => {
             />
           );
         })}
+
       {props.showArrows && (
         <Image
           src={`${config.storageUrl}/resources/arrows/right.svg`}
           height="31px"
           width="40px"
           size="contain"
-          onClick={() => props.next()}
+          onClick={() => {
+            props.next();
+            props.slider.current.next();
+          }}
         />
       )}
     </ContainerArrow>
@@ -55,7 +62,6 @@ const ContainerArrow = styled.div`
   align-items: center;
   margin-bottom: 2rem;
 `;
-
 
 const Dot = styled.span`
   height: 8px;

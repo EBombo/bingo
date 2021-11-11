@@ -5,29 +5,28 @@ import { Arrows } from "./arrowsCarousel";
 
 export const Carousel = (props) => {
   const slider = useRef(null);
+
   const [indicator, setIndicator] = useState(0);
-  const lengthComponents = props.components.length;
+  const [lengthComponents] = useState(props.components.length);
 
   const next = () => {
     if (indicator + 1 > lengthComponents - 1) {
       setIndicator(0);
-      props.setIndex && props.setIndex(0);
-    } else {
-      setIndicator(indicator + 1);
-      props.setIndex && props.setIndex(indicator + 1);
+      return props.setIndex && props.setIndex(0);
     }
-    slider.current.next();
+
+    setIndicator(indicator + 1);
+    props.setIndex && props.setIndex(indicator + 1);
   };
 
   const prev = () => {
     if (indicator - 1 < 0) {
       setIndicator(lengthComponents - 1);
-      props.setIndex && props.setIndex(lengthComponents - 1);
-    } else {
-      setIndicator(indicator - 1);
-      props.setIndex && props.setIndex(indicator - 1);
+      return props.setIndex && props.setIndex(lengthComponents - 1);
     }
-    slider.current.prev();
+
+    setIndicator(indicator - 1);
+    props.setIndex && props.setIndex(indicator - 1);
   };
 
   const goTo = (slideNumber) => {
@@ -51,7 +50,9 @@ export const Carousel = (props) => {
           </div>
         ))}
       </CarouselStyled>
-      {!props.hideIndicators && <Arrows next={next} prev={prev} indicator={indicator} goTo={goTo} {...props} />}
+      {!props.hideIndicators && (
+        <Arrows slider={slider} next={next} prev={prev} indicator={indicator} goTo={goTo} {...props} />
+      )}
     </Container>
   );
 };
