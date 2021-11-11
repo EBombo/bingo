@@ -11,8 +11,6 @@ import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 import { UserProgress } from "./UserProgress";
 import { ButtonAnt } from "../../../../components/form";
 
-const { Search } = Input;
-
 const TAB = {
   CARDS: "cards",
   TABLE: "table",
