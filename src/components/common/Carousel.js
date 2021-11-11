@@ -11,8 +11,10 @@ export const Carousel = (props) => {
   const next = () => {
     if (indicator + 1 > lengthComponents - 1) {
       setIndicator(0);
+      props.setIndex && props.setIndex(0);
     } else {
       setIndicator(indicator + 1);
+      props.setIndex && props.setIndex(indicator + 1);
     }
     slider.current.next();
   };
@@ -20,8 +22,10 @@ export const Carousel = (props) => {
   const prev = () => {
     if (indicator - 1 < 0) {
       setIndicator(lengthComponents - 1);
+      props.setIndex && props.setIndex(lengthComponents - 1);
     } else {
       setIndicator(indicator - 1);
+      props.setIndex && props.setIndex(indicator - 1);
     }
     slider.current.prev();
   };
