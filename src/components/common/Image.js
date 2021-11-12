@@ -20,6 +20,8 @@ const ImageCss = styled.div`
   ${(props) => (props.opacity ? "background-color: rgba(0,0,0,0.3);" : "")}
   filter: ${(props) => (props.filter ? props.filter : "none")};
   ${(props) => (props.zIndex ? `z-index:${props.zIndex};` : "")}
+  border: ${(props) => props.border || "none"};
+  border-radius: ${(props) => (props.borderRadius ? props.borderRadius : "0")};
 
   ${mediaQuery.afterMobile} {
     height: ${(props) => (props.desktopHeight ? props.desktopHeight : props.height)};
