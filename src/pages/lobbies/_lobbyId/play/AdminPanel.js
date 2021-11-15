@@ -31,12 +31,14 @@ export const AdminPanel = (props) => {
 
   const startGame = async (callback) => {
     if (!props.lobby.pattern) {
-      setIsVisibleModalPattern(true);
+      return setIsVisibleModalPattern(true);
     }
 
     setLoading(true);
 
     const board = createBoard();
+
+    setLastNumber(0);
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       round: 0,
@@ -163,8 +165,8 @@ export const AdminPanel = (props) => {
               <BingoBoard {...props} lastNumber={lastNumber} setLastNumber={setLastNumber} isVisible />
             </div>
             <div className="bottom-section">
-              <div className="ball-called">
-                <LastBall lastNumber={lastNumber} {...props} />
+              <div className="ball-called" key={lastNumber}>
+                <LastBall lastNumber={lastNumber} key={lastNumber} {...props} />
               </div>
               <div className="middle-container">
                 {props.lobby.startGame ? (
@@ -251,7 +253,7 @@ export const AdminPanel = (props) => {
             </ButtonAnt>
           </div>
           <div className="right-container">
-            <LastBall lastNumber={lastNumber} vertical {...props} />
+            <LastBall lastNumber={lastNumber} vertical key={lastNumber} {...props} />
             <div className="last-plays">
               <LastPlays {...props} />
             </div>

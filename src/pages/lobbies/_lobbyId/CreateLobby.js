@@ -11,15 +11,20 @@ import { Image } from "../../../components/common/Image";
 import { mediaQuery } from "../../../constants";
 import { Collapse } from "antd";
 
+const { Panel } = Collapse;
+
 export const CreateLobby = (props) => {
-  const router = useRouter();
-  const { Panel } = Collapse;
   const { Fetch } = useFetch();
-  const [, setLSAuthUser] = useUser();
-  const [audios] = useGlobal("audios");
-  const [game, setGame] = useState(null);
+
+  const router = useRouter();
   const { userId, tokenId, gameId } = router.query;
+
+  const [, setLSAuthUser] = useUser();
+
+  const [audios] = useGlobal("audios");
   const [, setAuthUser] = useGlobal("user");
+
+  const [game, setGame] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingSave, setIsLoadingSave] = useState(false);
 
@@ -46,7 +51,7 @@ export const CreateLobby = (props) => {
 
         if (error) {
           props.showNotification("ERROR", "Error al validar la cuenta");
-          return router.push("/login");
+          return router.push("/");
         }
 
         return response.user;
@@ -128,7 +133,7 @@ export const CreateLobby = (props) => {
 
       await Promise.all([promiseLobby, promiseLobbyBomboGames, promiseCountPlays]);
 
-      return router.push(`/lobbies/${lobbyId}`);
+      return router.push(`/bingo/lobbies/${lobbyId}`);
     } catch (error) {
       console.log(error);
     } finally {
