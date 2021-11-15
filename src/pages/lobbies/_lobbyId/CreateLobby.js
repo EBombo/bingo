@@ -51,7 +51,7 @@ export const CreateLobby = (props) => {
 
         if (error) {
           props.showNotification("ERROR", "Error al validar la cuenta");
-          return router.push("/login");
+          return router.push("/");
         }
 
         return response.user;
@@ -133,7 +133,7 @@ export const CreateLobby = (props) => {
 
       await Promise.all([promiseLobby, promiseLobbyBomboGames, promiseCountPlays]);
 
-      return router.push(`/lobbies/${lobbyId}`);
+      return router.push(`/bingo/lobbies/${lobbyId}`);
     } catch (error) {
       console.log(error);
     } finally {
