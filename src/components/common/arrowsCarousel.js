@@ -12,6 +12,7 @@ export const Arrows = (props) => {
           height="31px"
           width="40px"
           size="contain"
+          cursor="pointer"
           onClick={() => {
             props.prev();
             props.slider.current.prev();
@@ -37,6 +38,7 @@ export const Arrows = (props) => {
           height="31px"
           width="40px"
           size="contain"
+          cursor="pointer"
           onClick={() => {
             props.next();
             props.slider.current.next();
