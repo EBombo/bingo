@@ -16,5 +16,5 @@ module.exports = withBundleAnalyzer({
 
     return config;
   },
-  assetPrefix: "https://bingo-red.ebombo.io",
+  assetPrefix: process.env.DOMAIN ?? "",
 });
