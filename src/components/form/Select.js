@@ -13,11 +13,7 @@ export const Select = ({ variant = "default", optionsdom, ...props }) => (
     <StyledSelect {...props} variant={variant}>
       {optionsdom
         ? optionsdom.map((option) => (
-            <AntSelect.Option
-              key={option.key}
-              className={variant}
-              value={option.code}
-            >
+            <AntSelect.Option key={option.key} className={variant} value={option.code}>
               {option.name}
             </AntSelect.Option>
           ))
@@ -37,107 +33,31 @@ const SelectContainer = styled.div`
 
 const StyledSelect = styled(AntSelect)`
   width: 100%;
-  border: 1px solid
-    ${({ variant = "default", theme }) =>
-      variant === "primary"
-        ? theme.basic.primary
-        : variant === "secondary"
-        ? theme.basic.secondary
-        : variant === "warning"
-        ? theme.basic.warning
-        : variant === "danger"
-        ? theme.basic.danger
-        : theme.basic.default};
-  color: ${({ variant = "default", theme }) =>
-    variant === "primary"
-      ? theme.basic.primary
-      : variant === "secondary"
-      ? theme.basic.secondary
-      : variant === "warning"
-      ? theme.basic.warning
-      : variant === "danger"
-      ? theme.basic.danger
-      : theme.basic.default};
-
-  margin-bottom: ${(props) => props.marginbottom || "0"} !important;
+  border: none;
 
   .ant-select-selector {
     border: none !important;
     font-size: ${sizes.font.small};
     height: auto !important;
+    border-radius: 2px;
+    background: ${(props) => props.theme.basic.whiteLight};
 
-    background: ${({ variant = "default", theme }) =>
-      variant === "primary"
-        ? theme.basic.default
-        : variant === "secondary"
-        ? theme.basic.default
-        : variant === "warning"
-        ? theme.basic.default
-        : variant === "danger"
-        ? theme.basic.default
-        : "transparent"} !important;
-
-    .ant-select-selection-placeholder {
-      color: ${({ variant = "default", theme }) =>
-        variant === "primary"
-          ? theme.basic.primary
-          : variant === "secondary"
-          ? theme.basic.secondary
-          : variant === "warning"
-          ? theme.basic.warning
-          : variant === "danger"
-          ? theme.basic.danger
-          : theme.basic.default};
+    .ant-select-selection-item {
+      display: flex;
+      align-items: center;
+      color: ${(props) => props.theme.basic.grayLight} !important;
     }
   }
 
   .ant-select-arrow {
-    color: ${({ variant = "default", theme }) =>
-      variant === "primary"
-        ? theme.basic.primary
-        : variant === "secondary"
-        ? theme.basic.secondary
-        : variant === "warning"
-        ? theme.basic.warning
-        : variant === "danger"
-        ? theme.basic.danger
-        : theme.basic.default};
+    color: ${(props) => props.theme.basic.grayLight} !important;
 
     span {
       svg {
         cursor: pointer;
-        color: ${({ variant = "default", theme }) =>
-          variant === "primary"
-            ? theme.basic.primary
-            : variant === "secondary"
-            ? theme.basic.secondary
-            : variant === "warning"
-            ? theme.basic.warning
-            : variant === "danger"
-            ? theme.basic.danger
-            : theme.basic.default};
+        color: ${(props) => props.theme.basic.grayLight};
       }
     }
-  }
-
-  .ant-select-selection {
-    border: none !important;
-    border-radius: 0;
-    outline: none;
-    background-color: ${({ variant = "default", theme }) =>
-      variant === "primary"
-        ? theme.basic.primary
-        : variant === "secondary"
-        ? theme.basic.secondary
-        : variant === "warning"
-        ? theme.basic.warning
-        : variant === "danger"
-        ? theme.basic.danger
-        : theme.basic.default} !important;
-  }
-
-  .ant-select-selection:hover {
-    border-color: transparent !important;
   }
 `;
 
@@ -148,10 +68,7 @@ const Label = styled.label`
   line-height: 16px;
   font-size: ${sizes.font.mini};
 
-  color: ${(props) =>
-    props.variant === "primary"
-      ? props.theme.basic.primary
-      : props.theme.basic.default};
+  color: ${(props) => (props.variant === "primary" ? props.theme.basic.primary : props.theme.basic.default)};
 
   ${(props) =>
     props.required &&

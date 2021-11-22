@@ -1,29 +1,25 @@
-import {
-  LockOutlined,
-  SoundOutlined,
-  UnlockOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import React, { useEffect, useGlobal, useRef, useState } from "reactn";
+import { UserOutlined } from "@ant-design/icons";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
-import { database, firestore } from "../../../firebase";
-import { ButtonBingo } from "../../../components/form";
+import { config, database, firestore } from "../../../firebase";
+import { ButtonAnt, ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
 import { getBingoCard } from "../../../business";
+import { Image } from "../../../components/common/Image";
 
 export const LobbyAdmin = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
   const [audios] = useGlobal("audios");
   const [users, setUsers] = useState([]);
-  const [isPlay, setIsPlay] = useState(false);
+  const [volume, setVolume] = useState(30);
+  const [isPlay, setIsPlay] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [isLoadingLock, setIsLoadingLock] = useState(false);
   const [isLoadingStart, setIsLoadingStart] = useState(false);
-
-  const audioRef = useRef(null);
 
   useEffect(() => {
     if (!props.lobby) return;
@@ -39,6 +35,15 @@ export const LobbyAdmin = (props) => {
 
     fetchUsers();
   }, [props.lobby]);
+
+  useEffect(() => {
+    const currentAudioToPlay = props.lobby.game?.audio?.audioUrl ?? audios[0]?.audioUrl;
+
+    const currentAudio = props.audioRef.current ?? new Audio(currentAudioToPlay);
+
+    props.audioRef.current = currentAudio;
+    props.audioRef.current.play();
+  }, []);
 
   const updateLobby = async (isLocked = false, gameStarted = null) => {
     try {
@@ -71,6 +76,7 @@ export const LobbyAdmin = (props) => {
       <div className="header">
         <div className="left-menus">
           <Popover
+            trigger="click"
             content={
               <AudioStyled>
                 {audios.map((audio_) => (
@@ -78,13 +84,15 @@ export const LobbyAdmin = (props) => {
                     key={audio_.id}
                     className="item-audio"
                     onClick={() => {
-                      if (audioRef.current) audioRef.current.pause();
+                      if (props.audioRef.current) props.audioRef.current.pause();
 
                       const currentAudio = new Audio(audio_.audioUrl);
 
-                      audioRef.current = currentAudio;
-                      audioRef.current.play();
+                      props.audioRef.current = currentAudio;
+                      props.audioRef.current.volume = volume / 100;
+                      props.audioRef.current.play();
                       setIsPlay(true);
+                      setIsMuted(false);
                     }}
                   >
                     {audio_.title}
@@ -93,58 +101,86 @@ export const LobbyAdmin = (props) => {
               </AudioStyled>
             }
           >
-            <ButtonBingo
-              variant="primary"
-              key={audioRef.current?.paused}
-              margin="10px 20px"
-              onClick={() => {
-                if (audioRef.current && !audioRef.current?.paused) {
-                  audioRef.current.pause();
-                  return setIsPlay(false);
-                }
-
-                const currentAudioToPlay =
-                  props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
-
-                const currentAudio =
-                  audioRef.current ?? new Audio(currentAudioToPlay);
-
-                audioRef.current = currentAudio;
-                audioRef.current.play();
-                setIsPlay(true);
-              }}
-            >
-              {isPlay ? "♫" : "►"}
+            <ButtonBingo variant="primary" margin="10px 20px">
+              {isPlay ? (
+                <Image
+                  cursor="pointer"
+                  src={`${config.storageUrl}/resources/sound.svg`}
+                  height="25px"
+                  width="25px"
+                  size="contain"
+                  margin="auto"
+                />
+              ) : (
+                "►"
+              )}
             </ButtonBingo>
           </Popover>
           <Popover
             content={
-              <div style={{ width: 100 }}>
+              <SliderContent>
                 <Slider
                   defaultValue={30}
-                  onChange={(event) => {
-                    if (!audioRef.current) return;
-                    audioRef.current.volume = event / 100;
+                  value={volume}
+                  onChange={(value) => {
+                    if (!props.audioRef.current) return;
+
+                    props.audioRef.current.volume = value / 100;
+                    setVolume(value);
                   }}
                 />
-              </div>
+              </SliderContent>
             }
           >
             <ButtonBingo
               variant="primary"
               margin="10px 20px"
               disabled={!isPlay}
+              onClick={() => {
+                if (!props.audioRef.current) return;
+
+                if (props.audioRef.current.volume === 0) {
+                  props.audioRef.current.volume = 0.3;
+                  setVolume(30);
+
+                  return setIsMuted(false);
+                }
+                setVolume(0);
+                props.audioRef.current.volume = 0;
+                setIsMuted(true);
+              }}
+              key={isMuted}
             >
-              <SoundOutlined />
+              <Image
+                cursor="pointer"
+                src={isMuted ? `${config.storageUrl}/resources/mute.svg` : `${config.storageUrl}/resources/volume.svg`}
+                height="25px"
+                width="25px"
+                size="contain"
+                margin="auto"
+              />
             </ButtonBingo>
           </Popover>
         </div>
 
         <div className="item-pin">
-          <div className="label">Entra a www.ebombo.it</div>
+          <div className="label">{props.lobby.isLocked ? "Este juego esta bloqueado" : "Entra a www.ebombo.io"}</div>
           <div className="pin-label">Pin del juego:</div>
           <div className="pin">
-            {props.lobby.isLocked ? <LockOutlined /> : props.lobby?.pin}
+            {props.lobby.isLocked ? (
+              <ButtonBingo variant="primary" margin="10px 20px">
+                <Image
+                  cursor="pointer"
+                  src={`${config.storageUrl}/resources/lock.svg`}
+                  height="25px"
+                  width="25px"
+                  size="contain"
+                  margin="auto"
+                />
+              </ButtonBingo>
+            ) : (
+              props.lobby?.pin
+            )}
           </div>
         </div>
 
@@ -160,12 +196,19 @@ export const LobbyAdmin = (props) => {
               setIsLoadingLock(false);
             }}
           >
-            {props.lobby.isLocked ? <LockOutlined /> : <UnlockOutlined />}
+            {!isLoadingLock && (
+              <Image
+                src={`${config.storageUrl}/resources/${props.lobby.isLocked ? "lock.svg" : "un-lock.svg"}`}
+                cursor="pointer"
+                height="25px"
+                width="25px"
+                size="contain"
+                margin="auto"
+              />
+            )}
           </ButtonBingo>
-          <ButtonBingo
-            variant="primary"
-            margin="10px 20px"
-            padding="10px 30px"
+          <ButtonAnt
+            className="btn-start"
             loading={isLoadingStart}
             disabled={!users?.length || isLoadingStart}
             onClick={async () => {
@@ -174,8 +217,8 @@ export const LobbyAdmin = (props) => {
               setIsLoadingStart(false);
             }}
           >
-            EMPEZAR
-          </ButtonBingo>
+            Empezar
+          </ButtonAnt>
         </div>
       </div>
 
@@ -196,6 +239,18 @@ export const LobbyAdmin = (props) => {
     </LobbyCss>
   );
 };
+
+const SliderContent = styled.div`
+  width: 100px;
+
+  .ant-slider-track {
+    background-color: ${(props) => props.theme.basic.success} !important;
+  }
+
+  .ant-slider-handle {
+    border: solid 2px ${(props) => props.theme.basic.successDark} !important;
+  }
+`;
 
 const AudioStyled = styled.div`
   width: 100%;
@@ -222,9 +277,19 @@ const LobbyCss = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 
+    .right-menus {
+      .btn-start {
+        margin: 10px 20px !important;
+        padding: 10px 30px !important;
+      }
+    }
+
     .right-menus,
     .left-menus {
       text-align: center;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-evenly;
     }
 
     .left-menus {

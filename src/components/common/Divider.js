@@ -2,11 +2,7 @@ import React from "reactn";
 import styled from "styled-components";
 
 export const Divider = (props) => (
-  <DividerCss
-    className="subtitle-between-lines-desktop"
-    hasChildren={props.children}
-    {...props}
-  >
+  <DividerCss className="subtitle-between-lines-desktop" hasChildren={props.children} {...props}>
     <hr />
     {props.children && <span>{props.children}</span>}
     <hr />
@@ -21,8 +17,7 @@ const DividerCss = styled.div`
   margin-bottom: 10px;
 
   hr {
-    background-color: ${(props) =>
-      props.background ?? props.theme.basic.primary};
+    background-color: ${(props) => props.background ?? props.theme.basic.primary};
     border: none;
     width: ${(props) => (props.hasChildren ? "25%" : "50%")};
     height: 1px;

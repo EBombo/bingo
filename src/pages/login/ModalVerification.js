@@ -2,7 +2,7 @@ import React from "reactn";
 import styled from "styled-components";
 import { ModalContainer } from "../../components/common/ModalContainer";
 import { darkTheme } from "../../theme";
-import { ButtonAnt } from "../../components/form";
+import { ButtonBingo } from "../../components/form";
 
 export const ModalVerification = (props) => (
   <ModalContainer
@@ -10,25 +10,19 @@ export const ModalVerification = (props) => (
     closable={false}
     visible={props.isVisibleModalVerification}
     padding={"1rem"}
-    top={"20%"}
+    topDesktop="20%"
     background={darkTheme.basic.whiteLight}
     onCancel={() => props.setIsVisibleModalVerification(props.email)}
   >
     <ContentModal>
       <div className="title">Identificación del jugador grabada</div>
       <div className="description">
-        La próxima vez que jueges no va a ser necesario que coloques tu
-        identificación de jugador otra vez, asi que puedes ingresar rápidamente.
-        Lo puedes cambiar en ajustes en cualquier momento.
+        La próxima vez que juegues no va ha ser necesario que coloques tu identificación de jugador otra vez, asi que
+        puedes ingresar rápidamente. Lo puedes cambiar en ajustes en cualquier momento.
       </div>
-      <ButtonAnt
-        variant={"primary"}
-        width={"200px"}
-        margin={"1rem auto"}
-        onClick={() => props.setIsVisibleModalVerification(props.email)}
-      >
+      <ButtonBingo variant="secondary" width="200px" onClick={() => props.setIsVisibleModalVerification(props.email)}>
         Ok
-      </ButtonAnt>
+      </ButtonBingo>
     </ContentModal>
   </ModalContainer>
 );
@@ -53,5 +47,10 @@ const ContentModal = styled.div`
     font-size: 15px;
     line-height: 18px;
     color: ${(props) => props.theme.basic.blackDarken};
+  }
+
+  button {
+    display: block;
+    margin-top: 10px;
   }
 `;

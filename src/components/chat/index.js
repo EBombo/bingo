@@ -1,12 +1,9 @@
 import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import styled from "styled-components";
 import { config, firestore } from "../../firebase";
-import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
-import orderBy from "lodash/orderBy";
 import { snapshotToArray } from "../../utils";
 import { spinLoader } from "../common/loader";
-import Linkify from "react-linkify";
 import { useFetch } from "../../hooks/useFetch";
 import { useSendError } from "../../hooks";
 import { mediaQuery } from "../../constants";
@@ -49,9 +46,7 @@ export const Chat = (props) => {
 
   const scrollToBottom = () => {
     if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current
-        ? chatRef.current.scrollHeight
-        : null;
+      chatRef.current.scrollTop = chatRef.current ? chatRef.current.scrollHeight : null;
     }
   };
 
@@ -70,15 +65,13 @@ export const Chat = (props) => {
       setIsLoadingSendMessage(true);
       setMessage("");
 
-      const { error } = await Fetch(
-        `${config.serverUrl}/api/messages`,
-        "POST",
-        {
-          message: data.message,
-          user: authUser,
-          lobbyId,
-        }
-      );
+      // TODO: Consider add "data.message" to "messages" to optimize load messages.
+
+      const { error } = await Fetch(`${config.serverUrl}/api/messages`, "POST", {
+        message: data.message,
+        user: authUser,
+        lobbyId,
+      });
 
       if (error) return setMessage(message);
     } catch (error) {
@@ -90,7 +83,7 @@ export const Chat = (props) => {
   return (
     <Container>
       <div className="title" key={`key-title1-${lobbyId}`}>
-        CHAT DEL BINGO
+        Chat del Bingo
       </div>
       <Content>
         <div className="chat-body" ref={chatRef}>
@@ -100,7 +93,12 @@ export const Chat = (props) => {
             <div className="chat-empty">Comienza a chatear</div>
           ) : (
             messages.map((message, index) => (
-              <ChatMessage key={message.id} message={message} />
+              <ChatMessage
+                key={message.id}
+                message={message}
+                previousMessage={index > 1 ? messages[index - 1] : null}
+                index={index}
+              />
             ))
           )}
         </div>
@@ -109,6 +107,7 @@ export const Chat = (props) => {
         <form className="send-message" onSubmit={handleSubmit(sendMessage)}>
           <Input
             placeholder="Escribe tu mensaje aqui"
+            autoComplete="off"
             className="input-message"
             name="message"
             value={message}
@@ -121,6 +120,7 @@ export const Chat = (props) => {
             loading={isLoadingSendMessage}
             htmlType="submit"
             className="btn-submit"
+            color="secondary"
           >
             Enviar
           </ButtonAnt>
@@ -130,57 +130,8 @@ export const Chat = (props) => {
   );
 };
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  background: ${(props) => props.theme.basic.whiteLight};
-
-  .chat-info {
-    margin-top: 5px;
-    display: flex;
-    justify-content: space-between;
-
-    div:first-child {
-      width: auto;
-      color: ${(props) => props.theme.basic.primary};
-    }
-
-    div:nth-child(2n) {
-      width: auto;
-      color: ${(props) => props.theme.basic.white};
-    }
-  }
-
-  .title {
-    display: flex;
-    align-items: center;
-    color: ${(props) => props.theme.basic.blackDarken};
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 15px;
-    line-height: 18px;
-    padding: 0.5rem;
-    border-bottom: 2px solid ${(props) => props.theme.basic.grayLighten};
-  }
-
-  .footer {
-    padding: 0.5rem;
-    width: 100%;
-
-    .input-message {
-      border: 2px solid ${(props) => props.theme.basic.primaryLight};
-    }
-
-    .btn-submit {
-      margin: 10px 0 auto auto;
-    }
-  }
-`;
-
 const Content = styled.div`
-  color: ${(props) => props.theme.basic.white};
+  background: ${(props) => props.theme.basic.whiteLight};
   padding: 0.5rem;
 
   .chat-body {
@@ -209,9 +160,74 @@ const Content = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
-    height: calc(100vh - 185px);
+    height: calc(100vh - 195px);
     .chat-body {
       height: 100%;
+    }
+  }
+`;
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  background: ${(props) => props.theme.basic.whiteDark};
+
+  .chat-info {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+
+    div:first-child {
+      width: auto;
+      color: ${(props) => props.theme.basic.primary};
+    }
+
+    div:nth-child(2n) {
+      width: auto;
+      color: ${(props) => props.theme.basic.white};
+    }
+  }
+
+  .title {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    color: ${(props) => props.theme.basic.blackDarken};
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 18px;
+    padding: 0.5rem;
+    border-bottom: 1px solid ${(props) => props.theme.basic.grayLighten};
+    background: ${(props) => props.theme.basic.white};
+  }
+
+  .footer {
+    background: ${(props) => props.theme.basic.whiteDark};
+    box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.08);
+    padding: 0.5rem;
+    width: 100%;
+
+    .input-message {
+      height: 42px;
+      font-family: Lato;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 14px;
+      border-radius: 4px;
+      border: 2px solid ${(props) => props.theme.basic.primaryDark};
+    }
+
+    .btn-submit {
+      margin: 10px 0 auto auto;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 18px;
+      padding: 5px 30px !important;
     }
   }
 `;

@@ -50,10 +50,7 @@ const googleIconSvg = (
       d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"
       fill="#34A853"
     ></path>
-    <path
-      d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"
-      fill="#FBBC05"
-    ></path>
+    <path d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z" fill="#FBBC05"></path>
     <path
       d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"
       fill="#EA4335"
@@ -67,9 +64,7 @@ export const useAuth = () => {
   const [error, setError] = useState(null);
   const [, setAuthUser] = useGlobal("user");
   const [isLoadingUser, setIsLoadingUser] = useGlobal("isLoadingUser");
-  const [isLoadingCreateUser, setIsLoadingCreateUser] = useGlobal(
-    "isLoadingCreateUser"
-  );
+  const [isLoadingCreateUser, setIsLoadingCreateUser] = useGlobal("isLoadingCreateUser");
 
   useEffect(() => {
     if (!error) return;
@@ -91,10 +86,7 @@ export const useAuth = () => {
   const signIn = async (user) => {
     try {
       await setIsLoadingUser(true);
-      await authEvents.signInWithEmailAndPassword(
-        user.email.trim().toLowerCase(),
-        user.password
-      );
+      await authEvents.signInWithEmailAndPassword(user.email.trim().toLowerCase(), user.password);
     } catch (error) {
       let errorMessage = authenticationErrors[error.code];
       setError(errorMessage || "Ha ocurrido un error, intenta nuevamente");
@@ -118,15 +110,10 @@ export const useAuth = () => {
       await setIsLoadingUser(true);
       await setIsLoadingCreateUser(true);
 
-      const result = await authEvents.createUserWithEmailAndPassword(
-        user.email.toLowerCase().trim(),
-        user.password
-      );
+      const result = await authEvents.createUserWithEmailAndPassword(user.email.toLowerCase().trim(), user.password);
 
       const dialCode = (countryCode) => {
-        const country = dialCodes.find(
-          (country) => country.code === countryCode
-        );
+        const country = dialCodes.find((country) => country.code === countryCode);
         return get(country, "dialCode", null);
       };
 
@@ -150,16 +137,12 @@ export const useAuth = () => {
 
   const createAccount = async (user) => {
     try {
-      const { error } = await Fetch(
-        `${config.serverUrl}/api/users/${user.id}`,
-        "POST",
-        {
-          ...user,
-          acls: {
-            common: Object.keys(acls.common.items),
-          },
-        }
-      );
+      const { error } = await Fetch(`${config.serverUrl}/api/users/${user.id}`, "POST", {
+        ...user,
+        acls: {
+          common: Object.keys(acls.common.items),
+        },
+      });
 
       if (error) throw get(error, "message", "ha ocurrido un problema");
     } catch (error) {
@@ -170,9 +153,7 @@ export const useAuth = () => {
   const currentProvider = (provider) => {
     const providerInstance = signInProviders[provider].instance;
 
-    signInProviders[provider].scopes.forEach((scope) =>
-      providerInstance.addScope(scope)
-    );
+    signInProviders[provider].scopes.forEach((scope) => providerInstance.addScope(scope));
 
     return providerInstance;
   };
@@ -212,9 +193,7 @@ export const useAuth = () => {
           color="black"
         >
           <div className="icon">{googleIconSvg}</div>
-          <div className="label">
-            {props.googleLabel ? props.googleLabel : "Sign up using Google"}
-          </div>
+          <div className="label">{props.googleLabel ? props.googleLabel : "Sign up using Google"}</div>
         </ButtonsCss>
       )}
       {props.facebook && (
@@ -226,11 +205,7 @@ export const useAuth = () => {
           border="black"
         >
           <div className="icon">{facebookIconSvg}</div>
-          <div className="label">
-            {props.facebookLabel
-              ? props.facebookLabel
-              : "Sign up using Facebook"}
-          </div>
+          <div className="label">{props.facebookLabel ? props.facebookLabel : "Sign up using Facebook"}</div>
         </ButtonsCss>
       )}
     </>
@@ -278,6 +253,5 @@ const ButtonsCss = styled.div`
     box-shadow: 0 0 4px ${(props) => props.shadow || props.theme.basic.white};
   }
 
-  ${(props) =>
-    props.disabled && "pointer-events: none;filter: brightness(0.4);"}
+  ${(props) => props.disabled && "pointer-events: none;filter: brightness(0.4);"}
 `;

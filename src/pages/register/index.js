@@ -105,9 +105,7 @@ export const Register = (props) => {
                   name: country.name,
                 }))}
                 filterOption={(input, option) =>
-                  get(option, "props.children", "")
-                    .toLowerCase()
-                    .indexOf(input.toLowerCase()) >= 0
+                  get(option, "props.children", "").toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
               />
             }

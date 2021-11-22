@@ -1,161 +1,110 @@
-import { ButtonBingo, InputBingo } from "../../components/form";
-import React, { useEffect, useGlobal, useState } from "reactn";
-import { Image } from "../../components/common/Image";
+import React, { useEffect, useGlobal, useMemo, useState } from "reactn";
 import { config, firestore } from "../../firebase";
 import { NicknameStep } from "./NicknameStep";
 import { snapshotToArray } from "../../utils";
-import { useForm } from "react-hook-form";
 import { EmailStep } from "./EmailStep";
 import styled from "styled-components";
-import { object, string } from "yup";
 import { useRouter } from "next/router";
 import { useUser } from "../../hooks";
+import { PinStep } from "./PinStep";
 
 const Login = (props) => {
   const router = useRouter();
+
   const [, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
 
-  const [lobby, setLobby] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState(authUser?.email ?? null);
-  const [nickname, setNickname] = useState(authUser?.nickname ?? null);
 
-  const validationSchema = object().shape({
-    pin: string().required().min(6),
-  });
+  const fetchLobby = async (pin) => {
+    try {
+      const lobbyRef = await firestore.collection("lobbies").where("pin", "==", pin.toString()).limit(1).get();
 
-  const { register, errors, handleSubmit } = useForm({
-    validationSchema,
-    reValidateMode: "onSubmit",
-  });
+      if (lobbyRef.empty) throw Error("No encontramos tu sala, intenta nuevamente");
 
-  useEffect(() => {
-    if (!lobby) return;
-    if (!nickname) return;
-    if (lobby.userIdentity && !email) return;
+      const currentLobby = snapshotToArray(lobbyRef)[0];
 
-    const currentUser = {
-      ...authUser,
-      nickname,
-      email: email ?? null,
-      lobby: lobby,
-    };
+      const usersIds = Object.keys(currentLobby?.users ?? {});
 
-    setAuthUserLs(currentUser);
-    setAuthUser(currentUser);
-    router.push(`/lobbies/${lobby.id}`);
-  }, [lobby, nickname, email]);
+      if (!usersIds.includes(authUser?.id) && currentLobby?.isLocked) throw Error("Este juego esta cerrado");
 
-  const fetchLobby = async (pin, callback) => {
-    const lobbyRef = await firestore
-      .collection("lobbies")
-      .where("pin", "==", pin.toString())
-      .where("isLocked", "==", false)
-      .limit(1)
-      .get();
+      if (currentLobby?.isClosed) {
+        await setAuthUser({
+          id: firestore.collection("users").doc().id,
+          email: null,
+          lobby: null,
+          nickname: null,
+          isAdmin: false,
+        });
 
-    if (lobbyRef.empty) {
-      props.showNotification(
-        "UPS",
-        "No encontramos tu sala, intenta nuevamente",
-        "warning"
-      );
-      return setIsLoading(false);
+        throw Error("Esta sala ha concluido");
+      }
+
+      await setAuthUser({ ...authUser, lobby: currentLobby });
+      setAuthUserLs({ ...authUser, lobby: currentLobby });
+    } catch (error) {
+      props.showNotification("UPS", error.message, "warning");
     }
-    const currentLobby = snapshotToArray(lobbyRef)[0];
-
-    console.log("currentLobby.isClosed", currentLobby.isClosed);
-
-    if (currentLobby.isClosed) {
-      await setAuthUser({ id: firestore.collection("users").doc().id });
-      setLobby(null);
-      setEmail(null);
-      setNickname(null);
-      return callback && callback(false);
-    }
-
-    setLobby(currentLobby);
-    callback && callback(false);
+    setIsLoading(false);
   };
 
+  // Redirect to lobby.
   useEffect(() => {
-    if (lobby || !authUser?.lobby?.pin) return;
+    if (!authUser?.lobby) return;
+    if (!authUser?.nickname) return;
+    if (authUser?.lobby?.settings?.userIdentity && !authUser?.email) return;
+
+    router.push(`/lobbies/${authUser.lobby.id}`);
+  }, [authUser]);
+
+  // Auto login.
+  useEffect(() => {
+    if (!authUser?.lobby?.pin) return;
 
     setIsLoading(true);
-    fetchLobby(authUser.lobby.pin, setIsLoading);
+    fetchLobby(authUser.lobby.pin);
   }, [authUser?.lobby?.pin]);
 
-  const validatePin = async (data) => {
-    setIsLoading(true);
-
-    await fetchLobby(data.pin, setIsLoading);
-  };
+  const emailIsRequired = useMemo(() => {
+    return !!authUser?.lobby?.settings?.userIdentity;
+  }, [authUser]);
 
   return (
-    <>
-      <LoginContainer>
-        {!lobby && (
-          <form onSubmit={handleSubmit(validatePin)}>
-            <Image
-              src={`${config.storageUrl}/resources/white-icon-ebombo.png`}
-              width="180px"
-              margin="10px auto"
-            />
-            <div className="login-container">
-              <InputBingo
-                ref={register}
-                error={errors.pin}
-                type="number"
-                name="pin"
-                align="center"
-                width="100%"
-                margin="10px auto"
-                variant="default"
-                disabled={isLoading}
-                placeholder="Pin del juego"
-              />
-              <ButtonBingo
-                width="100%"
-                disabled={isLoading}
-                loading={isLoading}
-                htmlType="submit"
-              >
-                Ingresar
-              </ButtonBingo>
-            </div>
-          </form>
+    <LoginContainer storageUrl={config.storageUrl}>
+      <div className="main-container">
+        {!authUser?.lobby && (
+          <PinStep isLoading={isLoading} setIsLoading={setIsLoading} fetchLobby={fetchLobby} {...props} />
         )}
-        {lobby && lobby.userIdentity && !email && (
-          <EmailStep
-            lobby={lobby}
-            setIsLoading={setIsLoading}
-            isLoading={isLoading}
-            setEmailVerification={setEmail}
-            {...props}
-          />
+
+        {authUser?.lobby && (
+          <>
+            {emailIsRequired && !authUser?.email && (
+              <EmailStep isLoading={isLoading} setIsLoading={setIsLoading} {...props} />
+            )}
+
+            {(emailIsRequired && authUser?.email && !authUser.nickname) || (!emailIsRequired && !authUser?.nickname) ? (
+              <NicknameStep isLoading={isLoading} setIsLoading={setIsLoading} {...props} />
+            ) : null}
+          </>
         )}
-        {((lobby && lobby.userIdentity && email && !nickname) ||
-          (lobby && !lobby.userIdentity && !nickname)) && (
-          <NicknameStep
-            lobby={lobby}
-            nickname={nickname}
-            setNickname={setNickname}
-            setIsLoading={setIsLoading}
-            isLoading={isLoading}
-            {...props}
-          />
-        )}
-      </LoginContainer>
-    </>
+      </div>
+    </LoginContainer>
   );
 };
 
 const LoginContainer = styled.div`
-  padding: 10px;
-  max-width: 400px;
-  margin: 10% auto auto auto;
   color: ${(props) => props.theme.basic.white};
+  width: 100%;
+  height: 100vh;
+  background-image: url("${(props) => `${props.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
+  background-position: center;
+  background-size: contain;
+
+  .main-container {
+    padding: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
 
   .login-container {
     padding: 15px;

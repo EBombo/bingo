@@ -32,11 +32,7 @@ export const EditProfile = (props) => {
   const updateProfile = async (data) => {
     setLoading(true);
     try {
-      const { error } = await Fetch(
-        `${config.serverUrl}/api/users/${get(authUser, "id")}/edit`,
-        "PUT",
-        mapUser(data)
-      );
+      const { error } = await Fetch(`${config.serverUrl}/api/users/${get(authUser, "id")}/edit`, "PUT", mapUser(data));
 
       props.showNotification(
         error ? "ERROR" : "OK",
@@ -89,12 +85,7 @@ export const EditProfile = (props) => {
           defaultValue={get(authUser, "phoneNumber", "")}
           placeholder="Telefono"
         />
-        <ButtonAnt
-          variant="primary"
-          htmlType="submit"
-          disabled={loading}
-          loading={loading}
-        >
+        <ButtonAnt variant="primary" htmlType="submit" disabled={loading} loading={loading}>
           ACTUALIZAR
         </ButtonAnt>
       </form>

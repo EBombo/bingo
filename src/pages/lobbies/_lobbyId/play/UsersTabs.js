@@ -1,70 +1,96 @@
-import React, { useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled from "styled-components";
-import { mediaQuery } from "../../../../constants";
-import defaultTo from "lodash/defaultTo";
-import { Progress } from "antd";
-import { darkTheme } from "../../../../theme";
+import { Desktop, mediaQuery, Tablet } from "../../../../constants";
+import { Input, Popover } from "antd";
+import orderBy from "lodash/orderBy";
 import { ModalUserCard } from "./ModalUserCard";
+import { config, firestore } from "../../../../firebase";
+import { Image } from "../../../../components/common/Image";
+import { getNumberBoard } from "../../../../business";
+import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
+import { UserProgress } from "./UserProgress";
+import { ButtonAnt } from "../../../../components/form";
+
+const TAB = {
+  CARDS: "cards",
+  TABLE: "table",
+};
 
 export const UsersTabs = (props) => {
-  const [tab, setTab] = useState("cards");
+  const [authUser] = useGlobal("user");
+  const [tab, setTab] = useState(TAB.CARDS);
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
+  const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
+  const [users, setUsers] = useState([]);
 
-  const userContent = (user, index) => {
-    if (tab === "cards")
-      return (
-        <div className="user-card" key={`${user.nickname}-${index}`}>
-          <div className="name">{user.nickname}</div>
-          <div className="card-preview">
-            {defaultTo(
-              JSON.parse(user.card),
-              Array(5).fill(Array(5).fill(0))
-            ).map((row) =>
-              row.map((num) => (
-                <div
-                  className={`matrix-num`}
-                  key={`${row}-${Math.random() * 150}`}
-                />
-              ))
-            )}
-          </div>
-          <div className="btn-container">
-            <button
-              className="btn-show-card"
-              onClick={() => {
-                setCurrentUser(user);
-                setIsVisibleModalUserCard(true);
-              }}
-            >
-              Ver cartilla
-            </button>
-          </div>
-          <div className="more">
-            <div />
-            <div />
-            <div />
-          </div>
-        </div>
-      );
+  useEffect(() => {
+    resetUsers();
+  }, []);
 
-    return (
-      <div className="user-progress" key={`${user.nickname}-${index}`}>
-        <div className="name">{user.nickname}</div>
-        <div className={`progress ${user.progress === 100 && winner}`}>
-          <Progress percent={30} strokeColor={darkTheme.basic.primary} />
-        </div>
-        <div className="options">
-          <button className="btn-show-card">Ver cartilla</button>
-          <div className="more">
-            <div />
-            <div />
-            <div />
-          </div>
-        </div>
-      </div>
-    );
+  const resetUsers = () => {
+    let newUsers = Object.values(props.lobby.users ?? {});
+    newUsers = orderBy(newUsers, ["nickname"], ["desc"]);
+    setUsers(newUsers);
   };
+
+  const numberWinners = getNumberBoard(props.lobby.board ?? {});
+  const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
+
+  const removeUser = async (userId) => {
+    const newUsers = {
+      ...props.lobby.users,
+    };
+    delete newUsers[userId];
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      users: newUsers,
+    });
+  };
+
+  const filterUsers = (value) => {
+    if (value === "") return resetUsers();
+
+    const newUsers = users.filter((user) => user.nickname.includes(value));
+    setUsers(newUsers);
+  };
+
+  const menu = (user) => (
+    <Popover
+      trigger="click"
+      placement="bottom"
+      content={
+        <div
+          style={{
+            display: "flex",
+            cursor: "pointer",
+          }}
+          onClick={() => setIsVisibleModalConfirm(true)}
+        >
+          <Image
+            src={`${config.storageUrl}/resources/close.svg`}
+            filter="brightness(0.5)"
+            height="15px"
+            width="15px"
+            size="contain"
+            margin="auto 5px"
+          />{" "}
+          <div
+            style={{
+              margin: "auto",
+            }}
+          >
+            Remover jugador
+          </div>
+        </div>
+      }
+    >
+      <div className="more">
+        <div />
+        <div />
+        <div />
+      </div>
+    </Popover>
+  );
 
   return (
     <TabsContainer>
@@ -76,23 +102,151 @@ export const UsersTabs = (props) => {
           {...props}
         />
       )}
-      <div className="tabs-container">
-        <div
-          className={`tab ${tab === "cards" && "active"}`}
-          onClick={() => setTab("cards")}
-        >
-          Cuadrícula
+      {isVisibleModalConfirm && (
+        <ModalConfirm
+          isVisibleModalConfirm={isVisibleModalConfirm}
+          setIsVisibleModalConfirm={setIsVisibleModalConfirm}
+          title="Estas seguro de esta acción?"
+          description={"El usuario será eliminado"}
+          action={removeUser}
+          buttonName={"Remover"}
+          {...props}
+        />
+      )}
+      {/* TODO: Consider refactoring to use mediaQuery and not use <Desktop> & <Tablet> */}
+      <Desktop>
+        <div className="tabs-container-desktop">
+          <div className="left-side">Participantes ({Object.keys(props.lobby.users).length})</div>
+          <div className="right-side">
+            <ButtonAnt
+              className={`btn-tab ${tab === TAB.CARDS ? "active" : ""}`}
+              color="default"
+              margin="0 0.5rem"
+              onClick={() => setTab(TAB.CARDS)}
+            >
+              Cuadrícula
+            </ButtonAnt>
+            <ButtonAnt
+              className={`btn-tab ${tab === TAB.TABLE ? "active" : ""}`}
+              color="default"
+              margin="0 0.5rem"
+              onClick={() => setTab(TAB.TABLE)}
+            >
+              Tabla
+            </ButtonAnt>
+            <Input.Search
+              className="input-search"
+              placeholder="Buscar por nombre"
+              onSearch={(value) => filterUsers(value, event)}
+            />
+          </div>
         </div>
-        <div
-          className={`tab ${tab === "table" && "active"}`}
-          onClick={() => setTab("table")}
-        >
-          Tabla
+      </Desktop>
+      <Tablet>
+        <div className="tabs-container">
+          <ButtonAnt
+            className={`btn-tab ${tab === TAB.CARDS ? "active" : ""}`}
+            color="default"
+            margin="0 0.5rem"
+            onClick={() => setTab(TAB.CARDS)}
+          >
+            Cuadrícula
+          </ButtonAnt>
+          <ButtonAnt
+            className={`btn-tab ${tab === TAB.TABLE ? "active" : ""}`}
+            color="default"
+            margin="0 0.5rem"
+            onClick={() => setTab(TAB.TABLE)}
+          >
+            Tabla
+          </ButtonAnt>
         </div>
-      </div>
-      <div className={`user-tab-${tab === "cards" ? "cards" : "table"}`}>
-        {Object.values(props.lobby.users ?? {}).map((user, index) =>
-          userContent(user, index)
+      </Tablet>
+      {/* TODO: Consider refactoring to use mediaQuery and not use <Desktop> & <Tablet> */}
+
+      <div className={`user-tab-${tab}`}>
+        {users.map((user, index) =>
+          tab === TAB.CARDS ? (
+            <div
+              className={`user-card ${props.lobby?.bingo?.id === user.id && `winner`}`}
+              key={`${user.nickname}-${index}`}
+            >
+              {props.lobby?.bingo?.id === user.id && (
+                <div className="winner-img">
+                  <Image
+                    src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
+                    height="30px"
+                    width="30px"
+                    borderRadious="50%"
+                  />
+                </div>
+              )}
+
+              <div className={`name ${authUser.id === user.id && "auth-user"}`}>
+                <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                {user.nickname}
+              </div>
+
+              <div className="card-preview">
+                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} isCard />
+              </div>
+
+              {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
+                <div className="btn-container">
+                  <button
+                    className="btn-show-card"
+                    onClick={() => {
+                      setCurrentUser(user);
+                      setIsVisibleModalUserCard(true);
+                    }}
+                  >
+                    Ver cartilla
+                  </button>
+                </div>
+              )}
+
+              {authUser.isAdmin && menu(user)}
+            </div>
+          ) : (
+            <div
+              className={`user-progress ${props.lobby?.bingo?.id === user.id && `winner`}`}
+              key={`${user.nickname}-${index}`}
+            >
+              <div className={`name ${authUser.id === user.id && "auth-user"}`}>
+                <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                {user.nickname}
+              </div>
+
+              <div className={`progress ${user.progress === 100 && "winner"}`}>
+                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} />
+              </div>
+
+              {props.lobby?.bingo?.id === user.id && (
+                <div className="winner-img">
+                  <Image
+                    src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
+                    height="30px"
+                    width="30px"
+                    borderRadious="50%"
+                  />
+                </div>
+              )}
+              <div className="options">
+                {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
+                  <button
+                    className="btn-show-card"
+                    onClick={() => {
+                      setCurrentUser(user);
+                      setIsVisibleModalUserCard(true);
+                    }}
+                  >
+                    Ver cartilla
+                  </button>
+                )}
+                {authUser.isAdmin && menu(user)}
+              </div>
+            </div>
+          )
         )}
       </div>
     </TabsContainer>
@@ -103,6 +257,7 @@ const TabsContainer = styled.div`
   width: 100%;
 
   .btn-show-card {
+    cursor: pointer;
     height: 21px;
     font-family: Encode Sans;
     font-style: normal;
@@ -117,10 +272,14 @@ const TabsContainer = styled.div`
   }
 
   .tabs-container {
-    height: 32px;
-    background: ${(props) => props.theme.basic.whiteDark};
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    button {
+      padding: 5px !important;
+    }
 
     .tab {
       padding: 0.5rem 1rem;
@@ -134,21 +293,6 @@ const TabsContainer = styled.div`
       cursor: pointer;
       color: ${(props) => props.theme.basic.secondary};
     }
-
-    .active {
-      color: ${(props) => props.theme.basic.primary};
-    }
-
-    .active::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80%;
-      height: 2px;
-      background: ${(props) => props.theme.basic.primary};
-    }
   }
 
   .user-tab {
@@ -160,12 +304,43 @@ const TabsContainer = styled.div`
       padding: 1rem;
 
       .user-card {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        background: ${(props) => props.theme.basic.whiteDark};
+        display: grid;
         padding: 0.5rem;
         border-radius: 3px;
+        align-items: center;
+        justify-items: center;
+        grid-template-columns: 1fr 1fr 1fr 15px;
+        background: ${(props) => props.theme.basic.whiteDark};
+
+        .name {
+          text-align: center;
+          font-family: Encode Sans, sans-serif;
+          font-style: normal;
+          font-weight: bold;
+          font-size: 13px;
+          line-height: 18px;
+          display: flex;
+          align-items: center;
+
+          &.auth-user {
+            color: ${(props) => props.theme.basic.primary};
+          }
+        }
+      }
+
+      .winner {
+        background: ${(props) => props.theme.basic.primaryLight};
+        border: 3px solid ${(props) => props.theme.basic.primary};
+        box-sizing: border-box;
+        border-radius: 3px;
+        position: relative;
+
+        .winner-img {
+          position: absolute;
+          top: 0;
+          right: 0;
+          transform: translate(50%, -50%);
+        }
       }
 
       .card-preview {
@@ -200,6 +375,7 @@ const TabsContainer = styled.div`
         justify-content: space-evenly;
         height: 25px;
         cursor: pointer;
+
         div {
           width: 5px;
           height: 5px;
@@ -208,6 +384,7 @@ const TabsContainer = styled.div`
         }
       }
     }
+
     &-table {
       width: 100%;
       display: flex;
@@ -223,11 +400,15 @@ const TabsContainer = styled.div`
         padding: 0 1rem;
 
         .name {
-          font-family: Open Sans;
+          font-family: Encode Sans, sans-serif;
           font-style: normal;
           font-weight: bold;
           font-size: 13px;
           line-height: 18px;
+
+          &.auth-user {
+            color: ${(props) => props.theme.basic.primary};
+          }
         }
 
         .progress {
@@ -235,8 +416,10 @@ const TabsContainer = styled.div`
           display: flex;
           align-items: center;
           justify-content: center;
+
           .ant-progress {
             max-width: 250px;
+
             .ant-progress-inner {
               background: ${(props) => props.theme.basic.grayDark} !important;
             }
@@ -255,6 +438,7 @@ const TabsContainer = styled.div`
             height: 25px;
             cursor: pointer;
             margin-left: 10px;
+
             div {
               width: 5px;
               height: 5px;
@@ -266,6 +450,7 @@ const TabsContainer = styled.div`
       }
 
       .winner {
+        grid-template-columns: repeat(4, 1fr);
         background: ${(props) => props.theme.basic.primaryLight};
       }
     }
@@ -277,35 +462,70 @@ const TabsContainer = styled.div`
       border-radius: 4px;
     }
 
-    .tabs-container {
-      height: 32px;
-      background: transparent;
+    .tabs-container-desktop {
+      height: 48px;
+      background: ${(props) => props.theme.basic.secondary};
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       display: flex;
       align-items: center;
-      border-bottom: 2px solid ${(props) => props.theme.basic.whiteLight};
+      justify-content: space-between;
+      padding: 0 1rem;
+      margin-bottom: 1rem;
 
-      .tab {
-        padding: 0.5rem 1rem;
-        font-size: 15px;
-        line-height: 18px;
+      .left-side {
+        font-family: Lato;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 22px;
         color: ${(props) => props.theme.basic.whiteLight};
       }
 
-      .active {
-        color: ${(props) => props.theme.basic.primaryLight};
-      }
+      .right-side {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
 
-      .active::after {
-        width: 80%;
-        height: 2px;
-        background: ${(props) => props.theme.basic.primaryLight};
+        .input-search {
+          box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+          width: 300px;
+
+          input,
+          button {
+            border: none;
+            background: ${(props) => props.theme.basic.secondaryDarken};
+            font-family: Lato;
+            font-style: normal;
+            font-weight: bold;
+            font-size: 11px;
+            line-height: 13px;
+            color: ${(props) => props.theme.basic.primary};
+            border-radius: 4px 0 0 4px;
+            height: 30px;
+          }
+
+          button {
+            border-radius: 0 4px 4px 0;
+
+            svg {
+              color: ${(props) => props.theme.basic.primary};
+            }
+          }
+        }
       }
     }
+  }
 
-    .user-tab {
-      &-cards {
-        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      }
+  .btn-tab {
+    font-family: Lato, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14px;
+    padding: 5px 20px !important;
+
+    &.active {
+      color: ${(props) => props.theme.basic.primary};
     }
   }
 `;

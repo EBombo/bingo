@@ -1,32 +1,26 @@
-import React, { useGlobal, useRef, useState } from "reactn";
+import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
-import { firestore } from "../../../firebase";
-import { useUser } from "../../../hooks";
 import { mediaQuery } from "../../../constants";
-import { SoundOutlined } from "@ant-design/icons";
+import { config } from "../../../firebase";
+import { Image } from "../../../components/common/Image";
 
 export const UserLayout = (props) => {
-  const [, setAuthUserLs] = useUser();
-  const [authUser, setAuthUser] = useGlobal("user");
+  const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
-  const [isPlay, setIsPlay] = useState(false);
-
-  const audioRef = useRef(null);
-
-  const logout = async () => {
-    await setAuthUser({ id: firestore.collection("users").doc().id });
-    setAuthUserLs(null);
-  };
+  const [isPlay, setIsPlay] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(30);
 
   return (
     <UserLayoutCss>
       <div className="description">1-75 números</div>
-      <div className="title">{props.lobby.game.title}</div>
+      <div className="title no-wrap">{props.lobby.game.name}</div>
       <div className="right-content">
         {authUser.isAdmin ? (
           <div className="right-container">
             <Popover
+              trigger="click"
               content={
                 <AudioStyled>
                   {audios.map((audio_) => (
@@ -34,12 +28,13 @@ export const UserLayout = (props) => {
                       key={audio_.id}
                       className="item-audio"
                       onClick={() => {
-                        if (audioRef.current) audioRef.current.pause();
+                        if (props.audioRef.current) props.audioRef.current.pause();
 
                         const currentAudio = new Audio(audio_.audioUrl);
 
-                        audioRef.current = currentAudio;
-                        audioRef.current.play();
+                        props.audioRef.current = currentAudio;
+                        props.audioRef.current.volume = volume / 100;
+                        props.audioRef.current.play();
                         setIsPlay(true);
                       }}
                     >
@@ -49,52 +44,74 @@ export const UserLayout = (props) => {
                 </AudioStyled>
               }
             >
-              <button
-                className="nav-button"
-                key={audioRef.current?.paused}
-                onClick={() => {
-                  if (audioRef.current && !audioRef.current?.paused) {
-                    audioRef.current.pause();
-                    return setIsPlay(false);
-                  }
-
-                  const currentAudioToPlay =
-                    props.lobby.game?.audio?.audioUrl ?? audios[0].audioUrl;
-
-                  const currentAudio =
-                    audioRef.current ?? new Audio(currentAudioToPlay);
-
-                  audioRef.current = currentAudio;
-                  audioRef.current.play();
-                  setIsPlay(true);
-                }}
-              >
-                {isPlay ? "♫" : "►"}
+              <button className="nav-button" key={props.audioRef.current?.paused}>
+                {isPlay ? (
+                  <Image
+                    cursor="pointer"
+                    src={`${config.storageUrl}/resources/sound.svg`}
+                    height="25px"
+                    width="25px"
+                    size="contain"
+                    margin="auto"
+                  />
+                ) : (
+                  "►"
+                )}
               </button>
             </Popover>
             <Popover
               content={
-                <div style={{ width: 100 }}>
+                <SliderContent>
                   <Slider
+                    value={volume}
                     defaultValue={30}
-                    onChange={(event) => {
-                      if (!audioRef.current) return;
-                      audioRef.current.volume = event / 100;
+                    onChange={(value) => {
+                      if (!props.audioRef.current) return;
+
+                      props.audioRef.current.volume = value / 100;
+                      setVolume(value);
                     }}
                   />
-                </div>
+                </SliderContent>
               }
             >
-              <button className="nav-button" disabled={!isPlay}>
-                <SoundOutlined />
+              <button
+                className="nav-button"
+                disabled={!isPlay}
+                onClick={() => {
+                  if (!props.audioRef.current) return;
+
+                  if (props.audioRef.current.volume === 0) {
+                    props.audioRef.current.volume = 30 / 100;
+                    setVolume(30);
+
+                    return setIsMuted(false);
+                  }
+                  setVolume(0);
+                  props.audioRef.current.volume = 0;
+                  setIsMuted(true);
+                }}
+                key={isMuted}
+              >
+                <Image
+                  cursor="pointer"
+                  src={
+                    isMuted ? `${config.storageUrl}/resources/mute.svg` : `${config.storageUrl}/resources/volume.svg`
+                  }
+                  height="25px"
+                  width="25px"
+                  size="contain"
+                  margin="auto"
+                />
               </button>
             </Popover>
           </div>
         ) : (
           <Popover
+            trigger="click"
             content={
               <div>
-                <div onClick={logout} style={{ cursor: "pointer" }}>
+                <div onClick={() => props.logout()} style={{ cursor: "pointer" }}>
                   Salir
                 </div>
               </div>
@@ -115,7 +132,7 @@ export const UserLayout = (props) => {
 const UserLayoutCss = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
   align-items: center;
   background: ${(props) => props.theme.basic.whiteDark};
   padding: 0.5rem;
@@ -130,6 +147,8 @@ const UserLayoutCss = styled.div`
     justify-content: flex-end;
 
     .icon-menu {
+      cursor: pointer;
+      width: 40px;
       display: flex;
       align-items: center;
       justify-content: space-evenly;
@@ -196,5 +215,17 @@ const AudioStyled = styled.div`
       color: ${(props) => props.theme.basic.secondary};
       background: ${(props) => props.theme.basic.primaryLight};
     }
+  }
+`;
+
+const SliderContent = styled.div`
+  width: 100px;
+
+  .ant-slider-track {
+    background-color: ${(props) => props.theme.basic.success} !important;
+  }
+
+  .ant-slider-handle {
+    border: solid 2px ${(props) => props.theme.basic.successDark} !important;
   }
 `;

@@ -49,10 +49,14 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   /*-------------- FIX SALTO DE LINEA GENERAL ----------------*/
-
-  /*-------------- FIX SALTO DE LINEA GENERAL ----------------*/
   .no-wrap {
     white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+  }
+  
+  .pre-wrap {
+    white-space: normal !important;
     text-overflow: ellipsis !important;
     overflow: hidden !important;
   }
@@ -78,7 +82,7 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     background: ${(props) => props.theme.basic.secondary};
-    font-family: 'Encode Sans', sans-serif;
+    font-family: Lato;
     overflow: auto !important;
   }
 
@@ -104,7 +108,7 @@ export const GlobalStyle = createGlobalStyle`
   /*-------------- SELECT ANT----------------*/
 
   .ant-select-dropdown, .ant-select-dropdown--single, .ant-select-dropdown-placement-bottomLeft {
-    background-color: ${(props) => props.theme.basic.default} !important;
+    background-color: ${(props) => props.theme.basic.whiteLight} !important;
   }
 
 
@@ -145,9 +149,12 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${(props) => props.theme.basic.blackLighten} !important;
   }
 
-  /*-------------- SELECT ANT----------------*/
-
-
+  /*-------------- SWITCH ANT----------------*/
+  
+  .ant-switch-checked {
+    background-color: #85e4bf !important;
+  }
+  
   /*-------------- NOTIFICATIONS ANT---------------*/
   .ant-message {
     z-index: 999999;
@@ -196,6 +203,18 @@ export const GlobalStyle = createGlobalStyle`
     }
     to {
       transform: none;
+    }
+  }
+
+  @keyframes right-to-left-shift {
+    0% {
+      background-position: 0 0;
+    }
+    50% {
+      background-position: 50% 0;
+    }
+    100% {
+      background-position: 35% 0;
     }
   }
 
