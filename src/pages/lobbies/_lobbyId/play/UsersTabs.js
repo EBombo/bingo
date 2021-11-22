@@ -106,7 +106,7 @@ export const UsersTabs = (props) => {
         <ModalConfirm
           isVisibleModalConfirm={isVisibleModalConfirm}
           setIsVisibleModalConfirm={setIsVisibleModalConfirm}
-          title="Estas seguro de esta acción?"
+          title="¿Estás seguro de esta acción?"
           description={"El usuario será eliminado"}
           action={removeUser}
           buttonName={"Remover"}
