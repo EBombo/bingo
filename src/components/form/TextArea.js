@@ -6,10 +6,7 @@ export const TextArea = forwardRef((props, ref) => (
   <InputContainer marginBottom={props.marginBottom}>
     {props.label && <Label required={props.required}>{props.label}</Label>}
     <InputWrapper>
-      <span
-        className="ant-input-wrapper ant-input-group"
-        style={{ display: "table" }}
-      >
+      <span className="ant-input-wrapper ant-input-group" style={{ display: "table" }}>
         <StyledInput
           hasError={props.error}
           {...props}
@@ -54,11 +51,9 @@ const InputWrapper = styled.div`
 `;
 
 const StyledInput = styled.textarea`
-  background: ${(props) =>
-    props.background ? props.background : "transparent"};
+  background: ${(props) => (props.background ? props.background : "transparent")};
   color: ${(props) => (props.color ? props.color : "white")};
-  border: ${(props) =>
-    props.border ? props.border : `1px solid ${props.theme.basic.primary}`};
+  border: ${(props) => (props.border ? props.border : `1px solid ${props.theme.basic.primary}`)};
   ${(props) =>
     !props.addonBefore &&
     `
@@ -68,8 +63,7 @@ const StyledInput = styled.textarea`
   ${(props) =>
     props.hasError &&
     `
-    background: ${(props) =>
-      props.background ? props.background : "transparent"};
+    background: ${(props) => (props.background ? props.background : "transparent")};
     border-color: ${props.theme.basic.danger};!important;
   `} ${(props) => props.borderRadius && `border-radius: ${props.borderRadius};`}
 `;

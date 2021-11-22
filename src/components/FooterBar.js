@@ -2,12 +2,7 @@ import React, { useGlobal } from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../constants";
 import { useRouter } from "next/router";
-import {
-  BarChartOutlined,
-  HomeOutlined,
-  PoweroffOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { BarChartOutlined, HomeOutlined, PoweroffOutlined, UserOutlined } from "@ant-design/icons";
 import { useAcl } from "../hooks";
 import { useAuth } from "../hooks/useAuth";
 
@@ -65,28 +60,18 @@ const FooterBar = (props) => {
   ];
 
   const getCurrentMenu = () =>
-    window.location.pathname.includes("/admin")
-      ? [adminLinks[0]].concat(aclMenus({ menus: adminLinks }))
-      : userLinks;
+    window.location.pathname.includes("/admin") ? [adminLinks[0]].concat(aclMenus({ menus: adminLinks })) : userLinks;
 
-  const isSelected = (path) =>
-    path === window.location.pathname ? "item item-selected" : "item";
+  const isSelected = (path) => (path === window.location.pathname ? "item item-selected" : "item");
 
   return (
-    <ContainerFooter
-      authUser={authUser}
-      itemLenght={getCurrentMenu().length + 1}
-    >
+    <ContainerFooter authUser={authUser} itemLenght={getCurrentMenu().length + 1}>
       <div className="footer-items">
         {getCurrentMenu().map((userLink) => (
           <div
             className={isSelected(userLink.url)}
             key={`key-menu-user-link-${userLink.url}`}
-            onClick={() =>
-              authUser
-                ? router.push(userLink.url)
-                : setIsVisibleLoginModal(true)
-            }
+            onClick={() => (authUser ? router.push(userLink.url) : setIsVisibleLoginModal(true))}
           >
             {userLink.type}
             <span className="label">{userLink.name}</span>
@@ -122,10 +107,7 @@ const ContainerFooter = styled.section`
     width: 100%;
     background: ${(props) => props.theme.basic.blackDarken};
     direction: rtl;
-    grid-template-columns: repeat(
-      ${(props) => (props.authUser ? props.itemLenght : props.itemLenght - 1)},
-      1fr
-    );
+    grid-template-columns: repeat(${(props) => (props.authUser ? props.itemLenght : props.itemLenght - 1)}, 1fr);
 
     .item {
       position: relative;

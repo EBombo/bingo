@@ -8,16 +8,9 @@ export const DatePicker = forwardRef((props, ref) => {
     <Fragment>
       {props.label && <Label required={props.required}>{props.label}</Label>}
       <DatePickerContainer>
-        <StyledDatePicker
-          {...props}
-          placeholder="seleccionar fecha"
-          hasError={props.error}
-          ref={ref}
-        />
+        <StyledDatePicker {...props} placeholder="seleccionar fecha" hasError={props.error} ref={ref} />
       </DatePickerContainer>
-      {props.error && (
-        <Error>{props.errorMessage || props.error.message}</Error>
-      )}
+      {props.error && <Error>{props.errorMessage || props.error.message}</Error>}
     </Fragment>
   );
 });

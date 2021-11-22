@@ -1,28 +1,29 @@
-import React, { useState, useGlobal, useEffect } from "reactn";
-import styled from "styled-components";
-import { Image } from "../../../components/common/Image";
-import { config, firestore } from "../../../firebase";
 import get from "lodash/get";
+import styled from "styled-components";
 import { mediaQuery } from "../../../constants";
+import React, { useEffect, useGlobal } from "reactn";
+import { config, firestore } from "../../../firebase";
+import { Image } from "../../../components/common/Image";
+import { animatedBackground } from "../../../theme";
 
-export const LoadingGame = (props) => {
+export const LobbyLoading = (props) => {
   const [authUser] = useGlobal("user");
 
   useEffect(() => {
     const timer = setTimeout(() => {
       const updateLobby = async () =>
         await firestore.doc(`lobbies/${props.lobby.id}`).update({
-          bingoCardsDistributed: true,
+          isPlaying: true,
         });
 
       updateLobby();
-    }, 15000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <LoadingGameContainer>
+    <LoadingGameContainer config={config}>
       {authUser.isAdmin ? (
         <>
           <div className="step-one">
@@ -36,12 +37,10 @@ export const LoadingGame = (props) => {
               margin="0 auto"
               className="step-one-logo"
             />
-            <div className="step-one-description">Entra a www.ebombo.it</div>
+            <div className="step-one-description">Entra a www.ebombo.io</div>
           </div>
           <div className="step-two">
-            <div className="step-two-name">
-              {get(props, "lobby.game.name", "")}
-            </div>
+            <div className="step-two-name">{get(props, "lobby.game.name", "")}</div>
           </div>
           <div className="step-three">
             <div className="main-container">
@@ -54,51 +53,19 @@ export const LoadingGame = (props) => {
               </div>
             </div>
           </div>
-          <div className="step-four">
-            <div className="step-four-image">
-              <Image
-                src={`${config.storageUrl}/resources/amount.svg`}
-                height="35px"
-                width="35px"
-                desktopHeight="55px"
-                desktopWidth="55px"
-                size="contain"
-                margin="0"
-                className="amount-logo"
-              />
-            </div>
-            <div className="step-four-description">BINGO</div>
-            <div className="step-four-bar" />
-          </div>
         </>
       ) : (
         <>
-          <div className="step-one">
-            <div className="step-one-title">¡Prepárate!</div>
+          <div className="step-one-tablet">
+            <div className="step-one-tablet-title">¡Prepárate!</div>
 
             <Image
-              src={`${config.storageUrl}/resources/pacman.gif`}
+              src={`${config.storageUrl}/resources/white_spinner.gif`}
               height="75px"
               width="75px"
               size="contain"
               margin="1rem auto"
             />
-          </div>
-          <div className="step-four">
-            <div className="step-four-image">
-              <Image
-                src={`${config.storageUrl}/resources/amount.svg`}
-                height="35px"
-                width="35px"
-                desktopHeight="55px"
-                desktopWidth="55px"
-                size="contain"
-                margin="0"
-                className="amount-logo"
-              />
-            </div>
-            <div className="step-four-description">BINGO</div>
-            <div className="step-four-bar" />
           </div>
         </>
       )}
@@ -111,17 +78,16 @@ const LoadingGameContainer = styled.div`
   height: 100vh;
   position: relative;
   overflow: hidden;
-
-  .step-one {
-    &-logo {
-      position: relative;
-      animation-delay: 2s;
-      margin-top: 3rem;
-      animation: move-up 2s forwards;
-      -webkit-animation-delay: 2s;
-      -o-animation-delay: 2s;
-    }
-
+  background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
+  background-position: center;
+  background-size: contain;
+  
+  .step-one-tablet {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    right: 0;
+    
     &-title {
       font-family: Lato;
       font-style: normal;
@@ -131,6 +97,16 @@ const LoadingGameContainer = styled.div`
       margin: 3rem 0;
       text-align: center;
       color: ${(props) => props.theme.basic.white};
+    }
+  }
+  .step-one {
+    &-logo {
+      position: relative;
+      animation-delay: 2s;
+      margin-top: 3rem;
+      animation: move-up 2s forwards;
+      -webkit-animation-delay: 2s;
+      -o-animation-delay: 2s;
     }
 
     &-description {
@@ -218,20 +194,20 @@ const LoadingGameContainer = styled.div`
         justify-content: center;
       }
 
-      .num3,
-      .num2,
-      .num1 {
-        color: ${(props) => props.theme.basic.danger};
-      }
+    .num3,
+    .num2,
+    .num1 {
+      color: ${(props) => props.theme.basic.white};
+    }
 
-      .num1 {
-        animation: time 20s forwards;
-        animation-delay: 9s;
-      }
+    .num1 {
+      animation: time 20s forwards;
+      animation-delay: 9s;
+    }
 
-      .num2 {
-        animation: time 20s forwards;
-        animation-delay: 8s;
+    .num2 {
+      animation: time 20s forwards;
+      animation-delay: 8s;
       }
 
       .num3 {
@@ -245,71 +221,9 @@ const LoadingGameContainer = styled.div`
       }
     }
   }
-
-  .step-four {
-    position: absolute;
-    top: 20%;
-    left: 0;
-    right: 0;
-    animation: fadein 20s forwards;
-    -webkit-animation: fadein 20s forwards;
-    
-    &-image {
-      background: ${(props) => props.theme.basic.primary};
-      width: 65px;
-      height: 65px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 1;
-      transform: translateY(20%) rotate(45deg);
-      
-      .amount-logo {
-        transform: rotate(-45deg);
-      }
-      
-      ${mediaQuery.afterTablet} {
-        width: 105px;
-        height: 105px;
-      }
-    }
-
-    &-description {
-      height: 50px;
-      position: relative;
-      z-index: 1;
-      background: ${(props) => props.theme.basic.whiteLight};
-      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-      font-family: Lato;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 30px;
-      line-height: 36px;
-      color: ${(props) => props.theme.basic.blackDarken};
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-
-      ${mediaQuery.afterTablet} {
-        font-size: 48px;
-        line-height: 58px;
-      }
-    }
-    
-    &-bar {
-      width: 80%;
-      margin: 1rem auto;
-      height: 20px;
-      border-radius: 40px;
-      background: ${(props) => props.theme.basic.grayLighten};
-
-      ${mediaQuery.afterTablet} {
-        height: 31px;
-      }
-    }
+  
+  ${mediaQuery.afterTablet} {
+    background-image: url("${(props) => `${props.config.storageUrl}/resources/balls/coral-pattern.svg`}");
   }
 
   @keyframes time {

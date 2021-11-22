@@ -27,8 +27,7 @@ export const PrivateRoutes = (props) => {
       value: param,
     }));
 
-  const isValidUser = () =>
-    aclRoutes.some((userAcl) => endsWith(_path(), userAcl));
+  const isValidUser = () => aclRoutes.some((userAcl) => endsWith(_path(), userAcl));
 
   useEffect(() => {
     if (!isValidUser()) router.push("/");

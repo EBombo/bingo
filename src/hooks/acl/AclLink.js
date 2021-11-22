@@ -7,8 +7,7 @@ export const AclLink = (props) => {
 
   const isEnabled = props.userAcls.some((acl) => acl === props.name);
 
-  const onClick = () =>
-    isEnabled && props.onClick ? props.onClick() : history.push(props.to);
+  const onClick = () => (isEnabled && props.onClick ? props.onClick() : history.push(props.to));
 
   return (
     <Link isEnabled={isEnabled} onClick={onClick}>

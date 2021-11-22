@@ -91,8 +91,7 @@ export const Distribution2CenterStyled = styled.div`
 `;
 
 export const DistributionCol = styled.div`
-  background: ${(props) =>
-    props.background ? props.background : "transparent"};
+  background: ${(props) => (props.background ? props.background : "transparent")};
   ${(props) => (props.color ? `color:${props.color};` : "")};
   padding: 10px 8px;
   overflow-y: hidden;

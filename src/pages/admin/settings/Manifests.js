@@ -34,8 +34,7 @@ export const AdminManifest = (props) => {
     setIsLoading(false);
   };
 
-  const mapManifest = (data) =>
-    mapKeys(data, (value) => value.domain.replaceAll(".", "&"));
+  const mapManifest = (data) => mapKeys(data, (value) => value.domain.replaceAll(".", "&"));
 
   const mapIcons = (data) =>
     mapValues(data, (values) => {
@@ -80,11 +79,7 @@ export const AdminManifest = (props) => {
 
   return (
     <ManifestCss>
-      <form
-        onSubmit={handleSubmit(saveManifests)}
-        autoComplete="off"
-        noValidate
-      >
+      <form onSubmit={handleSubmit(saveManifests)} autoComplete="off" noValidate>
         <div>
           <FieldsetContainer>
             <legend>Manifest por dominio</legend>
@@ -184,17 +179,12 @@ export const AdminManifest = (props) => {
                   <Input
                     variant="primary"
                     label="Background Color"
-                    defaultValue={get(
-                      manifests[domain],
-                      "background_color",
-                      ""
-                    )}
+                    defaultValue={get(manifests[domain], "background_color", "")}
                     placeholder="Color de fondo"
                     type="color"
                     onBlur={(event) => {
                       let newManifests = manifests;
-                      newManifests[domain]["background_color"] =
-                        event.target.value;
+                      newManifests[domain]["background_color"] = event.target.value;
                       setManifests({ ...newManifests });
                     }}
                     ref={register}

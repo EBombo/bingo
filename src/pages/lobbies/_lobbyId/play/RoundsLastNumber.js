@@ -1,16 +1,17 @@
 import React from "reactn";
 import styled from "styled-components";
-import { mediaQuery } from "../../../constants";
+import { mediaQuery } from "../../../../constants";
+import defaultTo from "lodash/defaultTo";
 
 export const RoundsLastNumber = (props) => {
   return (
     <Container>
       <div className="item">
-        <div className="number">{props.round}</div>
+        <div className="number">{props.lobby?.round || 0}</div>
         <div className="description">Número de rondas</div>
       </div>
       <div className="item">
-        <div className="number">{props.lastNumber}</div>
+        <div className="number">{defaultTo(props.lobby.lastPlays, []).length > 0 ? props.lobby.lastPlays[0] : 0}</div>
         <div className="description">Jugada anterior</div>
       </div>
     </Container>
