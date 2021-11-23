@@ -212,7 +212,7 @@ export const ModalUserCard = (props) => {
             <Content>
               <div className="title-card">Cartilla {props.user.nickname}</div>
               <div className="card-container">
-                <UserCard user={props.user} {...props} />
+                <UserCard user={props.user} {...props} disableSelect/>
               </div>
               <div className="btn-container">
                 <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
