@@ -54,7 +54,7 @@ const Login = (props) => {
     if (!authUser?.nickname) return;
     if (authUser?.lobby?.settings?.userIdentity && !authUser?.email) return;
 
-    router.push(`/lobbies/${authUser.lobby.id}`);
+    router.push(`/bingo/lobbies/${authUser.lobby.id}`);
   }, [authUser]);
 
   // Auto login.
