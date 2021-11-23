@@ -154,6 +154,13 @@ export const GlobalStyle = createGlobalStyle`
   .ant-switch-checked {
     background-color: #85e4bf !important;
   }
+
+  /*-------------- BUTTON ANT----------------*/
+
+  .ant-btn {
+    font-weight: bold;
+  }
+
   
   /*-------------- NOTIFICATIONS ANT---------------*/
   .ant-message {
