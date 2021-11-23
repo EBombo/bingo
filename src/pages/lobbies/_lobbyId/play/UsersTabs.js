@@ -18,6 +18,7 @@ const TAB = {
 
 export const UsersTabs = (props) => {
   const [authUser] = useGlobal("user");
+
   const [tab, setTab] = useState(TAB.CARDS);
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
@@ -37,14 +38,17 @@ export const UsersTabs = (props) => {
   const numberWinners = getNumberBoard(props.lobby.board ?? {});
   const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
-  const removeUser = async (userId) => {
+  const removeUser = async () => {
     const newUsers = {
       ...props.lobby.users,
     };
-    delete newUsers[userId];
+    delete newUsers[currentUser.id];
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       users: newUsers,
     });
+
+    setIsVisibleModalConfirm(false);
+    setUsers(orderBy(newUsers, ["nickname"], ["desc"]));
   };
 
   const filterUsers = (value) => {
@@ -64,7 +68,10 @@ export const UsersTabs = (props) => {
             display: "flex",
             cursor: "pointer",
           }}
-          onClick={() => setIsVisibleModalConfirm(true)}
+          onClick={() => { 
+            setCurrentUser(user);
+            setIsVisibleModalConfirm(true);
+          }}
         >
           <Image
             src={`${config.storageUrl}/resources/close.svg`}
@@ -108,7 +115,7 @@ export const UsersTabs = (props) => {
           setIsVisibleModalConfirm={setIsVisibleModalConfirm}
           title="¿Estás seguro de esta acción?"
           description={"El usuario será eliminado"}
-          action={removeUser}
+          action={() => removeUser()}
           buttonName={"Remover"}
           {...props}
         />
