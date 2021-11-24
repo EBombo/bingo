@@ -88,7 +88,7 @@ export const UserCard = (props) => {
                   ) : isAuthUser ? (
                     <div
                       className={`${matrix[row][col] ? "active" : "number"} to-fill`}
-                      onClick={async () => await selectNumber(row, col, num)}
+                      onClick={async () => (!props.disableSelect) && await selectNumber(row, col, num)}
                     >
                       {num}
                     </div>
