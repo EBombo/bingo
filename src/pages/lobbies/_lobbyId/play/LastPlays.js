@@ -118,6 +118,7 @@ const Container = styled.div`
     border-radius: 100px;
     padding: 5px;
     margin-top: 1rem;
+    overflow: hidden;
   }
 
   .label {
