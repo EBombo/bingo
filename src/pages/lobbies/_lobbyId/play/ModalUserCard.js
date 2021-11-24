@@ -61,7 +61,7 @@ export const ModalUserCard = (props) => {
           width="650px"
           visible={props.isVisibleModalUserCard}
         >
-          <ContentAward>
+          <ContentAward {...props}>
             <div className="main-content-award">
               <div className="first-content">
                 <div className="top-container">
@@ -287,7 +287,7 @@ const ContentAward = styled.div`
   ${mediaQuery.afterTablet} {
     .main-content-award {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: ${(props) => props.lobby.settings.awards ? `2fr 1fr`: `1fr`};
       align-items: center;
       grid-gap: 1rem;
 
