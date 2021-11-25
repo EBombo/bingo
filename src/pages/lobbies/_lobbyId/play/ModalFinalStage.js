@@ -82,19 +82,19 @@ export const ModalFinalStage = (props) => {
 
   const adminContent = () => (
     <AdminContent>
-      <ButtonAnt color="secondary" onClick={() => setIsVisibleModalPattern(true)}>
+      <ButtonAnt className="btn" color="secondary" onClick={() => setIsVisibleModalPattern(true)}>
         Continuar juego
       </ButtonAnt>
-      <ButtonAnt color="secondary" onClick={() => blackout()}>
+      <ButtonAnt className="btn" color="secondary" onClick={() => blackout()}>
         Apagón
       </ButtonAnt>
-      <ButtonAnt color="secondary" onClick={() => newCards()}>
+      <ButtonAnt className="btn" color="secondary" onClick={() => newCards()}>
         Continuar con cartillas nuevas
       </ButtonAnt>
-      <ButtonAnt color="secondary" onClick={() => newGame()}>
+      <ButtonAnt className="btn" color="secondary" onClick={() => newGame()}>
         Juego nuevo
       </ButtonAnt>
-      <ButtonAnt color="danger" onClick={() => endGame()}>
+      <ButtonAnt className="btn" color="danger" onClick={() => endGame()}>
         Finalizar juego
       </ButtonAnt>
     </AdminContent>
@@ -232,19 +232,17 @@ const Content = styled.div`
 
 const AdminContent = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
   flex-direction: column;
-  height: 80%;
+  margin-top: 57px;
 
-  button {
+  .btn {
     width: 90%;
     font-family: Lato;
     font-style: normal;
     font-weight: bold;
     font-size: 15px;
     line-height: 18px;
-    margin: 0.5rem auto;
+    margin: 0 auto 2rem auto;
   }
 
   ${mediaQuery.afterTablet} {

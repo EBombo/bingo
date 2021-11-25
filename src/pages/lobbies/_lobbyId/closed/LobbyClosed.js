@@ -85,8 +85,8 @@ export const LobbyClosed = (props) => {
             margin="auto"
             onClick={() => {
               const userId = authUser.id;
-              const redirectUrl = `${window.location.origin}/games/${props.lobby.game.id}?userId=${userId}`;
-              window.open(redirectUrl, "blank");
+              const redirectUrl = `${window.location.origin}/bingo/lobbies/new?gameId=${props.lobby.game.id}&userId=${userId}`;
+              window.open(redirectUrl, "_blank");
             }}
           >
             Jugar de nuevo
@@ -278,6 +278,7 @@ const LobbyResumeCss = styled.div`
   display: flex;
   height: 100vh;
   text-align: center;
+  font-weight: bold;
 
   .flex {
     display: flex;
