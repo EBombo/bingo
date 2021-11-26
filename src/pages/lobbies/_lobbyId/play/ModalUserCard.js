@@ -124,7 +124,7 @@ export const ModalUserCard = (props) => {
               <ModalConfirm
                 isVisibleModalConfirm={isVisibleModalConfirm}
                 setIsVisibleModalConfirm={setIsVisibleModalConfirm}
-                title="El usuario sera bloqueado permanentemente. Deseas continuar? "
+                title="El usuario sera bloqueado permanentemente. ¿Deseas continuar?"
                 description={"Si vuelves no se guardaran los cambios."}
                 action={() => bannedUser()}
                 buttonName={"Suspender"}
