@@ -11,6 +11,7 @@ export const BingoBoard = (props) => {
 
   const [posY, setPosY] = useState(-1);
   const [posX, setPosX] = useState(-1);
+  const [posEffectX, setPosEffectX] = useState(-1);
   const [startEffectHead, setStartEffectHead] = useState(false);
   const [startEffectBody, setStartEffectBody] = useState(false);
 
@@ -42,6 +43,7 @@ export const BingoBoard = (props) => {
       await timeoutPromise((animationSpeed / 2) * 1000);
       setStartEffectBody(false);
       setPosX(positionOnScreenX);
+      setPosEffectX(-1);
 
       setCurrentBoard(props.lobby.board);
       props.setLastNumber && props.setLastNumber(props.lobby?.lastPlays?.[0] ?? 0);
@@ -50,14 +52,24 @@ export const BingoBoard = (props) => {
     initialize();
   }, [props.lobby.board]);
 
-  const effectY = () => setPosY(posY + (posY < 5 ? 1 : -5));
-  useInterval(effectY, startEffectHead ? animationSpeed * 50 : null);
+  useInterval(
+    () => {
+      setPosY(posY + (posY < 5 ? 1 : -5));
+    },
+    startEffectHead ? animationSpeed * 50 : null
+  );
 
-  const effectX = () => {
-    const max = posX + 15;
-    setPosX(posX + (posX < max ? 1 : -15));
-  };
-  useInterval(effectX, startEffectBody ? animationSpeed * 50 : null);
+  useInterval(
+    () => {
+      const max = posX + 14;
+      console.log("min", posX);
+      console.log("max", max);
+      const numberRam = Math.floor(Math.random() * (max - posX) + posX);
+      console.log("numberRam", numberRam);
+      setPosEffectX(numberRam);
+    },
+    startEffectBody ? animationSpeed * 50 : null
+  );
 
   const range = (start, end) =>
     Array(end - start + 1)
@@ -90,7 +102,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(1, 15).map((number) => (
               <td
-                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
+                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
                   number === props.lastNumber && `last-number`
                 }`}
                 key={number}
@@ -102,7 +114,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(16, 30).map((number) => (
               <td
-                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
+                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
                   number === props.lastNumber && `last-number`
                 }`}
                 key={number}
@@ -114,7 +126,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(31, 45).map((number) => (
               <td
-                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
+                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
                   number === props.lastNumber && `last-number`
                 }`}
                 key={number}
@@ -126,7 +138,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(46, 60).map((number) => (
               <td
-                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
+                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
                   number === props.lastNumber && `last-number`
                 }`}
                 key={number}
@@ -138,7 +150,7 @@ export const BingoBoard = (props) => {
           <tr>
             {range(61, 75).map((number) => (
               <td
-                className={`td-numbers ${posX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
+                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
                   number === props.lastNumber && `last-number`
                 }`}
                 key={number}
