@@ -17,6 +17,7 @@ import styled from "styled-components";
 import { ModalPattern } from "./ModalPattern";
 import { darkTheme } from "../../../../theme";
 import { usePrevious } from "../../../../hooks/usePrevious"
+import { ANIMATION } from "../../../../business";
 
 export const AdminPanel = (props) => {
   const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
@@ -86,7 +87,7 @@ export const AdminPanel = (props) => {
       board: newBoard,
     });
 
-    await timeoutPromise(animationSpeed * 1000);
+    await timeoutPromise((ANIMATION.max - animationSpeed) * 1000);
     setIsLoadingCalledNumber(false);
   };
 

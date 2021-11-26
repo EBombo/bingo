@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
 import { timeoutPromise } from "../../../../utils/promised";
-import { getHead } from "../../../../business";
+import { getHead, ANIMATION } from "../../../../business";
 import { useInterval } from "../../../../hooks/useInterval";
 
 export const BingoBoard = (props) => {
@@ -33,14 +33,14 @@ export const BingoBoard = (props) => {
 
       const positionOnScreenY = position?.index ?? 0;
       setStartEffectHead(true);
-      await timeoutPromise((animationSpeed / 2) * 1000);
+      await timeoutPromise(((ANIMATION.max - animationSpeed) / 2) * 1000);
       setStartEffectHead(false);
       setPosY(positionOnScreenY);
 
       const positionOnScreenX = lastNumber;
       setPosX(position.min);
       setStartEffectBody(true);
-      await timeoutPromise((animationSpeed / 2) * 1000);
+      await timeoutPromise(((ANIMATION.max - animationSpeed) / 2) * 1000);
       setStartEffectBody(false);
       setPosX(positionOnScreenX);
       setPosEffectX(-1);
@@ -56,7 +56,7 @@ export const BingoBoard = (props) => {
     () => {
       setPosY(posY + (posY < 5 ? 1 : -5));
     },
-    startEffectHead ? animationSpeed * 50 : null
+    startEffectHead ? (ANIMATION.max - animationSpeed) * 50 : null
   );
 
   useInterval(
@@ -68,7 +68,7 @@ export const BingoBoard = (props) => {
       console.log("numberRam", numberRam);
       setPosEffectX(numberRam);
     },
-    startEffectBody ? animationSpeed * 50 : null
+    startEffectBody ? (ANIMATION.max - animationSpeed) * 50 : null
   );
 
   const range = (start, end) =>
