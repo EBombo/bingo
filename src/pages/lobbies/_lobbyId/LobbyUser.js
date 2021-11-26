@@ -4,7 +4,6 @@ import React, { useEffect, useGlobal } from "reactn";
 import { Desktop, mediaQuery, Tablet } from "../../../constants";
 import styled from "styled-components";
 import { UserLayout } from "./userLayout";
-import { animatedBackground } from "../../../theme";
 
 export const LobbyUser = (props) => {
   const [authUser] = useGlobal("user");
@@ -19,6 +18,7 @@ export const LobbyUser = (props) => {
       email: authUser?.email ?? null,
       userId: authUser?.id ?? null,
       nickname: authUser?.nickname ?? null,
+      avatar: authUser?.avatar ?? null,
       lobbyId: props.lobby.id,
     };
 
