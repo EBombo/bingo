@@ -41,8 +41,8 @@ const Login = (props) => {
         throw Error("Esta sala ha concluido");
       }
 
-      await setAuthUser({ ...authUser, lobby: currentLobby, avatar });
-      setAuthUserLs({ ...authUser, lobby: currentLobby, avatar });
+      await setAuthUser({ avatar, ...authUser, lobby: currentLobby });
+      setAuthUserLs({ avatar, ...authUser, lobby: currentLobby });
     } catch (error) {
       props.showNotification("UPS", error.message, "warning");
     }
@@ -64,7 +64,7 @@ const Login = (props) => {
 
     setIsLoading(true);
     fetchLobby(authUser.lobby.pin);
-  }, [authUser?.lobby?.pin]);
+  }, []);
 
   const emailIsRequired = useMemo(() => {
     return !!authUser?.lobby?.settings?.userIdentity;
