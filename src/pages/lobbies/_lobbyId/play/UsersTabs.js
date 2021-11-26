@@ -54,8 +54,10 @@ export const UsersTabs = (props) => {
   const filterUsers = (value) => {
     if (value === "") return resetUsers();
 
-    const newUsers = users.filter((user) => user.nickname.includes(value));
-    setUsers(newUsers);
+    let currentUsers = Object.values(props.lobby.users ?? {});
+    const user_ = currentUsers.filter((user) => user.nickname.toLowerCase().includes(value.toLowerCase()));
+
+    setUsers(user_);
   };
 
   const menu = (user) => (
@@ -68,7 +70,7 @@ export const UsersTabs = (props) => {
             display: "flex",
             cursor: "pointer",
           }}
-          onClick={() => { 
+          onClick={() => {
             setCurrentUser(user);
             setIsVisibleModalConfirm(true);
           }}
