@@ -222,7 +222,9 @@ export const UsersTabs = (props) => {
               key={`${user.nickname}-${index}`}
             >
               <div className={`name ${authUser.id === user.id && "auth-user"}`}>
-                <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                {user.avatar && (
+                  <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                )}
                 {user.nickname}
               </div>
 
@@ -409,6 +411,7 @@ const TabsContainer = styled.div`
         padding: 0 1rem;
 
         .name {
+          display: flex;
           font-family: Encode Sans, sans-serif;
           font-style: normal;
           font-weight: bold;
