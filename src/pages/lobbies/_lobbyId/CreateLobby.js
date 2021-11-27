@@ -222,6 +222,7 @@ export const CreateLobby = (props) => {
                     code: audio.id,
                     name: audio.title,
                   }))}
+                  onChange={(value) => setGame({...game, audio: {id: value}})}
                 />
               </div>
 

@@ -61,7 +61,7 @@ export const ModalUserCard = (props) => {
           width="650px"
           visible={props.isVisibleModalUserCard}
         >
-          <ContentAward>
+          <ContentAward {...props}>
             <div className="main-content-award">
               <div className="first-content">
                 <div className="top-container">
@@ -124,7 +124,7 @@ export const ModalUserCard = (props) => {
               <ModalConfirm
                 isVisibleModalConfirm={isVisibleModalConfirm}
                 setIsVisibleModalConfirm={setIsVisibleModalConfirm}
-                title="El usuario sera bloqueado permanentemente. Deseas continuar? "
+                title="El usuario sera bloqueado permanentemente. ¿Deseas continuar?"
                 description={"Si vuelves no se guardaran los cambios."}
                 action={() => bannedUser()}
                 buttonName={"Suspender"}
@@ -212,7 +212,7 @@ export const ModalUserCard = (props) => {
             <Content>
               <div className="title-card">Cartilla {props.user.nickname}</div>
               <div className="card-container">
-                <UserCard user={props.user} {...props} />
+                <UserCard user={props.user} {...props} disableSelect/>
               </div>
               <div className="btn-container">
                 <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
@@ -287,7 +287,7 @@ const ContentAward = styled.div`
   ${mediaQuery.afterTablet} {
     .main-content-award {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: ${(props) => props.lobby.settings.awards ? `2fr 1fr`: `1fr`};
       align-items: center;
       grid-gap: 1rem;
 
