@@ -21,8 +21,8 @@ export const Winner = (props) => {
         />
       )}
       <div className="details">
-        <div className="tab" onClick={() => setAward(award ? null : props.winner.award.name)}>
-          {props.winner.nickname} {award ? <CaretUpOutlined /> : <CaretDownOutlined />}
+        <div className="tab" onClick={() => setAward(award ? null : props.winner.award?.name)}>
+          {props.winner.nickname} { props.winner.award?.name && (award ? <CaretUpOutlined /> : <CaretDownOutlined />) }
         </div>
         {award && <div className="award">{award}</div>}
       </div>

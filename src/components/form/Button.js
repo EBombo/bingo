@@ -126,7 +126,7 @@ const ButtonAntCss = styled(Button)`
       };  
       border: none;
       `}
-  &:active, &:focus {
+  &:active:enabled, &:focus:enabled {
     ${({ variant = "contained", theme, color = "primary" }) =>
       variant === "contained"
         ? `
@@ -224,7 +224,7 @@ const ButtonAntCss = styled(Button)`
       `}
   }
 
-  &:hover {
+  &:hover:enabled {
     ${({ variant = "contained", theme = darkTheme, color = "primary" }) =>
       variant === "contained"
         ? `

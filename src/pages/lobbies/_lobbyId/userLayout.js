@@ -140,6 +140,11 @@ const UserLayoutCss = styled.div`
 
   .title {
     text-align: center;
+    font-family: Lato;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 22px;
   }
 
   .right-content {

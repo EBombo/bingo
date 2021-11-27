@@ -21,11 +21,12 @@ const TABS = {
 export const LobbyInPlay = (props) => {
   const [authUser] = useGlobal("user");
   const [tabletTab, setTabletTab] = useState("bingo");
+
+  const [user, setUser] = useState(null);
+  const [isVisibleModalFinal, setIsVisibleModalFinal] = useState(false);
   const [isVisibleModalWinner, setIsVisibleModalWinner] = useState(false);
   const [isVisibleModalAwards, setIsVisibleModalAwards] = useState(false);
-  const [isVisibleModalFinal, setIsVisibleModalFinal] = useState(false);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (props.lobby.finalStage) setIsVisibleModalFinal(true);

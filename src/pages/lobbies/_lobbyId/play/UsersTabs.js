@@ -18,6 +18,7 @@ const TAB = {
 
 export const UsersTabs = (props) => {
   const [authUser] = useGlobal("user");
+
   const [tab, setTab] = useState(TAB.CARDS);
   const [currentUser, setCurrentUser] = useState(null);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
@@ -37,21 +38,26 @@ export const UsersTabs = (props) => {
   const numberWinners = getNumberBoard(props.lobby.board ?? {});
   const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
-  const removeUser = async (userId) => {
+  const removeUser = async () => {
     const newUsers = {
       ...props.lobby.users,
     };
-    delete newUsers[userId];
+    delete newUsers[currentUser.id];
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       users: newUsers,
     });
+
+    setIsVisibleModalConfirm(false);
+    setUsers(orderBy(newUsers, ["nickname"], ["desc"]));
   };
 
   const filterUsers = (value) => {
     if (value === "") return resetUsers();
 
-    const newUsers = users.filter((user) => user.nickname.includes(value));
-    setUsers(newUsers);
+    let currentUsers = Object.values(props.lobby.users ?? {});
+    const user_ = currentUsers.filter((user) => user.nickname.toLowerCase().includes(value.toLowerCase()));
+
+    setUsers(user_);
   };
 
   const menu = (user) => (
@@ -64,7 +70,10 @@ export const UsersTabs = (props) => {
             display: "flex",
             cursor: "pointer",
           }}
-          onClick={() => setIsVisibleModalConfirm(true)}
+          onClick={() => {
+            setCurrentUser(user);
+            setIsVisibleModalConfirm(true);
+          }}
         >
           <Image
             src={`${config.storageUrl}/resources/close.svg`}
@@ -106,9 +115,9 @@ export const UsersTabs = (props) => {
         <ModalConfirm
           isVisibleModalConfirm={isVisibleModalConfirm}
           setIsVisibleModalConfirm={setIsVisibleModalConfirm}
-          title="Estas seguro de esta acción?"
+          title="¿Estás seguro de esta acción?"
           description={"El usuario será eliminado"}
-          action={removeUser}
+          action={() => removeUser()}
           buttonName={"Remover"}
           {...props}
         />
@@ -213,7 +222,9 @@ export const UsersTabs = (props) => {
               key={`${user.nickname}-${index}`}
             >
               <div className={`name ${authUser.id === user.id && "auth-user"}`}>
-                <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                {user.avatar && (
+                  <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                )}
                 {user.nickname}
               </div>
 
@@ -400,6 +411,7 @@ const TabsContainer = styled.div`
         padding: 0 1rem;
 
         .name {
+          display: flex;
           font-family: Encode Sans, sans-serif;
           font-style: normal;
           font-weight: bold;

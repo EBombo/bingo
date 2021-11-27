@@ -1,5 +1,4 @@
 import React, { useGlobal, useState } from "reactn";
-import { useUser } from "../../hooks";
 import styled from "styled-components";
 import { config } from "../../firebase";
 import { Image } from "../../components/common/Image";
@@ -11,9 +10,7 @@ import { avatars } from "../../components/common/DataList";
 import { darkTheme } from "../../theme";
 
 export const PinStep = (props) => {
-  const [, setAuthUserLs] = useUser();
-
-  const [authUser, setAuthUser] = useGlobal("user");
+  const [authUser] = useGlobal("user");
 
   const [avatarIdx, setAvatarIdx] = useState(0);
 
@@ -29,10 +26,7 @@ export const PinStep = (props) => {
   const validatePin = async (data) => {
     props.setIsLoading(true);
 
-    await props.fetchLobby(data.pin);
-
-    await setAuthUser({ ...authUser, isAdmin: false, avatar: avatars[avatarIdx] });
-    setAuthUserLs({ ...authUser, isAdmin: false, avatar: avatars[avatarIdx] });
+    await props.fetchLobby(data.pin, avatars[avatarIdx]);
   };
 
   return (

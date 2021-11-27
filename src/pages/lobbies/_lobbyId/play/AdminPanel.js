@@ -16,6 +16,8 @@ import { ModalContainer } from "../../../../components/common/ModalContainer";
 import styled from "styled-components";
 import { ModalPattern } from "./ModalPattern";
 import { darkTheme } from "../../../../theme";
+import { usePrevious } from "../../../../hooks/usePrevious"
+import { ANIMATION } from "../../../../business";
 
 export const AdminPanel = (props) => {
   const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
@@ -28,6 +30,7 @@ export const AdminPanel = (props) => {
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [lastNumber, setLastNumber] = useState(0);
+  const prevLastNumber = usePrevious(lastNumber);
 
   const startGame = async (callback) => {
     if (!props.lobby.pattern) {
@@ -84,7 +87,7 @@ export const AdminPanel = (props) => {
       board: newBoard,
     });
 
-    await timeoutPromise(animationSpeed * 1000);
+    await timeoutPromise((ANIMATION.max - animationSpeed) * 1000);
     setIsLoadingCalledNumber(false);
   };
 
@@ -166,7 +169,7 @@ export const AdminPanel = (props) => {
             </div>
             <div className="bottom-section">
               <div className="ball-called" key={lastNumber}>
-                <LastBall lastNumber={lastNumber} key={lastNumber} {...props} />
+                <LastBall lastNumber={lastNumber} key={lastNumber} prevLastNumber={prevLastNumber} {...props} />
               </div>
               <div className="middle-container">
                 {props.lobby.startGame ? (
@@ -253,7 +256,7 @@ export const AdminPanel = (props) => {
             </ButtonAnt>
           </div>
           <div className="right-container">
-            <LastBall lastNumber={lastNumber} vertical key={lastNumber} {...props} />
+            <LastBall lastNumber={lastNumber} vertical key={lastNumber} prevLastNumber={prevLastNumber} {...props} />
             <div className="last-plays">
               <LastPlays {...props} />
             </div>

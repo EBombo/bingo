@@ -19,10 +19,6 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  * {
-    transition: all 0.5s ease;
-  }
-
   .un-seg {
     transition: all 1s ease !important;
   }
@@ -154,6 +150,13 @@ export const GlobalStyle = createGlobalStyle`
   .ant-switch-checked {
     background-color: #85e4bf !important;
   }
+
+  /*-------------- BUTTON ANT----------------*/
+
+  .ant-btn {
+    font-weight: bold;
+  }
+
   
   /*-------------- NOTIFICATIONS ANT---------------*/
   .ant-message {
