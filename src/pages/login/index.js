@@ -60,7 +60,7 @@ const Login = (props) => {
 
   // load LocalStorage user data.
   useEffect(() => {
-    if (authUser && !authUserLs) return;
+    if (authUser || !authUserLs) return;
 
     setAuthUser({...authUserLs})
   }, []);

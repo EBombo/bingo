@@ -22,7 +22,13 @@ export const Lobby = (props) => {
   const logout = async () => {
     const userId = firestore.collection("users").doc().id;
     await setAuthUser({ id: userId });
-    setAuthUserLs({ ...authUserLs, lobby: undefined });
+
+    setAuthUserLs({ 
+      avatar: authUserLs.avatar,
+      email: authUserLs.email,
+      id: authUserLs.id,
+      nickname: authUserLs.nickname,
+    });
     router.push("/");
   };
 
