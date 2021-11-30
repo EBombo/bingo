@@ -12,7 +12,7 @@ import { LobbyClosed } from "./closed/LobbyClosed";
 export const Lobby = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
-  const [, setAuthUserLs] = useUser();
+  const [authUserLs, setAuthUserLs] = useUser();
   const [lobby, setLobby] = useState(null);
   const [isLoading, setLoading] = useState(true);
   const [authUser, setAuthUser] = useGlobal("user");
@@ -22,7 +22,7 @@ export const Lobby = (props) => {
   const logout = async () => {
     const userId = firestore.collection("users").doc().id;
     await setAuthUser({ id: userId });
-    setAuthUserLs({ id: userId });
+    setAuthUserLs({ ...authUserLs, lobby: undefined });
     router.push("/");
   };
 
