@@ -12,7 +12,7 @@ import { avatars } from "../../components/common/DataList";
 const Login = (props) => {
   const router = useRouter();
 
-  const [, setAuthUserLs] = useUser();
+  const [authUserLs, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -32,9 +32,9 @@ const Login = (props) => {
       if (currentLobby?.isClosed) {
         await setAuthUser({
           id: firestore.collection("users").doc().id,
-          email: null,
+          email: authUserLs.email,
           lobby: null,
-          nickname: null,
+          nickname: authUserLs.nickname,
           isAdmin: false,
         });
 
@@ -57,6 +57,13 @@ const Login = (props) => {
 
     router.push(`/bingo/lobbies/${authUser.lobby.id}`);
   }, [authUser]);
+
+  // load LocalStorage user data.
+  useEffect(() => {
+    if (authUser || !authUserLs) return;
+
+    setAuthUser({...authUserLs})
+  }, []);
 
   // Auto login.
   useEffect(() => {
