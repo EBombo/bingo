@@ -27,12 +27,18 @@ export const UsersTabs = (props) => {
 
   useEffect(() => {
     resetUsers();
-  }, []);
+  }, [props.lobby.users]);
 
   const resetUsers = () => {
-    let newUsers = Object.values(props.lobby.users ?? {});
-    newUsers = orderBy(newUsers, ["nickname"], ["desc"]);
-    setUsers(newUsers);
+    let newUsers = Object.values(props.lobby.users ?? []);
+    newUsers = newUsers.map((user) => {
+      const userProgress = progress(user);
+      return {
+        ...user,
+        progress: userProgress,
+      };
+    });
+    setUsers(orderBy(newUsers, ["progress"], ["desc"]));
   };
 
   const numberWinners = getNumberBoard(props.lobby.board ?? {});
@@ -40,7 +46,7 @@ export const UsersTabs = (props) => {
 
   const removeUser = async () => {
     const newUsers = {
-      ...props.lobby.users,
+      ...users,
     };
     delete newUsers[currentUser.id];
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
@@ -58,6 +64,24 @@ export const UsersTabs = (props) => {
     const user_ = currentUsers.filter((user) => user.nickname.toLowerCase().includes(value.toLowerCase()));
 
     setUsers(user_);
+  };
+
+  const progress = (user) => {
+    const userPattern = JSON.parse(user.card);
+
+    let hits = 0;
+    let sizePattern = 0;
+
+    lobbyPattern.forEach((y, indexY) =>
+      y.forEach((x, indexX) => {
+        if (!!x) sizePattern++;
+        if (!!x && numberWinners.includes(userPattern[indexY][indexX])) hits++;
+      })
+    );
+
+    const percentage = (hits / sizePattern) * 100;
+
+    return parseInt((percentage || 0).toFixed(0));
   };
 
   const menu = (user) => (
@@ -177,10 +201,10 @@ export const UsersTabs = (props) => {
         {users.map((user, index) =>
           tab === TAB.CARDS ? (
             <div
-              className={`user-card ${props.lobby?.bingo?.id === user.id && `winner`}`}
+              className={`user-card ${user.progress === 100 && "winner"}`}
               key={`${user.nickname}-${index}`}
             >
-              {props.lobby?.bingo?.id === user.id && (
+              {user.progress === 100 && "winner" && (
                 <div className="winner-img">
                   <Image
                     src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
@@ -197,7 +221,14 @@ export const UsersTabs = (props) => {
               </div>
 
               <div className="card-preview">
-                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} isCard />
+                <UserProgress
+                  {...props}
+                  lobbyPattern={lobbyPattern}
+                  user={user}
+                  numberWinners={numberWinners}
+                  isCard
+                  key={user.progress}
+                />
               </div>
 
               {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
@@ -218,7 +249,7 @@ export const UsersTabs = (props) => {
             </div>
           ) : (
             <div
-              className={`user-progress ${props.lobby?.bingo?.id === user.id && `winner`}`}
+              className={`user-progress ${user.progress === 100 && "winner"}`}
               key={`${user.nickname}-${index}`}
             >
               <div className={`name ${authUser.id === user.id && "auth-user"}`}>
@@ -228,11 +259,11 @@ export const UsersTabs = (props) => {
                 {user.nickname}
               </div>
 
-              <div className={`progress ${user.progress === 100 && "winner"}`}>
+              <div className={`progress`}>
                 <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} />
               </div>
 
-              {props.lobby?.bingo?.id === user.id && (
+              {user.progress === 100 && "winner" && (
                 <div className="winner-img">
                   <Image
                     src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
@@ -406,7 +437,6 @@ const TabsContainer = styled.div`
         align-items: center;
         grid-template-columns: repeat(3, 1fr);
         height: 40px;
-        border: 1px solid #dedede;
         background: ${(props) => props.theme.basic.whiteLight};
         padding: 0 1rem;
 
@@ -462,7 +492,7 @@ const TabsContainer = styled.div`
       }
 
       .winner {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: 1fr 1fr 30px 1fr;
         background: ${(props) => props.theme.basic.primaryLight};
       }
     }
