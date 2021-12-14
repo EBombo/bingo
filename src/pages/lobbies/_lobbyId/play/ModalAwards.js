@@ -83,6 +83,7 @@ export const ModalAwards = (props) => {
                   setAwards([...newAwards]);
                 }}
                 placeholder={`Premio ${index + 1}`}
+                disabled={!authUser.isAdmin}
               />
               {authUser.isAdmin && (
                 <ButtonAnt color="danger" onClick={() => deleteAward(index)}>
