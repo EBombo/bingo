@@ -9,6 +9,7 @@ import styled from "styled-components";
 import { Popover, Slider } from "antd";
 import { getBingoCard } from "../../../business";
 import { Image } from "../../../components/common/Image";
+import orderBy from "lodash/orderBy";
 
 export const LobbyAdmin = (props) => {
   const router = useRouter();
@@ -29,6 +30,7 @@ export const LobbyAdmin = (props) => {
       userStatusDatabaseRef.on("value", (snapshot) => {
         let users_ = Object.values(snapshot.val() ?? {});
         users_ = users_.filter((user) => user.state.includes("online"));
+        users_ = orderBy(users_, ["last_changed"], ["asc"]);
         setUsers(users_);
       });
     };
