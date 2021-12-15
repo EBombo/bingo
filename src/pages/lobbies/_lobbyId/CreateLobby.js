@@ -22,7 +22,7 @@ export const CreateLobby = (props) => {
   const [, setLSAuthUser] = useUser();
 
   const [audios] = useGlobal("audios");
-  const [, setAuthUser] = useGlobal("user");
+  const [authUser, setAuthUser] = useGlobal("user");
 
   const [game, setGame] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,14 +72,15 @@ export const CreateLobby = (props) => {
 
         const response = await Promise.all([promiseUser, promiseGame]);
 
-        const authUser = response[0];
+        const userAdmin = response[0];
         const game = response[1];
 
         const formatUser = {
-          id: authUser.uid,
-          nickname: authUser.name,
-          email: authUser.email,
+          id: userAdmin.uid,
+          nickname: userAdmin.name,
+          email: userAdmin.email,
           isAdmin: true,
+          companyId: userAdmin.companyId ?? null,
         };
 
         if (!game.usersIds.includes(formatUser.id)) return router.push("/login");
@@ -90,6 +91,7 @@ export const CreateLobby = (props) => {
         setIsLoading(false);
       } catch (error) {
         console.error(error);
+        props.showNotification("ERROR", "Algo salio mal, intentalo nuevamente");
       }
     };
 
@@ -114,6 +116,7 @@ export const CreateLobby = (props) => {
         createAt: new Date(),
         isLocked: false,
         isClosed: false,
+        companyId: authUser?.companyId ?? null,
         startAt: null,
         settings: {
           userIdentity,
@@ -136,9 +139,9 @@ export const CreateLobby = (props) => {
       return router.push(`/bingo/lobbies/${lobbyId}`);
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoadingSave(false);
     }
+
+    setIsLoadingSave(false);
   };
 
   const generatePin = async () => {
@@ -222,7 +225,7 @@ export const CreateLobby = (props) => {
                     code: audio.id,
                     name: audio.title,
                   }))}
-                  onChange={(value) => setGame({...game, audio: {id: value}})}
+                  onChange={(value) => setGame({ ...game, audio: { id: value } })}
                 />
               </div>
 
