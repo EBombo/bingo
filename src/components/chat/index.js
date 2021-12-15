@@ -64,8 +64,7 @@ export const Chat = (props) => {
     try {
       setIsLoadingSendMessage(true);
       setMessage("");
-
-      // TODO: Consider add "data.message" to "messages" to optimize load messages.
+      setMessages([...messages, { message: data.message, user: authUser }])
 
       const { error } = await Fetch(`${config.serverUrl}/api/messages`, "POST", {
         message: data.message,

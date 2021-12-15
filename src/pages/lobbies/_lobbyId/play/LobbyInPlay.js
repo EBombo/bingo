@@ -399,9 +399,13 @@ const BingoGameContainer = styled.div`
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           grid-gap: 1rem;
-          align-items: center;
+          align-items: flex-start;
           max-width: 800px;
-          margin: 1rem 0;
+          margin: 1.2rem 0 1rem 0;
+
+          .ball-called {
+            align-self: center;
+          }
         }
       }
 

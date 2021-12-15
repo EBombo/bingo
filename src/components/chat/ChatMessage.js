@@ -19,7 +19,7 @@ export const ChatMessage = (props) => {
       <div className="header">
         {!sameAsBefore && (
           <div className="nickname">
-            {`${get(props, "message.user.nickname", "")} ${props.message.user.isAdmin ? "[ADMIN]" : ""}`}
+            {`${get(props, "message.user.nickname", "")} ${props.message?.user?.isAdmin ? "[ADMIN]" : ""}`}
           </div>
         )}
       </div>
@@ -27,7 +27,7 @@ export const ChatMessage = (props) => {
         <div className="message pre-wrap">
           <Linkify>{props.message.message}</Linkify>
         </div>
-        <div className="time">{moment(props.message.createAt.toDate()).format("hh:mma")}</div>
+        <div className="time">{moment(props.message.createAt?.toDate() ?? undefined).format("hh:mma")}</div>
       </div>
     </Messages>
   );
