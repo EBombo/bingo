@@ -62,7 +62,7 @@ const Login = (props) => {
   useEffect(() => {
     if (authUser || !authUserLs) return;
 
-    setAuthUser({...authUserLs})
+    setAuthUser({ ...authUserLs });
   }, []);
 
   // Auto login.
