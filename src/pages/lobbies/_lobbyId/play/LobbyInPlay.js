@@ -47,8 +47,6 @@ export const LobbyInPlay = (props) => {
   const callBingo = async () => {
     const _users = Object.values(props.lobby.users);
 
-    console.log(_users);
-
     const bingoUser = _users.find((user) => user.id === authUser.id);
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
