@@ -44,11 +44,18 @@ export const LobbyInPlay = (props) => {
     props.logout();
   }, [props.lobby.users]);
 
-  const callBingo = async () =>
+  const callBingo = async () => {
+    const _users = Object.values(props.lobby.users);
+
+    console.log(_users);
+
+    const bingoUser = _users.find((user) => user.id === authUser.id);
+
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      bingo: authUser,
+      bingo: bingoUser,
       updateAt: new Date(),
     });
+  };
 
   // TODO: Consider to refactoring, <Admin> & <User>.
   return (
