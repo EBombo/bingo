@@ -2,15 +2,27 @@ import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider } from "antd";
 import { mediaQuery } from "../../../constants";
-import { config } from "../../../firebase";
+import { config, firestore } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
+import { ButtonBingo } from "../../../components/form";
+import { firebase } from "../../../firebase/config";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
+
   const [isPlay, setIsPlay] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(30);
+  const [isLoadingLock, setIsLoadingLock] = useState(false);
+
+  const updateLobby = async () => {
+    await firestore.collection("lobbies").doc(props.lobby.id).update({
+      isLocked: !props.lobby.isLocked,
+    });
+  };
 
   return (
     <UserLayoutCss>
@@ -105,6 +117,27 @@ export const UserLayout = (props) => {
                 />
               </button>
             </Popover>
+            <button
+              disabled={isLoadingLock}
+              onClick={async () => {
+                setIsLoadingLock(true);
+                await updateLobby();
+                setIsLoadingLock(false);
+              }}
+            >
+              {isLoadingLock ? (
+                <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+              ) : (
+                <Image
+                  src={`${config.storageUrl}/resources/${props.lobby.isLocked ? "lock.svg" : "un-lock.svg"}`}
+                  cursor="pointer"
+                  height="25px"
+                  width="25px"
+                  size="contain"
+                  margin="auto"
+                />
+              )}
+            </button>
           </div>
         ) : (
           <Popover
@@ -186,6 +219,7 @@ const UserLayoutCss = styled.div`
       height: 30px;
       border: none;
       background: ${(props) => props.theme.basic.whiteLight};
+
       border-radius: 50%;
       margin: 0 5px;
     }
