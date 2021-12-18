@@ -57,8 +57,6 @@ export const NicknameStep = (props) => {
 
       await setAuthUser({ ...authUser, nickname: data.nickname });
 
-      console.log("user before nickname validation",authUser)
-
       if(authUser.lobby?.isPlaying){
         const newUser = {
           email: authUser?.email ?? null,
@@ -74,12 +72,11 @@ export const NicknameStep = (props) => {
           .update({
             countPlayers: firebase.firestore.FieldValue.increment(1),
           })
-        console.log("here")
+
         await firestore.collection("lobbies").doc(authUser.lobby.id).update({
           users: {...authUser.lobby.users, [authUser.id]: newUser
           }
         })
-        console.log("here 2")
       }
 
       setAuthUserLs({ ...authUser, nickname: data.nickname });
