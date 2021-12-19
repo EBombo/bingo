@@ -59,8 +59,8 @@ const RibbonCss = styled.div`
     font-family: Lato;
     font-style: normal;
     font-weight: 900;
-    font-size: 64px;
-    line-height: 117px;
+    font-size: ${props => props.fontSize ? props.fontSize : "64px"};
+    line-height: ${props => props.lineHeight ? props.lineHeight : "117px"};
 
     & .upper-line,
     .lower-line {
@@ -127,8 +127,8 @@ const RibbonCss = styled.div`
     ${(props) => computeStyleWidth(props.overflowDesktopWidth)}
 
     .ribbon-front {
-      font-size: 96px;
-      line-height: 167px;
+      font-size: ${props => props.fontSize ? props.fontSize : "96px"};
+      line-height: ${props => props.lineHeight ? props.lineHeight : "167px"};
     }
   }
 `;

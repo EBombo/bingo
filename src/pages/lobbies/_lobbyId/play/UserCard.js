@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
 import { generateMatrix } from "../../../../business";
 import { firebase, firestore } from "../../../../firebase";
+import defaultTo from "lodash/defaultTo";
 
 export const UserCard = (props) => {
   const [authUser] = useGlobal("user");
@@ -38,6 +39,11 @@ export const UserCard = (props) => {
 
     fetchMyWiningCard();
   }, []);
+
+  useEffect(() => {
+    const board = defaultTo(props.lobby.board, {});
+    if (Object.values(board).every((numberStatus) => numberStatus === false)) setMatrix(generateMatrix());
+  }, [props.lobby.board]);
 
   const selectNumber = async (row, col, number) => {
     const newMatrix = [...matrix];
@@ -78,7 +84,7 @@ export const UserCard = (props) => {
             <th>{props.lobby?.game?.letters?.o}</th>
           </tr>
         </thead>
-        <tbody className="tbody">
+        <tbody className="tbody" key={matrix}>
           {JSON.parse(props.lobby.users[userId]?.card ?? "[]").map((arrNums, row) => (
             <tr key={`key-${row}`}>
               {arrNums.map((num, col) => (
@@ -88,7 +94,7 @@ export const UserCard = (props) => {
                   ) : isAuthUser ? (
                     <div
                       className={`${matrix[row][col] ? "active" : "number"} to-fill`}
-                      onClick={async () => (!props.disableSelect) && await selectNumber(row, col, num)}
+                      onClick={() => !props.disableSelect && selectNumber(row, col, num)}
                     >
                       {num}
                     </div>
