@@ -9,6 +9,7 @@ import { useSendError, useUser } from "../../hooks";
 import { ValidateNickname } from "./ValidateNickname";
 import { firebase } from "../../firebase/config";
 import { getBingoCard } from "../../business";
+import { saveMembers } from "../../constants/saveMembers";
 
 export const NicknameStep = (props) => {
   const { sendError } = useSendError();
@@ -57,26 +58,28 @@ export const NicknameStep = (props) => {
 
       await setAuthUser({ ...authUser, nickname: data.nickname });
 
-      if(authUser.lobby?.isPlaying){
+      if (authUser.lobby?.isPlaying) {
         const newUser = {
           email: authUser?.email ?? null,
           userId: authUser?.id ?? null,
           nickname: authUser?.nickname ?? null,
           avatar: authUser?.avatar ?? null,
           lobbyId: authUser.lobby.id,
-          card: JSON.stringify(getBingoCard())
-        }
+          card: JSON.stringify(getBingoCard()),
+        };
+
+        await firestore.doc(`games/${authUser.lobby.game.id}`).update({
+          countPlayers: firebase.firestore.FieldValue.increment(1),
+        });
 
         await firestore
-          .doc(`games/${authUser.lobby.game.id}`)
+          .collection("lobbies")
+          .doc(authUser.lobby.id)
           .update({
-            countPlayers: firebase.firestore.FieldValue.increment(1),
-          })
+            users: { ...authUser.lobby.users, [authUser.id]: newUser },
+          });
 
-        await firestore.collection("lobbies").doc(authUser.lobby.id).update({
-          users: {...authUser.lobby.users, [authUser.id]: newUser
-          }
-        })
+        await saveMembers(authUser.lobby, authUser);
       }
 
       setAuthUserLs({ ...authUser, nickname: data.nickname });
