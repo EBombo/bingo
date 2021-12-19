@@ -79,7 +79,7 @@ export const NicknameStep = (props) => {
             users: { ...authUser.lobby.users, [authUser.id]: newUser },
           });
 
-        await saveMembers(authUser.lobby, authUser);
+        await saveMembers(authUser.lobby, [authUser]);
       }
 
       setAuthUserLs({ ...authUser, nickname: data.nickname });
