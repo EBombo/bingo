@@ -37,7 +37,7 @@ export const LobbyAdmin = (props) => {
       userStatusDatabaseRef.on("value", (snapshot) => {
         let users_ = Object.values(snapshot.val() ?? {});
         users_ = users_.filter((user) => user.state.includes("online"));
-        users_ = orderBy(users_, ["last_changed"], ["asc"]);
+        users_ = orderBy(users_, ["last_changed"], ["desc"]);
         setUsers(users_);
       });
     };

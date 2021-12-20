@@ -212,7 +212,7 @@ export const ModalUserCard = (props) => {
             <Content>
               <div className="title-card">Cartilla {props.user.nickname}</div>
               <div className="card-container">
-                <UserCard user={props.user} {...props} disableSelect/>
+                <UserCard user={props.user} {...props} disableSelect />
               </div>
               <div className="btn-container">
                 <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
@@ -287,7 +287,7 @@ const ContentAward = styled.div`
   ${mediaQuery.afterTablet} {
     .main-content-award {
       display: grid;
-      grid-template-columns: ${(props) => props.lobby.settings.awards ? `2fr 1fr`: `1fr`};
+      grid-template-columns: ${(props) => (props.lobby.settings.awards ? `2fr 1fr` : `1fr`)};
       align-items: center;
       grid-gap: 1rem;
 

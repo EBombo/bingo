@@ -23,7 +23,7 @@ export const Lobby = (props) => {
     const userId = firestore.collection("users").doc().id;
     await setAuthUser({ id: userId });
 
-    setAuthUserLs({ 
+    setAuthUserLs({
       avatar: authUserLs.avatar,
       email: authUserLs.email,
       id: authUserLs.id,

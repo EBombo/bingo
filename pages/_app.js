@@ -1,9 +1,9 @@
 import React, { useEffect, useGlobal } from "reactn";
-import "antd/dist/antd.css";
 import { notification } from "antd";
 import { useUser } from "../src/hooks";
 import get from "lodash/get";
 import "../src/theme/globals.css";
+import "antd/dist/antd.css";
 import { darkTheme, GlobalStyle, lightTheme } from "../src/theme";
 import { ThemeProvider } from "styled-components";
 import { ErrorBoundary } from "react-error-boundary";

@@ -24,14 +24,19 @@ export const LastBall = (props) => {
   }, [props.lastNumber]);
 
   return (
-    <LastBallContainer number={lastNumber} prevNumber={props.prevLastNumber} vertical={props.vertical} outEffect={outEffect}>
+    <LastBallContainer
+      number={lastNumber}
+      prevNumber={props.prevLastNumber}
+      vertical={props.vertical}
+      outEffect={outEffect}
+    >
       {lastNumber > 0 && (
         <div className="ball-container">
           <div className="middle-container">
             <div className="inner-container">
               <div className="letter">
-                { outEffect
-                  ? (props.prevLastNumber < BOARD_PARAMS.B.value
+                {outEffect
+                  ? props.prevLastNumber < BOARD_PARAMS.B.value
                     ? get(props, "lobby.game.letters.b", "B")
                     : props.prevLastNumber < BOARD_PARAMS.I.value
                     ? get(props, "lobby.game.letters.i", "I")
@@ -39,17 +44,16 @@ export const LastBall = (props) => {
                     ? get(props, "lobby.game.letters.n", "N")
                     : props.prevLastNumber < BOARD_PARAMS.G.value
                     ? get(props, "lobby.game.letters.g", "G")
-                    : get(props, "lobby.game.letters.o", "O"))
-                  : (lastNumber < BOARD_PARAMS.B.value
-                    ? get(props, "lobby.game.letters.b", "B")
-                    : lastNumber < BOARD_PARAMS.I.value
-                    ? get(props, "lobby.game.letters.i", "I")
-                    : lastNumber < BOARD_PARAMS.N.value
-                    ? get(props, "lobby.game.letters.n", "N")
-                    : lastNumber < BOARD_PARAMS.G.value
-                    ? get(props, "lobby.game.letters.g", "G")
-                    : get(props, "lobby.game.letters.o", "O"))
-                }
+                    : get(props, "lobby.game.letters.o", "O")
+                  : lastNumber < BOARD_PARAMS.B.value
+                  ? get(props, "lobby.game.letters.b", "B")
+                  : lastNumber < BOARD_PARAMS.I.value
+                  ? get(props, "lobby.game.letters.i", "I")
+                  : lastNumber < BOARD_PARAMS.N.value
+                  ? get(props, "lobby.game.letters.n", "N")
+                  : lastNumber < BOARD_PARAMS.G.value
+                  ? get(props, "lobby.game.letters.g", "G")
+                  : get(props, "lobby.game.letters.o", "O")}
               </div>
               <div className="number">{outEffect ? props.prevLastNumber : lastNumber}</div>
             </div>
@@ -83,16 +87,16 @@ const LastBallContainer = styled.div`
     border-radius: 50%;
     background: ${(props) =>
       props.outEffect
-      ? (props.prevNumber < 16
-        ? props.theme.ballsColors.b
-        : props.prevNumber < 31
-        ? props.theme.ballsColors.i
-        : props.prevNumber < 46
-        ? props.theme.ballsColors.n
-        : props.prevNumber < 61
-        ? props.theme.ballsColors.g
-        : props.theme.ballsColors.o)
-      : (props.number < 16
+        ? props.prevNumber < 16
+          ? props.theme.ballsColors.b
+          : props.prevNumber < 31
+          ? props.theme.ballsColors.i
+          : props.prevNumber < 46
+          ? props.theme.ballsColors.n
+          : props.prevNumber < 61
+          ? props.theme.ballsColors.g
+          : props.theme.ballsColors.o
+        : props.number < 16
         ? props.theme.ballsColors.b
         : props.number < 31
         ? props.theme.ballsColors.i
@@ -100,8 +104,7 @@ const LastBallContainer = styled.div`
         ? props.theme.ballsColors.n
         : props.number < 61
         ? props.theme.ballsColors.g
-        : props.theme.ballsColors.o)
-    };
+        : props.theme.ballsColors.o};
     position: relative;
     animation: 1s
       ${(props) =>
@@ -119,16 +122,16 @@ const LastBallContainer = styled.div`
       border-radius: 50%;
       background: ${(props) =>
         props.outEffect
-        ? (props.prevNumber < 16
-          ? props.theme.ballsColors.borderB
-          : props.prevNumber < 31
-          ? props.theme.ballsColors.borderI
-          : props.prevNumber < 46
-          ? props.theme.ballsColors.borderN
-          : props.prevNumber < 61
-          ? props.theme.ballsColors.borderG
-          : props.theme.ballsColors.borderO)
-        : (props.number < 16
+          ? props.prevNumber < 16
+            ? props.theme.ballsColors.borderB
+            : props.prevNumber < 31
+            ? props.theme.ballsColors.borderI
+            : props.prevNumber < 46
+            ? props.theme.ballsColors.borderN
+            : props.prevNumber < 61
+            ? props.theme.ballsColors.borderG
+            : props.theme.ballsColors.borderO
+          : props.number < 16
           ? props.theme.ballsColors.borderB
           : props.number < 31
           ? props.theme.ballsColors.borderI
@@ -136,8 +139,7 @@ const LastBallContainer = styled.div`
           ? props.theme.ballsColors.borderN
           : props.number < 61
           ? props.theme.ballsColors.borderG
-          : props.theme.ballsColors.borderO)
-      };
+          : props.theme.ballsColors.borderO};
       position: absolute;
       top: 50%;
       left: 50%;
