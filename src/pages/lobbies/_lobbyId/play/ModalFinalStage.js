@@ -8,6 +8,7 @@ import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { createBoard, generateMatrix, getBingoCard } from "../../../../business";
 import { ModalPattern } from "./ModalPattern";
+import { Ribbon } from "./Ribbon";
 
 export const ModalFinalStage = (props) => {
   const [authUser] = useGlobal("user");
@@ -40,8 +41,13 @@ export const ModalFinalStage = (props) => {
   };
 
   const newGame = async () => {
+    const newUsers = newUsersCard();
+
     const board = createBoard();
-    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+
+    const promiseNewCards = firestore.doc(`lobbies/${props.lobby.id}`).update({
+      startGame: false,
+      pattern: null,
       round: 0,
       lastPlays: [],
       board,
@@ -49,15 +55,15 @@ export const ModalFinalStage = (props) => {
       updateAt: new Date(),
     });
 
+    const promisesRemoveUsers = removeLobbyUsers();
+
+    await Promise.all([promiseNewCards, ...promisesRemoveUsers]);
+
     props.setIsVisibleModalFinal(false);
   };
 
   const newCards = async () => {
-    const newUsers = Object.values(props.lobby.users).reduce((usersSum, user) => {
-      const card = getBingoCard();
-      const newUser = { ...user, card: JSON.stringify(card) };
-      return { ...usersSum, [newUser.id]: newUser };
-    }, {});
+    const newUsers = newUsersCard();
 
     const board = createBoard();
 
@@ -70,15 +76,24 @@ export const ModalFinalStage = (props) => {
       users: newUsers,
     });
 
-    const promisesRemoveUsers = Object.keys(props.lobby.users).map(
-      async (userId) =>
-        await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(userId).delete()
-    );
+    const promisesRemoveUsers = removeLobbyUsers();
 
     await Promise.all([promiseNewCards, ...promisesRemoveUsers]);
 
     props.setIsVisibleModalFinal(false);
   };
+
+  const newUsersCard = () =>
+    Object.values(props.lobby.users).reduce((usersSum, user) => {
+      const card = getBingoCard();
+      const newUser = { ...user, card: JSON.stringify(card) };
+      return { ...usersSum, [newUser.id]: newUser };
+    }, {});
+
+  const removeLobbyUsers = () =>
+    Object.keys(props.lobby.users).map(async (userId) => {
+      await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(userId).delete();
+    });
 
   const adminContent = () => (
     <AdminContent>
@@ -120,6 +135,7 @@ export const ModalFinalStage = (props) => {
       closable={false}
       width="600px"
       visible={props.isVisibleModalFinal}
+      padding="2rem 0rem 1rem 0"
     >
       {isVisibleModalPattern && (
         <ModalPattern
@@ -130,10 +146,15 @@ export const ModalFinalStage = (props) => {
         />
       )}
       <Content>
-        <div className="title">Ganador</div>
+        <Ribbon
+          title={`¡Ganador ${props.lobby.winners[props.lobby.winners.length - 1].nickname}!`}
+          overflowDesktopWidth={80}
+          overflowWidth={40}
+          fontSize={"35px"}
+          lineHeight={"90px"}
+        />
         <div className="main-container">
           <div className="left-container">
-            <div className="winner-name">{props.lobby.winners[props.lobby.winners.length - 1].nickname}</div>
             <div className="card-container">
               <UserCard user={props.lobby.winners[props.lobby.winners.length - 1]} {...props} />
             </div>
@@ -168,6 +189,7 @@ const Content = styled.div`
   .main-container {
     display: flex;
     flex-direction: column;
+    padding: 1rem;
 
     .left-container {
       .winner-name {

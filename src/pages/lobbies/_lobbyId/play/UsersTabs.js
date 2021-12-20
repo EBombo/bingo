@@ -200,10 +200,7 @@ export const UsersTabs = (props) => {
       <div className={`user-tab-${tab}`}>
         {users.map((user, index) =>
           tab === TAB.CARDS ? (
-            <div
-              className={`user-card ${user.progress === 100 && "winner"}`}
-              key={`${user.nickname}-${index}`}
-            >
+            <div className={`user-card ${user.progress === 100 && "winner"}`} key={`${user.nickname}-${index}`}>
               {user.progress === 100 && "winner" && (
                 <div className="winner-img">
                   <Image
@@ -248,10 +245,7 @@ export const UsersTabs = (props) => {
               {authUser.isAdmin && menu(user)}
             </div>
           ) : (
-            <div
-              className={`user-progress ${user.progress === 100 && "winner"}`}
-              key={`${user.nickname}-${index}`}
-            >
+            <div className={`user-progress ${user.progress === 100 && "winner"}`} key={`${user.nickname}-${index}`}>
               <div className={`name ${authUser.id === user.id && "auth-user"}`}>
                 {user.avatar && (
                   <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
