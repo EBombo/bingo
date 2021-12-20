@@ -10,6 +10,7 @@ import { ValidateNickname } from "./ValidateNickname";
 import { firebase } from "../../firebase/config";
 import { getBingoCard } from "../../business";
 import { saveMembers } from "../../constants/saveMembers";
+import defaultTo from "lodash/defaultTo";
 
 export const NicknameStep = (props) => {
   const { sendError } = useSendError();
@@ -51,38 +52,43 @@ export const NicknameStep = (props) => {
     try {
       props.setIsLoading(true);
 
-      if (users.some((user) => user.nickname === data.nickname)) {
+      if (defaultTo(users, []).some((user) => user.nickname === data.nickname)) {
         setIsValidating(false);
         throw Error("ERROR", "El nickname ya se encuentra registrado");
       }
 
-      await setAuthUser({ ...authUser, nickname: data.nickname });
+      const lobbyRef = await firestore.doc(`lobbies/${authUser.lobby.id}`).get();
+      const lobby = lobbyRef.data();
 
-      if (authUser.lobby?.isPlaying) {
-        const newUser = {
-          email: authUser?.email ?? null,
-          userId: authUser?.id ?? null,
-          nickname: authUser?.nickname ?? null,
-          avatar: authUser?.avatar ?? null,
-          lobbyId: authUser.lobby.id,
-          card: JSON.stringify(getBingoCard()),
-        };
+      const newUser = {
+        id: authUser?.id ?? null,
+        email: authUser?.email ?? null,
+        userId: authUser?.id ?? null,
+        nickname: data.nickname,
+        avatar: authUser?.avatar ?? null,
+        lobbyId: lobby.id,
+        lobby
+      };
 
-        await firestore.doc(`games/${authUser.lobby.game.id}`).update({
+      if (lobby?.isPlaying) {
+        newUser.card = JSON.stringify(getBingoCard());
+
+        await firestore.doc(`games/${lobby.game.id}`).update({
           countPlayers: firebase.firestore.FieldValue.increment(1),
         });
 
         await firestore
           .collection("lobbies")
-          .doc(authUser.lobby.id)
+          .doc(lobby.id)
           .update({
-            users: { ...authUser.lobby.users, [authUser.id]: newUser },
+            users: { ...lobby.users, [authUser.id]: newUser },
           });
 
         await saveMembers(authUser.lobby, [newUser]);
       }
 
-      setAuthUserLs({ ...authUser, nickname: data.nickname });
+      await setAuthUser(newUser);
+      setAuthUserLs(newUser);
     } catch (error) {
       props.showNotification("Error", error.message);
 
