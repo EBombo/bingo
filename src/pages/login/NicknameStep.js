@@ -2,11 +2,14 @@ import React, { useEffect, useGlobal, useState } from "reactn";
 import { ButtonBingo, InputBingo } from "../../components/form";
 import { Image } from "../../components/common/Image";
 import { useForm } from "react-hook-form";
-import { config, database } from "../../firebase";
+import { config, database, firestore } from "../../firebase";
 import styled from "styled-components";
 import { object, string } from "yup";
 import { useSendError, useUser } from "../../hooks";
 import { ValidateNickname } from "./ValidateNickname";
+import { firebase } from "../../firebase/config";
+import { getBingoCard } from "../../business";
+import { saveMembers } from "../../constants/saveMembers";
 
 export const NicknameStep = (props) => {
   const { sendError } = useSendError();
@@ -54,6 +57,31 @@ export const NicknameStep = (props) => {
       }
 
       await setAuthUser({ ...authUser, nickname: data.nickname });
+
+      if (authUser.lobby?.isPlaying) {
+        const newUser = {
+          email: authUser?.email ?? null,
+          userId: authUser?.id ?? null,
+          nickname: authUser?.nickname ?? null,
+          avatar: authUser?.avatar ?? null,
+          lobbyId: authUser.lobby.id,
+          card: JSON.stringify(getBingoCard()),
+        };
+
+        await firestore.doc(`games/${authUser.lobby.game.id}`).update({
+          countPlayers: firebase.firestore.FieldValue.increment(1),
+        });
+
+        await firestore
+          .collection("lobbies")
+          .doc(authUser.lobby.id)
+          .update({
+            users: { ...authUser.lobby.users, [authUser.id]: newUser },
+          });
+
+        await saveMembers(authUser.lobby, [newUser]);
+      }
+
       setAuthUserLs({ ...authUser, nickname: data.nickname });
     } catch (error) {
       props.showNotification("Error", error.message);
