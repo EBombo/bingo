@@ -4,7 +4,6 @@ import { mediaQuery } from "../../../constants";
 import React, { useEffect, useGlobal } from "reactn";
 import { config, firestore } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
-import { animatedBackground } from "../../../theme";
 
 export const LobbyLoading = (props) => {
   const [authUser] = useGlobal("user");
@@ -37,7 +36,7 @@ export const LobbyLoading = (props) => {
               margin="0 auto"
               className="step-one-logo"
             />
-            <div className="step-one-description">Entra a www.ebombo.io</div>
+            <div className="step-one-description">Entra a ebombo.io</div>
           </div>
           <div className="step-two">
             <div className="step-two-name">{get(props, "lobby.game.name", "")}</div>
