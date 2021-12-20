@@ -10,14 +10,13 @@ import { ButtonAnt } from "../../../../components/form";
 import { mapKeys } from "lodash/object";
 import { firestore } from "../../../../firebase";
 import { timeoutPromise } from "../../../../utils/promised";
-import { createBoard } from "../../../../business";
+import { ANIMATION, createBoard } from "../../../../business";
 import { useInterval } from "../../../../hooks/useInterval";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
 import styled from "styled-components";
 import { ModalPattern } from "./ModalPattern";
 import { darkTheme } from "../../../../theme";
-import { usePrevious } from "../../../../hooks/usePrevious"
-import { ANIMATION } from "../../../../business";
+import { usePrevious } from "../../../../hooks/usePrevious";
 
 export const AdminPanel = (props) => {
   const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);

@@ -146,7 +146,13 @@ export const ModalFinalStage = (props) => {
         />
       )}
       <Content>
-        <Ribbon title={`¡Ganador ${props.lobby.winners[props.lobby.winners.length - 1].nickname}!`} overflowDesktopWidth={80} overflowWidth={40} fontSize={"35px"} lineHeight={"90px"}/>
+        <Ribbon
+          title={`¡Ganador ${props.lobby.winners[props.lobby.winners.length - 1].nickname}!`}
+          overflowDesktopWidth={80}
+          overflowWidth={40}
+          fontSize={"35px"}
+          lineHeight={"90px"}
+        />
         <div className="main-container">
           <div className="left-container">
             <div className="card-container">

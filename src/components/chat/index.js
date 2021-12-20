@@ -64,7 +64,7 @@ export const Chat = (props) => {
     try {
       setIsLoadingSendMessage(true);
       setMessage("");
-      setMessages([...messages, { message: data.message, user: authUser }])
+      setMessages([...messages, { message: data.message, user: authUser }]);
 
       const { error } = await Fetch(`${config.serverUrl}/api/messages`, "POST", {
         message: data.message,
