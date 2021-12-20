@@ -1,7 +1,7 @@
 import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
-import { config, database, firestore, firestoreEvents } from "../../../firebase";
+import { config, database, firestore } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
@@ -36,7 +36,7 @@ export const LobbyAdmin = (props) => {
       userStatusDatabaseRef.on("value", (snapshot) => {
         let users_ = Object.values(snapshot.val() ?? {});
         users_ = users_.filter((user) => user.state.includes("online"));
-        users_ = orderBy(users_, ["last_changed"], ["asc"]);
+        users_ = orderBy(users_, ["last_changed"], ["desc"]);
         setUsers(users_);
       });
     };
