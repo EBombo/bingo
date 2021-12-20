@@ -1,7 +1,7 @@
 import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
-import { config, database, firestore, firestoreEvents } from "../../../firebase";
+import { config, database, firestore } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
@@ -12,6 +12,7 @@ import { Image } from "../../../components/common/Image";
 import orderBy from "lodash/orderBy";
 import { firebase } from "../../../firebase/config";
 import { useSendError } from "../../../hooks";
+import { saveMembers } from "../../../constants/saveMembers";
 
 export const LobbyAdmin = (props) => {
   const { sendError } = useSendError();
@@ -83,7 +84,7 @@ export const LobbyAdmin = (props) => {
         : null;
 
       // The new users saved as members.
-      const promiseMembers = newLobby.users ? await saveMembers(props.lobby, newLobby.users) : null;
+      const promiseMembers = newLobby.users ? saveMembers(props.lobby, newLobby.users) : null;
 
       await Promise.all([promiseLobby, promiseGame, promiseMembers]);
     } catch (error) {
