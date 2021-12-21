@@ -8,12 +8,15 @@ import { LobbyLoading } from "./LobbyLoading";
 import { LobbyInPlay } from "./play/LobbyInPlay";
 import { useUser } from "../../../hooks";
 import { LobbyClosed } from "./closed/LobbyClosed";
+import { snapshotToArray } from "../../../utils";
+import { useMemo } from "react";
 
 export const Lobby = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
   const [authUserLs, setAuthUserLs] = useUser();
   const [lobby, setLobby] = useState(null);
+  const [users, setUsers] = useState({});
   const [isLoading, setLoading] = useState(true);
   const [authUser, setAuthUser] = useGlobal("user");
 
@@ -60,16 +63,37 @@ export const Lobby = (props) => {
         setLoading(false);
       });
 
-    const sub = fetchLobby();
-    return () => sub && sub();
+    const fetchUsers = async () =>
+      firestore
+        .collection("lobbies")
+        .doc(lobbyId)
+        .collection("users")
+        .onSnapshot((usersRef) => {
+          const users_ = snapshotToArray(usersRef);
+
+          const usersMapped = users_.reduce((usersSum, user) => ({ ...usersSum, [user.id]: user }), {});
+
+          console.log(users_);
+          setUsers(usersMapped);
+        });
+
+    fetchLobby();
+    fetchUsers();
   }, [lobbyId]);
+
+  const lobbyWithUsers = useMemo(() => {
+    if (!lobby) return null;
+    if (!users) return { ...lobby, users: {} };
+
+    return { ...lobby, users };
+  }, [lobby, users]);
 
   if (isLoading || (!authUser?.nickname && !authUser.isAdmin) || !lobby) return spinLoaderMin();
 
   const additionalProps = {
+    lobby: lobbyWithUsers,
     audioRef: audioRef,
     logout: logout,
-    lobby: lobby,
     ...props,
   };
 
