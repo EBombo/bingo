@@ -1,7 +1,7 @@
 import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
-import { config, database, firestore } from "../../../firebase";
+import { config, database, firestore, firestoreBomboGames } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
@@ -65,28 +65,39 @@ export const LobbyAdmin = (props) => {
     try {
       if (!lobbyId) throw Error("Lobby not exist");
 
+      let users = null;
       let newLobby = {
         isLocked,
         startAt: gameStarted,
         updateAt: new Date(),
       };
 
-      if (gameStarted) newLobby.users = mapUsersWithCards();
+      if (gameStarted) users = mapUsersWithCards();
 
       // Add users to lobby.
-      const promiseLobby = firestore.doc(`lobbies/${lobbyId}`).update(newLobby);
+      const promiseLobbyBingo = firestore.doc(`lobbies/${lobbyId}`).update(newLobby);
+      const promiseLobbyGames = firestoreBomboGames.doc(`lobbies/${lobbyId}`).update(newLobby);
+
+      if (!gameStarted) return;
+
+      // Save users.
+      const promisesUsers = Object.values(users).map(
+        async (user) => await firestore.collection("lobbies").doc(lobbyId).collection("users").doc(user.id).set(user)
+      );
+
+      await Promise.all(promisesUsers);
 
       // Count users.
-      const promiseGame = newLobby.users
+      const promiseGame = users
         ? await firestore
             .doc(`games/${props.lobby.game.id}`)
-            .update({ countPlayers: firebase.firestore.FieldValue.increment(newLobby.users?.length ?? 0) })
+            .update({ countPlayers: firebase.firestore.FieldValue.increment(Object.values(users ?? {}).length ?? 0) })
         : null;
 
       // The new users saved as members.
-      const promiseMembers = newLobby.users ? saveMembers(props.lobby, newLobby.users) : null;
+      const promiseMembers = users ? saveMembers(props.lobby, users) : null;
 
-      await Promise.all([promiseLobby, promiseGame, promiseMembers]);
+      await Promise.all([promiseLobbyBingo, promiseLobbyGames, promiseGame, promiseMembers]);
     } catch (error) {
       props.showNotification("ERROR", "Lobby not exist");
       console.error(error);

@@ -45,16 +45,9 @@ export const UsersTabs = (props) => {
   const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
   const removeUser = async () => {
-    const newUsers = {
-      ...users,
-    };
-    delete newUsers[currentUser.id];
-    await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      users: newUsers,
-    });
+    await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(currentUser.id).delete();
 
     setIsVisibleModalConfirm(false);
-    setUsers(orderBy(newUsers, ["nickname"], ["desc"]));
   };
 
   const filterUsers = (value) => {

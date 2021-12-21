@@ -57,6 +57,7 @@ export const LobbyUser = (props) => {
   const content = () => (
     <>
       <UserLayout {...props} />
+
       <div className="main-container">
         <div className="logo">
           <Image src={`${config.storageUrl}/resources/white-icon-ebombo.png`} width="180px" height="auto" margin="0" />
