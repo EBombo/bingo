@@ -36,7 +36,7 @@ export const UserPanel = (props) => {
               <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
             </div>
             <div className="bottom-section">
-              <LastBall lastNumber={lastNumber} key={lastNumber} vertical {...props} />
+              <LastBall key={lastNumber} vertical {...props} />
               <div className="last-plays-container">
                 <LastPlays showMore {...props} />
               </div>
@@ -60,7 +60,7 @@ export const UserPanel = (props) => {
             </div>
           </div>
           <div className="right-side">
-            <LastBall lastNumber={lastNumber} key={lastNumber} {...props} />
+            <LastBall {...props} />
             <LastPlays {...props} />
           </div>
         </div>
