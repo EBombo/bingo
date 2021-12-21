@@ -30,7 +30,9 @@ export const UserLayout = (props) => {
   return (
     <UserLayoutCss>
       <div className="description">1-75 números</div>
-      <div className="title no-wrap">{props.lobby.game.name}</div>
+      <div className="title no-wrap">
+        {props.lobby.game.name} - PIN:{props.lobby.pin}
+      </div>
       <div className="right-content">
         {authUser.isAdmin ? (
           <div className="right-container">
@@ -147,7 +149,18 @@ export const UserLayout = (props) => {
             trigger="click"
             content={
               <div>
-                <div onClick={() => props.logout()} style={{ cursor: "pointer" }}>
+                <div
+                  onClick={async () => {
+                    props.logout();
+                    await firestore
+                      .collection("lobbies")
+                      .doc(props.lobby.id)
+                      .collection("users")
+                      .doc(authUser.id)
+                      .delete();
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
                   Salir
                 </div>
               </div>
