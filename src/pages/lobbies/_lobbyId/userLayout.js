@@ -149,7 +149,18 @@ export const UserLayout = (props) => {
             trigger="click"
             content={
               <div>
-                <div onClick={() => props.logout()} style={{ cursor: "pointer" }}>
+                <div
+                  onClick={async () => {
+                    props.logout();
+                    await firestore
+                      .collection("lobbies")
+                      .doc(props.lobby.id)
+                      .collection("users")
+                      .doc(authUser.id)
+                      .delete();
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
                   Salir
                 </div>
               </div>
