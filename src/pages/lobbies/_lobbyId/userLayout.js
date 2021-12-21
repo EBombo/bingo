@@ -30,7 +30,9 @@ export const UserLayout = (props) => {
   return (
     <UserLayoutCss>
       <div className="description">1-75 números</div>
-      <div className="title no-wrap">{props.lobby.game.name}</div>
+      <div className="title no-wrap">
+        {props.lobby.game.name} - PIN:{props.lobby.pin}
+      </div>
       <div className="right-content">
         {authUser.isAdmin ? (
           <div className="right-container">
