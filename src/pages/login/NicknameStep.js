@@ -10,7 +10,6 @@ import { ValidateNickname } from "./ValidateNickname";
 import { firebase } from "../../firebase/config";
 import { getBingoCard } from "../../business";
 import { saveMembers } from "../../constants/saveMembers";
-import defaultTo from "lodash/defaultTo";
 
 export const NicknameStep = (props) => {
   const { sendError } = useSendError();
@@ -52,10 +51,13 @@ export const NicknameStep = (props) => {
     try {
       props.setIsLoading(true);
 
+      // TODO: Use subCollection to validate nickname.
+      /*
       if (defaultTo(users, []).some((user) => user.nickname === data.nickname)) {
         setIsValidating(false);
         throw Error("ERROR", "El nickname ya se encuentra registrado");
       }
+       */
 
       const lobbyRef = await firestore.doc(`lobbies/${authUser.lobby.id}`).get();
       const lobby = lobbyRef.data();
@@ -67,7 +69,7 @@ export const NicknameStep = (props) => {
         nickname: data.nickname,
         avatar: authUser?.avatar ?? null,
         lobbyId: lobby.id,
-        lobby
+        lobby,
       };
 
       if (lobby?.isPlaying) {
@@ -77,12 +79,7 @@ export const NicknameStep = (props) => {
           countPlayers: firebase.firestore.FieldValue.increment(1),
         });
 
-        await firestore
-          .collection("lobbies")
-          .doc(lobby.id)
-          .update({
-            users: { ...lobby.users, [authUser.id]: newUser },
-          });
+        await firestore.collection("lobbies").doc(lobby.id).collection("users").doc(authUser.id).set(newUser);
 
         await saveMembers(authUser.lobby, [newUser]);
       }
