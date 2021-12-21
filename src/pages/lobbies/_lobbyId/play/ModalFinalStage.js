@@ -55,9 +55,15 @@ export const ModalFinalStage = (props) => {
       updateAt: new Date(),
     });
 
-    const promisesRemoveUsers = removeLobbyUsers();
+    // Update users.
+    const promisesUsers = Object.values(newUsers).map(
+      async (user) =>
+        await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(user.id).update(user)
+    );
 
-    await Promise.all([promiseNewCards, ...promisesRemoveUsers]);
+    const promisesRemoveUsers = removeUsersCards();
+
+    await Promise.all([promiseNewCards, promisesUsers, ...promisesRemoveUsers]);
 
     props.setIsVisibleModalFinal(false);
   };
@@ -73,12 +79,17 @@ export const ModalFinalStage = (props) => {
       board,
       finalStage: false,
       updateAt: new Date(),
-      users: newUsers,
     });
 
-    const promisesRemoveUsers = removeLobbyUsers();
+    // Update users.
+    const promisesUsers = Object.values(newUsers).map(
+      async (user) =>
+        await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(user.id).update(user)
+    );
 
-    await Promise.all([promiseNewCards, ...promisesRemoveUsers]);
+    const promisesRemoveUsers = removeUsersCards();
+
+    await Promise.all([promiseNewCards, promisesUsers, ...promisesRemoveUsers]);
 
     props.setIsVisibleModalFinal(false);
   };
@@ -90,9 +101,14 @@ export const ModalFinalStage = (props) => {
       return { ...usersSum, [newUser.id]: newUser };
     }, {});
 
-  const removeLobbyUsers = () =>
+  const removeUsersCards = () =>
     Object.keys(props.lobby.users).map(async (userId) => {
-      await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(userId).delete();
+      await firestore
+        .collection("lobbies")
+        .doc(props.lobby.id)
+        .collection("users")
+        .doc(userId)
+        .update({ myWinningCard: [] });
     });
 
   const adminContent = () => (

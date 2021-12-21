@@ -15,11 +15,11 @@ export const LastBall = (props) => {
       await timeoutPromise(200);
       setOutEffect(false);
 
-      const _lastPlays = [...props.lobby.lastPlays]
+      const _lastPlays = [...(props.lobby?.lastPlays ?? [])];
 
-      const _lastNumber = _lastPlays.length ? _lastPlays.shift() : 0
+      const _lastNumber = _lastPlays.length ? _lastPlays.shift() : 0;
 
-      setLastNumber(_lastNumber)
+      setLastNumber(_lastNumber);
     };
 
     initializeAnimation();
