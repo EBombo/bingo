@@ -5,9 +5,11 @@ import { useRouter } from "next/router";
 import { useFetch } from "./useFetch";
 
 export const useSendError = () => {
-  const { Fetch } = useFetch();
-  const [authUser] = useGlobal("user");
   const { pathname } = useRouter();
+
+  const { Fetch } = useFetch();
+
+  const [authUser] = useGlobal("user");
 
   const sendError = async (error = {}, action) => {
     try {
