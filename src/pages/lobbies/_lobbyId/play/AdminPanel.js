@@ -168,7 +168,7 @@ export const AdminPanel = (props) => {
             </div>
             <div className="bottom-section">
               <div className="ball-called" key={lastNumber}>
-                <LastBall lastNumber={lastNumber} key={lastNumber} prevLastNumber={prevLastNumber} {...props} />
+                <LastBall prevLastNumber={prevLastNumber} {...props} />
               </div>
               <div className="middle-container">
                 {props.lobby.startGame ? (
@@ -255,7 +255,7 @@ export const AdminPanel = (props) => {
             </ButtonAnt>
           </div>
           <div className="right-container">
-            <LastBall lastNumber={lastNumber} vertical key={lastNumber} prevLastNumber={prevLastNumber} {...props} />
+            <LastBall vertical prevLastNumber={prevLastNumber} {...props} />
             <div className="last-plays">
               <LastPlays {...props} />
             </div>

@@ -6,6 +6,7 @@ import { ModalWinner } from "./ModalWinner";
 import { ModalAwards } from "./ModalAwards";
 import { UsersTabs } from "./UsersTabs";
 import defaultTo from "lodash/defaultTo";
+import isEmpty from "lodash/isEmpty";
 import { UserLayout } from "../userLayout";
 import { firestore } from "../../../../firebase";
 import { AdminPanel } from "./AdminPanel";
@@ -38,6 +39,7 @@ export const LobbyInPlay = (props) => {
   }, [props.lobby.bingo]);
 
   useEffect(() => {
+    if (isEmpty(props.lobby.users)) return;
     const currentUserId = authUser.id;
     if (props.lobby?.users?.[currentUserId] || props.lobby.game.usersIds.includes(currentUserId)) return;
 

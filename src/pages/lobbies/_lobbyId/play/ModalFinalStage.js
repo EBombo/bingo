@@ -55,9 +55,15 @@ export const ModalFinalStage = (props) => {
       updateAt: new Date(),
     });
 
-    const promisesRemoveUsers = removeLobbyUsers();
+    // Update users.
+    const promisesUsers = Object.values(newUsers).map(
+      async (user) =>
+        await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(user.id).update(user)
+    );
 
-    await Promise.all([promiseNewCards, ...promisesRemoveUsers]);
+    const promisesRemoveUsers = removeUsersCards();
+
+    await Promise.all([promiseNewCards, promisesUsers, ...promisesRemoveUsers]);
 
     props.setIsVisibleModalFinal(false);
   };
@@ -73,12 +79,17 @@ export const ModalFinalStage = (props) => {
       board,
       finalStage: false,
       updateAt: new Date(),
-      users: newUsers,
     });
 
-    const promisesRemoveUsers = removeLobbyUsers();
+    // Update users.
+    const promisesUsers = Object.values(newUsers).map(
+      async (user) =>
+        await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(user.id).update(user)
+    );
 
-    await Promise.all([promiseNewCards, ...promisesRemoveUsers]);
+    const promisesRemoveUsers = removeUsersCards();
+
+    await Promise.all([promiseNewCards, promisesUsers, ...promisesRemoveUsers]);
 
     props.setIsVisibleModalFinal(false);
   };
@@ -90,9 +101,14 @@ export const ModalFinalStage = (props) => {
       return { ...usersSum, [newUser.id]: newUser };
     }, {});
 
-  const removeLobbyUsers = () =>
+  const removeUsersCards = () =>
     Object.keys(props.lobby.users).map(async (userId) => {
-      await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(userId).delete();
+      await firestore
+        .collection("lobbies")
+        .doc(props.lobby.id)
+        .collection("users")
+        .doc(userId)
+        .update({ myWinningCard: [] });
     });
 
   const adminContent = () => (
@@ -133,7 +149,7 @@ export const ModalFinalStage = (props) => {
       background="#FAFAFA"
       footer={null}
       closable={false}
-      width="600px"
+      width="700px"
       visible={props.isVisibleModalFinal}
       padding="2rem 0rem 1rem 0"
     >
@@ -233,6 +249,7 @@ const Content = styled.div`
     .main-container {
       display: grid;
       grid-template-columns: 320px auto;
+      align-items: center;
 
       .left-container {
         .winner-name {
@@ -255,19 +272,21 @@ const Content = styled.div`
 const AdminContent = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 57px;
+  margin-top: 20px;
 
   .btn {
     width: 90%;
     font-family: Lato;
     font-style: normal;
     font-weight: bold;
-    font-size: 15px;
-    line-height: 18px;
+    font-size: 17px;
+    line-height: 20px;
+    height: 45px;
     margin: 0 auto 2rem auto;
   }
 
   ${mediaQuery.afterTablet} {
+    margin-top: 0;
     button {
       margin: 0.5rem 0;
     }
