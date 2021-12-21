@@ -1,7 +1,7 @@
 import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
-import { config, database, firestore } from "../../../firebase";
+import { config, database, firestore, firestoreBomboGames } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
@@ -74,7 +74,8 @@ export const LobbyAdmin = (props) => {
       if (gameStarted) newLobby.users = mapUsersWithCards();
 
       // Add users to lobby.
-      const promiseLobby = firestore.doc(`lobbies/${lobbyId}`).update(newLobby);
+      const promiseLobbyBingo = firestore.doc(`lobbies/${lobbyId}`).update(newLobby);
+      const promiseLobbyGames = firestoreBomboGames.doc(`lobbies/${lobbyId}`).update(newLobby);
 
       // Count users.
       const promiseGame = newLobby.users
@@ -86,7 +87,7 @@ export const LobbyAdmin = (props) => {
       // The new users saved as members.
       const promiseMembers = newLobby.users ? saveMembers(props.lobby, newLobby.users) : null;
 
-      await Promise.all([promiseLobby, promiseGame, promiseMembers]);
+      await Promise.all([promiseLobbyBingo, promiseLobbyGames, promiseGame, promiseMembers]);
     } catch (error) {
       props.showNotification("ERROR", "Lobby not exist");
       console.error(error);

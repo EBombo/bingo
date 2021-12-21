@@ -29,6 +29,7 @@ export const Lobby = (props) => {
       id: authUserLs.id,
       nickname: authUserLs.nickname,
     });
+
     router.push("/");
   };
 
