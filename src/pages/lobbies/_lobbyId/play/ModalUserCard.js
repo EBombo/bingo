@@ -87,8 +87,8 @@ export const ModalUserCard = (props) => {
                           name="award[1][]"
                           className="input-checkbox"
                           value={index}
-                          checked={award.name === awardSelected?.name}
-                          onChange={() => setAwardSelected(award)}
+                          checked={`${award.name}-${index}` === `${awardSelected?.name}-${awardSelected?.index}`}
+                          onChange={() => setAwardSelected({ ...award, index })}
                         />
                         <label>{award.name}</label>
                       </div>

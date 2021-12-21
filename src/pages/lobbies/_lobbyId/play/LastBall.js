@@ -10,18 +10,20 @@ export const LastBall = (props) => {
   const [outEffect, setOutEffect] = useState(false);
 
   useEffect(() => {
-    if (!props.lastNumber) return;
-
     const initializeAnimation = async () => {
       setOutEffect(true);
       await timeoutPromise(200);
       setOutEffect(false);
 
-      setLastNumber(props.lastNumber);
+      const _lastPlays = [...props.lobby.lastPlays]
+
+      const _lastNumber = _lastPlays.length ? _lastPlays.shift() : 0
+
+      setLastNumber(_lastNumber)
     };
 
     initializeAnimation();
-  }, [props.lastNumber]);
+  }, [props.lobby.lastPlays]);
 
   return (
     <LastBallContainer
