@@ -83,7 +83,7 @@ export const CreateLobby = (props) => {
           companyId: userAdmin.companyId ?? null,
         };
 
-        if (!game.usersIds.includes(formatUser.id)) return router.push("/login");
+        if (!game?.usersIds?.includes(formatUser.id)) return router.push("/login");
 
         await setAuthUser(formatUser);
         setLSAuthUser(formatUser);
@@ -103,10 +103,14 @@ export const CreateLobby = (props) => {
     try {
       const pin = await generatePin();
 
+      // References.
       const lobbiesRef = firestore.collection("lobbies");
       const lobbiesBomboGamesRef = firestoreBomboGames.collection("lobbies");
+
+      // New lobby id.
       const lobbyId = lobbiesRef.doc().id;
 
+      // New lobby mapped.
       const newLobby = {
         pin,
         game,
@@ -129,9 +133,11 @@ export const CreateLobby = (props) => {
         },
       };
 
+      // Create lobby [bingo & ebombo-games].
       const promiseLobby = lobbiesRef.doc(lobbyId).set(newLobby);
       const promiseLobbyBomboGames = lobbiesBomboGamesRef.doc(lobbyId).set(newLobby);
 
+      // Metrics.
       const promiseCountPlays = firestore.doc(`games/${game.id}`).update({ countPlays: (game?.countPlays ?? 0) + 1 });
 
       await Promise.all([promiseLobby, promiseLobbyBomboGames, promiseCountPlays]);
@@ -144,17 +150,18 @@ export const CreateLobby = (props) => {
     setIsLoadingSave(false);
   };
 
+  const validatePin = async (pin) => {
+    // Validate ebombo-games.
+    const gamesRef = await firestoreBomboGames.collection("lobbies").where("pin", "==", pin).get();
+
+    return gamesRef.empty;
+  };
+
   const generatePin = async () => {
     const pin = Math.floor(100000 + Math.random() * 900000);
     const isValid = await validatePin(pin);
 
     return isValid && pin > 99999 ? pin.toString() : await generatePin();
-  };
-
-  const validatePin = async (pin) => {
-    const gamesRef = await firestoreBomboGames.collection("lobbies").where("pin", "==", pin).get();
-
-    return gamesRef.empty;
   };
 
   if (isLoading) return spinLoaderMin();

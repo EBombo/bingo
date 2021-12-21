@@ -1,27 +1,30 @@
 import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
-import { Popover, Slider } from "antd";
+import { Popover, Slider, Spin } from "antd";
 import { mediaQuery } from "../../../constants";
-import { config, firestore } from "../../../firebase";
+import { config, firestore, firestoreBomboGames } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
-import { ButtonBingo } from "../../../components/form";
-import { firebase } from "../../../firebase/config";
-import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
 
+  const [volume, setVolume] = useState(30);
   const [isPlay, setIsPlay] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(30);
   const [isLoadingLock, setIsLoadingLock] = useState(false);
 
   const updateLobby = async () => {
-    await firestore.collection("lobbies").doc(props.lobby.id).update({
+    const promiseBingo = firestore.collection("lobbies").doc(props.lobby.id).update({
       isLocked: !props.lobby.isLocked,
     });
+
+    const promiseEbombogames = firestoreBomboGames.collection("lobbies").doc(props.lobby.id).update({
+      isLocked: !props.lobby.isLocked,
+    });
+
+    await Promise.all([promiseBingo, promiseEbombogames]);
   };
 
   return (
