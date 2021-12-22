@@ -6,7 +6,7 @@ import defaultTo from "lodash/defaultTo";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { ButtonAnt, Input, Select, Switch } from "../../../components/form";
-import { useUser } from "../../../hooks";
+import { useSendError, useUser } from "../../../hooks";
 import { Image } from "../../../components/common/Image";
 import { mediaQuery } from "../../../constants";
 import { Collapse } from "antd";
@@ -14,6 +14,7 @@ import { Collapse } from "antd";
 const { Panel } = Collapse;
 
 export const CreateLobby = (props) => {
+  const { sendError } = useSendError();
   const { Fetch } = useFetch();
 
   const router = useRouter();
@@ -144,7 +145,9 @@ export const CreateLobby = (props) => {
 
       return router.push(`/bingo/lobbies/${lobbyId}`);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      await sendError(error, "createLobby");
+      props.showNotification("ERROR", "Algo salio mal al crear el lobby, intetalo nuevamente.");
     }
 
     setIsLoadingSave(false);
