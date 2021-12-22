@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { mediaQuery } from "../../../../constants";
 import get from "lodash/get";
 import { timeoutPromise } from "../../../../utils/promised";
-import { getHead, ANIMATION } from "../../../../business";
+import { ANIMATION, getHead } from "../../../../business";
 import { useInterval } from "../../../../hooks/useInterval";
 
 export const BingoBoard = (props) => {
@@ -62,10 +62,7 @@ export const BingoBoard = (props) => {
   useInterval(
     () => {
       const max = posX + 14;
-      console.log("min", posX);
-      console.log("max", max);
       const numberRam = Math.floor(Math.random() * (max - posX) + posX);
-      console.log("numberRam", numberRam);
       setPosEffectX(numberRam);
     },
     startEffectBody ? (ANIMATION.max - animationSpeed) * 50 : null

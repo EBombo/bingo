@@ -14,11 +14,14 @@ import { useMemo } from "react";
 export const Lobby = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
+
   const [authUserLs, setAuthUserLs] = useUser();
+
+  const [authUser, setAuthUser] = useGlobal("user");
+
   const [lobby, setLobby] = useState(null);
   const [users, setUsers] = useState({});
   const [isLoading, setLoading] = useState(true);
-  const [authUser, setAuthUser] = useGlobal("user");
 
   const audioRef = useRef(null);
 
@@ -31,8 +34,6 @@ export const Lobby = (props) => {
       avatar: authUserLs.avatar,
       nickname: authUserLs.nickname,
     };
-
-    console.log("it will logout", userMapped);
 
     await setAuthUser(userMapped);
     setAuthUserLs(userMapped);
@@ -48,7 +49,7 @@ export const Lobby = (props) => {
     if (!lobbyId) return;
 
     const fetchLobby = () =>
-      firestore.doc(`lobbies/${lobbyId}`).onSnapshot((lobbyRef) => {
+      firestore.doc(`lobbies/${lobbyId}`).onSnapshot(async (lobbyRef) => {
         const currentLobby = lobbyRef.data();
 
         // Lobby not found.
@@ -61,7 +62,7 @@ export const Lobby = (props) => {
         if (currentLobby?.isClosed && !authUser?.isAdmin) return logout();
 
         setAuthUserLs({ ...authUser, lobby: currentLobby });
-        setAuthUser({ ...authUser, lobby: currentLobby });
+        await setAuthUser({ ...authUser, lobby: currentLobby });
 
         setLobby(currentLobby);
         setLoading(false);
@@ -77,7 +78,6 @@ export const Lobby = (props) => {
 
           const usersMapped = users_.reduce((usersSum, user) => ({ ...usersSum, [user.id]: user }), {});
 
-          console.log(users_);
           setUsers(usersMapped);
         });
 
