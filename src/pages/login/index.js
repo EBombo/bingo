@@ -94,11 +94,13 @@ const Login = (props) => {
               ...authUser,
               email: null,
               nickname: null,
+              lobby: null,
             });
             setAuthUserLs({
               ...authUser,
               email: null,
               nickname: null,
+              lobby: null,
             });
           }}
         >
