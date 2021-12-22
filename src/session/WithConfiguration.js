@@ -35,6 +35,8 @@ export const WithConfiguration = (props) => {
       environment !== config.firebase.projectId && localStorage.clear();
       setEnvironment(config.firebase.projectId);
 
+      console.log({ authUserLS });
+
       await setGlobal({
         user: authUserLS ? collectionToDate(authUserLS) : { id: firestore.collection("users").doc().id },
         settings: collectionToDate({ ...settingsLS, version }),
