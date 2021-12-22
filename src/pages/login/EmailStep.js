@@ -6,13 +6,18 @@ import { ButtonBingo, InputBingo } from "../../components/form";
 import { object, string } from "yup";
 import { useForm } from "react-hook-form";
 import { ModalVerification } from "./ModalVerification";
-import { useUser } from "../../hooks";
+import { useSendError, useUser } from "../../hooks";
+import { fetchUserByEmail } from "./fetchUserByEmail";
 
 export const EmailStep = (props) => {
+  const { sendError } = useSendError();
+
   const [, setAuthUserLs] = useUser();
+
   const [authUser, setAuthUser] = useGlobal("user");
 
   const [email, setEmail] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const validationSchema = object().shape({
     email: string().required().email(),
@@ -23,7 +28,26 @@ export const EmailStep = (props) => {
     reValidateMode: "onSubmit",
   });
 
-  const emailVerification = async (data) => setEmail(data.email);
+  const emailVerification = async (data) => {
+    try {
+      setLoading(true);
+
+      // Validate if user has already logged in before with the same email.
+      const user_ = await fetchUserByEmail(data.email.toLowerCase(), authUser.lobby.id);
+
+      if (user_) {
+        // Replace information.
+        await setAuthUser({ ...authUser, ...user_ });
+        return setAuthUserLs({ ...authUser, ...user_ });
+      }
+
+      setEmail(data.email.toLowerCase());
+    } catch (error) {
+      props.showNotification("UPS", "Algo salio mal, intentalo nuevamente", "error");
+      await sendError(error, "emailVerification");
+    }
+    setLoading(true);
+  };
 
   return (
     <EmailForm onSubmit={handleSubmit(emailVerification)}>
@@ -60,7 +84,12 @@ export const EmailStep = (props) => {
           placeholder="Ingresa tu email"
         />
 
-        <ButtonBingo width="100%" disabled={props.isLoading} htmlType="submit">
+        <ButtonBingo
+          width="100%"
+          disabled={props.isLoading || loading}
+          loading={props.isLoading || loading}
+          htmlType="submit"
+        >
           Ingresar
         </ButtonBingo>
       </div>
