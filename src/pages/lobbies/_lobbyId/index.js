@@ -24,16 +24,20 @@ export const Lobby = (props) => {
 
   const logout = async () => {
     const userId = firestore.collection("users").doc().id;
-    await setAuthUser({ id: userId });
 
-    setAuthUserLs({
-      avatar: authUserLs.avatar,
+    const userMapped = {
+      id: userId,
       email: authUserLs.email,
-      id: authUserLs.id,
+      avatar: authUserLs.avatar,
       nickname: authUserLs.nickname,
-    });
+    };
 
-    router.push("/");
+    console.log("it will logout", userMapped);
+
+    await setAuthUser(userMapped);
+    setAuthUserLs(userMapped);
+
+    await router.push("/");
   };
 
   useEffect(() => {
