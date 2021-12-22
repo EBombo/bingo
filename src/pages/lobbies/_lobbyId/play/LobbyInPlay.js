@@ -40,7 +40,7 @@ export const LobbyInPlay = (props) => {
 
   useEffect(() => {
     if (isEmpty(props.lobby.users)) return;
-    console.log("it will logout - ", props.lobby?.users);
+
     const currentUserId = authUser.id;
     if (props.lobby?.users?.[currentUserId] || props.lobby.game.usersIds.includes(currentUserId)) return;
 
