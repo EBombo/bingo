@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled, { keyframes } from "styled-components";
 import get from "lodash/get";
 import { BOARD_PARAMS } from "../../../../business";
 import { fadeInDownBig, fadeInLeftBig, fadeOutDownBig, fadeOutRightBig } from "react-animations";
 import { timeoutPromise } from "../../../../utils/promised";
+import { ANIMATION } from "../../../../business";
 
 export const LastBall = (props) => {
   const [lastNumber, setLastNumber] = useState(props.lastNumber);
+  const [prevLastNumber] = useState(props.prevLastNumber);
   const [outEffect, setOutEffect] = useState(false);
 
   useEffect(() => {
     const initializeAnimation = async () => {
       setOutEffect(true);
-      await timeoutPromise(200);
+      await timeoutPromise((ANIMATION.max - props.lobby?.animationSpeed ?? ANIMATION.default) * 1000);
       setOutEffect(false);
 
       const _lastPlays = [...(props.lobby?.lastPlays ?? [])];
@@ -26,28 +28,13 @@ export const LastBall = (props) => {
   }, [props.lobby.lastPlays]);
 
   return (
-    <LastBallContainer
-      number={lastNumber}
-      prevNumber={props.prevLastNumber}
-      vertical={props.vertical}
-      outEffect={outEffect}
-    >
-      {lastNumber > 0 && (
+    <LastBallContainer number={lastNumber} prevNumber={prevLastNumber} vertical={props.vertical} outEffect={outEffect}>
+      {lastNumber > 0 && !outEffect && (
         <div className="ball-container">
           <div className="middle-container">
             <div className="inner-container">
               <div className="letter">
-                {outEffect
-                  ? props.prevLastNumber < BOARD_PARAMS.B.value
-                    ? get(props, "lobby.game.letters.b", "B")
-                    : props.prevLastNumber < BOARD_PARAMS.I.value
-                    ? get(props, "lobby.game.letters.i", "I")
-                    : props.prevLastNumber < BOARD_PARAMS.N.value
-                    ? get(props, "lobby.game.letters.n", "N")
-                    : props.prevLastNumber < BOARD_PARAMS.G.value
-                    ? get(props, "lobby.game.letters.g", "G")
-                    : get(props, "lobby.game.letters.o", "O")
-                  : lastNumber < BOARD_PARAMS.B.value
+                {lastNumber < BOARD_PARAMS.B.value
                   ? get(props, "lobby.game.letters.b", "B")
                   : lastNumber < BOARD_PARAMS.I.value
                   ? get(props, "lobby.game.letters.i", "I")
@@ -57,7 +44,27 @@ export const LastBall = (props) => {
                   ? get(props, "lobby.game.letters.g", "G")
                   : get(props, "lobby.game.letters.o", "O")}
               </div>
-              <div className="number">{outEffect ? props.prevLastNumber : lastNumber}</div>
+              <div className="number">{lastNumber}</div>
+            </div>
+          </div>
+        </div>
+      )}
+      {prevLastNumber > 0 && outEffect && (
+        <div className="ball-container">
+          <div className="middle-container">
+            <div className="inner-container">
+              <div className="letter">
+                {prevLastNumber < BOARD_PARAMS.B.value
+                  ? get(props, "lobby.game.letters.b", "B")
+                  : prevLastNumber < BOARD_PARAMS.I.value
+                  ? get(props, "lobby.game.letters.i", "I")
+                  : prevLastNumber < BOARD_PARAMS.N.value
+                  ? get(props, "lobby.game.letters.n", "N")
+                  : prevLastNumber < BOARD_PARAMS.G.value
+                  ? get(props, "lobby.game.letters.g", "G")
+                  : get(props, "lobby.game.letters.o", "O")}
+              </div>
+              <div className="number">{prevLastNumber}</div>
             </div>
           </div>
         </div>

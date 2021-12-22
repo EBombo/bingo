@@ -2,6 +2,7 @@ import React, { useGlobal } from "reactn";
 import { Slider } from "antd";
 import styled from "styled-components";
 import { ANIMATION, SPEED } from "../../../../business";
+import { firestore } from "../../../../firebase";
 
 export const SliderControls = () => {
   const [isAutomatic] = useGlobal("isAutomatic");
@@ -10,6 +11,13 @@ export const SliderControls = () => {
 
   // TODO: Consider only showing when "isAutomatic" is active.
   //if (!isAutomatic) return null;
+
+  const updateAnimationSpeed = async (value) => {
+    setReproductionSpeed(value);
+    await firestore.collection("lobbies").doc(`${props.lobby.id}`).update({
+      animationSpeed: value
+    });
+  }
 
   return (
     <SliderControlsCss>
@@ -29,7 +37,7 @@ export const SliderControls = () => {
           <div className="description">Vel. reproducción</div>
           <div>
             <Slider
-              onChange={(value) => setReproductionSpeed(value)}
+              onChange={(value) => updateAnimationSpeed(value)}
               defaultValue={reproductionSpeed}
               min={SPEED.min}
               max={SPEED.max}
