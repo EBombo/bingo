@@ -1,24 +1,17 @@
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useGlobal } from "reactn";
 import { ButtonBingo, InputBingo } from "../../components/form";
 import { Image } from "../../components/common/Image";
 import { useForm } from "react-hook-form";
-import { config, database, firestore } from "../../firebase";
+import { config } from "../../firebase";
 import styled from "styled-components";
 import { object, string } from "yup";
-import { useSendError, useUser } from "../../hooks";
+import { useUser } from "../../hooks";
 import { ValidateNickname } from "./ValidateNickname";
-import { firebase } from "../../firebase/config";
-import { getBingoCard } from "../../business";
-import { saveMembers } from "../../constants/saveMembers";
 
 export const NicknameStep = (props) => {
-  const { sendError } = useSendError();
-
   const [, setAuthUserLs] = useUser();
-  const [authUser, setAuthUser] = useGlobal("user");
 
-  const [users, setUsers] = useState(null);
-  const [isValidating, setIsValidating] = useState(false);
+  const [authUser, setAuthUser] = useGlobal("user");
 
   const validationSchema = object().shape({
     nickname: string().required(),
@@ -29,79 +22,18 @@ export const NicknameStep = (props) => {
     reValidateMode: "onSubmit",
   });
 
-  useEffect(() => {
-    if (!authUser?.lobby) return;
-
-    const fetchUsers = async () => {
-      const userStatusDatabaseRef = database.ref(`lobbies/${authUser.lobby.id}/users`);
-
-      userStatusDatabaseRef.on("value", (snapshot) => {
-        let users_ = Object.values(snapshot.val() ?? {});
-        users_ = users_.filter((user) => user.state.includes("online"));
-        setUsers(users_);
-      });
-    };
-
-    fetchUsers();
-  }, [authUser.lobby]);
-
   const validateNickname = async (data) => {
-    setIsValidating(true);
+    props.setIsLoading(true);
 
-    try {
-      props.setIsLoading(true);
-
-      // TODO: Use subCollection to validate nickname.
-      /*
-      if (defaultTo(users, []).some((user) => user.nickname === data.nickname)) {
-        setIsValidating(false);
-        throw Error("ERROR", "El nickname ya se encuentra registrado");
-      }
-       */
-
-      const lobbyRef = await firestore.doc(`lobbies/${authUser.lobby.id}`).get();
-      const lobby = lobbyRef.data();
-
-      const newUser = {
-        id: authUser?.id ?? null,
-        email: authUser?.email ?? null,
-        userId: authUser?.id ?? null,
-        nickname: data.nickname,
-        avatar: authUser?.avatar ?? null,
-        lobbyId: lobby.id,
-        lobby,
-      };
-
-      if (lobby?.isPlaying) {
-        newUser.card = JSON.stringify(getBingoCard());
-
-        await firestore.doc(`games/${lobby.game.id}`).update({
-          countPlayers: firebase.firestore.FieldValue.increment(1),
-        });
-
-        await firestore.collection("lobbies").doc(lobby.id).collection("users").doc(authUser.id).set(newUser);
-
-        await saveMembers(authUser.lobby, [newUser]);
-      }
-
-      await setAuthUser(newUser);
-      setAuthUserLs(newUser);
-    } catch (error) {
-      props.showNotification("Error", error.message);
-
-      await sendError({
-        error: Object(error).toString(),
-        action: "nicknameSubmit",
-      });
-    }
+    await setAuthUser({ ...authUser, nickname: data.nickname });
+    setAuthUserLs({ ...authUser, nickname: data.nickname });
 
     props.setIsLoading(false);
-    setIsValidating(false);
   };
 
   return (
     <NicknameForm onSubmit={handleSubmit(validateNickname)}>
-      {isValidating && <ValidateNickname {...props} />}
+      {props.isLoading && <ValidateNickname {...props} />}
 
       <Image src={`${config.storageUrl}/resources/white-icon-ebombo.png`} width="180px" margin="10px auto" />
 

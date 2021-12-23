@@ -9,11 +9,17 @@ import { useUser } from "../../hooks";
 import { PinStep } from "./PinStep";
 import { avatars } from "../../components/common/DataList";
 import { Anchor } from "../../components/form";
+import { getBingoCard } from "../../business";
+import { firebase } from "../../firebase/config";
+import { saveMembers } from "../../constants/saveMembers";
+import { fetchUserByEmail } from "./fetchUserByEmail";
+import { Tooltip } from "antd";
 
 const Login = (props) => {
   const router = useRouter();
+  const { pin } = router.query;
 
-  const [authUserLs, setAuthUserLs] = useUser();
+  const [, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -27,20 +33,15 @@ const Login = (props) => {
 
       const currentLobby = snapshotToArray(lobbyRef)[0];
 
-      // Fetch users collection.
-      const usersRef = await firestore.collection("lobbies").doc(currentLobby.id).collection("users").get();
-      const users = snapshotToArray(usersRef);
-      const usersIds = users.map((user) => user.id);
-
-      if (!usersIds.includes(authUser?.id) && currentLobby?.isLocked) throw Error("Este juego esta cerrado");
+      if (currentLobby?.isLocked) throw Error("Este juego esta cerrado");
 
       if (currentLobby?.isClosed) {
         await setAuthUser({
           id: firestore.collection("users").doc().id,
-          email: authUserLs.email,
           lobby: null,
-          nickname: authUserLs.nickname,
           isAdmin: false,
+          email: authUser.email,
+          nickname: authUser.nickname,
         });
 
         throw Error("Esta sala ha concluido");
@@ -60,23 +61,82 @@ const Login = (props) => {
     if (!authUser?.nickname) return;
     if (authUser?.lobby?.settings?.userIdentity && !authUser?.email) return;
 
-    router.push(`/bingo/lobbies/${authUser.lobby.id}`);
+    // Determine is necessary create a user.
+    const initialize = async () => {
+      // Replace "newUser" if user has already logged in before with the same email.
+      const user_ = authUser?.email ? await fetchUserByEmail(authUser.email, authUser.lobby.id) : null;
+
+      // If user has already logged then redirect.
+      if (user_) {
+        await setAuthUser(user_);
+        setAuthUserLs(user_);
+        return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
+      }
+
+      // Fetch lobby.
+      const lobbyRef = await firestore.doc(`lobbies/${authUser.lobby.id}`).get();
+      const lobby = lobbyRef.data();
+
+      // Redirect to lobby.
+      if (!lobby.isPlaying) return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
+
+      const userId = authUser?.id ?? firestore.collection("users").doc().id;
+      const userCard = getBingoCard();
+
+      let newUser = {
+        id: userId,
+        userId,
+        email: authUser?.email ?? null,
+        nickname: authUser.nickname,
+        avatar: authUser?.avatar ?? null,
+        card: JSON.stringify(userCard),
+        lobbyId: lobby.id,
+        lobby,
+      };
+
+      // Update metrics.
+      const promiseMetric = firestore.doc(`games/${lobby.game.id}`).update({
+        countPlayers: firebase.firestore.FieldValue.increment(1),
+      });
+
+      // Register user in lobby.
+      const promiseUser = firestore
+        .collection("lobbies")
+        .doc(lobby.id)
+        .collection("users")
+        .doc(authUser.id)
+        .set(newUser);
+
+      // Register user as a member in company.
+      const promiseMember = saveMembers(authUser.lobby, [newUser]);
+
+      await Promise.all([promiseMetric, promiseUser, promiseMember]);
+
+      await setAuthUser(newUser);
+      setAuthUserLs(newUser);
+
+      // Redirect to lobby.
+      await router.push(`/bingo/lobbies/${authUser.lobby.id}`);
+    };
+
+    initialize();
   }, [authUser]);
 
-  // load LocalStorage user data.
-  useEffect(() => {
-    if (authUser || !authUserLs) return;
-
-    setAuthUser({ ...authUserLs });
-  }, []);
-
-  // Auto login.
+  // Fetch lobby to auto login.
   useEffect(() => {
     if (!authUser?.lobby?.pin) return;
 
     setIsLoading(true);
     fetchLobby(authUser.lobby.pin);
   }, []);
+
+  // Auto fetch lobby.
+  useEffect(() => {
+    if (!pin) return;
+
+    setIsLoading(true);
+    fetchLobby(pin);
+  }, [pin]);
 
   const emailIsRequired = useMemo(() => {
     return !!authUser?.lobby?.settings?.userIdentity;
@@ -89,8 +149,8 @@ const Login = (props) => {
           underlined
           variant="white"
           fontSize="16px"
-          onClick={() => {
-            setAuthUser({
+          onClick={async () => {
+            await setAuthUser({
               ...authUser,
               email: null,
               nickname: null,
@@ -104,7 +164,7 @@ const Login = (props) => {
             });
           }}
         >
-          Salir
+          Volver
         </Anchor>
       </div>
     ),
@@ -115,7 +175,37 @@ const Login = (props) => {
     <LoginContainer storageUrl={config.storageUrl}>
       <div className="main-container">
         {!authUser?.lobby && (
-          <PinStep isLoading={isLoading} setIsLoading={setIsLoading} fetchLobby={fetchLobby} {...props} />
+          <>
+            <PinStep isLoading={isLoading} setIsLoading={setIsLoading} fetchLobby={fetchLobby} {...props} />
+            {authUser?.email && authUser?.nickname && (
+              <div className="back">
+                <Tooltip title={`email: ${authUser.email} nickname: ${authUser.nickname}`} placement="bottom">
+                  <Anchor
+                    underlined
+                    variant="white"
+                    fontSize="11px"
+                    margin="10px auto"
+                    onClick={async () => {
+                      await setAuthUser({
+                        ...authUser,
+                        email: null,
+                        nickname: null,
+                        lobby: null,
+                      });
+                      setAuthUserLs({
+                        ...authUser,
+                        email: null,
+                        nickname: null,
+                        lobby: null,
+                      });
+                    }}
+                  >
+                    Remover email y nickname
+                  </Anchor>
+                </Tooltip>
+              </div>
+            )}
+          </>
         )}
 
         {authUser?.lobby && (
