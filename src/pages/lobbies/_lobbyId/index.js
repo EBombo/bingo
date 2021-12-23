@@ -68,7 +68,7 @@ export const Lobby = (props) => {
         setLoading(false);
       });
 
-    const fetchUsers = async () =>
+    const fetchUsers = () =>
       firestore
         .collection("lobbies")
         .doc(lobbyId)
@@ -81,8 +81,12 @@ export const Lobby = (props) => {
           setUsers(usersMapped);
         });
 
-    fetchLobby();
-    fetchUsers();
+    const unSubLobby = fetchLobby();
+    const unSubUsers = fetchUsers();
+    return () => {
+      unSubLobby && unSubLobby();
+      unSubUsers && unSubUsers();
+    };
   }, [lobbyId]);
 
   const lobbyWithUsers = useMemo(() => {
