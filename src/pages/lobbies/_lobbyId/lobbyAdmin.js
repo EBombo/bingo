@@ -1,12 +1,12 @@
 import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { Divider } from "../../../components/common/Divider";
-import { config, database, firestore, firestoreBomboGames } from "../../../firebase";
+import { config, database, firestore, firestoreBomboGames, hostName } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { Popover, Slider } from "antd";
+import { Popover, Slider, Tooltip } from "antd";
 import { getBingoCard } from "../../../business";
 import { Image } from "../../../components/common/Image";
 import orderBy from "lodash/orderBy";
@@ -198,7 +198,17 @@ export const LobbyAdmin = (props) => {
         </div>
 
         <div className="item-pin">
-          <div className="label">{props.lobby.isLocked ? "Este juego esta bloqueado" : "Entra a ebombo.io"}</div>
+          <Tooltip placement="bottom" title="Click aquí para copiar el link de ebombo con pin">
+            <div
+              className="label"
+              onClick={() => {
+                navigator.clipboard.writeText(`${hostName}?pin=${props.lobby?.pin}`);
+                props.showNotification("OK", "Link copiado!", "success");
+              }}
+            >
+              {props.lobby.isLocked ? "Este juego esta bloqueado" : "Entra a ebombo.io"}
+            </div>
+          </Tooltip>
           <div className="pin-label">Pin del juego:</div>
           <div className="pin">
             {props.lobby.isLocked ? (
@@ -213,7 +223,16 @@ export const LobbyAdmin = (props) => {
                 />
               </ButtonBingo>
             ) : (
-              props.lobby?.pin
+              <div
+                onClick={() => {
+                  navigator.clipboard.writeText(props.lobby.pin);
+                  props.showNotification("OK", "PIN copiado!", "success");
+                }}
+              >
+                <Tooltip placement="bottom" title="Click aquí para copiar el PIN">
+                  {props.lobby?.pin}
+                </Tooltip>
+              </div>
             )}
           </div>
         </div>
@@ -352,6 +371,7 @@ const LobbyCss = styled.div`
 
       .pin {
         font-size: 2rem;
+        cursor: pointer;
       }
 
       .label {
@@ -360,6 +380,7 @@ const LobbyCss = styled.div`
         font-family: Gloria Hallelujah;
         font-style: normal;
         font-weight: normal;
+        cursor: pointer;
       }
     }
   }
