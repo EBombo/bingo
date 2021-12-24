@@ -107,13 +107,17 @@ export const Lobby = (props) => {
 
   const lobbyIsClosed = lobby?.isClosed && authUser?.isAdmin;
 
+  /** Game report. **/
   if (lobbyIsClosed) return <LobbyClosed {...additionalProps} />;
 
+  /** The game is playing. **/
   if (lobby?.isPlaying) return <LobbyInPlay {...additionalProps} />;
 
+  /** Loading page. **/
   if (lobby?.startAt) return <LobbyLoading {...additionalProps} />;
 
-  if (authUser?.isAdmin) return <LobbyAdmin {...additionalProps} />;
+  /** Before starting the game. **/
+  if (authUser?.isAdmin) return <LobbyAdmin {...additionalProps} />; // Admin.
 
-  return <LobbyUser {...additionalProps} />;
+  return <LobbyUser {...additionalProps} />; // User.
 };
