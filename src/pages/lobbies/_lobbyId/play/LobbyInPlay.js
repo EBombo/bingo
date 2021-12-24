@@ -56,7 +56,7 @@ export const LobbyInPlay = (props) => {
 
     await firestore.runTransaction(async (transaction) => {
       // Fetch lobby.
-      const lobbyQuery = await transaction.get();
+      const lobbyQuery = await transaction.get(lobbyRef);
       const lobby_ = lobbyQuery.data();
 
       console.log("lobby_?.bingoUser", lobby_?.bingoUser);
