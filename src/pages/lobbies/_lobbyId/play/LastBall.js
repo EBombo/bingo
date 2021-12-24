@@ -7,15 +7,18 @@ import { timeoutPromise } from "../../../../utils/promised";
 import { ANIMATION } from "../../../../business";
 
 export const LastBall = (props) => {
-  const [lastNumber, setLastNumber] = useState(props.lastNumber);
-  const [prevLastNumber] = useState(props.prevLastNumber);
-  const [outEffect, setOutEffect] = useState(false);
+  const [lastNumber, setLastNumber] = useState(null);
 
   useEffect(() => {
+    if (!props.admin) return;
+    setLastNumber(props.lastNumber);
+  }, [props.lastNumber]);
+
+  useEffect(() => {
+    if (props.admin) return;
+
     const initializeAnimation = async () => {
-      setOutEffect(true);
       await timeoutPromise((ANIMATION.max - props.lobby?.animationSpeed ?? ANIMATION.default) * 1000);
-      setOutEffect(false);
 
       const _lastPlays = [...(props.lobby?.lastPlays ?? [])];
 
@@ -25,11 +28,11 @@ export const LastBall = (props) => {
     };
 
     initializeAnimation();
-  }, [props.lobby.lastPlays]);
+  }, [props.lobby?.lastPlays]);
 
   return (
-    <LastBallContainer number={lastNumber} prevNumber={prevLastNumber} vertical={props.vertical} outEffect={outEffect}>
-      {lastNumber > 0 && !outEffect && (
+    <LastBallContainer number={lastNumber} vertical={props.vertical}>
+      {lastNumber > 0 && (
         <div className="ball-container">
           <div className="middle-container">
             <div className="inner-container">
@@ -49,44 +52,21 @@ export const LastBall = (props) => {
           </div>
         </div>
       )}
-      {prevLastNumber > 0 && outEffect && (
-        <div className="ball-container">
-          <div className="middle-container">
-            <div className="inner-container">
-              <div className="letter">
-                {prevLastNumber < BOARD_PARAMS.B.value
-                  ? get(props, "lobby.game.letters.b", "B")
-                  : prevLastNumber < BOARD_PARAMS.I.value
-                  ? get(props, "lobby.game.letters.i", "I")
-                  : prevLastNumber < BOARD_PARAMS.N.value
-                  ? get(props, "lobby.game.letters.n", "N")
-                  : prevLastNumber < BOARD_PARAMS.G.value
-                  ? get(props, "lobby.game.letters.g", "G")
-                  : get(props, "lobby.game.letters.o", "O")}
-              </div>
-              <div className="number">{prevLastNumber}</div>
-            </div>
-          </div>
-        </div>
-      )}
     </LastBallContainer>
   );
 };
 
 const slideInLeftAnimation = keyframes`${fadeInLeftBig}`;
-const slideOutRightAnimation = keyframes`${fadeOutRightBig}`;
-
 const slideInDownAnimation = keyframes`${fadeInDownBig}`;
-const slideOutDownAnimation = keyframes`${fadeOutDownBig}`;
 
 const LastBallContainer = styled.div`
-  width: ${(props) => (props.vertical ? "125px" : "100%")};
+  width: ${(props) => (props.vertical ? "125px" : "200px")};
   height: ${(props) => (props.vertical ? "190px" : "130px")};
   background: #221545;
   box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.25);
   border-radius: 100px;
   padding: 5px;
-  max-width: 200px;
+  margin: 0 auto;
   display: ${(props) => (props.vertical ? "flex-start" : "center")};
   clip-path: ${(props) => (props.vertical ? "ellipse(62% 51% at 50% 50%)" : "ellipse(50% 60% at 50% 50%)")};
 
@@ -95,17 +75,7 @@ const LastBallContainer = styled.div`
     height: 120px;
     border-radius: 50%;
     background: ${(props) =>
-      props.outEffect
-        ? props.prevNumber < 16
-          ? props.theme.ballsColors.b
-          : props.prevNumber < 31
-          ? props.theme.ballsColors.i
-          : props.prevNumber < 46
-          ? props.theme.ballsColors.n
-          : props.prevNumber < 61
-          ? props.theme.ballsColors.g
-          : props.theme.ballsColors.o
-        : props.number < 16
+      props.number < 16
         ? props.theme.ballsColors.b
         : props.number < 31
         ? props.theme.ballsColors.i
@@ -115,32 +85,14 @@ const LastBallContainer = styled.div`
         ? props.theme.ballsColors.g
         : props.theme.ballsColors.o};
     position: relative;
-    animation: 1s
-      ${(props) =>
-        props.vertical
-          ? props.outEffect
-            ? slideOutDownAnimation
-            : slideInDownAnimation
-          : props.outEffect
-          ? slideOutRightAnimation
-          : slideInLeftAnimation};
+    animation: 1s ${(props) => (props.vertical ? slideInDownAnimation : slideInLeftAnimation)};
 
     .middle-container {
       width: 72%;
       height: 72%;
       border-radius: 50%;
       background: ${(props) =>
-        props.outEffect
-          ? props.prevNumber < 16
-            ? props.theme.ballsColors.borderB
-            : props.prevNumber < 31
-            ? props.theme.ballsColors.borderI
-            : props.prevNumber < 46
-            ? props.theme.ballsColors.borderN
-            : props.prevNumber < 61
-            ? props.theme.ballsColors.borderG
-            : props.theme.ballsColors.borderO
-          : props.number < 16
+        props.number < 16
           ? props.theme.ballsColors.borderB
           : props.number < 31
           ? props.theme.ballsColors.borderI

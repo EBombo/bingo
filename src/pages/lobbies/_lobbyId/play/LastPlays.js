@@ -7,7 +7,6 @@ import { mediaQuery } from "../../../../constants";
 import { fadeInLeft } from "react-animations";
 
 export const LastPlays = (props) => {
-  const [animationSpeed] = useGlobal("animationSpeed");
   const [lastPlays, setLastPlays] = useState(props.lobby?.lastPlays || []);
   const [showMore] = useState(props.showMore);
 
@@ -15,7 +14,8 @@ export const LastPlays = (props) => {
     const initialize = async () => {
       const newLastPlays = props.lobby?.lastPlays || [];
 
-      if (newLastPlays?.length) await timeoutPromise((ANIMATION.max - animationSpeed) * 1000);
+      if (newLastPlays?.length)
+        await timeoutPromise((ANIMATION.max - (props.lobby?.animationSpeed ?? ANIMATION.default)) * 1000);
 
       // Prevent work as a pointer.
       const currentLastPlays = [...newLastPlays];
