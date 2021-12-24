@@ -58,6 +58,7 @@ export const LobbyInPlay = (props) => {
     const lobbyQuery = await lobbyRef.get();
     const lobby_ = lobbyQuery.data();
 
+    console.log("lobby_?.bingoUser", lobby_?.bingoUser);
     // Prevent call bingo.
     if (lobby_?.bingoUser) return;
 
