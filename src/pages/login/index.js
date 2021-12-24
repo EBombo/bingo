@@ -13,9 +13,11 @@ import { getBingoCard } from "../../business";
 import { firebase } from "../../firebase/config";
 import { saveMembers } from "../../constants/saveMembers";
 import { fetchUserByEmail } from "./fetchUserByEmail";
+import { Tooltip } from "antd";
 
 const Login = (props) => {
   const router = useRouter();
+  const { pin } = router.query;
 
   const [, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
@@ -120,13 +122,21 @@ const Login = (props) => {
     initialize();
   }, [authUser]);
 
-  // fetch lobby to auto login.
+  // Fetch lobby to auto login.
   useEffect(() => {
     if (!authUser?.lobby?.pin) return;
 
     setIsLoading(true);
     fetchLobby(authUser.lobby.pin);
   }, []);
+
+  // Auto fetch lobby.
+  useEffect(() => {
+    if (!pin) return;
+
+    setIsLoading(true);
+    fetchLobby(pin);
+  }, [pin]);
 
   const emailIsRequired = useMemo(() => {
     return !!authUser?.lobby?.settings?.userIdentity;
@@ -154,7 +164,7 @@ const Login = (props) => {
             });
           }}
         >
-          Salir
+          Volver
         </Anchor>
       </div>
     ),
@@ -165,7 +175,37 @@ const Login = (props) => {
     <LoginContainer storageUrl={config.storageUrl}>
       <div className="main-container">
         {!authUser?.lobby && (
-          <PinStep isLoading={isLoading} setIsLoading={setIsLoading} fetchLobby={fetchLobby} {...props} />
+          <>
+            <PinStep isLoading={isLoading} setIsLoading={setIsLoading} fetchLobby={fetchLobby} {...props} />
+            {authUser?.email && authUser?.nickname && (
+              <div className="back">
+                <Tooltip title={`email: ${authUser.email} nickname: ${authUser.nickname}`} placement="bottom">
+                  <Anchor
+                    underlined
+                    variant="white"
+                    fontSize="11px"
+                    margin="10px auto"
+                    onClick={async () => {
+                      await setAuthUser({
+                        ...authUser,
+                        email: null,
+                        nickname: null,
+                        lobby: null,
+                      });
+                      setAuthUserLs({
+                        ...authUser,
+                        email: null,
+                        nickname: null,
+                        lobby: null,
+                      });
+                    }}
+                  >
+                    Remover email y nickname
+                  </Anchor>
+                </Tooltip>
+              </div>
+            )}
+          </>
         )}
 
         {authUser?.lobby && (
