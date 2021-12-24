@@ -54,12 +54,12 @@ export const LobbyInPlay = (props) => {
     // Lobby Ref.
     const lobbyRef = firestore.doc(`lobbies/${props.lobby.id}`);
 
+    // Transactions for call bingo.
     await firestore.runTransaction(async (transaction) => {
       // Fetch lobby.
       const lobbyQuery = await transaction.get(lobbyRef);
       const lobby_ = lobbyQuery.data();
 
-      console.log("lobby_?.bingoUser", lobby_?.bingoUser);
       // Prevent call bingo.
       if (lobby_?.bingoUser) return;
 
@@ -69,21 +69,6 @@ export const LobbyInPlay = (props) => {
         updateAt: new Date(),
       });
     });
-
-    /*
-    // Fetch lobby.
-    const lobbyQuery = await lobbyRef.get();
-    const lobby_ = lobbyQuery.data();
-
-    // Prevent call bingo.
-    if (lobby_?.bingoUser) return;
-
-    // Call bingo.
-    await lobbyRef.update({
-      bingo: bingoUser,
-      updateAt: new Date(),
-    });
-    */
   };
 
   // TODO: Consider to refactoring, <Admin> & <User>.
