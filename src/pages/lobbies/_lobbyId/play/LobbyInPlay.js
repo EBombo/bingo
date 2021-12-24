@@ -38,6 +38,7 @@ export const LobbyInPlay = (props) => {
   }, [props.lobby.bingo]);
 
   useEffect(() => {
+    /** Don't use "props.lobby.users" because the "get" query gets users progressively  **/
     if (!props.lobby) return;
     if (!authUser?.id) return;
     // AuthUser is admin.
