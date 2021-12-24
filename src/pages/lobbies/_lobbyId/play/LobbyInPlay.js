@@ -49,10 +49,20 @@ export const LobbyInPlay = (props) => {
 
   const callBingo = async () => {
     const _users = Object.values(props.lobby.users);
-
     const bingoUser = _users.find((user) => user.id === authUser.id);
 
-    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+    // Lobby Ref.
+    const lobbyRef = firestore.doc(`lobbies/${props.lobby.id}`);
+
+    // Fetch lobby.
+    const lobbyQuery = await lobbyRef.get();
+    const lobby_ = lobbyQuery.data();
+
+    // Prevent call bingo.
+    if (lobby_?.bingoUser) return;
+
+    // Call bingo.
+    await lobbyRef.update({
       bingo: bingoUser,
       updateAt: new Date(),
     });
