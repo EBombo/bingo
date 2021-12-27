@@ -8,14 +8,26 @@ import React, { useEffect, useGlobal, useState } from "reactn";
 import defaultTo from "lodash/defaultTo";
 import { Chat } from "../../../../components/chat";
 import { Desktop, Tablet } from "../../../../constants";
+import { usePrevious } from "../../../../hooks/usePrevious";
+import { timeoutPromise } from "../../../../utils/promised";
+import { ANIMATION } from "../../../../business";
 
 export const UserPanel = (props) => {
   const [authUser] = useGlobal("user");
   const [lastNumber, setLastNumber] = useState(0);
+  const [prevLastNumber, setPrevLastNumber] = useState(0);
 
   useEffect(() => {
-    if (!props.lobby.lastPlays?.length || []) setLastNumber(0);
-  }, [props.lobby]);
+    const initialize = async () => {
+      if (!props.lobby.lastPlays.length) setLastNumber(0);
+      if (props.lobby.lastPlays.length) {
+        await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
+        setLastNumber(props.lobby.lastPlays[0]);
+        setPrevLastNumber(props.lobby.lastPlays[0]);
+      }
+    };
+    initialize();
+  }, [props.lobby?.lastPlays]);
 
   return (
     <>
@@ -36,7 +48,7 @@ export const UserPanel = (props) => {
               <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
             </div>
             <div className="bottom-section">
-              <LastBall key={lastNumber} vertical {...props} />
+              <LastBall lastNumber={lastNumber} prevLastNumber={prevLastNumber} vertical {...props} />
               <div className="last-plays-container">
                 <LastPlays showMore {...props} />
               </div>
@@ -60,7 +72,7 @@ export const UserPanel = (props) => {
             </div>
           </div>
           <div className="right-side">
-            <LastBall {...props} />
+            <LastBall lastNumber={lastNumber} prevLastNumber={prevLastNumber} {...props} />
             <LastPlays {...props} />
           </div>
         </div>

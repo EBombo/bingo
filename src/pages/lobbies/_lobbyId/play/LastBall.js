@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "reactn";
+import React, { useEffect, useGlobal, useState } from "reactn";
 import styled, { keyframes } from "styled-components";
 import get from "lodash/get";
 import { BOARD_PARAMS } from "../../../../business";
 import { fadeInDownBig, fadeInLeftBig, fadeOutDownBig, fadeOutRightBig } from "react-animations";
 import { timeoutPromise } from "../../../../utils/promised";
+import { ANIMATION } from "../../../../business";
+import defaultTo from "lodash/defaultTo";
 
 export const LastBall = (props) => {
   const [lastNumber, setLastNumber] = useState(props.lastNumber);
@@ -12,42 +14,25 @@ export const LastBall = (props) => {
   useEffect(() => {
     const initializeAnimation = async () => {
       setOutEffect(true);
-      await timeoutPromise(200);
+
+      await timeoutPromise(1000);
+
       setOutEffect(false);
 
-      const _lastPlays = [...(props.lobby?.lastPlays ?? [])];
-
-      const _lastNumber = _lastPlays.length ? _lastPlays.shift() : 0;
-
-      setLastNumber(_lastNumber);
+      setLastNumber(props.lastNumber);
     };
 
     initializeAnimation();
-  }, [props.lobby.lastPlays]);
+  }, [props.lastNumber]);
 
   return (
-    <LastBallContainer
-      number={lastNumber}
-      prevNumber={props.prevLastNumber}
-      vertical={props.vertical}
-      outEffect={outEffect}
-    >
+    <LastBallContainer number={lastNumber} prevNumber={props.prevLastNumber} vertical={props.vertical} outEffect={outEffect}>
       {lastNumber > 0 && (
         <div className="ball-container">
           <div className="middle-container">
             <div className="inner-container">
               <div className="letter">
-                {outEffect
-                  ? props.prevLastNumber < BOARD_PARAMS.B.value
-                    ? get(props, "lobby.game.letters.b", "B")
-                    : props.prevLastNumber < BOARD_PARAMS.I.value
-                    ? get(props, "lobby.game.letters.i", "I")
-                    : props.prevLastNumber < BOARD_PARAMS.N.value
-                    ? get(props, "lobby.game.letters.n", "N")
-                    : props.prevLastNumber < BOARD_PARAMS.G.value
-                    ? get(props, "lobby.game.letters.g", "G")
-                    : get(props, "lobby.game.letters.o", "O")
-                  : lastNumber < BOARD_PARAMS.B.value
+                {lastNumber < BOARD_PARAMS.B.value
                   ? get(props, "lobby.game.letters.b", "B")
                   : lastNumber < BOARD_PARAMS.I.value
                   ? get(props, "lobby.game.letters.i", "I")
@@ -57,7 +42,27 @@ export const LastBall = (props) => {
                   ? get(props, "lobby.game.letters.g", "G")
                   : get(props, "lobby.game.letters.o", "O")}
               </div>
-              <div className="number">{outEffect ? props.prevLastNumber : lastNumber}</div>
+              <div className="number">{lastNumber}</div>
+            </div>
+          </div>
+        </div>
+      )}
+      {props.prevLastNumber > 0 && outEffect && (
+        <div className="ball-container">
+          <div className="middle-container">
+            <div className="inner-container">
+              <div className="letter">
+                {props.prevLastNumber < BOARD_PARAMS.B.value
+                  ? get(props, "lobby.game.letters.b", "B")
+                  : props.prevLastNumber < BOARD_PARAMS.I.value
+                  ? get(props, "lobby.game.letters.i", "I")
+                  : props.prevLastNumber < BOARD_PARAMS.N.value
+                  ? get(props, "lobby.game.letters.n", "N")
+                  : props.prevLastNumber < BOARD_PARAMS.G.value
+                  ? get(props, "lobby.game.letters.g", "G")
+                  : get(props, "lobby.game.letters.o", "O")}
+              </div>
+              <div className="number">{props.prevLastNumber}</div>
             </div>
           </div>
         </div>
@@ -73,13 +78,13 @@ const slideInDownAnimation = keyframes`${fadeInDownBig}`;
 const slideOutDownAnimation = keyframes`${fadeOutDownBig}`;
 
 const LastBallContainer = styled.div`
-  width: ${(props) => (props.vertical ? "125px" : "100%")};
+  width: ${(props) => (props.vertical ? "125px" : "200px")};
   height: ${(props) => (props.vertical ? "190px" : "130px")};
   background: #221545;
   box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.25);
   border-radius: 100px;
   padding: 5px;
-  max-width: 200px;
+  margin: 0 auto;
   display: ${(props) => (props.vertical ? "flex-start" : "center")};
   clip-path: ${(props) => (props.vertical ? "ellipse(62% 51% at 50% 50%)" : "ellipse(50% 60% at 50% 50%)")};
 

@@ -5,9 +5,9 @@ import { BOARD_PARAMS, ANIMATION } from "../../../../business";
 import { timeoutPromise } from "../../../../utils/promised";
 import { mediaQuery } from "../../../../constants";
 import { fadeInLeft } from "react-animations";
+import defaultTo from "lodash/defaultTo";
 
 export const LastPlays = (props) => {
-  const [animationSpeed] = useGlobal("animationSpeed");
   const [lastPlays, setLastPlays] = useState(props.lobby?.lastPlays || []);
   const [showMore] = useState(props.showMore);
 
@@ -15,7 +15,8 @@ export const LastPlays = (props) => {
     const initialize = async () => {
       const newLastPlays = props.lobby?.lastPlays || [];
 
-      if (newLastPlays?.length) await timeoutPromise((ANIMATION.max - animationSpeed) * 1000);
+      if (newLastPlays?.length)
+        await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
 
       // Prevent work as a pointer.
       const currentLastPlays = [...newLastPlays];
