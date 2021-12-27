@@ -8,31 +8,25 @@ import { ANIMATION } from "../../../../business";
 import defaultTo from "lodash/defaultTo";
 
 export const LastBall = (props) => {
-  const [lastNumber, setLastNumber] = useState(null);
+  const [lastNumber, setLastNumber] = useState(props.lastNumber);
+  const [outEffect, setOutEffect] = useState(false);
 
   useEffect(() => {
-    if (!props.admin) return;
-    setLastNumber(props.lastNumber);
-  }, [props.lastNumber]);
-
-  useEffect(() => {
-    if (props.admin) return;
-
     const initializeAnimation = async () => {
-      await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
+      setOutEffect(true);
 
-      const _lastPlays = [...(props.lobby?.lastPlays ?? [])];
+      await timeoutPromise(1000);
 
-      const _lastNumber = _lastPlays.length ? _lastPlays.shift() : 0;
+      setOutEffect(false);
 
-      setLastNumber(_lastNumber);
+      setLastNumber(props.lastNumber);
     };
 
     initializeAnimation();
-  }, [props.lobby?.lastPlays]);
+  }, [props.lastNumber]);
 
   return (
-    <LastBallContainer number={lastNumber} vertical={props.vertical}>
+    <LastBallContainer number={lastNumber} prevNumber={props.prevLastNumber} vertical={props.vertical} outEffect={outEffect}>
       {lastNumber > 0 && (
         <div className="ball-container">
           <div className="middle-container">
@@ -53,12 +47,35 @@ export const LastBall = (props) => {
           </div>
         </div>
       )}
+      {props.prevLastNumber > 0 && outEffect && (
+        <div className="ball-container">
+          <div className="middle-container">
+            <div className="inner-container">
+              <div className="letter">
+                {props.prevLastNumber < BOARD_PARAMS.B.value
+                  ? get(props, "lobby.game.letters.b", "B")
+                  : props.prevLastNumber < BOARD_PARAMS.I.value
+                  ? get(props, "lobby.game.letters.i", "I")
+                  : props.prevLastNumber < BOARD_PARAMS.N.value
+                  ? get(props, "lobby.game.letters.n", "N")
+                  : props.prevLastNumber < BOARD_PARAMS.G.value
+                  ? get(props, "lobby.game.letters.g", "G")
+                  : get(props, "lobby.game.letters.o", "O")}
+              </div>
+              <div className="number">{props.prevLastNumber}</div>
+            </div>
+          </div>
+        </div>
+      )}
     </LastBallContainer>
   );
 };
 
 const slideInLeftAnimation = keyframes`${fadeInLeftBig}`;
+const slideOutRightAnimation = keyframes`${fadeOutRightBig}`;
+
 const slideInDownAnimation = keyframes`${fadeInDownBig}`;
+const slideOutDownAnimation = keyframes`${fadeOutDownBig}`;
 
 const LastBallContainer = styled.div`
   width: ${(props) => (props.vertical ? "125px" : "200px")};
@@ -76,7 +93,17 @@ const LastBallContainer = styled.div`
     height: 120px;
     border-radius: 50%;
     background: ${(props) =>
-      props.number < 16
+      props.outEffect
+        ? props.prevNumber < 16
+          ? props.theme.ballsColors.b
+          : props.prevNumber < 31
+          ? props.theme.ballsColors.i
+          : props.prevNumber < 46
+          ? props.theme.ballsColors.n
+          : props.prevNumber < 61
+          ? props.theme.ballsColors.g
+          : props.theme.ballsColors.o
+        : props.number < 16
         ? props.theme.ballsColors.b
         : props.number < 31
         ? props.theme.ballsColors.i
@@ -86,14 +113,32 @@ const LastBallContainer = styled.div`
         ? props.theme.ballsColors.g
         : props.theme.ballsColors.o};
     position: relative;
-    animation: 1s ${(props) => (props.vertical ? slideInDownAnimation : slideInLeftAnimation)};
+    animation: 1s
+      ${(props) =>
+        props.vertical
+          ? props.outEffect
+            ? slideOutDownAnimation
+            : slideInDownAnimation
+          : props.outEffect
+          ? slideOutRightAnimation
+          : slideInLeftAnimation};
 
     .middle-container {
       width: 72%;
       height: 72%;
       border-radius: 50%;
       background: ${(props) =>
-        props.number < 16
+        props.outEffect
+          ? props.prevNumber < 16
+            ? props.theme.ballsColors.borderB
+            : props.prevNumber < 31
+            ? props.theme.ballsColors.borderI
+            : props.prevNumber < 46
+            ? props.theme.ballsColors.borderN
+            : props.prevNumber < 61
+            ? props.theme.ballsColors.borderG
+            : props.theme.ballsColors.borderO
+          : props.number < 16
           ? props.theme.ballsColors.borderB
           : props.number < 31
           ? props.theme.ballsColors.borderI
