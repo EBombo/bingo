@@ -5,6 +5,7 @@ import { BOARD_PARAMS } from "../../../../business";
 import { fadeInDownBig, fadeInLeftBig, fadeOutDownBig, fadeOutRightBig } from "react-animations";
 import { timeoutPromise } from "../../../../utils/promised";
 import { ANIMATION } from "../../../../business";
+import defaultTo from "lodash/defaultTo";
 
 export const LastBall = (props) => {
   const [lastNumber, setLastNumber] = useState(null);
@@ -18,7 +19,9 @@ export const LastBall = (props) => {
     if (props.admin) return;
 
     const initializeAnimation = async () => {
-      await timeoutPromise((ANIMATION.max - props.lobby?.animationSpeed ?? ANIMATION.default) * 1000);
+      console.log("hit 1", (ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
+      await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
+      console.log("hit 2");
 
       const _lastPlays = [...(props.lobby?.lastPlays ?? [])];
 
