@@ -19,9 +19,7 @@ export const LastBall = (props) => {
     if (props.admin) return;
 
     const initializeAnimation = async () => {
-      console.log("hit 1", (ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
       await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
-      console.log("hit 2");
 
       const _lastPlays = [...(props.lobby?.lastPlays ?? [])];
 
