@@ -65,6 +65,8 @@ export const LobbyInPlay = (props) => {
     const _users = Object.values(props.lobby.users);
     const bingoUser = _users.find((user) => user.id === authUser.id);
 
+    if (!bingoUser) return props.showNotification("Ups", "Este usuario no existe");
+
     // Lobby Ref.
     const lobbyRef = firestore.doc(`lobbies/${props.lobby.id}`);
 
