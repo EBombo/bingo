@@ -1,10 +1,13 @@
 import React, { useState } from "reactn";
-import { firestore } from "../../../../firebase";
 import { darkTheme } from "../../../../theme";
 import { Progress } from "antd";
+import { useMemo } from "react";
 
 export const UserProgress = (props) => {
-  const [numberWinners] = useState(props.user.myWinningCard ?? props.numberWinners);
+  const numberWinners = useMemo(() => {
+    return props.user.myWinningCard ?? props.numberWinners;
+  }, [props.user.myWinningCard, props.numberWinners]);
+
   const [userCard] = useState(JSON.parse(props.user.card));
 
   return props.isCard ? (
