@@ -342,7 +342,7 @@ const LobbyCss = styled.div`
       text-align: center;
       display: flex;
       align-items: flex-start;
-      justify-content: space-evenly;
+      justify-content: center;
     }
 
     .left-menus {
