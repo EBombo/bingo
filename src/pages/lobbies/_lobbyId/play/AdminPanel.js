@@ -19,12 +19,13 @@ import { darkTheme } from "../../../../theme";
 import { usePrevious } from "../../../../hooks/usePrevious";
 
 export const AdminPanel = (props) => {
-  const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
-  const [apagon, setApagon] = useState(false);
-
   const [reproductionSpeed] = useGlobal("reproductionSpeed");
   const [animationSpeed] = useGlobal("animationSpeed");
   const [isAutomatic, setIsAutomatic] = useGlobal("isAutomatic");
+
+  const [apagon, setApagon] = useState(false);
+  const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
@@ -32,9 +33,7 @@ export const AdminPanel = (props) => {
   const prevLastNumber = usePrevious(lastNumber);
 
   const startGame = async (callback) => {
-    if (!props.lobby.pattern) {
-      return setIsVisibleModalPattern(true);
-    }
+    if (!props.lobby.pattern) return setIsVisibleModalPattern(true);
 
     setLoading(true);
 

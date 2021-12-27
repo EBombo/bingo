@@ -1,7 +1,7 @@
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useEffect, useState } from "reactn";
 import styled, { keyframes } from "styled-components";
 import get from "lodash/get";
-import { BOARD_PARAMS, ANIMATION } from "../../../../business";
+import { ANIMATION, BOARD_PARAMS } from "../../../../business";
 import { timeoutPromise } from "../../../../utils/promised";
 import { mediaQuery } from "../../../../constants";
 import { fadeInLeft } from "react-animations";

@@ -1,11 +1,9 @@
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useEffect, useState } from "reactn";
 import styled, { keyframes } from "styled-components";
 import get from "lodash/get";
 import { BOARD_PARAMS } from "../../../../business";
 import { fadeInDownBig, fadeInLeftBig, fadeOutDownBig, fadeOutRightBig } from "react-animations";
 import { timeoutPromise } from "../../../../utils/promised";
-import { ANIMATION } from "../../../../business";
-import defaultTo from "lodash/defaultTo";
 
 export const LastBall = (props) => {
   const [lastNumber, setLastNumber] = useState(props.lastNumber);
@@ -26,7 +24,12 @@ export const LastBall = (props) => {
   }, [props.lastNumber]);
 
   return (
-    <LastBallContainer number={lastNumber} prevNumber={props.prevLastNumber} vertical={props.vertical} outEffect={outEffect}>
+    <LastBallContainer
+      number={lastNumber}
+      prevNumber={props.prevLastNumber}
+      vertical={props.vertical}
+      outEffect={outEffect}
+    >
       {lastNumber > 0 && (
         <div className="ball-container">
           <div className="middle-container">
