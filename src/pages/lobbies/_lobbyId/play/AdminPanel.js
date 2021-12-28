@@ -92,7 +92,9 @@ export const AdminPanel = (props) => {
   useInterval(
     callNumber,
     // Prevent auto play.
-    isAutomatic && !props.lobby.bingo && !props.isVisibleModalFinal ? (reproductionSpeed + animationSpeed) * 1000 : null
+    isAutomatic && !props.lobby.bingo && !props.isVisibleModalFinal
+      ? (20 - reproductionSpeed + animationSpeed) * 1000
+      : null
   );
 
   const modalConfirm = () => (
