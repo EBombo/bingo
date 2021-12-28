@@ -106,8 +106,54 @@ export const LobbyAdmin = (props) => {
   };
 
   return (
-    <LobbyCss>
-      <div className="header">
+    <LobbyCss {...props}>
+      <div className="title">
+        {props.lobby?.game?.name}
+      </div>
+      <div className="header"> 
+
+        <div className="item-pin">
+          <Tooltip placement="bottom" title="Click aquí para copiar el link de ebombo con pin">
+            <div
+              className="label"
+              onClick={() => {
+                navigator.clipboard.writeText(`${hostName}?pin=${props.lobby?.pin}`);
+                props.showNotification("OK", "Link copiado!", "success");
+              }}
+            >
+              {props.lobby.isLocked 
+                ? "Este juego esta bloqueado"
+                : (<>Entra a <span className="font-black">ebombo.io</span></> )}
+            </div>
+          </Tooltip>
+          <div className="pin-label">Pin del juego:</div>
+          <div className="pin">
+            {props.lobby.isLocked ? (
+              <ButtonBingo variant="primary" margin="10px 20px">
+                <Image
+                  cursor="pointer"
+                  src={`${config.storageUrl}/resources/lock.svg`}
+                  height="24px"
+                  width="24px"
+                  size="contain"
+                  margin="auto"
+                />
+              </ButtonBingo>
+            ) : (
+              <div
+                onClick={() => {
+                  navigator.clipboard.writeText(props.lobby.pin);
+                  props.showNotification("OK", "PIN copiado!", "success");
+                }}
+              >
+                <Tooltip placement="bottom" title="Click aquí para copiar el PIN">
+                  {props.lobby?.pin}
+                </Tooltip>
+              </div>
+            )}
+          </div>
+        </div>
+
         <div className="left-menus">
           <Popover
             trigger="click"
@@ -135,13 +181,13 @@ export const LobbyAdmin = (props) => {
               </AudioStyled>
             }
           >
-            <ButtonBingo variant="primary" margin="10px 20px">
+            <ButtonBingo variant="primary">
               {isPlay ? (
                 <Image
                   cursor="pointer"
                   src={`${config.storageUrl}/resources/sound.svg`}
-                  height="25px"
-                  width="25px"
+                  height="24px"
+                  width="24px"
                   size="contain"
                   margin="auto"
                 />
@@ -168,7 +214,6 @@ export const LobbyAdmin = (props) => {
           >
             <ButtonBingo
               variant="primary"
-              margin="10px 20px"
               disabled={!isPlay}
               onClick={() => {
                 if (!props.audioRef.current) return;
@@ -188,59 +233,15 @@ export const LobbyAdmin = (props) => {
               <Image
                 cursor="pointer"
                 src={isMuted ? `${config.storageUrl}/resources/mute.svg` : `${config.storageUrl}/resources/volume.svg`}
-                height="25px"
-                width="25px"
+                height="24px"
+                width="24px"
                 size="contain"
                 margin="auto"
               />
             </ButtonBingo>
           </Popover>
-        </div>
-
-        <div className="item-pin">
-          <Tooltip placement="bottom" title="Click aquí para copiar el link de ebombo con pin">
-            <div
-              className="label"
-              onClick={() => {
-                navigator.clipboard.writeText(`${hostName}?pin=${props.lobby?.pin}`);
-                props.showNotification("OK", "Link copiado!", "success");
-              }}
-            >
-              {props.lobby.isLocked ? "Este juego esta bloqueado" : "Entra a ebombo.io"}
-            </div>
-          </Tooltip>
-          <div className="pin-label">Pin del juego:</div>
-          <div className="pin">
-            {props.lobby.isLocked ? (
-              <ButtonBingo variant="primary" margin="10px 20px">
-                <Image
-                  cursor="pointer"
-                  src={`${config.storageUrl}/resources/lock.svg`}
-                  height="25px"
-                  width="25px"
-                  size="contain"
-                  margin="auto"
-                />
-              </ButtonBingo>
-            ) : (
-              <div
-                onClick={() => {
-                  navigator.clipboard.writeText(props.lobby.pin);
-                  props.showNotification("OK", "PIN copiado!", "success");
-                }}
-              >
-                <Tooltip placement="bottom" title="Click aquí para copiar el PIN">
-                  {props.lobby?.pin}
-                </Tooltip>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="right-menus">
           <ButtonBingo
             variant="primary"
-            margin="10px 20px"
             disabled={isLoadingLock}
             loading={isLoadingLock}
             onClick={async () => {
@@ -253,16 +254,21 @@ export const LobbyAdmin = (props) => {
               <Image
                 src={`${config.storageUrl}/resources/${props.lobby.isLocked ? "lock.svg" : "un-lock.svg"}`}
                 cursor="pointer"
-                height="25px"
-                width="25px"
+                height="24px"
+                width="24px"
                 size="contain"
                 margin="auto"
               />
             )}
           </ButtonBingo>
+        </div>
+
+        <div className="right-menus">
+          
           <ButtonAnt
             className="btn-start"
             loading={isLoadingStart}
+            color="success"
             disabled={!users?.length || isLoadingStart}
             onClick={async () => {
               setIsLoadingStart(true);
@@ -274,8 +280,6 @@ export const LobbyAdmin = (props) => {
           </ButtonAnt>
         </div>
       </div>
-
-      <Divider />
 
       <div className="container-users">
         <div className="all-users">
@@ -320,20 +324,52 @@ const AudioStyled = styled.div`
 `;
 
 const LobbyCss = styled.div`
-  width: fit-content;
+  min-height: 100vh;
+  background-image: url("${(props) => `${config.storageUrl}/resources/balls/coral-pattern-tablet.svg`}");
 
   ${mediaQuery.afterTablet} {
     width: auto;
   }
 
+
+  .title {
+    text-align: center;
+    background: ${(props) => props.theme.basic.white};
+    color: ${(props) => props.theme.basic.black};
+    padding: 0.5rem 0;
+    font-size: 18px;
+    font-weight: 700;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    ${mediaQuery.afterTablet} {
+      font-size: 2rem;
+    }
+  }
+
   .header {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr auto;
+    padding: 2rem 1rem 2rem 1rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+    background: ${(props) => props.theme.basic.secondary};
+
+    ${mediaQuery.afterTablet} {
+      grid-template-columns: 1fr auto 1fr;
+      grid-template-rows: auto;
+
+      align-items: start;
+    }
 
     .right-menus {
+      margin-left: 0.25rem;
+      justify-content: flex-end;
+
       .btn-start {
-        margin: 10px 20px !important;
-        padding: 10px 30px !important;
+        padding: 11px 36px !important;
+        ${mediaQuery.afterTablet} {
+          padding: 11px 72px !important;
+        }
       }
     }
 
@@ -341,46 +377,70 @@ const LobbyCss = styled.div`
     .left-menus {
       text-align: center;
       display: flex;
-      align-items: flex-start;
-      justify-content: center;
+      align-items: center;
     }
 
     .left-menus {
+      margin-right: 0.25rem;
+      justify-content: flex-start;
+
       button {
         width: 45px;
         box-shadow: none;
-        border-radius: 50px;
+        margin: 0 0.5rem 0 0;
       }
     }
 
     .item-pin {
-      width: 370px;
-      height: 370px;
-      font-size: 20px;
-      max-width: 400px;
-      border-radius: 50%;
-      padding-top: 175px;
+      font-size: 21px;
+      border-radius: 4px 4px 0px 0px;
       text-align: center;
-      margin: -175px auto 2rem auto;
+      margin: 0 0 2rem 0;
       color: ${(props) => props.theme.basic.white};
-      box-shadow: 0 25px 0 ${(props) => props.theme.basic.secondaryDark};
+      background: ${(props) => props.theme.basic.secondaryDarken};
+      box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
 
-      .pin-label {
-        font-size: 2rem;
-      }
+      grid-column: 1 / 3;
+      grid-row: 1 / 2;
 
-      .pin {
-        font-size: 2rem;
-        cursor: pointer;
+      ${mediaQuery.afterTablet} {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+        margin: 0;
       }
 
       .label {
         background: ${(props) => props.theme.basic.white};
         color: ${(props) => props.theme.basic.black};
-        font-family: Gloria Hallelujah;
         font-style: normal;
         font-weight: normal;
         cursor: pointer;
+      }
+
+      .pin-label {
+        display: inline-block;
+        font-size: 1.25rem;
+        font-weight: 900;
+        vertical-align: super;
+        margin: 0 0.25rem;
+
+        ${mediaQuery.afterTablet} {
+          margin: 0 0.5rem 0 1.5rem;
+          font-size: 2.5rem;
+        }
+      }
+
+      .pin {
+        display: inline-block;
+        font-size: 2.5rem;
+        cursor: pointer;
+        font-weight: 900;
+        margin: 0 0.25rem;
+
+        ${mediaQuery.afterTablet} {
+          margin: 0 1.5rem 0 0.5rem;
+          font-size: 5rem;
+        }
       }
     }
   }
@@ -399,11 +459,17 @@ const LobbyCss = styled.div`
       margin-bottom: 2rem;
       color: ${(props) => props.theme.basic.white};
       background: ${(props) => props.theme.basic.primaryDark};
+      font-weight: bold;
+
+      span {
+        vertical-align: baseline;
+      }
     }
 
     .list-users {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 4px;
 
       ${mediaQuery.afterTablet} {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -411,14 +477,15 @@ const LobbyCss = styled.div`
       }
 
       .item-user {
-        padding: 5px 10px;
+        padding: 8px 10px;
         text-align: center;
         border-radius: 5px;
         color: ${(props) => props.theme.basic.white};
-        background: ${(props) => props.theme.basic.primary};
+        background: ${(props) => props.theme.basic.secondaryDarken};
+        font-weight: bold;
 
         ${mediaQuery.afterTablet} {
-          padding: 15px 10px;
+          padding: 12px 10px;
         }
       }
     }
