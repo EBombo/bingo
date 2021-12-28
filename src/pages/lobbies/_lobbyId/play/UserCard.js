@@ -20,7 +20,7 @@ export const UserCard = (props) => {
   }, [props.user, authUser]);
 
   useEffect(() => {
-    if (props?.lobby?.settings?.cardAutofill) return;
+    if (props.lobby?.settings?.cardAutofill) return;
 
     const fetchMyWiningCard = async () => {
       const userQuery = await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(userId).get();
@@ -45,7 +45,7 @@ export const UserCard = (props) => {
     };
 
     fetchMyWiningCard();
-  }, []);
+  }, [props?.lobby]);
 
   useEffect(() => {
     const board = defaultTo(props.lobby.board, {});
