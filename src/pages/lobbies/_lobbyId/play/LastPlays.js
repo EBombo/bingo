@@ -60,7 +60,7 @@ export const LastPlays = (props) => {
       </div>
       {props.showMore && (
         <div className="balls">
-          {lastPlays.slice(5, 9).map((number) => (
+          {lastPlays.slice(4, 8).map((number) => (
             <BallContainer number={number} key={number}>
               <div className="middle-container">
                 <div className="inner-container">
@@ -84,7 +84,7 @@ export const LastPlays = (props) => {
       )}
       {props.showMore && (
         <div className="balls">
-          {lastPlays.slice(9, 13).map((number) => (
+          {lastPlays.slice(8, 12).map((number) => (
             <BallContainer number={number} key={number}>
               <div className="middle-container">
                 <div className="inner-container">
