@@ -14,7 +14,6 @@ export const ChatMessage = (props) => {
       received={get(authUser, "id", "") !== get(props, "message.user.id", null)}
       sameAsBefore={sameAsBefore}
       isAdmin={get(props, "message.user.isAdmin", null)}
-      key={props.index}
     >
       <div className="header">
         {!sameAsBefore && (

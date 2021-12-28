@@ -16,31 +16,25 @@ import { ModalContainer } from "../../../../components/common/ModalContainer";
 import styled from "styled-components";
 import { ModalPattern } from "./ModalPattern";
 import { darkTheme } from "../../../../theme";
-import { usePrevious } from "../../../../hooks/usePrevious";
 
 export const AdminPanel = (props) => {
-  const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
-  const [apagon, setApagon] = useState(false);
-
   const [reproductionSpeed] = useGlobal("reproductionSpeed");
   const [animationSpeed] = useGlobal("animationSpeed");
   const [isAutomatic, setIsAutomatic] = useGlobal("isAutomatic");
+
+  const [apagon, setApagon] = useState(false);
+  const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [isLoadingCalledNumber, setIsLoadingCalledNumber] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
-  const [lastNumber, setLastNumber] = useState(0);
-  const prevLastNumber = usePrevious(lastNumber);
 
   const startGame = async (callback) => {
-    if (!props.lobby.pattern) {
-      return setIsVisibleModalPattern(true);
-    }
+    if (!props.lobby.pattern) return setIsVisibleModalPattern(true);
 
     setLoading(true);
 
     const board = createBoard();
-
-    setLastNumber(0);
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       round: 0,
@@ -66,6 +60,11 @@ export const AdminPanel = (props) => {
       if (!value) missingNumbers.push(key);
     });
 
+    if (!missingNumbers?.length) {
+      setIsLoadingCalledNumber(false);
+      return props.showNotification("Ups", "Todas las bolillas ya han salido!");
+    }
+
     const randomIndex = Math.floor(Math.random() * missingNumbers.length);
 
     const numberCalled = missingNumbers[randomIndex];
@@ -75,7 +74,7 @@ export const AdminPanel = (props) => {
 
     newBoard[numberCalled] = true;
 
-    const newLastPlays = props.lobby.lastPlays;
+    let newLastPlays = [...(props.lobby?.lastPlays ?? [])];
 
     newLastPlays.unshift(numberCalled);
 
@@ -93,7 +92,9 @@ export const AdminPanel = (props) => {
   useInterval(
     callNumber,
     // Prevent auto play.
-    isAutomatic && !props.lobby.bingo && !props.isVisibleModalFinal ? (reproductionSpeed + animationSpeed) * 1000 : null
+    isAutomatic && !props.lobby.bingo && !props.isVisibleModalFinal
+      ? (20 - reproductionSpeed + animationSpeed) * 1000
+      : null
   );
 
   const modalConfirm = () => (
@@ -164,11 +165,11 @@ export const AdminPanel = (props) => {
           </div>
           <div className="right-container">
             <div className="board-container">
-              <BingoBoard {...props} lastNumber={lastNumber} setLastNumber={setLastNumber} isVisible />
+              <BingoBoard {...props} isVisible />
             </div>
             <div className="bottom-section">
-              <div className="ball-called" key={lastNumber}>
-                <LastBall prevLastNumber={prevLastNumber} {...props} />
+              <div className="ball-called">
+                <LastBall {...props} />
               </div>
               <div className="middle-container">
                 {props.lobby.startGame ? (
@@ -218,7 +219,7 @@ export const AdminPanel = (props) => {
       </Desktop>
       <Tablet>
         <div className="bingo-board">
-          <BingoBoard {...props} setLastNumber={setLastNumber} isVisible />
+          <BingoBoard {...props} isVisible />
         </div>
         <div className="pattern-rounds">
           <div className="left-container">
@@ -255,7 +256,7 @@ export const AdminPanel = (props) => {
             </ButtonAnt>
           </div>
           <div className="right-container">
-            <LastBall vertical prevLastNumber={prevLastNumber} {...props} />
+            <LastBall {...props} vertical />
             <div className="last-plays">
               <LastPlays {...props} />
             </div>

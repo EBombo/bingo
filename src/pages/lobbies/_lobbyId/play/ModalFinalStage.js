@@ -71,12 +71,9 @@ export const ModalFinalStage = (props) => {
   const newCards = async () => {
     const newUsers = newUsersCard();
 
-    const board = createBoard();
-
     const promiseNewCards = firestore.doc(`lobbies/${props.lobby.id}`).update({
       round: 0,
       lastPlays: [],
-      board,
       finalStage: false,
       updateAt: new Date(),
     });

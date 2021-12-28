@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { Input, Popover } from "antd";
 import orderBy from "lodash/orderBy";
+import defaultTo from "lodash/defaultTo";
 import { ModalUserCard } from "./ModalUserCard";
 import { config, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
@@ -65,10 +66,12 @@ export const UsersTabs = (props) => {
     let hits = 0;
     let sizePattern = 0;
 
+    let _numberWinners = props.lobby.game.cardAutofill ? numberWinners : defaultTo(user.myWinningCard, []);
+
     lobbyPattern.forEach((y, indexY) =>
       y.forEach((x, indexX) => {
         if (!!x) sizePattern++;
-        if (!!x && numberWinners.includes(userPattern[indexY][indexX])) hits++;
+        if (!!x && _numberWinners.includes(userPattern[indexY][indexX])) hits++;
       })
     );
 

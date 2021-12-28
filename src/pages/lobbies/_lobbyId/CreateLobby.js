@@ -32,7 +32,7 @@ export const CreateLobby = (props) => {
   const [userIdentity, setUserIdentity] = useState(true);
   const [showAllCards, setShowAllCards] = useState(false);
   const [cardAutofill, setCardAutofill] = useState(false);
-  const [showParticipants, setShowParticipants] = useState(true);
+  const [showParticipants, setShowParticipants] = useState(false);
   const [showBoardToUser, setShowBoardToUser] = useState(false);
   const [awards, setAwards] = useState([
     {
@@ -241,24 +241,28 @@ export const CreateLobby = (props) => {
 
               <div className="option">
                 <div>
-                  <div className="title-opt">Los jugadores pueden ver cartillas de otros jug.</div>
-                </div>
-                <Switch defaultChecked={showAllCards} onChange={() => setShowAllCards(!showAllCards)} />
-              </div>
-
-              <div className="option">
-                <div>
                   <div className="title-opt">El jug. tiene que llenar su cartilla manualmente</div>
                   <span>Los jugadores tienen que estar atentos al juego</span>
                 </div>
                 <Switch defaultChecked={!cardAutofill} onChange={() => setCardAutofill(!cardAutofill)} />
               </div>
 
-              <div className="option">
+              <div className="option_ hidden">
                 <div>
                   <div className="title-opt">El jug. puede ver a los demás participantes</div>
                 </div>
                 <Switch defaultChecked={showParticipants} onChange={() => setShowParticipants(!showParticipants)} />
+              </div>
+
+              <div className="option_ hidden">
+                <div>
+                  <div className="title-opt">Los jugadores pueden ver cartillas de otros jug.</div>
+                </div>
+                <Switch
+                  defaultChecked={showAllCards}
+                  onChange={() => setShowAllCards(!showAllCards)}
+                  disabled={showParticipants}
+                />
               </div>
 
               <div className="option">

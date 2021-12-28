@@ -266,7 +266,7 @@ export const LobbyAdmin = (props) => {
             disabled={!users?.length || isLoadingStart}
             onClick={async () => {
               setIsLoadingStart(true);
-              await updateLobby(true, new Date());
+              await updateLobby(false, new Date());
               setIsLoadingStart(false);
             }}
           >
@@ -342,7 +342,7 @@ const LobbyCss = styled.div`
       text-align: center;
       display: flex;
       align-items: flex-start;
-      justify-content: space-evenly;
+      justify-content: center;
     }
 
     .left-menus {

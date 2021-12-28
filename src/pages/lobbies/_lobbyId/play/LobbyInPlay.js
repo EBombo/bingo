@@ -6,7 +6,6 @@ import { ModalWinner } from "./ModalWinner";
 import { ModalAwards } from "./ModalAwards";
 import { UsersTabs } from "./UsersTabs";
 import defaultTo from "lodash/defaultTo";
-import isEmpty from "lodash/isEmpty";
 import { UserLayout } from "../userLayout";
 import { firestore } from "../../../../firebase";
 import { AdminPanel } from "./AdminPanel";
@@ -39,22 +38,52 @@ export const LobbyInPlay = (props) => {
   }, [props.lobby.bingo]);
 
   useEffect(() => {
-    if (isEmpty(props.lobby.users)) return;
+    /** Don't use "props.lobby.users" because the "get" query gets users progressively  **/
+    if (!props.lobby) return;
+    if (!authUser?.id) return;
+    // AuthUser is admin.
+    if (props.lobby.game.usersIds.includes(authUser.id)) return;
 
-    const currentUserId = authUser.id;
-    if (props.lobby?.users?.[currentUserId] || props.lobby.game.usersIds.includes(currentUserId)) return;
+    const verifyUserAccount = async () => {
+      const userQuery = await firestore
+        .collection("lobbies")
+        .doc(props.lobby.id)
+        .collection("users")
+        .doc(authUser.id)
+        .get();
 
-    props.logout();
+      // User is registered in lobby.
+      if (userQuery.exists) return;
+
+      await props.logout();
+    };
+
+    verifyUserAccount();
   }, [props.lobby.users]);
 
   const callBingo = async () => {
     const _users = Object.values(props.lobby.users);
-
     const bingoUser = _users.find((user) => user.id === authUser.id);
 
-    await firestore.doc(`lobbies/${props.lobby.id}`).update({
-      bingo: bingoUser,
-      updateAt: new Date(),
+    if (!bingoUser) return props.showNotification("Ups", "Este usuario no existe");
+
+    // Lobby Ref.
+    const lobbyRef = firestore.doc(`lobbies/${props.lobby.id}`);
+
+    // Transactions for call bingo.
+    await firestore.runTransaction(async (transaction) => {
+      // Fetch lobby.
+      const lobbyQuery = await transaction.get(lobbyRef);
+      const lobby_ = lobbyQuery.data();
+
+      // Prevent call bingo.
+      if (lobby_?.bingoUser) return;
+
+      // Call bingo.
+      transaction.update(lobbyRef, {
+        bingo: bingoUser,
+        updateAt: new Date(),
+      });
     });
   };
 
