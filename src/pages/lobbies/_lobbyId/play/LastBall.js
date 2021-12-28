@@ -13,6 +13,8 @@ export const LastBall = (props) => {
 
   useEffect(() => {
     if (isLoading) return setIsLoading(false);
+    // Prevent re render.
+    if (props.lobby?.lastPlays?.[0] === lastNumber) return;
 
     const initializeAnimation = async () => {
       await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
