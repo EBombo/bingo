@@ -32,6 +32,7 @@ export const UsersTabs = (props) => {
 
   const resetUsers = () => {
     let newUsers = Object.values(props.lobby.users ?? []);
+
     newUsers = newUsers.map((user) => {
       const userProgress = progress(user);
       return {
