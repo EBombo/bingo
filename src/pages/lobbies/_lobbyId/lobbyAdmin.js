@@ -266,7 +266,7 @@ export const LobbyAdmin = (props) => {
             disabled={!users?.length || isLoadingStart}
             onClick={async () => {
               setIsLoadingStart(true);
-              await updateLobby(true, new Date());
+              await updateLobby(false, new Date());
               setIsLoadingStart(false);
             }}
           >
