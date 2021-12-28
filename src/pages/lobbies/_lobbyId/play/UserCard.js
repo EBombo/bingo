@@ -29,9 +29,11 @@ export const UserCard = (props) => {
 
       const user = userQuery.data();
 
+      if (!user) return;
+      if (!user?.card) return;
       if (!user?.myWinningCard) return;
 
-      const userCard = JSON.parse(props.lobby.users[userId]?.card ?? "[]");
+      const userCard = JSON.parse(user.card ?? "[]");
       const newMatrix = [...matrix];
 
       // Autofill user card with "myWinningCard" [array].
