@@ -96,7 +96,7 @@ export const UserCard = (props) => {
             <tr key={`key-${row}`}>
               {arrNums.map((num, col) => (
                 <td key={`key-${num}-${col}-${matrix}`}>
-                  {props.lobby.settings.cardAutofill ? (
+                  {props.lobby?.settings?.cardAutofill ? (
                     <div className={`${props.lobby.board && props.lobby.board[num] && `active`}`}>{num}</div>
                   ) : isAuthUser ? (
                     <div

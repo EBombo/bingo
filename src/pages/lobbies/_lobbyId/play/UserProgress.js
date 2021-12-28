@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 export const UserProgress = (props) => {
   const numberWinners = useMemo(() => {
-    if (props.lobby.settings.cardAutofill) return props.numberWinners ?? [];
+    if (props.lobby?.settings?.cardAutofill) return props.numberWinners ?? [];
 
     return props.user.myWinningCard ?? [];
   }, [props.lobby, props.user.myWinningCard, props.numberWinners]);
