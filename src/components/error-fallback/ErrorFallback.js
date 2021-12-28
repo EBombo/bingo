@@ -15,10 +15,6 @@ export const ErrorFallback = (props) => {
     if (props.error.data) console.debug(props.error.data);
   }, [props.error]);
 
-  useEffect(() => {
-    setAuthUserLS(null);
-  }, []);
-
   return (
     <div className="container-error-server">
       <h3 style={{ color: "#fff", textAlign: "center", marginBottom: "10px" }}>

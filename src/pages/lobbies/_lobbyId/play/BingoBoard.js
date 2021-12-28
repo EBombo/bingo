@@ -46,7 +46,6 @@ export const BingoBoard = (props) => {
       setPosEffectX(-1);
 
       setCurrentBoard(props.lobby.board);
-      props.setLastNumber && props.setLastNumber(props.lobby?.lastPlays?.[0] ?? 0);
     };
 
     initialize();
@@ -99,9 +98,9 @@ export const BingoBoard = (props) => {
           <tr>
             {range(1, 15).map((number) => (
               <td
-                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
-                  number === props.lastNumber && `last-number`
-                }`}
+                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${
+                  currentBoard[number] ? `active` : ""
+                } `}
                 key={number}
               >
                 {number}
@@ -111,9 +110,9 @@ export const BingoBoard = (props) => {
           <tr>
             {range(16, 30).map((number) => (
               <td
-                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
-                  number === props.lastNumber && `last-number`
-                }`}
+                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${
+                  currentBoard[number] ? `active` : ""
+                } `}
                 key={number}
               >
                 {number}
@@ -123,9 +122,9 @@ export const BingoBoard = (props) => {
           <tr>
             {range(31, 45).map((number) => (
               <td
-                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
-                  number === props.lastNumber && `last-number`
-                }`}
+                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${
+                  currentBoard[number] ? `active` : ""
+                } `}
                 key={number}
               >
                 {number}
@@ -135,9 +134,9 @@ export const BingoBoard = (props) => {
           <tr>
             {range(46, 60).map((number) => (
               <td
-                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
-                  number === props.lastNumber && `last-number`
-                }`}
+                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${
+                  currentBoard[number] ? `active` : ""
+                } `}
                 key={number}
               >
                 {number}
@@ -147,9 +146,9 @@ export const BingoBoard = (props) => {
           <tr>
             {range(61, 75).map((number) => (
               <td
-                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${currentBoard[number] && `active`} ${
-                  number === props.lastNumber && `last-number`
-                }`}
+                className={`td-numbers ${posEffectX === number ? "activex" : ""} ${
+                  currentBoard[number] ? `active` : ""
+                } `}
                 key={number}
               >
                 {number}
@@ -239,11 +238,6 @@ const BoardContainer = styled.div`
         .active {
           background: ${(props) => props.theme.basic.primary};
           color: ${(props) => props.theme.basic.whiteDark};
-
-          &.last-number {
-            background: ${(props) => props.theme.basic.success};
-            color: ${(props) => props.theme.basic.black};
-          }
         }
 
         .activex {

@@ -9,15 +9,12 @@ export const SliderControls = (props) => {
   const [animationSpeed, setAnimationSpeed] = useGlobal("animationSpeed");
   const [reproductionSpeed, setReproductionSpeed] = useGlobal("reproductionSpeed");
 
-  // TODO: Consider only showing when "isAutomatic" is active.
-  //if (!isAutomatic) return null;
-
   const updateAnimationSpeed = async (value) => {
-    setAnimationSpeed(value);
+    await setAnimationSpeed(value);
     await firestore.collection("lobbies").doc(`${props.lobby.id}`).update({
-      animationSpeed: value
+      animationSpeed: value,
     });
-  }
+  };
 
   return (
     <SliderControlsCss>

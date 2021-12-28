@@ -241,9 +241,10 @@ export const CreateLobby = (props) => {
 
               <div className="option">
                 <div>
-                  <div className="title-opt">Los jugadores pueden ver cartillas de otros jug.</div>
+                  <div className="title-opt">El jug. tiene que llenar su cartilla manualmente</div>
+                  <span>Los jugadores tienen que estar atentos al juego</span>
                 </div>
-                <Switch defaultChecked={showAllCards} onChange={() => setShowAllCards(!showAllCards)} />
+                <Switch defaultChecked={!cardAutofill} onChange={() => setCardAutofill(!cardAutofill)} />
               </div>
 
               <div className="option_ hidden">
