@@ -4,30 +4,13 @@ import { CardPattern } from "./CardPattern";
 import { LastBall } from "./LastBall";
 import { ButtonAnt } from "../../../../components/form";
 import { LastPlays } from "./LastPlays";
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useGlobal } from "reactn";
 import defaultTo from "lodash/defaultTo";
 import { Chat } from "../../../../components/chat";
 import { Desktop, Tablet } from "../../../../constants";
-import { timeoutPromise } from "../../../../utils/promised";
-import { ANIMATION } from "../../../../business";
 
 export const UserPanel = (props) => {
   const [authUser] = useGlobal("user");
-
-  const [lastNumber, setLastNumber] = useState(0);
-  const [prevLastNumber, setPrevLastNumber] = useState(0);
-
-  useEffect(() => {
-    const initialize = async () => {
-      if (!props.lobby?.lastPlays?.length) return setLastNumber(0);
-
-      await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
-      setLastNumber(props.lobby.lastPlays[0]);
-      setPrevLastNumber(props.lobby.lastPlays[0]);
-    };
-
-    initialize();
-  }, [props.lobby?.lastPlays]);
 
   return (
     <>
