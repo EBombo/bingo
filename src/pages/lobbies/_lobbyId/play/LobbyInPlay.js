@@ -77,7 +77,7 @@ export const LobbyInPlay = (props) => {
       const lobby_ = lobbyQuery.data();
 
       // Prevent call bingo.
-      if (lobby_?.bingoUser) return;
+      if (lobby_?.bingo) return;
 
       // Call bingo.
       transaction.update(lobbyRef, {
