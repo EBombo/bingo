@@ -45,10 +45,10 @@ export const UserPanel = (props) => {
           </div>
           <div className="right-user-content">
             <div className="board-container">
-              <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
+              <BingoBoard {...props} isVisible={props.lobby.settings.showBoardToUser} />
             </div>
             <div className="bottom-section">
-              <LastBall lastNumber={lastNumber} prevLastNumber={prevLastNumber} vertical {...props} />
+              <LastBall {...props} vertical />
               <div className="last-plays-container">
                 <LastPlays showMore {...props} />
               </div>
@@ -72,7 +72,7 @@ export const UserPanel = (props) => {
             </div>
           </div>
           <div className="right-side">
-            <LastBall lastNumber={lastNumber} prevLastNumber={prevLastNumber} {...props} />
+            <LastBall {...props} />
             <LastPlays {...props} />
           </div>
         </div>
@@ -94,7 +94,7 @@ export const UserPanel = (props) => {
           )}
         </div>
         <div className="bingo-board">
-          <BingoBoard {...props} setLastNumber={setLastNumber} isVisible={props.lobby.settings.showBoardToUser} />
+          <BingoBoard {...props} isVisible={props.lobby.settings.showBoardToUser} />
         </div>
         <div className="chat-container">
           <Chat title={"CHAT DEL BINGO"} />

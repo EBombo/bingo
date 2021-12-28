@@ -6,23 +6,28 @@ import { timeoutPromise } from "../../../../utils/promised";
 import { mediaQuery } from "../../../../constants";
 import { fadeInLeft } from "react-animations";
 import defaultTo from "lodash/defaultTo";
+import { useMemo } from "react";
 
 export const LastPlays = (props) => {
-  const [lastPlays, setLastPlays] = useState(props.lobby?.lastPlays || []);
-  const [showMore] = useState(props.showMore);
+  const currentLastPlays = useMemo(() => {
+    // Prevent work as a pointer.
+    let lastBalls = [...(props.lobby?.lastPlays || [])];
+    // Prevent delete undefined.
+    lastBalls.length ? lastBalls.shift() : [];
+
+    return lastBalls;
+  }, [props.lobby?.lastPlays]);
+
+  const [lastPlays, setLastPlays] = useState(currentLastPlays);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (isLoading) return setIsLoading(false);
+
     const initialize = async () => {
-      const newLastPlays = props.lobby?.lastPlays || [];
+      await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
 
-      if (newLastPlays?.length)
-        await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
-
-      // Prevent work as a pointer.
-      const currentLastPlays = [...newLastPlays];
-
-      // Prevent delete undefined.
-      currentLastPlays?.length && currentLastPlays.shift();
+      // Update local lastPlays.
       setLastPlays(currentLastPlays);
     };
 
@@ -53,7 +58,7 @@ export const LastPlays = (props) => {
           </BallContainer>
         ))}
       </div>
-      {showMore && (
+      {props.showMore && (
         <div className="balls">
           {lastPlays.slice(5, 9).map((number) => (
             <BallContainer number={number} key={number}>
@@ -77,7 +82,7 @@ export const LastPlays = (props) => {
           ))}
         </div>
       )}
-      {showMore && (
+      {props.showMore && (
         <div className="balls">
           {lastPlays.slice(9, 13).map((number) => (
             <BallContainer number={number} key={number}>

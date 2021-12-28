@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from "reactn";
 import styled, { keyframes } from "styled-components";
 import get from "lodash/get";
-import { BOARD_PARAMS } from "../../../../business";
+import { ANIMATION, BOARD_PARAMS } from "../../../../business";
 import { fadeInDownBig, fadeInLeftBig, fadeOutDownBig, fadeOutRightBig } from "react-animations";
 import { timeoutPromise } from "../../../../utils/promised";
+import defaultTo from "lodash/defaultTo";
 
 export const LastBall = (props) => {
-  const [lastNumber, setLastNumber] = useState(props.lastNumber);
+  const [lastNumber, setLastNumber] = useState(props.lobby?.lastPlays?.[0] ?? null);
   const [outEffect, setOutEffect] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (isLoading) return setIsLoading(false);
+
     const initializeAnimation = async () => {
+      await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
+
       setOutEffect(true);
 
       await timeoutPromise(1000);
 
       setOutEffect(false);
 
-      setLastNumber(props.lastNumber);
+      setLastNumber(props.lobby?.lastPlays?.[0] ?? null);
     };
 
     initializeAnimation();
-  }, [props.lastNumber]);
+  }, [props.lobby?.lastPlays]);
 
   return (
-    <LastBallContainer
-      number={lastNumber}
-      prevNumber={props.prevLastNumber}
-      vertical={props.vertical}
-      outEffect={outEffect}
-    >
-      {lastNumber > 0 && (
+    <LastBallContainer number={lastNumber} vertical={props.vertical} outEffect={outEffect}>
+      {lastNumber && (
         <div className="ball-container">
           <div className="middle-container">
             <div className="inner-container">
@@ -46,26 +47,6 @@ export const LastBall = (props) => {
                   : get(props, "lobby.game.letters.o", "O")}
               </div>
               <div className="number">{lastNumber}</div>
-            </div>
-          </div>
-        </div>
-      )}
-      {props.prevLastNumber > 0 && outEffect && (
-        <div className="ball-container">
-          <div className="middle-container">
-            <div className="inner-container">
-              <div className="letter">
-                {props.prevLastNumber < BOARD_PARAMS.B.value
-                  ? get(props, "lobby.game.letters.b", "B")
-                  : props.prevLastNumber < BOARD_PARAMS.I.value
-                  ? get(props, "lobby.game.letters.i", "I")
-                  : props.prevLastNumber < BOARD_PARAMS.N.value
-                  ? get(props, "lobby.game.letters.n", "N")
-                  : props.prevLastNumber < BOARD_PARAMS.G.value
-                  ? get(props, "lobby.game.letters.g", "G")
-                  : get(props, "lobby.game.letters.o", "O")}
-              </div>
-              <div className="number">{props.prevLastNumber}</div>
             </div>
           </div>
         </div>
@@ -96,17 +77,7 @@ const LastBallContainer = styled.div`
     height: 120px;
     border-radius: 50%;
     background: ${(props) =>
-      props.outEffect
-        ? props.prevNumber < 16
-          ? props.theme.ballsColors.b
-          : props.prevNumber < 31
-          ? props.theme.ballsColors.i
-          : props.prevNumber < 46
-          ? props.theme.ballsColors.n
-          : props.prevNumber < 61
-          ? props.theme.ballsColors.g
-          : props.theme.ballsColors.o
-        : props.number < 16
+      props.number < 16
         ? props.theme.ballsColors.b
         : props.number < 31
         ? props.theme.ballsColors.i
@@ -131,17 +102,7 @@ const LastBallContainer = styled.div`
       height: 72%;
       border-radius: 50%;
       background: ${(props) =>
-        props.outEffect
-          ? props.prevNumber < 16
-            ? props.theme.ballsColors.borderB
-            : props.prevNumber < 31
-            ? props.theme.ballsColors.borderI
-            : props.prevNumber < 46
-            ? props.theme.ballsColors.borderN
-            : props.prevNumber < 61
-            ? props.theme.ballsColors.borderG
-            : props.theme.ballsColors.borderO
-          : props.number < 16
+        props.number < 16
           ? props.theme.ballsColors.borderB
           : props.number < 31
           ? props.theme.ballsColors.borderI
