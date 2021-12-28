@@ -25,6 +25,11 @@ export const Lobby = (props) => {
 
   const audioRef = useRef(null);
 
+  useEffect(() => {
+    // Redirect to login.
+    if (!authUser?.nickname && !authUser.isAdmin) return router.push("/");
+  }, [authUser]);
+
   const logout = async () => {
     const userId = firestore.collection("users").doc().id;
 
@@ -41,10 +46,7 @@ export const Lobby = (props) => {
     await router.push("/");
   };
 
-  useEffect(() => {
-    if (!authUser?.nickname && !authUser.isAdmin) return router.push("/");
-  }, [authUser]);
-
+  // Fetch lobby.
   useEffect(() => {
     if (!lobbyId) return;
 
@@ -68,26 +70,32 @@ export const Lobby = (props) => {
         setLoading(false);
       });
 
-    const fetchUsers = () =>
-      firestore
-        .collection("lobbies")
-        .doc(lobbyId)
-        .collection("users")
-        .onSnapshot((usersRef) => {
-          const users_ = snapshotToArray(usersRef);
-
-          const usersMapped = users_.reduce((usersSum, user) => ({ ...usersSum, [user.id]: user }), {});
-
-          setUsers(usersMapped);
-        });
-
     const unSubLobby = fetchLobby();
-    const unSubUsers = fetchUsers();
-    return () => {
-      unSubLobby && unSubLobby();
-      unSubUsers && unSubUsers();
-    };
+    return () => unSubLobby && unSubLobby();
   }, [lobbyId]);
+
+  // Fetch users.
+  useEffect(() => {
+    if (!lobby) return;
+
+    const fetchUsers = () => {
+      let usersQueryRef = firestore.collection("lobbies").doc(lobbyId).collection("users");
+
+      if (!lobby.settings?.showParticipants && !authUser.isAdmin)
+        usersQueryRef = usersQueryRef.where("id", "==", authUser.id).limit(1);
+
+      return usersQueryRef.onSnapshot((usersRef) => {
+        const users_ = snapshotToArray(usersRef);
+
+        const usersMapped = users_.reduce((usersSum, user) => ({ ...usersSum, [user.id]: user }), {});
+
+        setUsers(usersMapped);
+      });
+    };
+
+    const unSubUsers = fetchUsers();
+    return () => unSubUsers && unSubUsers();
+  }, [lobby]);
 
   const lobbyWithUsers = useMemo(() => {
     if (!lobby) return null;
@@ -107,13 +115,19 @@ export const Lobby = (props) => {
 
   const lobbyIsClosed = lobby?.isClosed && authUser?.isAdmin;
 
+  /** Game report. **/
   if (lobbyIsClosed) return <LobbyClosed {...additionalProps} />;
 
+  /** The game is playing. **/
   if (lobby?.isPlaying) return <LobbyInPlay {...additionalProps} />;
 
+  /** Loading page. **/
   if (lobby?.startAt) return <LobbyLoading {...additionalProps} />;
 
-  if (authUser?.isAdmin) return <LobbyAdmin {...additionalProps} />;
+  /** TODO: Consider refactoring as a single component where the user and the administrator wait for the creation of the lobby **/
+  /** Before starting the game. **/
+  if (authUser?.isAdmin) return <LobbyAdmin {...additionalProps} />; // Admin.
 
-  return <LobbyUser {...additionalProps} />;
+  /** TODO: Consider refactoring as a single component where the user and the administrator wait for the creation of the lobby **/
+  return <LobbyUser {...additionalProps} />; // User.
 };
