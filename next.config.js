@@ -10,19 +10,19 @@ module.exports = withBundleAnalyzer({
         contextRegExp: /moment$/,
       })
     );
-
-    config.optimization = {
-      sideEffects: true,
-      runtimeChunk: "single",
-      minimize: true,
-      minimizer: [],
-      splitChunks: {
-        chunks: "all",
-        maxInitialRequests: Infinity,
-        minSize: 200000,
-        maxSize: 250000,
-      },
-    };
+    assetPrefix: process.env.NEXT_PUBLIC_DOMAIN ?? "",
+      (config.optimization = {
+        sideEffects: true,
+        runtimeChunk: "single",
+        minimize: true,
+        minimizer: [],
+        splitChunks: {
+          chunks: "all",
+          maxInitialRequests: Infinity,
+          minSize: 200000,
+          maxSize: 250000,
+        },
+      });
 
     return config;
   },
