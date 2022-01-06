@@ -16,6 +16,7 @@ import { ModalContainer } from "../../../../components/common/ModalContainer";
 import styled from "styled-components";
 import { ModalPattern } from "./ModalPattern";
 import { darkTheme } from "../../../../theme";
+import { useMemo } from "react";
 
 export const AdminPanel = (props) => {
   const [reproductionSpeed] = useGlobal("reproductionSpeed");
@@ -133,6 +134,20 @@ export const AdminPanel = (props) => {
     />
   );
 
+  // Use useMemo to prevent re render unnecessary.
+  const lastBallDesktop = useMemo(() => {
+    if (!props.lobby) return null;
+
+    return <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} />;
+  }, [props.lobby?.lastPlays, props.lobby?.animationSpeed]);
+
+  // Use useMemo to prevent re render unnecessary.
+  const lastBallMobile = useMemo(() => {
+    if (!props.lobby) return null;
+
+    return <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} vertical />;
+  }, [props.lobby?.lastPlays, props.lobby?.animationSpeed]);
+
   return (
     <>
       {modalConfirm()}
@@ -168,9 +183,7 @@ export const AdminPanel = (props) => {
               <BingoBoard {...props} isVisible />
             </div>
             <div className="bottom-section">
-              <div className="ball-called">
-                <LastBall {...props} />
-              </div>
+              <div className="ball-called">{lastBallDesktop}</div>
               <div className="middle-container">
                 {props.lobby.startGame ? (
                   <ButtonAnt
@@ -256,7 +269,7 @@ export const AdminPanel = (props) => {
             </ButtonAnt>
           </div>
           <div className="right-container">
-            <LastBall {...props} vertical />
+            {lastBallMobile}
             <div className="last-plays">
               <LastPlays {...props} />
             </div>
