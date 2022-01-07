@@ -135,17 +135,19 @@ export const AdminPanel = (props) => {
   );
 
   // Use useMemo to prevent re render unnecessary.
-  const lastBallDesktop = useMemo(() => {
+  const lastBall = useMemo(() => {
     if (!props.lobby) return null;
 
-    return <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} />;
-  }, [props.lobby?.lastPlays, props.lobby?.animationSpeed]);
-
-  // Use useMemo to prevent re render unnecessary.
-  const lastBallMobile = useMemo(() => {
-    if (!props.lobby) return null;
-
-    return <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} vertical />;
+    return (
+      <>
+        <Desktop>
+          <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} />
+        </Desktop>
+        <Tablet>
+          <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} vertical />
+        </Tablet>
+      </>
+    );
   }, [props.lobby?.lastPlays, props.lobby?.animationSpeed]);
 
   return (
@@ -183,7 +185,7 @@ export const AdminPanel = (props) => {
               <BingoBoard {...props} isVisible />
             </div>
             <div className="bottom-section">
-              <div className="ball-called">{lastBallDesktop}</div>
+              <div className="ball-called">{lastBall}</div>
               <div className="middle-container">
                 {props.lobby.startGame ? (
                   <ButtonAnt
@@ -269,7 +271,7 @@ export const AdminPanel = (props) => {
             </ButtonAnt>
           </div>
           <div className="right-container">
-            {lastBallMobile}
+            {lastBall}
             <div className="last-plays">
               <LastPlays {...props} />
             </div>
