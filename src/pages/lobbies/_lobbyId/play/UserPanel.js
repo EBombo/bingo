@@ -4,13 +4,29 @@ import { CardPattern } from "./CardPattern";
 import { LastBall } from "./LastBall";
 import { ButtonAnt } from "../../../../components/form";
 import { LastPlays } from "./LastPlays";
-import React, { useGlobal } from "reactn";
+import React, { useGlobal, useMemo } from "reactn";
 import defaultTo from "lodash/defaultTo";
 import { Chat } from "../../../../components/chat";
 import { Desktop, Tablet } from "../../../../constants";
 
 export const UserPanel = (props) => {
   const [authUser] = useGlobal("user");
+
+  // Use useMemo to prevent re render unnecessary.
+  const lastBall = useMemo(() => {
+    if (!props.lobby) return null;
+
+    return (
+      <>
+        <Desktop>
+          <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} vertical />
+        </Desktop>
+        <Tablet>
+          <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} />
+        </Tablet>
+      </>
+    );
+  }, [props.lobby?.lastPlays, props.lobby?.animationSpeed]);
 
   return (
     <>
@@ -31,7 +47,7 @@ export const UserPanel = (props) => {
               <BingoBoard {...props} isVisible={props.lobby.settings.showBoardToUser} />
             </div>
             <div className="bottom-section">
-              <LastBall {...props} vertical />
+              {lastBall}
               <div className="last-plays-container">
                 <LastPlays showMore {...props} />
               </div>
@@ -55,7 +71,7 @@ export const UserPanel = (props) => {
             </div>
           </div>
           <div className="right-side">
-            <LastBall {...props} />
+            {lastBall}
             <LastPlays {...props} />
           </div>
         </div>
