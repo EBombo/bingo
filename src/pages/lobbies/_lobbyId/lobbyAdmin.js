@@ -9,10 +9,12 @@ import styled from "styled-components";
 import { Popover, Slider, Tooltip } from "antd";
 import { getBingoCard } from "../../../business";
 import { Image } from "../../../components/common/Image";
-import orderBy from "lodash/orderBy";
 import { firebase } from "../../../firebase/config";
 import { useSendError } from "../../../hooks";
 import { saveMembers } from "../../../constants/saveMembers";
+import { useInView } from "react-intersection-observer";
+
+const userListSizeRatio = 50; 
 
 export const LobbyAdmin = (props) => {
   const { sendError } = useSendError();
@@ -28,22 +30,36 @@ export const LobbyAdmin = (props) => {
   const [isMuted, setIsMuted] = useState(false);
   const [isLoadingLock, setIsLoadingLock] = useState(false);
   const [isLoadingStart, setIsLoadingStart] = useState(false);
+  const [userListSize, setUserListSize] = useState(100);
+  const { ref : scrollTriggerRef, inView } = useInView({ threshold: 0 });
 
   useEffect(() => {
     if (!props.lobby) return;
+    if (!inView) return;
+
+    const usersQuery = () => database
+        .ref(`lobbies/${lobbyId}/users`)
+        .orderByChild("last_changed")
+        .limitToLast(userListSize);
 
     const fetchUsers = async () => {
-      const userStatusDatabaseRef = database.ref(`lobbies/${lobbyId}/users`);
-      userStatusDatabaseRef.on("value", (snapshot) => {
-        let users_ = Object.values(snapshot.val() ?? {});
-        users_ = users_.filter((user) => user.state.includes("online"));
-        users_ = orderBy(users_, ["last_changed"], ["desc"]);
+      const UsersQueryRef = usersQuery();
+      UsersQueryRef.on("value", (snapshot) => {
+        let users_ = [] 
+
+        snapshot.forEach((docRef) => {
+          const user = docRef.val();
+
+          if (user.state.includes("online"))
+            users_.unshift(user);
+        })
+
+        setUserListSize(userListSize + userListSizeRatio);
         setUsers(users_);
       });
     };
-
     fetchUsers();
-  }, [props.lobby]);
+  }, [inView]);
 
   useEffect(() => {
     const currentAudioToPlay = props.lobby.game?.audio?.audioUrl ?? audios[0]?.audioUrl;
@@ -283,16 +299,17 @@ export const LobbyAdmin = (props) => {
 
       <div className="container-users">
         <div className="all-users">
-          {users?.length ?? 0} <UserOutlined />
+          {props.lobby?.countPlayers ?? 0} <UserOutlined />
         </div>
         <div className="list-users">
-          {users.map((user) => (
-            <div key={user.userId} className="item-user">
+          {users.map((user, i) => (
+            <div key={`user-${i}`} className="item-user">
               {user.nickname}
             </div>
           ))}
         </div>
       </div>
+      <div ref={scrollTriggerRef} className="loading-section" />
     </LobbyCss>
   );
 };
@@ -330,7 +347,6 @@ const LobbyCss = styled.div`
   ${mediaQuery.afterTablet} {
     width: auto;
   }
-
 
   .title {
     text-align: center;
@@ -489,5 +505,8 @@ const LobbyCss = styled.div`
         }
       }
     }
+  }
+  .loading-section {
+    height: 20px;
   }
 `;
