@@ -1,6 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
-import { Divider } from "../../../components/common/Divider";
 import { config, database, firestore, firestoreBomboGames, hostName } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
@@ -14,7 +13,7 @@ import { useSendError } from "../../../hooks";
 import { saveMembers } from "../../../constants/saveMembers";
 import { useInView } from "react-intersection-observer";
 
-const userListSizeRatio = 50; 
+const userListSizeRatio = 50;
 
 export const LobbyAdmin = (props) => {
   const { sendError } = useSendError();
@@ -31,33 +30,31 @@ export const LobbyAdmin = (props) => {
   const [isLoadingLock, setIsLoadingLock] = useState(false);
   const [isLoadingStart, setIsLoadingStart] = useState(false);
   const [userListSize, setUserListSize] = useState(100);
-  const { ref : scrollTriggerRef, inView } = useInView({ threshold: 0 });
+  const { ref: scrollTriggerRef, inView } = useInView({ threshold: 0 });
 
   useEffect(() => {
     if (!props.lobby) return;
     if (!inView) return;
 
-    const usersQuery = () => database
-        .ref(`lobbies/${lobbyId}/users`)
-        .orderByChild("last_changed")
-        .limitToLast(userListSize);
+    const usersQuery = () =>
+      database.ref(`lobbies/${lobbyId}/users`).orderByChild("last_changed").limitToLast(userListSize);
 
     const fetchUsers = async () => {
       const UsersQueryRef = usersQuery();
       UsersQueryRef.on("value", (snapshot) => {
-        let users_ = [] 
+        let users_ = [];
 
         snapshot.forEach((docRef) => {
           const user = docRef.val();
 
-          if (user.state.includes("online"))
-            users_.unshift(user);
-        })
+          if (user.state.includes("online")) users_.unshift(user);
+        });
 
         setUserListSize(userListSize + userListSizeRatio);
         setUsers(users_);
       });
     };
+
     fetchUsers();
   }, [inView]);
 
@@ -123,11 +120,8 @@ export const LobbyAdmin = (props) => {
 
   return (
     <LobbyCss {...props}>
-      <div className="title">
-        {props.lobby?.game?.name}
-      </div>
-      <div className="header"> 
-
+      <div className="title">{props.lobby?.game?.name}</div>
+      <div className="header">
         <div className="item-pin">
           <Tooltip placement="bottom" title="Click aquí para copiar el link de ebombo con pin">
             <div
@@ -137,12 +131,18 @@ export const LobbyAdmin = (props) => {
                 props.showNotification("OK", "Link copiado!", "success");
               }}
             >
-              {props.lobby.isLocked 
-                ? "Este juego esta bloqueado"
-                : (<>Entra a <span className="font-black">ebombo.io</span></> )}
+              {props.lobby.isLocked ? (
+                "Este juego esta bloqueado"
+              ) : (
+                <>
+                  Entra a <span className="font-black">ebombo.io</span>
+                </>
+              )}
             </div>
           </Tooltip>
+
           <div className="pin-label">Pin del juego:</div>
+
           <div className="pin">
             {props.lobby.isLocked ? (
               <ButtonBingo variant="primary" margin="10px 20px">
@@ -212,6 +212,7 @@ export const LobbyAdmin = (props) => {
               )}
             </ButtonBingo>
           </Popover>
+
           <Popover
             content={
               <SliderContent>
@@ -256,6 +257,7 @@ export const LobbyAdmin = (props) => {
               />
             </ButtonBingo>
           </Popover>
+
           <ButtonBingo
             variant="primary"
             disabled={isLoadingLock}
@@ -280,7 +282,6 @@ export const LobbyAdmin = (props) => {
         </div>
 
         <div className="right-menus">
-          
           <ButtonAnt
             className="btn-start"
             loading={isLoadingStart}
@@ -309,6 +310,7 @@ export const LobbyAdmin = (props) => {
           ))}
         </div>
       </div>
+
       <div ref={scrollTriggerRef} className="loading-section" />
     </LobbyCss>
   );
@@ -383,6 +385,7 @@ const LobbyCss = styled.div`
 
       .btn-start {
         padding: 11px 36px !important;
+
         ${mediaQuery.afterTablet} {
           padding: 11px 72px !important;
         }
@@ -506,6 +509,7 @@ const LobbyCss = styled.div`
       }
     }
   }
+
   .loading-section {
     height: 20px;
   }
