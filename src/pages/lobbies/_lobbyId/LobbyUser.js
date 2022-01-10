@@ -1,22 +1,24 @@
-import { Popover, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import React, { useEffect, useGlobal, useState, useRef } from "reactn";
+import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
-import { config, database, firebase, firestore } from "../../../firebase";
+import { config, database, firebase, firestore, hostName } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
 import { Desktop, mediaQuery, Tablet } from "../../../constants";
 import { UserLayout } from "./userLayout";
+import { ButtonBingo } from "../../../components/form";
 
 let alreadyRun = false;
 
 export const LobbyUser = (props) => {
   const [authUser] = useGlobal("user");
   const [users, setUsers] = useState([]);
-  const {ref, inView, entry} = useInView({ threshold: 0 });
+  const { ref, inView, entry } = useInView({ threshold: 0 });
   const [isOnline, setIsOnline] = useState(false);
- 
-  const isFirstRun = useRef(true); 
+
+  const isFirstRun = useRef(true);
+
   useEffect(() => {
     // skip first run
     if (isFirstRun.current) {
@@ -26,7 +28,9 @@ export const LobbyUser = (props) => {
 
     const incrementCountPlayer = async () => {
       await firestore.doc(`lobbies/${props.lobby.id}`).update({
-        countPlayers: isOnline ? firebase.firestore.FieldValue.increment(1) : firebase.firestore.FieldValue.increment(-1),
+        countPlayers: isOnline
+          ? firebase.firestore.FieldValue.increment(1)
+          : firebase.firestore.FieldValue.increment(-1),
       });
     };
 
@@ -35,7 +39,7 @@ export const LobbyUser = (props) => {
   }, [isOnline]);
 
   useEffect(() => {
-    window.addEventListener('unload', async function(event) {
+    window.addEventListener("unload", async function (event) {
       await firestore.doc(`lobbies/${props.lobby.id}`).update({
         countPlayers: firebase.firestore.FieldValue.increment(-1),
       });
@@ -46,11 +50,10 @@ export const LobbyUser = (props) => {
 
       userStatusDatabaseRef.on("value", async (snapshot) => {
         const user = snapshot.val();
-        setIsOnline(user?.state === 'online');
-
+        setIsOnline(user?.state === "online");
       });
     };
-    console.log('execution listenUserState');
+    console.log("execution listenUserState");
 
     listenUserState();
   }, []);
@@ -60,8 +63,7 @@ export const LobbyUser = (props) => {
     if (!authUser) return;
     if (alreadyRun) return;
     alreadyRun = true;
-    console.log('execution setPresence');
-    
+    console.log("execution setPresence");
 
     const userStatusDatabaseRef = database.ref(`lobbies/${props.lobby.id}/users/${authUser.id}`);
 
@@ -104,7 +106,7 @@ export const LobbyUser = (props) => {
         state: "offline",
         last_changed: firebase.database.ServerValue.TIMESTAMP,
       });
-    }
+    };
   }, [props.lobby, authUser]);
 
   // useEffect(() => {
@@ -128,7 +130,7 @@ export const LobbyUser = (props) => {
     <>
       <UserLayout {...props} />
 
-      <div className="header"> 
+      <div className="header">
         <div className="item-pin">
           <Tooltip placement="bottom" title="Click aquí para copiar el link de ebombo con pin">
             <div
@@ -138,9 +140,13 @@ export const LobbyUser = (props) => {
                 props.showNotification("OK", "Link copiado!", "success");
               }}
             >
-              {props.lobby.isLocked 
-                ? "Este juego esta bloqueado"
-                : (<>Entra a <span className="font-black">ebombo.io</span></> )}
+              {props.lobby.isLocked ? (
+                "Este juego esta bloqueado"
+              ) : (
+                <>
+                  Entra a <span className="font-black">ebombo.io</span>
+                </>
+              )}
             </div>
           </Tooltip>
           <div className="pin-label">Pin del juego:</div>
