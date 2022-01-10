@@ -70,15 +70,13 @@ const Login = (props) => {
       const lobby = lobbyRef.data();
 
       if (lobby?.isClosed) {
-        await setAuthUser({
+        return setAuthUser({
           id: firestore.collection("users").doc().id,
           lobby: null,
           isAdmin: false,
           email: authUser.email,
           nickname: authUser.nickname,
         });
-
-        return props.showNotification("UPS", "Esta sala ha concluido", "warning");
       }
 
       // AuthUser is admin.
