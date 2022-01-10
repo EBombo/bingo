@@ -126,6 +126,7 @@ export const LobbyInPlay = (props) => {
             {...props}
           />
         )}
+
         <Desktop>
           <div className="main-container">
             {authUser.isAdmin ? (
@@ -150,6 +151,7 @@ export const LobbyInPlay = (props) => {
             <Chat title={"CHAT DEL BINGO"} />
           </div>
         </Desktop>
+
         <Tablet>
           <div className="main-container">
             {(authUser.isAdmin || props.lobby.settings?.showParticipants) && (
@@ -168,9 +170,11 @@ export const LobbyInPlay = (props) => {
                 </div>
               </div>
             )}
+
             {tabletTab === "bingo" && authUser.isAdmin && (
               <AdminPanel {...props} tabletTab={tabletTab} setIsVisibleModalAwards={setIsVisibleModalAwards} />
             )}
+
             {tabletTab === "bingo" && !authUser.isAdmin && (
               <UserPanel
                 {...props}
@@ -180,6 +184,7 @@ export const LobbyInPlay = (props) => {
               />
             )}
           </div>
+
           {tabletTab === "users" && (authUser.isAdmin || props.lobby.settings.showParticipants) && (
             <UsersTabs {...props} />
           )}
