@@ -12,7 +12,6 @@ import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 import { UserProgress } from "./UserProgress";
 import { ButtonAnt } from "../../../../components/form";
 import AutoSizer from "react-virtualized-auto-sizer";
-import "react-virtualized/styles.css";
 import { FixedSizeList as List } from "react-window";
 
 const TAB = {
