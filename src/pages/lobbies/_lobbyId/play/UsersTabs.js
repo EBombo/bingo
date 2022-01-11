@@ -11,8 +11,9 @@ import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 import { UserProgress } from "./UserProgress";
 import { ButtonAnt } from "../../../../components/form";
-import {AutoSizer, List as ListX, WindowScroller} from "react-virtualized";
-import 'react-virtualized/styles.css'; 
+import AutoSizer from "react-virtualized-auto-sizer";
+import "react-virtualized/styles.css";
+import { FixedSizeList as List } from "react-window";
 
 const TAB = {
   CARDS: "cards",
@@ -27,7 +28,7 @@ export const UsersTabs = (props) => {
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [users, setUsers] = useState([]);
-  
+
   const windowScrollParentRef = useRef();
 
   useEffect(() => {
@@ -198,188 +199,140 @@ export const UsersTabs = (props) => {
       </Tablet>
       {/* TODO: Consider refactoring to use mediaQuery and not use <Desktop> & <Tablet> */}
 
-      <div className={`user-tab-${tab}`} style={{ display: 'block' }} ref={windowScrollParentRef}>
-        { tab === TAB.CARDS &&
-          <WindowScroller >
-            {({ height, scrollTop }) => (
-              <AutoSizer disableHeight>
-                {({ width }) => (
-                  <ListX
-                    autoHeight
-                    height={height}
-                    width={width}
-                    scrollTop={scrollTop}
-                    rowHeight={48}
-                    rowRenderer={({ index, key, style }) => {
-                      return (
-                        <div style={{ ...style, background: 'teal' }} key={key}>
-                          {index} - user {index}
-                        </div>
-                      );
-                    }}
-                    rowCount={1000}
-                    overscanRowCount={5}
-                  />
-                )}
-              </AutoSizer>
-            )}
-          </WindowScroller>
-        }
-          {/*
-          <WindowScroller>
-            {({ height, scrollTop }) => (
-              <AutoSizer disableHeight>
-                {({ width }) => (
-                  <ListX
-                    autoHeight
-                    height={height}
-                    width={width}
-                    scrollTop={scrollTop}
-                    rowHeight={48}
-                    rowRenderer={({ index, key, style }) => {
-                      return (
-                        <div style={{ ...style, background: 'teal' }} key={key}>
-                          {index} - user {index}
-                        </div>
-                      );
-                    }}
-                    rowCount={200}
-                    overscanRowCount={5}
-                  />
-                )}
-              </AutoSizer>
-            )}
-          </WindowScroller>
-          */}
-          {/*
-          <WindowScroller>
-            {({ height, isScrolling, onChildScroll, scrollTop }) =>
-            (<AutoSizer disableHeight>
-              {({width}) => (
-                <ListVirtualized
-                autoHeight
-                height={height}
-                isScrolling={isScrolling}
-                scrollTop={scrollTop}
-                onScroll={onChildScroll}
-                width={width}
-                rowCount={users.length}
-                rowHeight={50}
-                rowRenderer={({ key, index, style }) => {
-                  console.log(`user ${index}`);
+      <div className={`user-tab-${tab}`} ref={windowScrollParentRef}>
+        {tab === TAB.CARDS && (
+          <AutoSizer>
+            {({ width, height }) => (
+              <List height={height} itemCount={users.length} itemSize={60} width={width}>
+                {({ index, style }) => {
                   const user = users[index];
-                  return (<div key={key} style={{...style, background: 'teal'}}>
-                      <p>{user.nickname}</p>
+
+                  return (
+                    <div
+                      className={`user-card ${user.progress === 100 && "winner"}`}
+                      key={`user-card-${index}`}
+                      style={{ ...style }}
+                    >
+                      {user.progress === 100 && "winner" && (
+                        <div className="winner-img">
+                          <Image
+                            src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
+                            height="30px"
+                            width="30px"
+                            borderRadious="50%"
+                          />
+                        </div>
+                      )}
+
+                      <div className={`name ${authUser.id === user.id && "auth-user"}`}>
+                        <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                        {user.nickname}
+                      </div>
+
+                      <div className="card-preview">
+                        <UserProgress
+                          {...props}
+                          lobbyPattern={lobbyPattern}
+                          user={user}
+                          numberWinners={numberWinners}
+                          isCard
+                          key={user.progress}
+                        />
+                      </div>
+
+                      {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
+                        <div className="btn-container">
+                          <button
+                            className="btn-show-card"
+                            onClick={() => {
+                              setCurrentUser(user);
+                              setIsVisibleModalUserCard(true);
+                            }}
+                          >
+                            Ver cartilla
+                          </button>
+                        </div>
+                      )}
+
+                      {authUser.isAdmin && menu(user)}
                     </div>
                   );
-                  return (<div className={`user-card ${user.progress === 100 && "winner"}`} key={key} style={{...style}}>
-                    {user.progress === 100 && "winner" && (
-                      <div className="winner-img">
-                      <Image
-                      src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
-                      height="30px"
-                      width="30px"
-                      borderRadious="50%"
-                      />
+                }}
+              </List>
+            )}
+          </AutoSizer>
+        )}
+
+        {tab === TAB.TABLE && (
+          <AutoSizer>
+            {({ width, height }) => (
+              <List height={height} itemCount={users.length} itemSize={40} width={width}>
+                {({ index, style }) => {
+                  const user = users[index];
+
+                  return (
+                    <div
+                      className={`user-progress ${user.progress === 100 && "winner"}`}
+                      key={`${user.nickname}-${index}`}
+                      style={{ ...style }}
+                    >
+                      <div className={`name ${authUser.id === user.id && "auth-user"}`}>
+                        {user.avatar && (
+                          <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                        )}
+                        {user.nickname}
                       </div>
-                    )}
 
-                    <div className={`name ${authUser.id === user.id && "auth-user"}`}>
-                    <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
-                    {user.nickname}
-                    </div>
-
-                    <div className="card-preview">
-                    <UserProgress
-                    {...props}
-                    lobbyPattern={lobbyPattern}
-                    user={user}
-                    numberWinners={numberWinners}
-                    isCard
-                    key={user.progress}
-                    />
-                    </div>
-
-                    {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
-                      <div className="btn-container">
-                      <button
-                      className="btn-show-card"
-                      onClick={() => {
-                        setCurrentUser(user);
-                        setIsVisibleModalUserCard(true);
-                      }}
-                      >
-                      Ver cartilla
-                      </button>
+                      <div className={`progress`}>
+                        <UserProgress
+                          {...props}
+                          lobbyPattern={lobbyPattern}
+                          user={user}
+                          numberWinners={numberWinners}
+                        />
                       </div>
-                    )}
 
-                    {authUser.isAdmin && menu(user)}
-                    </div>)
-                } 
-                }
-                overscanRowCount={5}
-                estimatedRowSize={2}/>
-              )}
-            </AutoSizer>)
-            }
-          </WindowScroller>
-          */}
-
-        { tab === TAB.CARDS && 
-          users?.map((user, index) => (
-            <div className={`user-progress ${user.progress === 100 && "winner"}`} key={`${user.nickname}-${index}`}>
-              <div className={`name ${authUser.id === user.id && "auth-user"}`}>
-                {user.avatar && (
-                  <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
-                )}
-                {user.nickname}
-              </div>
-
-              <div className={`progress`}>
-                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} />
-              </div>
-
-              {user.progress === 100 && "winner" && (
-                <div className="winner-img">
-                  <Image
-                    src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
-                    height="30px"
-                    width="30px"
-                    borderRadious="50%"
-                  />
-                </div>
-              )}
-              <div className="options">
-                {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
-                  <button
-                    className="btn-show-card"
-                    onClick={() => {
-                      setCurrentUser(user);
-                      setIsVisibleModalUserCard(true);
-                    }}
-                  >
-                    Ver cartilla
-                  </button>
-                )}
-                {authUser.isAdmin && menu(user)}
-              </div>
-            </div>))
-        }
-        
+                      {user.progress === 100 && "winner" && (
+                        <div className="winner-img">
+                          <Image
+                            src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
+                            height="30px"
+                            width="30px"
+                            borderRadious="50%"
+                          />
+                        </div>
+                      )}
+                      <div className="options">
+                        {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
+                          <button
+                            className="btn-show-card"
+                            onClick={() => {
+                              setCurrentUser(user);
+                              setIsVisibleModalUserCard(true);
+                            }}
+                          >
+                            Ver cartilla
+                          </button>
+                        )}
+                        {authUser.isAdmin && menu(user)}
+                      </div>
+                    </div>
+                  );
+                }}
+              </List>
+            )}
+          </AutoSizer>
+        )}
       </div>
     </TabsContainer>
   );
 };
 
-const ListVirtualized = styled(ListX)`
-  .ReactVirtualized__Grid__innerScrollContainer{
-    overflow: auto!important;
-  }
-`;
-
 const TabsContainer = styled.div`
   width: 100%;
+  display: grid;
+  grid-template-rows: min-content auto;
+  height: calc(100% - 50px);
 
   .btn-show-card {
     cursor: pointer;
@@ -426,7 +379,7 @@ const TabsContainer = styled.div`
       display: grid;
       grid-template-columns: 1fr;
       grid-gap: 0.5rem;
-      padding: 1rem;
+      padding: 0 1rem;
 
       .user-card {
         display: grid;
@@ -514,6 +467,7 @@ const TabsContainer = styled.div`
       width: 100%;
       display: flex;
       flex-direction: column;
+      padding: 0 1rem;
 
       .user-progress {
         display: grid;
@@ -582,6 +536,8 @@ const TabsContainer = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
+    height: auto;
+
     .btn-show-card {
       padding: 0 20px;
       border-radius: 4px;

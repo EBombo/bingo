@@ -199,6 +199,9 @@ const BingoGameContainer = styled.div`
   height: calc(100vh - 50px);
 
   .main-container {
+    display: grid;
+    grid-template-rows: min-content auto;
+
     .top-container-user {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
