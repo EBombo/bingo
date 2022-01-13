@@ -108,17 +108,14 @@ export const LobbyUser = (props) => {
 
   // Disconnect presence.
   useEffect(() => {
+    // Update to offline when user doesn't have LOBBY and is not ADMIN.
     if (authUser?.lobby || authUser?.isAdmin) return;
 
-    const mappedUser = {
-      email: authUser?.email ?? null,
-      userId: authUser?.id ?? null,
-      nickname: authUser?.nickname ?? null,
-      avatar: authUser?.avatar ?? null,
-    };
-
     const isOfflineForDatabase = {
-      ...mappedUser,
+      userId: authUser?.id ?? null,
+      email: authUser?.email ?? null,
+      avatar: authUser?.avatar ?? null,
+      nickname: authUser?.nickname ?? null,
       state: "offline",
       last_changed: firebase.database.ServerValue.TIMESTAMP,
     };
