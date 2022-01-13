@@ -63,7 +63,8 @@ export const LobbyHeader = (props) => {
 
       // Save users.
       const usersDatabaseRef = database.ref(`lobbies/${props.lobby.id}/users`);
-      const snapshot = await usersDatabaseRef.once('value');
+      // Consider use get() instead of once().
+      const snapshot = await usersDatabaseRef.once("value");
       const users_ = Object.values(snapshot.val());
       users = mapUsersWithCards(users_);
 
@@ -134,120 +135,120 @@ export const LobbyHeader = (props) => {
         </div>
       </div>
 
-      { authUser.isAdmin && (
-      <div className="left-menus">
-        <Popover
-          trigger="click"
-          content={
-            <AudioStyled>
-              {audios.map((audio_) => (
-                <div
-                  key={audio_.id}
-                  className="item-audio"
-                  onClick={() => {
-                    if (props.audioRef.current) props.audioRef.current.pause();
+      {authUser.isAdmin && (
+        <div className="left-menus">
+          <Popover
+            trigger="click"
+            content={
+              <AudioStyled>
+                {audios.map((audio_) => (
+                  <div
+                    key={audio_.id}
+                    className="item-audio"
+                    onClick={() => {
+                      if (props.audioRef.current) props.audioRef.current.pause();
 
-                    const currentAudio = new Audio(audio_.audioUrl);
+                      const currentAudio = new Audio(audio_.audioUrl);
 
-                    props.audioRef.current = currentAudio;
-                    props.audioRef.current.volume = volume / 100;
-                    props.audioRef.current.play();
-                    setIsPlay(true);
-                    setIsMuted(false);
+                      props.audioRef.current = currentAudio;
+                      props.audioRef.current.volume = volume / 100;
+                      props.audioRef.current.play();
+                      setIsPlay(true);
+                      setIsMuted(false);
+                    }}
+                  >
+                    {audio_.title}
+                  </div>
+                ))}
+              </AudioStyled>
+            }
+          >
+            <ButtonBingo variant="primary">
+              {isPlay ? (
+                <Image
+                  cursor="pointer"
+                  src={`${config.storageUrl}/resources/sound.svg`}
+                  height="24px"
+                  width="24px"
+                  size="contain"
+                  margin="auto"
+                />
+              ) : (
+                "►"
+              )}
+            </ButtonBingo>
+          </Popover>
+
+          <Popover
+            content={
+              <SliderContent>
+                <Slider
+                  defaultValue={30}
+                  value={volume}
+                  onChange={(value) => {
+                    if (!props.audioRef.current) return;
+
+                    props.audioRef.current.volume = value / 100;
+                    setVolume(value);
                   }}
-                >
-                  {audio_.title}
-                </div>
-              ))}
-            </AudioStyled>
-          }
-        >
-          <ButtonBingo variant="primary">
-            {isPlay ? (
+                />
+              </SliderContent>
+            }
+          >
+            <ButtonBingo
+              variant="primary"
+              disabled={!isPlay}
+              onClick={() => {
+                if (!props.audioRef.current) return;
+
+                if (props.audioRef.current.volume === 0) {
+                  props.audioRef.current.volume = 0.3;
+                  setVolume(30);
+
+                  return setIsMuted(false);
+                }
+                setVolume(0);
+                props.audioRef.current.volume = 0;
+                setIsMuted(true);
+              }}
+              key={isMuted}
+            >
               <Image
                 cursor="pointer"
-                src={`${config.storageUrl}/resources/sound.svg`}
+                src={isMuted ? `${config.storageUrl}/resources/mute.svg` : `${config.storageUrl}/resources/volume.svg`}
                 height="24px"
                 width="24px"
                 size="contain"
                 margin="auto"
               />
-            ) : (
-              "►"
-            )}
-          </ButtonBingo>
-        </Popover>
+            </ButtonBingo>
+          </Popover>
 
-        <Popover
-          content={
-            <SliderContent>
-              <Slider
-                defaultValue={30}
-                value={volume}
-                onChange={(value) => {
-                  if (!props.audioRef.current) return;
-
-                  props.audioRef.current.volume = value / 100;
-                  setVolume(value);
-                }}
-              />
-            </SliderContent>
-          }
-        >
           <ButtonBingo
             variant="primary"
-            disabled={!isPlay}
-            onClick={() => {
-              if (!props.audioRef.current) return;
-
-              if (props.audioRef.current.volume === 0) {
-                props.audioRef.current.volume = 0.3;
-                setVolume(30);
-
-                return setIsMuted(false);
-              }
-              setVolume(0);
-              props.audioRef.current.volume = 0;
-              setIsMuted(true);
+            disabled={isLoadingLock}
+            loading={isLoadingLock}
+            onClick={async () => {
+              setIsLoadingLock(true);
+              await updateLobby(!props.lobby.isLocked);
+              setIsLoadingLock(false);
             }}
-            key={isMuted}
           >
-            <Image
-              cursor="pointer"
-              src={isMuted ? `${config.storageUrl}/resources/mute.svg` : `${config.storageUrl}/resources/volume.svg`}
-              height="24px"
-              width="24px"
-              size="contain"
-              margin="auto"
-            />
+            {!isLoadingLock && (
+              <Image
+                src={`${config.storageUrl}/resources/${props.lobby.isLocked ? "lock.svg" : "un-lock.svg"}`}
+                cursor="pointer"
+                height="24px"
+                width="24px"
+                size="contain"
+                margin="auto"
+              />
+            )}
           </ButtonBingo>
-        </Popover>
-
-        <ButtonBingo
-          variant="primary"
-          disabled={isLoadingLock}
-          loading={isLoadingLock}
-          onClick={async () => {
-            setIsLoadingLock(true);
-            await updateLobby(!props.lobby.isLocked);
-            setIsLoadingLock(false);
-          }}
-        >
-          {!isLoadingLock && (
-            <Image
-              src={`${config.storageUrl}/resources/${props.lobby.isLocked ? "lock.svg" : "un-lock.svg"}`}
-              cursor="pointer"
-              height="24px"
-              width="24px"
-              size="contain"
-              margin="auto"
-            />
-          )}
-        </ButtonBingo>
-      </div>
+        </div>
       )}
 
-      { authUser.isAdmin && (
+      {authUser.isAdmin && (
         <div className="right-menus">
           <ButtonAnt
             className="btn-start"
@@ -264,7 +265,7 @@ export const LobbyHeader = (props) => {
         </div>
       )}
     </LobbyHeaderStyled>
-  )
+  );
 };
 
 const SliderContent = styled.div`

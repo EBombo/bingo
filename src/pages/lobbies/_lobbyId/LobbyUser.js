@@ -1,12 +1,14 @@
-import { UserOutlined } from "@ant-design/icons";
-import React, { useEffect, useGlobal, useState, useRef } from "reactn";
-import { config, database, firestore } from "../../../firebase";
+import React, { useEffect, useGlobal, useRef, useState } from "reactn";
+import { config, database } from "../../../firebase";
 import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
+import { MoreOutlined, UserOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { firebase } from "../../../firebase/config";
 import { useInView } from "react-intersection-observer";
 import { LobbyHeader } from "./LobbyHeader";
+import { Popover } from "antd";
+import { useMemo } from "react";
 
 const userListSizeRatio = 50;
 
@@ -17,152 +19,156 @@ export const LobbyUser = (props) => {
   const [authUser] = useGlobal("user");
 
   const [users, setUsers] = useState([]);
-  const [userListSize, setUserListSize] = useState(100);
+  const [userListSize, setUserListSize] = useState(0);
   const { ref: scrollTriggerRef, inView } = useInView({ threshold: 0 });
-  const [isOnline, setIsOnline] = useState(false);
 
-  // common
+  const userRef = useRef(null);
+  const unSub = useRef(null);
+
+  // Common.
   useEffect(() => {
     if (!props.lobby) return;
     if (!inView) return;
 
-    const usersQuery = () =>
-      database.ref(`lobbies/${lobbyId}/users`).orderByChild("last_changed").limitToLast(userListSize);
+    const newUserListSizeRatio = userListSize + userListSizeRatio;
 
-    let userQueryListener;
-    let UsersQueryRef = usersQuery();
-    const fetchUsers = async () => {
-      userQueryListener = UsersQueryRef.on("value", (snapshot) => {
+    // Realtime database cannot sort descending.
+    // Reference orderByChild: https://firebase.google.com/docs/database/web/lists-of-data?authuser=0#sort_data
+    // Reference limitToLast: https://firebase.google.com/docs/database/web/lists-of-data?authuser=0#filtering_data
+    const UsersQueryRef = database
+      .ref(`lobbies/${lobbyId}/users`)
+      .orderByChild("last_changed")
+      .limitToLast(newUserListSizeRatio);
+
+    const fetchUsers = () =>
+      UsersQueryRef.on("value", (snapshot) => {
         let users_ = [];
 
         snapshot.forEach((docRef) => {
           const user = docRef.val();
-          if (!authUser.isAdmin && user.userId === authUser.id) return
           if (user.state.includes("online")) users_.unshift(user);
-        })
+        });
 
-        setUserListSize(userListSize + userListSizeRatio);
+        setUserListSize(newUserListSizeRatio);
         setUsers(users_);
       });
-    };
 
-    fetchUsers();
+    const userQueryListener = fetchUsers();
 
-    return () => {
-      UsersQueryRef?.off("value", userQueryListener);
-    };
+    return () => UsersQueryRef?.off("value", userQueryListener);
   }, [inView]);
 
-  if (!authUser.isAdmin) {
-    const isFirstRun = useRef(true); 
-    useEffect(() => {
-      // skip first run
-      if (isFirstRun.current) {
-        isFirstRun.current = false;
-        return;
-      }
+  // Create presence.
+  useEffect(() => {
+    if (!props.lobby) return;
 
-      const incrementCountPlayer = async () => {
-        await firestore.doc(`lobbies/${props.lobby.id}`).update({
-          countPlayers: isOnline ? firebase.firestore.FieldValue.increment(1) : firebase.firestore.FieldValue.increment(-1),
-        });
-      };
+    if (!authUser) return;
+    if (!authUser.lobby) return;
+    if (authUser.isAdmin) return;
 
-      incrementCountPlayer();
-    }, [isOnline]);
+    const mappedUser = {
+      email: authUser?.email ?? null,
+      userId: authUser?.id ?? null,
+      nickname: authUser?.nickname ?? null,
+      avatar: authUser?.avatar ?? null,
+      lobbyId: props.lobby.id,
+    };
 
-    useEffect(() => {
-      window.addEventListener('unload', async function(event) {
-        await firestore.doc(`lobbies/${props.lobby.id}`).update({
-          countPlayers: firebase.firestore.FieldValue.increment(-1),
-        });
+    const isOfflineForDatabase = {
+      ...mappedUser,
+      state: "offline",
+      last_changed: firebase.database.ServerValue.TIMESTAMP,
+    };
+
+    const isOnlineForDatabase = {
+      ...mappedUser,
+      state: "online",
+      last_changed: firebase.database.ServerValue.TIMESTAMP,
+    };
+
+    userRef.current = database.ref(`lobbies/${props.lobby.id}/users/${authUser.id}`);
+
+    // Reference:
+    // https://firebase.google.com/docs/firestore/solutions/presence
+    const createPresence = () =>
+      database.ref(".info/connected").on("value", async (snapshot) => {
+        if (!snapshot?.val) return;
+        if (!snapshot.val()) return;
+
+        // Reference: https://firebase.google.com/docs/reference/node/firebase.database.OnDisconnect
+        await userRef.current.onDisconnect().set(isOfflineForDatabase);
+
+        userRef.current.set(isOnlineForDatabase);
       });
 
-      let userStatusDatabaselistener;
-      let userStatusDatabaseRef;
-      const listenUserState = async () => {
-        userStatusDatabaseRef = database.ref(`lobbies/${props.lobby.id}/users/${authUser.id}`);
+    unSub.current = createPresence();
 
-        userStatusDatabaselistener = userStatusDatabaseRef.on("value", async (snapshot) => {
-          const user = snapshot.val();
-          setIsOnline(user?.state === 'online');
+    return () => userRef.current?.off("value", unSub.current);
+  }, [authUser]);
 
-        });
-      };
+  // Disconnect presence.
+  useEffect(() => {
+    if (authUser?.lobby || authUser?.isAdmin) return;
 
-      listenUserState();
+    const mappedUser = {
+      email: authUser?.email ?? null,
+      userId: authUser?.id ?? null,
+      nickname: authUser?.nickname ?? null,
+      avatar: authUser?.avatar ?? null,
+    };
 
-      return () => {
-        userStatusDatabaseRef?.off("value", userStatusDatabaselistener);
-      };
-    }, []);
+    const isOfflineForDatabase = {
+      ...mappedUser,
+      state: "offline",
+      last_changed: firebase.database.ServerValue.TIMESTAMP,
+    };
 
-    const alreadyRun = useRef(false);
-    useEffect(() => {
-      if (!props.lobby) return;
-      if (!authUser) return;
-      if (alreadyRun.current) return;
-      alreadyRun.current = true;
+    return () => {
+      userRef.current.set(isOfflineForDatabase);
+      userRef.current?.off("value", unSub.current);
+    };
+  }, [authUser]);
 
-      const userStatusDatabaseRef = database.ref(`lobbies/${props.lobby.id}/users/${authUser.id}`);
+  const btnExit = useMemo(() => {
+    if (!authUser) return null;
+    if (authUser.isAdmin) return null;
 
-      const user = {
-        email: authUser?.email ?? null,
-        userId: authUser?.id ?? null,
-        nickname: authUser?.nickname ?? null,
-        avatar: authUser?.avatar ?? null,
-        lobbyId: props.lobby.id,
-      };
-
-      const createPresence = async () => {
-        const isOfflineForDatabase = {
-          ...user,
-          state: "offline",
-          last_changed: firebase.database.ServerValue.TIMESTAMP,
-        };
-
-        const isOnlineForDatabase = {
-          ...user,
-          state: "online",
-          last_changed: firebase.database.ServerValue.TIMESTAMP,
-        };
-
-        database.ref(".info/connected").on("value", async (snapshot) => {
-          if (!snapshot.val()) return;
-
-          await userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase);
-
-          userStatusDatabaseRef.set(isOnlineForDatabase);
-        });
-      };
-
-      createPresence();
-
-      return async () => {
-        await userStatusDatabaseRef.set({
-          ...user,
-          state: "offline",
-          last_changed: firebase.database.ServerValue.TIMESTAMP,
-        });
-      }
-    }, [props.lobby, authUser]);
-  }
+    return (
+      <Popover
+        trigger="click"
+        content={
+          <div>
+            <div onClick={async () => props.logout()} style={{ cursor: "pointer" }}>
+              Salir
+            </div>
+          </div>
+        }
+      >
+        <div className="icon-menu">
+          <MoreOutlined />
+        </div>
+      </Popover>
+    );
+  }, [authUser]);
 
   return (
     <LobbyCss {...props}>
-      <div className="title">{props.lobby?.game?.name}</div>
+      <div className="title">
+        <div />
+        {props.lobby?.game?.name}
+        <div className="right-content">{btnExit}</div>
+      </div>
+
       <LobbyHeader {...props} />
 
       <div className="container-users">
         <div className="all-users">
           {props.lobby?.countPlayers ?? 0} <UserOutlined />
         </div>
+
         <div className="list-users">
-          { !authUser.isAdmin && (
-            <div className="item-user">{authUser?.nickname}</div>
-          )}
-          {users.map((user, i) => (
-            <div key={`user-${i}`} className="item-user">
+          {users.map((user) => (
+            <div key={user.id} className="item-user">
               {user.nickname}
             </div>
           ))}
@@ -189,10 +195,30 @@ const LobbyCss = styled.div`
     padding: 0.5rem 0;
     font-size: 18px;
     font-weight: 700;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
 
     ${mediaQuery.afterTablet} {
       font-size: 2rem;
+    }
+
+    .right-content {
+      display: flex;
+      justify-content: flex-end;
+
+      .icon-menu {
+        cursor: pointer;
+        width: 40px;
+        height: 100%;
+        display: flex;
+
+        .anticon {
+          margin: auto;
+          font-size: 2rem;
+          font-weight: bold;
+        }
+      }
     }
   }
 

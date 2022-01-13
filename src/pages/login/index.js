@@ -94,7 +94,7 @@ const Login = (props) => {
       }
 
       // Redirect to lobby.
-      if (!lobby.isPlaying) return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
+      if (!lobby?.isPlaying) return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
 
       const userId = authUser?.id ?? firestore.collection("users").doc().id;
       const userCard = getBingoCard();
