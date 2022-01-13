@@ -9,6 +9,7 @@ import { useInView } from "react-intersection-observer";
 import { LobbyHeader } from "./LobbyHeader";
 import { Popover } from "antd";
 import { useMemo } from "react";
+import { spinLoaderMin } from "../../../components/common/loader";
 
 const userListSizeRatio = 50;
 
@@ -19,6 +20,7 @@ export const LobbyUser = (props) => {
   const [authUser] = useGlobal("user");
 
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [userListSize, setUserListSize] = useState(0);
   const { ref: scrollTriggerRef, inView } = useInView({ threshold: 0 });
 
@@ -30,6 +32,7 @@ export const LobbyUser = (props) => {
     if (!props.lobby) return;
     if (!inView) return;
 
+    setIsLoading(true);
     const newUserListSizeRatio = userListSize + userListSizeRatio;
 
     // Realtime database cannot sort descending.
@@ -50,6 +53,7 @@ export const LobbyUser = (props) => {
         });
 
         setUserListSize(newUserListSizeRatio);
+        setIsLoading(false);
         setUsers(users_);
       });
 
@@ -86,6 +90,7 @@ export const LobbyUser = (props) => {
       last_changed: firebase.database.ServerValue.TIMESTAMP,
     };
 
+    // Create reference.
     userRef.current = database.ref(`lobbies/${props.lobby.id}/users/${authUser.id}`);
 
     // Reference:
@@ -172,6 +177,7 @@ export const LobbyUser = (props) => {
         </div>
       </div>
 
+      {isLoading && spinLoaderMin()}
       <div ref={scrollTriggerRef} className="loading-section" />
     </LobbyCss>
   );
