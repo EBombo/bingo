@@ -45,6 +45,7 @@ export const LobbyHeader = (props) => {
     }, {});
 
   const updateLobby = async (isLocked = false, gameStarted = null) => {
+    // TODO: Consider move this functions to backend [optimize performance].
     try {
       if (!lobbyId) throw Error("Lobby not exist");
 
@@ -61,13 +62,16 @@ export const LobbyHeader = (props) => {
 
       if (!gameStarted) return;
 
-      // Save users.
+      // Fetch users.
       const usersDatabaseRef = database.ref(`lobbies/${props.lobby.id}/users`);
-      // Consider use get() instead of once().
-      const snapshot = await usersDatabaseRef.once("value");
-      const users_ = Object.values(snapshot.val());
-      users = mapUsersWithCards(users_);
+      const snapshot = await usersDatabaseRef.get();
 
+      // Mapped users.
+      let users_ = Object.values(snapshot.val());
+      const usersFiltered = users_.filter((user) => user.state.includes("online"));
+      users = mapUsersWithCards(usersFiltered);
+
+      // Save users in sub collection.
       const promisesUsers = Object.values(users).map(
         async (user) => await firestore.collection("lobbies").doc(lobbyId).collection("users").doc(user.id).set(user)
       );
