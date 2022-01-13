@@ -65,6 +65,20 @@ const Login = (props) => {
 
     // Determine is necessary create a user.
     const initialize = async () => {
+      // Fetch lobby.
+      const lobbyRef = await firestore.doc(`lobbies/${authUser.lobby.id}`).get();
+      const lobby = lobbyRef.data();
+
+      if (lobby?.isClosed) {
+        return setAuthUser({
+          id: firestore.collection("users").doc().id,
+          lobby: null,
+          isAdmin: false,
+          email: authUser.email,
+          nickname: authUser.nickname,
+        });
+      }
+
       // AuthUser is admin.
       if (authUser.lobby?.game?.usersIds?.includes(authUser.id))
         return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
@@ -79,12 +93,8 @@ const Login = (props) => {
         return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
       }
 
-      // Fetch lobby.
-      const lobbyRef = await firestore.doc(`lobbies/${authUser.lobby.id}`).get();
-      const lobby = lobbyRef.data();
-
       // Redirect to lobby.
-      if (!lobby.isPlaying) return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
+      if (!lobby?.isPlaying) return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
 
       const userId = authUser?.id ?? firestore.collection("users").doc().id;
       const userCard = getBingoCard();

@@ -2,7 +2,6 @@ import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import { firestore } from "../../../firebase";
 import { useRouter } from "next/router";
 import { spinLoaderMin } from "../../../components/common/loader";
-import { LobbyAdmin } from "./lobbyAdmin";
 import { LobbyUser } from "./LobbyUser";
 import { LobbyLoading } from "./LobbyLoading";
 import { LobbyInPlay } from "./play/LobbyInPlay";
@@ -124,10 +123,6 @@ export const Lobby = (props) => {
   /** Loading page. **/
   if (lobby?.startAt) return <LobbyLoading {...additionalProps} />;
 
-  /** TODO: Consider refactoring as a single component where the user and the administrator wait for the creation of the lobby **/
   /** Before starting the game. **/
-  if (authUser?.isAdmin) return <LobbyAdmin {...additionalProps} />; // Admin.
-
-  /** TODO: Consider refactoring as a single component where the user and the administrator wait for the creation of the lobby **/
-  return <LobbyUser {...additionalProps} />; // User.
+  return <LobbyUser {...additionalProps} />;
 };

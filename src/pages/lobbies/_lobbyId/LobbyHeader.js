@@ -1,60 +1,43 @@
-import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useGlobal, useState } from "reactn";
-import { Divider } from "../../../components/common/Divider";
 import { config, database, firestore, firestoreBomboGames, hostName } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
 import { mediaQuery } from "../../../constants";
-import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Popover, Slider, Tooltip } from "antd";
 import { getBingoCard } from "../../../business";
 import { Image } from "../../../components/common/Image";
-import orderBy from "lodash/orderBy";
-import { firebase } from "../../../firebase/config";
 import { useSendError } from "../../../hooks";
 import { saveMembers } from "../../../constants/saveMembers";
+import { useRouter } from "next/router";
 
-export const LobbyAdmin = (props) => {
+export const LobbyHeader = (props) => {
   const { sendError } = useSendError();
 
   const router = useRouter();
   const { lobbyId } = router.query;
 
+  const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
 
-  const [users, setUsers] = useState([]);
   const [volume, setVolume] = useState(30);
   const [isPlay, setIsPlay] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
+
   const [isLoadingLock, setIsLoadingLock] = useState(false);
   const [isLoadingStart, setIsLoadingStart] = useState(false);
 
-  useEffect(() => {
-    if (!props.lobby) return;
+  if (authUser.isAdmin) {
+    useEffect(() => {
+      const currentAudioToPlay = props.lobby.game?.audio?.audioUrl ?? audios[0]?.audioUrl;
 
-    const fetchUsers = async () => {
-      const userStatusDatabaseRef = database.ref(`lobbies/${lobbyId}/users`);
-      userStatusDatabaseRef.on("value", (snapshot) => {
-        let users_ = Object.values(snapshot.val() ?? {});
-        users_ = users_.filter((user) => user.state.includes("online"));
-        users_ = orderBy(users_, ["last_changed"], ["desc"]);
-        setUsers(users_);
-      });
-    };
+      const currentAudio = props.audioRef.current ?? new Audio(currentAudioToPlay);
 
-    fetchUsers();
-  }, [props.lobby]);
+      props.audioRef.current = currentAudio;
+      props.audioRef.current.play();
+    }, []);
+  }
 
-  useEffect(() => {
-    const currentAudioToPlay = props.lobby.game?.audio?.audioUrl ?? audios[0]?.audioUrl;
-
-    const currentAudio = props.audioRef.current ?? new Audio(currentAudioToPlay);
-
-    props.audioRef.current = currentAudio;
-    props.audioRef.current.play();
-  }, []);
-
-  const mapUsersWithCards = () =>
+  const mapUsersWithCards = (users) =>
     users.reduce((usersSum, user) => {
       const card = getBingoCard();
       const newUser = { ...user, id: user.userId, card: JSON.stringify(card) };
@@ -62,6 +45,7 @@ export const LobbyAdmin = (props) => {
     }, {});
 
   const updateLobby = async (isLocked = false, gameStarted = null) => {
+    // TODO: Consider move this functions to backend [optimize performance].
     try {
       if (!lobbyId) throw Error("Lobby not exist");
 
@@ -72,42 +56,90 @@ export const LobbyAdmin = (props) => {
         updateAt: new Date(),
       };
 
-      if (gameStarted) users = mapUsersWithCards();
-
       // Add users to lobby.
       const promiseLobbyBingo = firestore.doc(`lobbies/${lobbyId}`).update(newLobby);
       const promiseLobbyGames = firestoreBomboGames.doc(`lobbies/${lobbyId}`).update(newLobby);
 
       if (!gameStarted) return;
 
-      // Save users.
+      // Fetch users.
+      const usersDatabaseRef = database.ref(`lobbies/${props.lobby.id}/users`);
+      const snapshot = await usersDatabaseRef.get();
+
+      // Mapped users.
+      let users_ = Object.values(snapshot.val());
+      const usersFiltered = users_.filter((user) => user.state.includes("online"));
+      users = mapUsersWithCards(usersFiltered);
+
+      // Save users in sub collection.
       const promisesUsers = Object.values(users).map(
         async (user) => await firestore.collection("lobbies").doc(lobbyId).collection("users").doc(user.id).set(user)
       );
 
       await Promise.all(promisesUsers);
 
-      // Count users.
-      const promiseGame = users
-        ? await firestore
-            .doc(`games/${props.lobby.game.id}`)
-            .update({ countPlayers: firebase.firestore.FieldValue.increment(Object.values(users ?? {}).length ?? 0) })
-        : null;
-
       // The new users saved as members.
       const promiseMembers = users ? saveMembers(props.lobby, users) : null;
 
-      await Promise.all([promiseLobbyBingo, promiseLobbyGames, promiseGame, promiseMembers]);
+      await Promise.all([promiseLobbyBingo, promiseLobbyGames, promiseMembers]);
     } catch (error) {
+      if (!gameStarted) setIsLoadingStart(false);
       props.showNotification("ERROR", "Lobby not exist");
-      console.error(error);
       sendError(error, "updateLobby");
     }
   };
 
   return (
-    <LobbyCss>
-      <div className="header">
+    <LobbyHeaderStyled {...props}>
+      <div className="item-pin">
+        <Tooltip placement="bottom" title="Click aquí para copiar el link de ebombo con pin">
+          <div
+            className="label"
+            onClick={() => {
+              navigator.clipboard.writeText(`${hostName}?pin=${props.lobby?.pin}`);
+              props.showNotification("OK", "Link copiado!", "success");
+            }}
+          >
+            {props.lobby.isLocked ? (
+              "Este juego esta bloqueado"
+            ) : (
+              <>
+                Entra a <span className="font-black">ebombo.io</span>
+              </>
+            )}
+          </div>
+        </Tooltip>
+
+        <div className="pin-label">Pin del juego:</div>
+
+        <div className="pin">
+          {props.lobby.isLocked ? (
+            <ButtonBingo variant="primary" margin="10px 20px">
+              <Image
+                cursor="pointer"
+                src={`${config.storageUrl}/resources/lock.svg`}
+                height="24px"
+                width="24px"
+                size="contain"
+                margin="auto"
+              />
+            </ButtonBingo>
+          ) : (
+            <div
+              onClick={() => {
+                navigator.clipboard.writeText(props.lobby.pin);
+                props.showNotification("OK", "PIN copiado!", "success");
+              }}
+            >
+              <Tooltip placement="bottom" title="Click aquí para copiar el PIN">
+                {props.lobby?.pin}
+              </Tooltip>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {authUser.isAdmin && (
         <div className="left-menus">
           <Popover
             trigger="click"
@@ -135,13 +167,13 @@ export const LobbyAdmin = (props) => {
               </AudioStyled>
             }
           >
-            <ButtonBingo variant="primary" margin="10px 20px">
+            <ButtonBingo variant="primary">
               {isPlay ? (
                 <Image
                   cursor="pointer"
                   src={`${config.storageUrl}/resources/sound.svg`}
-                  height="25px"
-                  width="25px"
+                  height="24px"
+                  width="24px"
                   size="contain"
                   margin="auto"
                 />
@@ -150,6 +182,7 @@ export const LobbyAdmin = (props) => {
               )}
             </ButtonBingo>
           </Popover>
+
           <Popover
             content={
               <SliderContent>
@@ -168,7 +201,6 @@ export const LobbyAdmin = (props) => {
           >
             <ButtonBingo
               variant="primary"
-              margin="10px 20px"
               disabled={!isPlay}
               onClick={() => {
                 if (!props.audioRef.current) return;
@@ -188,59 +220,16 @@ export const LobbyAdmin = (props) => {
               <Image
                 cursor="pointer"
                 src={isMuted ? `${config.storageUrl}/resources/mute.svg` : `${config.storageUrl}/resources/volume.svg`}
-                height="25px"
-                width="25px"
+                height="24px"
+                width="24px"
                 size="contain"
                 margin="auto"
               />
             </ButtonBingo>
           </Popover>
-        </div>
 
-        <div className="item-pin">
-          <Tooltip placement="bottom" title="Click aquí para copiar el link de ebombo con pin">
-            <div
-              className="label"
-              onClick={() => {
-                navigator.clipboard.writeText(`${hostName}?pin=${props.lobby?.pin}`);
-                props.showNotification("OK", "Link copiado!", "success");
-              }}
-            >
-              {props.lobby.isLocked ? "Este juego esta bloqueado" : "Entra a ebombo.io"}
-            </div>
-          </Tooltip>
-          <div className="pin-label">Pin del juego:</div>
-          <div className="pin">
-            {props.lobby.isLocked ? (
-              <ButtonBingo variant="primary" margin="10px 20px">
-                <Image
-                  cursor="pointer"
-                  src={`${config.storageUrl}/resources/lock.svg`}
-                  height="25px"
-                  width="25px"
-                  size="contain"
-                  margin="auto"
-                />
-              </ButtonBingo>
-            ) : (
-              <div
-                onClick={() => {
-                  navigator.clipboard.writeText(props.lobby.pin);
-                  props.showNotification("OK", "PIN copiado!", "success");
-                }}
-              >
-                <Tooltip placement="bottom" title="Click aquí para copiar el PIN">
-                  {props.lobby?.pin}
-                </Tooltip>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="right-menus">
           <ButtonBingo
             variant="primary"
-            margin="10px 20px"
             disabled={isLoadingLock}
             loading={isLoadingLock}
             onClick={async () => {
@@ -253,43 +242,33 @@ export const LobbyAdmin = (props) => {
               <Image
                 src={`${config.storageUrl}/resources/${props.lobby.isLocked ? "lock.svg" : "un-lock.svg"}`}
                 cursor="pointer"
-                height="25px"
-                width="25px"
+                height="24px"
+                width="24px"
                 size="contain"
                 margin="auto"
               />
             )}
           </ButtonBingo>
+        </div>
+      )}
+
+      {authUser.isAdmin && (
+        <div className="right-menus">
           <ButtonAnt
             className="btn-start"
             loading={isLoadingStart}
-            disabled={!users?.length || isLoadingStart}
+            color="success"
+            disabled={!props.lobby.countPlayers || isLoadingStart}
             onClick={async () => {
               setIsLoadingStart(true);
               await updateLobby(false, new Date());
-              setIsLoadingStart(false);
             }}
           >
             Empezar
           </ButtonAnt>
         </div>
-      </div>
-
-      <Divider />
-
-      <div className="container-users">
-        <div className="all-users">
-          {users?.length ?? 0} <UserOutlined />
-        </div>
-        <div className="list-users">
-          {users.map((user) => (
-            <div key={user.userId} className="item-user">
-              {user.nickname}
-            </div>
-          ))}
-        </div>
-      </div>
-    </LobbyCss>
+      )}
+    </LobbyHeaderStyled>
   );
 };
 
@@ -319,107 +298,101 @@ const AudioStyled = styled.div`
   }
 `;
 
-const LobbyCss = styled.div`
-  width: fit-content;
+const LobbyHeaderStyled = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr auto;
+  padding: 2rem 1rem 2rem 1rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  background: ${(props) => props.theme.basic.secondary};
 
   ${mediaQuery.afterTablet} {
-    width: auto;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto;
+
+    align-items: start;
   }
 
-  .header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+  .right-menus {
+    margin-left: 0.25rem;
+    justify-content: flex-end;
 
-    .right-menus {
-      .btn-start {
-        margin: 10px 20px !important;
-        padding: 10px 30px !important;
-      }
-    }
-
-    .right-menus,
-    .left-menus {
-      text-align: center;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    .left-menus {
-      button {
-        width: 45px;
-        box-shadow: none;
-        border-radius: 50px;
-      }
-    }
-
-    .item-pin {
-      width: 370px;
-      height: 370px;
-      font-size: 20px;
-      max-width: 400px;
-      border-radius: 50%;
-      padding-top: 175px;
-      text-align: center;
-      margin: -175px auto 2rem auto;
-      color: ${(props) => props.theme.basic.white};
-      box-shadow: 0 25px 0 ${(props) => props.theme.basic.secondaryDark};
-
-      .pin-label {
-        font-size: 2rem;
-      }
-
-      .pin {
-        font-size: 2rem;
-        cursor: pointer;
-      }
-
-      .label {
-        background: ${(props) => props.theme.basic.white};
-        color: ${(props) => props.theme.basic.black};
-        font-family: Gloria Hallelujah;
-        font-style: normal;
-        font-weight: normal;
-        cursor: pointer;
-      }
-    }
-  }
-
-  .container-users {
-    padding: 10px 15px;
-
-    ${mediaQuery.afterTablet} {
-      padding: 10px 5rem;
-    }
-
-    .all-users {
-      padding: 5px 10px;
-      width: fit-content;
-      border-radius: 3px;
-      margin-bottom: 2rem;
-      color: ${(props) => props.theme.basic.white};
-      background: ${(props) => props.theme.basic.primaryDark};
-    }
-
-    .list-users {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
+    .btn-start {
+      padding: 11px 36px !important;
 
       ${mediaQuery.afterTablet} {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-        grid-gap: 10px;
+        padding: 11px 72px !important;
       }
+    }
+  }
 
-      .item-user {
-        padding: 5px 10px;
-        text-align: center;
-        border-radius: 5px;
-        color: ${(props) => props.theme.basic.white};
-        background: ${(props) => props.theme.basic.primary};
+  .right-menus,
+  .left-menus {
+    text-align: center;
+    display: flex;
+    align-items: center;
+  }
 
-        ${mediaQuery.afterTablet} {
-          padding: 15px 10px;
-        }
+  .left-menus {
+    margin-right: 0.25rem;
+    justify-content: flex-start;
+
+    button {
+      width: 45px;
+      box-shadow: none;
+      margin: 0 0.5rem 0 0;
+    }
+  }
+
+  .item-pin {
+    font-size: 21px;
+    border-radius: 4px 4px 0px 0px;
+    text-align: center;
+    margin: 0 0 2rem 0;
+    color: ${(props) => props.theme.basic.white};
+    background: ${(props) => props.theme.basic.secondaryDarken};
+    box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
+
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+
+    ${mediaQuery.afterTablet} {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+      margin: 0;
+    }
+
+    .label {
+      background: ${(props) => props.theme.basic.white};
+      color: ${(props) => props.theme.basic.black};
+      font-style: normal;
+      font-weight: normal;
+      cursor: pointer;
+    }
+
+    .pin-label {
+      display: inline-block;
+      font-size: 1.25rem;
+      font-weight: 900;
+      vertical-align: super;
+      margin: 0 0.25rem;
+
+      ${mediaQuery.afterTablet} {
+        margin: 0 0.5rem 0 1.5rem;
+        font-size: 2.5rem;
+      }
+    }
+
+    .pin {
+      display: inline-block;
+      font-size: 2.5rem;
+      cursor: pointer;
+      font-weight: 900;
+      margin: 0 0.25rem;
+
+      ${mediaQuery.afterTablet} {
+        margin: 0 1.5rem 0 0.5rem;
+        font-size: 5rem;
       }
     }
   }
