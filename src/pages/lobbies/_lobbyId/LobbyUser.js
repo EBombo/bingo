@@ -112,11 +112,11 @@ export const LobbyUser = (props) => {
     if (authUser?.lobby || authUser?.isAdmin) return;
 
     const isOfflineForDatabase = {
+      state: "offline",
       userId: authUser?.id ?? null,
       email: authUser?.email ?? null,
       avatar: authUser?.avatar ?? null,
       nickname: authUser?.nickname ?? null,
-      state: "offline",
       last_changed: firebase.database.ServerValue.TIMESTAMP,
     };
 
