@@ -26,16 +26,16 @@ export const LobbyHeader = (props) => {
   const [isLoadingLock, setIsLoadingLock] = useState(false);
   const [isLoadingStart, setIsLoadingStart] = useState(false);
 
-  if (authUser.isAdmin) {
-    useEffect(() => {
-      const currentAudioToPlay = props.lobby.game?.audio?.audioUrl ?? audios[0]?.audioUrl;
+  useEffect(() => {
+    if (!authUser.isAdmin) return;
 
-      const currentAudio = props.audioRef.current ?? new Audio(currentAudioToPlay);
+    const currentAudioToPlay = props.lobby.game?.audio?.audioUrl ?? audios[0]?.audioUrl;
 
-      props.audioRef.current = currentAudio;
-      props.audioRef.current.play();
-    }, []);
-  }
+    const currentAudio = props.audioRef.current ?? new Audio(currentAudioToPlay);
+
+    props.audioRef.current = currentAudio;
+    props.audioRef.current.play();
+  }, []);
 
   const mapUsersWithCards = (users) =>
     users.reduce((usersSum, user) => {
