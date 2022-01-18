@@ -94,7 +94,7 @@ export const UserCard = (props) => {
           </tr>
         </thead>
         <tbody className="tbody" key={matrix}>
-          {JSON.parse(props.lobby.users[userId]?.card ?? "[]").map((arrNums, row) => (
+          {JSON.parse(props.winner?.card || props.lobby.users[userId]?.card || "[]").map((arrNums, row) => (
             <tr key={`key-${row}`}>
               {arrNums.map((num, col) => (
                 <td key={`key-${num}-${col}-${matrix}`}>
