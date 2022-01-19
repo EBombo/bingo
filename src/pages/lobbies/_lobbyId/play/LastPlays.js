@@ -120,11 +120,20 @@ const Container = styled.div`
     align-items: center;
     height: 53px;
     background: ${(props) => props.theme.basic.secondaryDarken};
-    box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.25);
     border-radius: 100px;
     padding: 5px;
-    margin-top: 1rem;
+    margin: 1rem auto auto auto;
     overflow: hidden;
+    max-width: 200px;
+  }
+
+  ${mediaQuery.afterTablet} {
+    .balls {
+      max-width: 250px;
+      height: 70px;
+      grid-gap: 3px;
+    }
   }
 
   .label {
@@ -135,14 +144,6 @@ const Container = styled.div`
     font-size: 10px;
     line-height: 12px;
     color: #a3a3a3;
-  }
-
-  ${mediaQuery.afterTablet} {
-    .balls {
-      width: 250px;
-      height: 70px;
-      grid-gap: 3px;
-    }
   }
 `;
 

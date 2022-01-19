@@ -108,39 +108,6 @@ export const ModalFinalStage = (props) => {
         .update({ myWinningCard: [] });
     });
 
-  const adminContent = () => (
-    <AdminContent>
-      <ButtonAnt className="btn" color="secondary" onClick={() => setIsVisibleModalPattern(true)}>
-        Continuar juego
-      </ButtonAnt>
-      <ButtonAnt className="btn" color="secondary" onClick={() => blackout()}>
-        Apagón
-      </ButtonAnt>
-      <ButtonAnt className="btn" color="secondary" onClick={() => newCards()}>
-        Continuar con cartillas nuevas
-      </ButtonAnt>
-      <ButtonAnt className="btn" color="secondary" onClick={() => newGame()}>
-        Juego nuevo
-      </ButtonAnt>
-      <ButtonAnt className="btn" color="danger" onClick={() => endGame()}>
-        Finalizar juego
-      </ButtonAnt>
-    </AdminContent>
-  );
-
-  const userContent = () => (
-    <UserContent>
-      <div className="description">Esperando que el administrador continue el juego...</div>
-      <Image
-        src={`${config.storageUrl}/resources/spinner.gif`}
-        height="85px"
-        width="85px"
-        size="contain"
-        margin="1rem auto"
-      />
-    </UserContent>
-  );
-
   return (
     <ModalContainer
       background="#FAFAFA"
@@ -169,7 +136,7 @@ export const ModalFinalStage = (props) => {
         <div className="main-container">
           <div className="left-container">
             <div className="card-container">
-              <UserCard user={props.lobby.winners[props.lobby.winners.length - 1]} {...props} />
+              <UserCard winner={props.lobby.winners[props.lobby.winners.length - 1]} {...props} />
             </div>
           </div>
           <div className="right-container">
@@ -179,7 +146,37 @@ export const ModalFinalStage = (props) => {
                 <div className="award-name">{props.lobby.winners[props.lobby.winners.length - 1].award.name}</div>
               </>
             )}
-            {authUser.isAdmin ? adminContent() : userContent()}
+
+            {authUser.isAdmin ? (
+              <AdminContent>
+                <ButtonAnt className="btn" color="secondary" onClick={() => setIsVisibleModalPattern(true)}>
+                  Continuar juego
+                </ButtonAnt>
+                <ButtonAnt className="btn" color="secondary" onClick={() => blackout()}>
+                  Apagón
+                </ButtonAnt>
+                <ButtonAnt className="btn" color="secondary" onClick={() => newCards()}>
+                  Continuar con cartillas nuevas
+                </ButtonAnt>
+                <ButtonAnt className="btn" color="secondary" onClick={() => newGame()}>
+                  Juego nuevo
+                </ButtonAnt>
+                <ButtonAnt className="btn" color="danger" onClick={() => endGame()}>
+                  Finalizar juego
+                </ButtonAnt>
+              </AdminContent>
+            ) : (
+              <UserContent>
+                <div className="description">Esperando que el administrador continue el juego...</div>
+                <Image
+                  src={`${config.storageUrl}/resources/spinner.gif`}
+                  height="85px"
+                  width="85px"
+                  size="contain"
+                  margin="1rem auto"
+                />
+              </UserContent>
+            )}
           </div>
         </div>
       </Content>
@@ -306,6 +303,7 @@ const UserContent = styled.div`
     font-size: 16px;
     line-height: 20px;
     color: ${(props) => props.theme.basic.blackDarken};
+    width: 100%;
     max-width: 100%;
   }
 `;

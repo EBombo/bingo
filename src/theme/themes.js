@@ -45,6 +45,10 @@ export const darkTheme = {
     color: "white",
     shadow: "#170D33",
   },
+  buttonSuccess: {
+    background: "#56EEA5",
+    hover: "#B8FFDD",
+  },
   inputPrimary: {
     background: "#FFFFFF",
     color: "black",
