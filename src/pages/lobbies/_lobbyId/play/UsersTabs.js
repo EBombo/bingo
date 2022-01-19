@@ -202,58 +202,56 @@ export const UsersTabs = (props) => {
         {tab === TAB.CARDS && (
           <AutoSizer>
             {({ width, height }) => (
-              <List height={height} itemCount={users.length} itemSize={60} width={width}>
+              <List height={height} itemCount={users.length} itemSize={64} width={width}>
                 {({ index, style }) => {
                   const user = users[index];
 
                   return (
-                    <div
-                      className={`user-card ${user.progress === 100 && "winner"}`}
-                      key={`user-card-${index}`}
-                      style={{ ...style }}
-                    >
-                      {user.progress === 100 && "winner" && (
-                        <div className="winner-img">
-                          <Image
-                            src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
-                            height="30px"
-                            width="30px"
-                            borderRadious="50%"
+                    <div style={{ ...style }} key={`user-card-${index}`}>
+                      <div className={`user-card ${user.progress === 100 && "winner"}`}>
+                        {user.progress === 100 && "winner" && (
+                          <div className="winner-img">
+                            <Image
+                              src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
+                              height="30px"
+                              width="30px"
+                              borderRadious="50%"
+                            />
+                          </div>
+                        )}
+
+                        <div className={`name ${authUser.id === user.id && "auth-user"}`}>
+                          <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                          {user.nickname}
+                        </div>
+
+                        <div className="card-preview">
+                          <UserProgress
+                            {...props}
+                            lobbyPattern={lobbyPattern}
+                            user={user}
+                            numberWinners={numberWinners}
+                            isCard
+                            key={user.progress}
                           />
                         </div>
-                      )}
 
-                      <div className={`name ${authUser.id === user.id && "auth-user"}`}>
-                        <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
-                        {user.nickname}
+                        {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
+                          <div className="btn-container">
+                            <button
+                              className="btn-show-card"
+                              onClick={() => {
+                                setCurrentUser(user);
+                                setIsVisibleModalUserCard(true);
+                              }}
+                            >
+                              Ver cartilla
+                            </button>
+                          </div>
+                        )}
+
+                        {authUser.isAdmin && menu(user)}
                       </div>
-
-                      <div className="card-preview">
-                        <UserProgress
-                          {...props}
-                          lobbyPattern={lobbyPattern}
-                          user={user}
-                          numberWinners={numberWinners}
-                          isCard
-                          key={user.progress}
-                        />
-                      </div>
-
-                      {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
-                        <div className="btn-container">
-                          <button
-                            className="btn-show-card"
-                            onClick={() => {
-                              setCurrentUser(user);
-                              setIsVisibleModalUserCard(true);
-                            }}
-                          >
-                            Ver cartilla
-                          </button>
-                        </div>
-                      )}
-
-                      {authUser.isAdmin && menu(user)}
                     </div>
                   );
                 }}
@@ -270,50 +268,48 @@ export const UsersTabs = (props) => {
                   const user = users[index];
 
                   return (
-                    <div
-                      className={`user-progress ${user.progress === 100 && "winner"}`}
-                      key={`${user.nickname}-${index}`}
-                      style={{ ...style }}
-                    >
-                      <div className={`name ${authUser.id === user.id && "auth-user"}`}>
-                        {user.avatar && (
-                          <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
-                        )}
-                        {user.nickname}
-                      </div>
+                    <div style={{ ...style }} key={`${user.nickname}-${index}`}>
+                      <div className={`user-progress ${user.progress === 100 && "winner"}`}>
+                        <div className={`name ${authUser.id === user.id && "auth-user"}`}>
+                          {user.avatar && (
+                            <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                          )}
+                          {user.nickname}
+                        </div>
 
-                      <div className={`progress`}>
-                        <UserProgress
-                          {...props}
-                          lobbyPattern={lobbyPattern}
-                          user={user}
-                          numberWinners={numberWinners}
-                        />
-                      </div>
-
-                      {user.progress === 100 && "winner" && (
-                        <div className="winner-img">
-                          <Image
-                            src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
-                            height="30px"
-                            width="30px"
-                            borderRadious="50%"
+                        <div className={`progress`}>
+                          <UserProgress
+                            {...props}
+                            lobbyPattern={lobbyPattern}
+                            user={user}
+                            numberWinners={numberWinners}
                           />
                         </div>
-                      )}
-                      <div className="options">
-                        {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
-                          <button
-                            className="btn-show-card"
-                            onClick={() => {
-                              setCurrentUser(user);
-                              setIsVisibleModalUserCard(true);
-                            }}
-                          >
-                            Ver cartilla
-                          </button>
+
+                        {user.progress === 100 && "winner" && (
+                          <div className="winner-img">
+                            <Image
+                              src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
+                              height="30px"
+                              width="30px"
+                              borderRadious="50%"
+                            />
+                          </div>
                         )}
-                        {authUser.isAdmin && menu(user)}
+                        <div className="options">
+                          {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
+                            <button
+                              className="btn-show-card"
+                              onClick={() => {
+                                setCurrentUser(user);
+                                setIsVisibleModalUserCard(true);
+                              }}
+                            >
+                              Ver cartilla
+                            </button>
+                          )}
+                          {authUser.isAdmin && menu(user)}
+                        </div>
                       </div>
                     </div>
                   );
