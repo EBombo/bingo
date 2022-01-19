@@ -178,13 +178,14 @@ export const CreateLobby = (props) => {
             <div>Jugadores vs Jugadores</div>
             <div>1:1 dispositivos</div>
             <ButtonAnt
-              color="secondary"
+              className="btn-play"
+              color="success"
               margin="auto"
               loading={isLoadingSave}
               disabled={isLoadingSave}
               onClick={() => createLobby("individual")}
             >
-              Clásico
+              Jugar
             </ButtonAnt>
           </div>
           <div className="item">
@@ -493,5 +494,13 @@ const GameCss = styled.div`
 
   .ant-collapse-content {
     background: ${(props) => props.theme.basic.secondary} !important;
+  }
+
+  .btn-play {
+    font-weight: bold;
+
+    &:hover {
+      background: ${(props) => props.theme.buttonSuccess.hover} !important;
+    }
   }
 `;
