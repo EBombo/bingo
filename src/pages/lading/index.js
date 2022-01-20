@@ -8,7 +8,7 @@ export const Lading = () => {
 
   return (
     <LadingContainer>
-      <Anchor variant="primary" onClick={() => router.push("/login")}>
+      <Anchor variant="primary" url="/login">
         INGREGAR
       </Anchor>
     </LadingContainer>
