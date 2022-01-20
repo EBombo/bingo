@@ -394,6 +394,8 @@ const TabsContainer = styled.div`
           line-height: 18px;
           display: flex;
           align-items: center;
+          justify-self: flex-start;
+          padding-left: 1rem;
 
           &.auth-user {
             color: ${(props) => props.theme.basic.primary};
