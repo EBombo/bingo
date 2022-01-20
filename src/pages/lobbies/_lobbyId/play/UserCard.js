@@ -4,16 +4,23 @@ import { mediaQuery } from "../../../../constants";
 import { generateMatrix } from "../../../../business";
 import { firebase, firestore } from "../../../../firebase";
 import defaultTo from "lodash/defaultTo";
+import { useMemo } from "react";
 
 export const UserCard = (props) => {
   const [authUser] = useGlobal("user");
+
   const [matrix, setMatrix] = useState(generateMatrix());
 
-  const userId = props.user ? props.user?.id : authUser?.id;
-  const isAuthUser = props.user && props.user?.id === authUser?.id;
+  const userId = useMemo(() => {
+    return props.user ? props.user?.id : authUser?.id;
+  }, [props.user, authUser]);
+
+  const isAuthUser = useMemo(() => {
+    return props.user && props.user?.id === authUser?.id;
+  }, [props.user, authUser]);
 
   useEffect(() => {
-    if (props?.lobby?.settings?.cardAutofill) return;
+    if (props.lobby?.settings?.cardAutofill) return;
 
     const fetchMyWiningCard = async () => {
       const userQuery = await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(userId).get();
@@ -22,12 +29,14 @@ export const UserCard = (props) => {
 
       const user = userQuery.data();
 
+      if (!user) return;
+      if (!user?.card) return;
       if (!user?.myWinningCard) return;
 
-      const userCard = JSON.parse(props.lobby.users[userId]?.card ?? "[]");
+      const userCard = JSON.parse(user.card ?? "[]");
       const newMatrix = [...matrix];
 
-      // Auto fill user card with "myWinningCard" [array].
+      // Autofill user card with "myWinningCard" [array].
       userCard.forEach((axisY, indexY) =>
         axisY.forEach((axisX, indexX) => {
           if (user.myWinningCard.includes(axisX)) newMatrix[indexY][indexX] = true;
@@ -38,7 +47,7 @@ export const UserCard = (props) => {
     };
 
     fetchMyWiningCard();
-  }, []);
+  }, [props?.lobby]);
 
   useEffect(() => {
     const board = defaultTo(props.lobby.board, {});
@@ -85,11 +94,11 @@ export const UserCard = (props) => {
           </tr>
         </thead>
         <tbody className="tbody" key={matrix}>
-          {JSON.parse(props.lobby.users[userId]?.card ?? "[]").map((arrNums, row) => (
+          {JSON.parse(props.winner?.card || props.lobby.users[userId]?.card || "[]").map((arrNums, row) => (
             <tr key={`key-${row}`}>
               {arrNums.map((num, col) => (
                 <td key={`key-${num}-${col}-${matrix}`}>
-                  {props.lobby.settings.cardAutofill ? (
+                  {props.lobby?.settings?.cardAutofill ? (
                     <div className={`${props.lobby.board && props.lobby.board[num] && `active`}`}>{num}</div>
                   ) : isAuthUser ? (
                     <div
