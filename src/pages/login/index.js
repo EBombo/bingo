@@ -24,6 +24,12 @@ const Login = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    if (!authUser?.lobby) return;
+
+    router.prefetch(`/bingo/lobbies/${authUser?.lobby?.id}`);
+  }, [authUser]);
+
   const fetchLobby = async (pin, avatar = avatars[0]) => {
     try {
       // Fetch lobby.

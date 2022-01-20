@@ -43,6 +43,11 @@ export const CreateLobby = (props) => {
   const [showAwards, setShowAwards] = useState(false);
 
   useEffect(() => {
+    router.prefetch("/");
+    router.prefetch("/login");
+  }, []);
+
+  useEffect(() => {
     if ((!tokenId && !userId) || !gameId) return;
 
     const verifyUser = async () => {
