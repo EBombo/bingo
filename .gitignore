@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+./public/sitemap.xml
+./public/robots.txt
 yarn.lock
 
 # testing
@@ -44,3 +46,5 @@ yarn-error.log*
 .firebase
 **/*.cssç
 *.log
+
+.nvmrc

@@ -7,29 +7,29 @@ import { timeoutPromise } from "../../../../utils/promised";
 import defaultTo from "lodash/defaultTo";
 
 export const LastBall = (props) => {
-  const [lastNumber, setLastNumber] = useState(props.lobby?.lastPlays?.[0] ?? null);
+  const [lastNumber, setLastNumber] = useState(props.lastPlays?.[0] ?? null);
   const [outEffect, setOutEffect] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (isLoading) return setIsLoading(false);
     // Prevent re render.
-    if (props.lobby?.lastPlays?.[0] === lastNumber) return;
+    if (props.lastPlays?.[0] === lastNumber) return;
 
     const initializeAnimation = async () => {
-      await timeoutPromise((ANIMATION.max - defaultTo(props.lobby.animationSpeed, ANIMATION.default)) * 1000);
+      await timeoutPromise((ANIMATION.max - defaultTo(props.animationSpeed, ANIMATION.default)) * 1000);
 
       setOutEffect(true);
 
-      await timeoutPromise(1000);
+      await timeoutPromise(500);
 
       setOutEffect(false);
 
-      setLastNumber(props.lobby?.lastPlays?.[0] ?? null);
+      setLastNumber(props.lastPlays?.[0] ?? null);
     };
 
     initializeAnimation();
-  }, [props.lobby?.lastPlays]);
+  }, [props.lastPlays]);
 
   return (
     <LastBallContainer number={lastNumber} vertical={props.vertical} outEffect={outEffect}>

@@ -32,6 +32,7 @@ export const UsersTabs = (props) => {
 
   const resetUsers = () => {
     let newUsers = Object.values(props.lobby.users ?? []);
+
     newUsers = newUsers.map((user) => {
       const userProgress = progress(user);
       return {
@@ -66,7 +67,7 @@ export const UsersTabs = (props) => {
     let hits = 0;
     let sizePattern = 0;
 
-    let _numberWinners = props.lobby.game.cardAutofill ? numberWinners : defaultTo(user.myWinningCard, []);
+    let _numberWinners = props.lobby?.settings?.cardAutofill ? numberWinners : defaultTo(user.myWinningCard, []);
 
     lobbyPattern.forEach((y, indexY) =>
       y.forEach((x, indexX) => {
