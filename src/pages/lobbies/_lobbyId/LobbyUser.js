@@ -164,11 +164,18 @@ export const LobbyUser = (props) => {
       <LobbyHeader {...props} />
 
       <div className="container-users">
-        <div className="all-users">
+        <div className="all-users m-2 py-2 px-4">
           {props.lobby?.countPlayers ?? 0} <UserOutlined />
         </div>
 
-        <div className="list-users">
+        { !authUser.isAdmin && (
+          <div className="notification-joint-user font-bold text-white bg-green-800 text-center sm:text-lg py-2">
+            Entró correctamente al juego.
+            <div className="inline-block bg-primary p-2 m-2 rounded shadow-xl">{authUser.nickname} (Tú)</div>
+          </div>
+        )}
+
+        <div className="list-users  p-4">
           {users.map((user) => (
             <div key={user.id} className="item-user">
               {user.nickname}
@@ -226,14 +233,13 @@ const LobbyCss = styled.div`
   }
 
   .container-users {
-    padding: 10px 15px;
+    // padding: 10px 15px;
 
     ${mediaQuery.afterTablet} {
-      padding: 10px 5rem;
+      // padding: 10px 5rem;
     }
 
     .all-users {
-      padding: 5px 10px;
       width: fit-content;
       border-radius: 3px;
       margin-bottom: 2rem;
