@@ -27,7 +27,7 @@ export const ModalAwards = (props) => {
 
   const addAward = async () => {
     const newAwards = [...awards];
-    newAwards.push({ award, id: firestore.collection("awards").doc().id });
+    newAwards.push({ ...award, id: firestore.collection("awards").doc().id });
     setAwards(newAwards);
     setAward("");
     setIsUpdating(true);
@@ -99,11 +99,15 @@ export const ModalAwards = (props) => {
               <FileUpload
                 file={award.imageUrl ?? `${config.storageUrl}/resources/gift.png`}
                 preview={true}
-                fileName="coverImgUrl"
-                filePath={props.path}
-                sizes="300x350"
-                disabled={props.isLoading}
-                afterUpload={(coverImgs) => props.setCoverImgUrl(coverImgs[0].url)}
+                fileName="awardImg"
+                filePath={`awards/${award.id}`}
+                sizes="250x250"
+                afterUpload={(images) => {
+                  const newAwards = [...awards];
+                  newAwards[index].imageUrl = images[0].url;
+                  console.log(newAwards);
+                  setAwards(newAwards);
+                }}
               />
               <Tablet>
                 <div className="p-2">
@@ -134,17 +138,20 @@ export const ModalAwards = (props) => {
               </div>
 
               <div className="p-2">
-                <Input
-                  placeholder="Premio"
-                  name="award"
-                  value={award.name}
-                  onChange={(event) =>
-                    setAward({
-                      name: event.target.value,
-                      order: defaultTo(props.lobby.settings.awards, []).length + 1,
-                    })
-                  }
-                />
+                <form>
+                  <Input
+                    placeholder="Premio"
+                    name="award"
+                    value={award.name}
+                    onChange={(event) => {
+                      event.preventDefault();
+                      setAward({
+                        name: event.target.value,
+                        order: defaultTo(props.lobby.settings.awards, []).length + 1,
+                      });
+                    }}
+                  />
+                </form>
               </div>
               <ButtonAnt color="secondary" margin="0 auto" padding="5px" onClick={() => addAward()}>
                 Agregar
