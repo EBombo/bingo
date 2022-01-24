@@ -104,7 +104,7 @@ export const LobbyHeader = (props) => {
               "Este juego esta bloqueado"
             ) : (
               <>
-                Entra a <span className="font-black">ebombo.io</span>
+                Entra a <span className="font-black">ebombo.io <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" /> </span>
               </>
             )}
           </div>
