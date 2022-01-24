@@ -168,7 +168,7 @@ export const LobbyUser = (props) => {
           {props.lobby?.countPlayers ?? 0} <UserOutlined />
         </div>
 
-        { !authUser.isAdmin && (
+        { !authUser?.isAdmin && (
           <div className="notification-joint-user font-bold text-white bg-green-800 text-center sm:text-lg py-2">
             Entró correctamente al juego.
             <div className="inline-block bg-primary p-2 m-2 rounded shadow-xl">{authUser.nickname} (Tú)</div>
@@ -233,11 +233,6 @@ const LobbyCss = styled.div`
   }
 
   .container-users {
-    // padding: 10px 15px;
-
-    ${mediaQuery.afterTablet} {
-      // padding: 10px 5rem;
-    }
 
     .all-users {
       width: fit-content;
