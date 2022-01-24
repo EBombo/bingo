@@ -141,10 +141,22 @@ export const ModalFinalStage = (props) => {
           </div>
           <div className="right-container">
             {props.lobby.winners[props.lobby.winners.length - 1].award && (
-              <>
-                <div className="award">Premio</div>
-                <div className="award-name">{props.lobby.winners[props.lobby.winners.length - 1].award.name}</div>
-              </>
+              <div className="flex flex-col">
+                <div className="text-['Lato'] text-[17px] text-center leading-[20px] text-blackDarken">Premio</div>
+                <div className="text-['Lato'] text-[17px] text-center font-bold leading-[20px] text-blackDarken my-2">
+                  {props.lobby.winners[props.lobby.winners.length - 1].award.name}
+                </div>
+                <Image
+                  src={
+                    props.lobby.winners[props.lobby.winners.length - 1].award.imageUrl ??
+                    `${config.storageUrl}/resources/gift.png`
+                  }
+                  height="80px"
+                  width="80px"
+                  size="contain"
+                  margin="0 auto 2rem auto"
+                />
+              </div>
             )}
 
             {authUser.isAdmin ? (
