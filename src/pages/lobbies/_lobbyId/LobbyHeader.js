@@ -96,7 +96,7 @@ export const LobbyHeader = (props) => {
           <div
             className="label"
             onClick={() => {
-              navigator.clipboard.writeText(`${hostName}?pin=${props.lobby?.pin}`);
+              navigator.clipboard.writeText(`${hostName}/?pin=${props.lobby?.pin}`);
               props.showNotification("OK", "Link copiado!", "success");
             }}
           >
