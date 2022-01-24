@@ -66,31 +66,37 @@ export const ModalAwards = (props) => {
           {...props}
         />
       )}
+
       <AwardsContainer key={props.lobby.settings}>
         <div className="title">{authUser.isAdmin ? "Editar " : ""} Premios</div>
         {defaultTo(awards, []).map((award, index) => (
-          <div className="award" key={index}>
-            <div className="label">Premio {index + 1}</div>
-            <div className="content">
-              <Input
-                defaultValue={award.name}
-                onBlur={(e) => {
-                  const newAwards = [...awards];
-                  newAwards[index] = {
-                    name: e.target.value,
-                    order: index + 1,
-                  };
-                  setAwards([...newAwards]);
-                }}
-                placeholder={`Premio ${index + 1}`}
-                disabled={!authUser.isAdmin}
-              />
-              {authUser.isAdmin && (
-                <ButtonAnt color="danger" onClick={() => deleteAward(index)}>
-                  Borrar
-                </ButtonAnt>
-              )}
+          <div
+            className="bg-whiteLight shadow-[0_0_8px_rgba(0,0,0,0.17)] rounded-[10px] grid grid-cols-[2fr_1fr] items-center my-4 md:grid-cols-[2fr_1fr_1fr]"
+            key={index}
+          >
+            <div className="p-2">
+              <div className="w-[140px] bg-primary font-['Lato'] text-[18px] leading-[22px] text-white">Premio {index + 1}</div>
+              <div className="">
+                <Input
+                  defaultValue={award.name}
+                  onBlur={(e) => {
+                    const newAwards = [...awards];
+                    newAwards[index] = {
+                      name: e.target.value,
+                      order: index + 1,
+                    };
+                    setAwards([...newAwards]);
+                  }}
+                  placeholder={`Premio ${index + 1}`}
+                  disabled={!authUser.isAdmin}
+                />
+              </div>
             </div>
+            {authUser.isAdmin && (
+              <ButtonAnt color="danger" onClick={() => deleteAward(index)}>
+                Borrar
+              </ButtonAnt>
+            )}
           </div>
         ))}
         {authUser.isAdmin && (
