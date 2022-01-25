@@ -1,10 +1,11 @@
 import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider, Spin } from "antd";
-import { mediaQuery } from "../../../constants";
+import { mediaQuery, Desktop } from "../../../constants";
 import { config, firestore, firestoreBomboGames } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, MessageOutlined } from "@ant-design/icons";
+import { ButtonAnt } from "../../../components/form";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
@@ -29,11 +30,17 @@ export const UserLayout = (props) => {
 
   return (
     <UserLayoutCss>
-      <div className="description">1-75 números</div>
       <div className="title no-wrap">
         {props.lobby.game.name} - PIN:{props.lobby.pin}
       </div>
       <div className="right-content">
+
+      <Desktop>
+        <ButtonAnt
+          onClick={() => { props.setToggleChat((prevValue) => !prevValue) }}
+        ><MessageOutlined/> Chat</ButtonAnt>
+      </Desktop>
+
         {authUser.isAdmin ? (
           <div className="right-container">
             <Popover
