@@ -13,7 +13,15 @@ export const ButtonAnt = forwardRef((props, ref) => (
 
 const ButtonAntCss = styled(Button)`
   padding: ${(props) =>
-    props.size === "small" ? "10px" : props.size === "medium" ? "6px 20px" : props.size === "big" ? "10px 30px" : ""};
+    props.padding
+      ? props.padding
+      : props.size === "small"
+      ? "10px"
+      : props.size === "medium"
+      ? "6px 20px"
+      : props.size === "big"
+      ? "10px 30px"
+      : ""};
   margin: ${(props) => props.margin || 0};
   border-radius: ${(props) => (props.borderRadius ? props.borderRadius : "4px")};
   cursor: pointer;

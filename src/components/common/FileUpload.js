@@ -87,9 +87,17 @@ export const FileUpload = (props) => {
   return (
     <UploadContainer>
       {previewFile ? (
-        <div className="image-container">
+        <div className="image-container" onClick={() => inputRef.current.click()}>
           {get(props, "accept", "image/*").includes("image") ? (
-            <Image src={previewFile} height="100px" width="100px" margin="0" borderRadius="5px" />
+            <Image
+              src={previewFile}
+              height="50px"
+              width="50px"
+              desktopHeight="100px"
+              desktopWidth="100px"
+              margin="0"
+              borderRadius="5px"
+            />
           ) : (
             <>
               {previewFile} <Icon type="check-circle" />
@@ -102,9 +110,6 @@ export const FileUpload = (props) => {
         </div>
       )}
       <div className="input-container">
-        <ButtonAnt onClick={() => inputRef.current.click()} loading={loading} key={loading}>
-          {props.buttonLabel || "Subir Imagen"}
-        </ButtonAnt>
         <input
           type="file"
           accept={props.accept || "image/*" || "application/pdf"}

@@ -322,6 +322,7 @@ export const CreateLobby = (props) => {
                         ...awards,
                         {
                           name: "",
+                          id: firestore.collection("awards").doc().id,
                           order: awards.length + 1,
                         },
                       ]);
