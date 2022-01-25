@@ -4,8 +4,11 @@ import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { ButtonAnt } from "../../../../components/form";
 import { Input } from "antd";
 import defaultTo from "lodash/defaultTo";
-import { firestore } from "../../../../firebase";
+import { config, firestore } from "../../../../firebase";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
+import get from "lodash/get";
+import { FileUpload } from "../../../../components/common/FileUpload";
+import { Desktop, Tablet } from "../../../../constants";
 
 export const ModalAwards = (props) => {
   const [authUser] = useGlobal("user");
@@ -24,7 +27,7 @@ export const ModalAwards = (props) => {
 
   const addAward = async () => {
     const newAwards = [...awards];
-    newAwards.push(award);
+    newAwards.push({ ...award, id: firestore.collection("awards").doc().id });
     setAwards(newAwards);
     setAward("");
     setIsUpdating(true);
@@ -66,12 +69,18 @@ export const ModalAwards = (props) => {
           {...props}
         />
       )}
+
       <AwardsContainer key={props.lobby.settings}>
         <div className="title">{authUser.isAdmin ? "Editar " : ""} Premios</div>
         {defaultTo(awards, []).map((award, index) => (
-          <div className="award" key={index}>
-            <div className="label">Premio {index + 1}</div>
-            <div className="content">
+          <div
+            className="relative bg-whiteLight shadow-[0_0_8px_rgba(0,0,0,0.17)] rounded-[10px] grid grid-cols-[2fr_1fr] items-center my-4 md:grid-cols-[2fr_1fr_1fr] h-[130px]"
+            key={index}
+          >
+            <div className="absolute top-[10%] w-[120px] flex">
+              <div className="pointer">Premio {index + 1}</div>
+            </div>
+            <div className="p-2">
               <Input
                 defaultValue={award.name}
                 onBlur={(e) => {
@@ -85,33 +94,69 @@ export const ModalAwards = (props) => {
                 placeholder={`Premio ${index + 1}`}
                 disabled={!authUser.isAdmin}
               />
-              {authUser.isAdmin && (
-                <ButtonAnt color="danger" onClick={() => deleteAward(index)}>
-                  Borrar
-                </ButtonAnt>
-              )}
             </div>
+            <div className="">
+              <FileUpload
+                file={award.imageUrl ?? `${config.storageUrl}/resources/gift.png`}
+                preview={true}
+                fileName="awardImg"
+                filePath={`awards/${award.id}`}
+                sizes="250x250"
+                afterUpload={(images) => {
+                  const newAwards = [...awards];
+                  newAwards[index].imageUrl = images[0].url;
+                  console.log(newAwards);
+                  setAwards(newAwards);
+                }}
+              />
+              <Tablet>
+                <div className="p-2">
+                  {authUser.isAdmin && (
+                    <ButtonAnt color="danger" onClick={() => deleteAward(index)} padding="5px" margin="0 auto">
+                      Borrar
+                    </ButtonAnt>
+                  )}
+                </div>
+              </Tablet>
+            </div>
+            <Desktop>
+              <div className="p-2">
+                {authUser.isAdmin && (
+                  <ButtonAnt color="danger" onClick={() => deleteAward(index)} size="small">
+                    Borrar
+                  </ButtonAnt>
+                )}
+              </div>
+            </Desktop>
           </div>
         ))}
         {authUser.isAdmin && (
           <>
-            <div className="label">Agregar premio</div>
-            <form>
-              <Input
-                placeholder="Premio"
-                name="award"
-                value={award.name}
-                onChange={(event) =>
-                  setAward({
-                    name: event.target.value,
-                    order: defaultTo(props.lobby.settings.awards, []).length + 1,
-                  })
-                }
-              />
-              <ButtonAnt color="secondary" onClick={() => addAward()}>
+            <div className="relative bg-whiteLight shadow-[0_0_8px_rgba(0,0,0,0.17)] rounded-[10px] grid items-center my-4 grid-cols-[2fr_1fr] h-[120px]">
+              <div className="absolute top-[10%] w-[120px] flex">
+                <div className="pointer">Agregar premio</div>
+              </div>
+
+              <div className="p-2">
+                <form>
+                  <Input
+                    placeholder="Premio"
+                    name="award"
+                    value={award.name}
+                    onChange={(event) => {
+                      event.preventDefault();
+                      setAward({
+                        name: event.target.value,
+                        order: defaultTo(props.lobby.settings.awards, []).length + 1,
+                      });
+                    }}
+                  />
+                </form>
+              </div>
+              <ButtonAnt color="secondary" margin="0 auto" padding="5px" onClick={() => addAward()}>
                 Agregar
               </ButtonAnt>
-            </form>
+            </div>
             <div className="btns-container">
               <ButtonAnt
                 color="default"
@@ -174,5 +219,25 @@ const AwardsContainer = styled.div`
     align-items: center;
     justify-content: space-evenly;
     margin: 1rem 0;
+  }
+
+  .pointer {
+    width: 100%;
+    height: 22px;
+    position: relative;
+    background: ${(props) => props.theme.basic.primary};
+    text-align: center;
+  }
+
+  .pointer:before {
+    content: "";
+    position: absolute;
+    right: -11px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 11px solid ${(props) => props.theme.basic.primary};
+    border-top: 11px solid transparent;
+    border-bottom: 11px solid transparent;
   }
 `;
