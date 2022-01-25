@@ -1,7 +1,7 @@
 import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider, Spin, Tooltip } from "antd";
-import { mediaQuery } from "../../../constants";
+import { mediaQuery, Desktop } from "../../../constants";
 import { config, firestore, firestoreBomboGames, hostName } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
 import { LoadingOutlined, MessageOutlined } from "@ant-design/icons";
@@ -164,8 +164,14 @@ export const UserLayout = (props) => {
 
         </div>
       </div>
-      {!authUser.isAdmin && (
         <div className="right-content">
+          <Desktop>
+            <ButtonAnt
+              onClick={() => { props.setToggleChat((prevValue) => !prevValue) }}
+            ><MessageOutlined/> Chat</ButtonAnt>
+          </Desktop>
+
+          {!authUser.isAdmin && (
           <Popover
             trigger="click"
             content={
@@ -193,8 +199,8 @@ export const UserLayout = (props) => {
               <span />
             </div>
           </Popover>
+          )}
         </div>
-      )}
     </UserLayoutCss>
   );
 };
