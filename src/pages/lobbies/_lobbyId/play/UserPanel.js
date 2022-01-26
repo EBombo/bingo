@@ -29,7 +29,7 @@ export const UserPanel = (props) => {
   }, [props.lobby?.lastPlays, props.lobby?.animationSpeed]);
 
   return (
-    <div className="bg-lobby-pattern">
+    <div className="bg-lobby-pattern w-full h-full overflow-auto">
       <Desktop>
         <div className={`user-main grid p-4 w-full h-full`}>
           {props.lobby.settings.showBoardToUser && (

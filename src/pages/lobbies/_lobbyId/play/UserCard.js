@@ -124,6 +124,7 @@ export const UserCard = (props) => {
 const CardContainer = styled.div`
   width: 100%;
   height: 100%;
+  ${(props) => (props.full && "min-width: 550px" )};
   max-width: ${(props) => (props.full ? "100%" : "350px")};
   background: ${(props) => {
     if (props.backgroundImg) return `url(${props.backgroundImg})`;
