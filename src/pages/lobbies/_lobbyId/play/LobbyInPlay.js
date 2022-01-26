@@ -28,6 +28,8 @@ export const LobbyInPlay = (props) => {
   const [isVisibleModalAwards, setIsVisibleModalAwards] = useState(false);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
 
+  const [toggleChat, setToggleChat] = useState(true);
+
   useEffect(() => {
     if (props.lobby.finalStage) setIsVisibleModalFinal(true);
     if (!props.lobby.finalStage) setIsVisibleModalFinal(false);
@@ -90,7 +92,7 @@ export const LobbyInPlay = (props) => {
   // TODO: Consider to refactoring, <Admin> & <User>.
   return (
     <>
-      <UserLayout {...props} />
+      <UserLayout {...props} setToggleChat={setToggleChat}/>
 
       <BingoGameContainer isVisibleBoard={props.lobby.settings.showBoardToUser}>
         {isVisibleModalFinal && (
@@ -144,9 +146,12 @@ export const LobbyInPlay = (props) => {
             />
           )}
 
-          <div className="chat-container">
-            <Chat title={"CHAT DEL BINGO"} />
-          </div>
+          { toggleChat && (
+            <div className="chat-container" >
+              <Chat title={"CHAT DEL BINGO"} />
+            </div>
+          )}
+          
         </Desktop>
 
         <Tablet>
@@ -334,8 +339,7 @@ const BingoGameContainer = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
-    display: grid;
-    grid-template-columns: calc(100% - 300px) 300px;
+    display: flex;
 
     .user-main {
       grid-template-columns: ${(props) => (props.isVisibleBoard ? "375px auto" : "1fr")};
@@ -343,6 +347,7 @@ const BingoGameContainer = styled.div`
 
     .chat-container {
       height: 100%;
+      min-width: 300px;
     }
 
     .bingo {
