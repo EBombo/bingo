@@ -17,6 +17,7 @@ import styled from "styled-components";
 import { ModalPattern } from "./ModalPattern";
 import { darkTheme } from "../../../../theme";
 import { useMemo } from "react";
+import { UsersTabs } from "./UsersTabs";
 
 export const AdminPanel = (props) => {
   const [reproductionSpeed] = useGlobal("reproductionSpeed");
@@ -151,7 +152,7 @@ export const AdminPanel = (props) => {
   }, [props.lobby?.lastPlays, props.lobby?.animationSpeed]);
 
   return (
-    <>
+    <div className="grid grid-rows-[min-content_auto] bg-lobby-pattern">
       {modalConfirm()}
       {isVisibleModalPattern && modalPattern()}
       <Desktop>
@@ -302,7 +303,8 @@ export const AdminPanel = (props) => {
           <Chat title={"CHAT DEL BINGO"} />
         </div>
       </Tablet>
-    </>
+      <UsersTabs {...props} />
+    </div>
   );
 };
 

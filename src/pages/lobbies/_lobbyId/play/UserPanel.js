@@ -29,36 +29,41 @@ export const UserPanel = (props) => {
   }, [props.lobby?.lastPlays, props.lobby?.animationSpeed]);
 
   return (
-    <>
+    <div className="bg-lobby-pattern w-full h-full overflow-auto">
       <Desktop>
-        <div className="user-content">
-          <div className="left-user-content">
-            <UserCard user={authUser} {...props} />
-            <ButtonAnt
-              color="success"
-              onClick={() => props.callBingo()}
-              disabled={defaultTo(props.lobby.bannedUsersId, []).includes(authUser.id) || !props.lobby.startGame}
-            >
-              Bingo
-            </ButtonAnt>
-          </div>
-          <div className="right-user-content">
-            <div className="board-container">
-              <BingoBoard {...props} isVisible={props.lobby.settings.showBoardToUser} />
+        <div className={`user-main grid p-4 w-full h-full`}>
+          {props.lobby.settings.showBoardToUser && (
+            <div className="p-4">
+              <BingoBoard vertical isVisible {...props} />
             </div>
-            <div className="bottom-section">
-              {lastBall}
-              <div className="last-plays-container">
-                <LastPlays showMore {...props} />
-              </div>
-              <div className="pattern">
+          )}
+          <div
+            className={`bg-secondaryDarken/60 p-2 grid grid-cols-[1fr_2fr] w-full max-w-screen-xl mx-auto`}
+          >
+            <div className="flex flex-col items-center justify-around">
+              <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} />
+              <LastPlays showMore {...props} />
+              <div className="w-[300px] bg-secondary shadow-[0_4px_8px_rgba(0,0,0,0.25)] rounded-[4px] p-4">
                 <CardPattern caption={"Patrón a completar"} hiddenOptions key={props.lobby.pattern} {...props} />
-                {props.lobby.settings.awards?.length && (
-                  <ButtonAnt color="default" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
-                    Ver premios
-                  </ButtonAnt>
-                )}
               </div>
+              {props.lobby.settings.awards?.length && (
+                <ButtonAnt color="default" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
+                  Ver premios
+                </ButtonAnt>
+              )}
+              <ButtonAnt
+                color="success"
+                width="100%"
+                padding="1.5rem 1rem"
+                fontSize="3rem"
+                onClick={() => props.callBingo()}
+                disabled={defaultTo(props.lobby.bannedUsersId, []).includes(authUser.id) || !props.lobby.startGame}
+              >
+                Bingo
+              </ButtonAnt>
+            </div>
+            <div className="flex items-center p-8">
+              <UserCard user={authUser} full {...props} />
             </div>
           </div>
         </div>
@@ -99,6 +104,6 @@ export const UserPanel = (props) => {
           <Chat title={"CHAT DEL BINGO"} />
         </div>
       </Tablet>
-    </>
+    </div>
   );
 };

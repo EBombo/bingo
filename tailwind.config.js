@@ -39,8 +39,8 @@ module.exports = {
         gray: "#E4E4E4",
         secondGray: "#EFEFEF",
       },
-      backgroundImage: (theme) => ({
-        "lobby-pattern": `url('${config.storageUrl}/resources/coral-pattern-tablet.svg')`,
+      backgroundImage: () => ({
+        "lobby-pattern": `url('${config.storageUrl}/resources/coral-pattern.svg')`,
       }),
     },
   },
