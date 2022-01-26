@@ -75,7 +75,7 @@ export const BingoBoard = (props) => {
   if (!props.isVisible) return null;
 
   return (
-    <BoardContainer>
+    <BoardContainer vertical={props.vertical}>
       <table className="board">
         <thead>
           <tr>
@@ -162,28 +162,31 @@ export const BingoBoard = (props) => {
 };
 
 const BoardContainer = styled.div`
-  width: 100%;
+  width: ${(props) => (props.vertical ? "325px" : "100%")};
   max-width: 800px;
   margin: 0 auto;
 
   table {
-    display: flex;
+    ${(props) => !props.vertical && "display: flex"};
     background: ${(props) => props.theme.basic.secondary};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    width: 100%;
 
     thead {
       position: relative;
       display: flex;
-      flex-direction: column;
+      flex-direction: ${(props) => (props.vertical ? "row" : "column")};
       justify-content: space-evenly;
       align-items: center;
       background: ${(props) => props.theme.basic.secondaryDarken};
       border-radius: 3px;
-      width: 10%;
-      max-width: 70px;
+      width: ${(props) => (props.vertical ? "100%" : "10%")};
+      ${(props) => props.vertical && "height: 85px;"}
+      ${(props) => !props.vertical && "max-width: 70px;"}
 
       tr {
-        z-index: 2;
+        width: ${(props) => (props.vertical ? "20%" : "auto")};
+        ${(props) => props.vertical && "text-align: center;"}
 
         .th-header {
           display: inline-flex;
@@ -211,16 +214,18 @@ const BoardContainer = styled.div`
     tbody {
       position: relative;
       display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      width: 90%;
+      flex-direction: ${(props) => (props.vertical ? "row" : "column")};
+      justify-content: ${(props) => (props.vertical ? "space-around" : "space-evenly")};
+      width: ${(props) => (props.vertical ? "100%" : "90%")};
 
       tr {
         z-index: 2;
         display: grid;
-        grid-template-columns: repeat(15, 1fr);
+        ${(props) => props.vertical && "grid-template-rows: repeat(15, 1fr);"}
+        ${(props) => !props.vertical && "grid-template-columns: repeat(15, 1fr);"}
         grid-gap: 2px;
         margin: 3px;
+        ${(props) => props.vertical && "width: 20%;"}
 
         .td-numbers {
           display: inline-flex;
@@ -259,10 +264,6 @@ const BoardContainer = styled.div`
       }
 
       tbody {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-
         tr {
           margin: 5px;
 
