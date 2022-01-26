@@ -152,7 +152,7 @@ export const AdminPanel = (props) => {
   }, [props.lobby?.lastPlays, props.lobby?.animationSpeed]);
 
   return (
-    <div className="grid grid-rows-[min-content_auto] bg-lobby-pattern">
+    <div className="grid grid-rows-[min-content_auto] bg-lobby-pattern w-full">
       {modalConfirm()}
       {isVisibleModalPattern && modalPattern()}
       <Desktop>
