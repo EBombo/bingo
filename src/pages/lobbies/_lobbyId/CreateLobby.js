@@ -91,7 +91,10 @@ export const CreateLobby = (props) => {
           companyId: userAdmin.companyId ?? null,
         };
 
-        if (!game?.usersIds?.includes(formatUser.id)) return router.push("/login");
+        if (!game?.usersIds?.includes(formatUser.id) && typeof window !== "undefined") {
+          window.location.href = "/";
+          return;
+        };
 
         await setAuthUser(formatUser);
         setLSAuthUser(formatUser);
