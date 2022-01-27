@@ -46,7 +46,7 @@ export const Lobby = (props) => {
     await setAuthUser(userMapped);
     setAuthUserLs(userMapped);
 
-    await router.push("/");
+    if (typeof window !== "undefined") window.location.href = "/";
   };
 
   // Fetch lobby.
