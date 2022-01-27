@@ -30,7 +30,7 @@ export const Lobby = (props) => {
 
   useEffect(() => {
     // Redirect to login.
-    if (!authUser?.nickname && !authUser.isAdmin) return router.push("/");
+    if (!authUser?.nickname && !authUser.isAdmin && typeof window !== "undefined") window.location.href = "/";
   }, [authUser]);
 
   const logout = async () => {

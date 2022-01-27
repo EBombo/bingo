@@ -57,7 +57,9 @@ export const CreateLobby = (props) => {
 
         if (error) {
           props.showNotification("ERROR", "Error al validar la cuenta");
-          return router.push("/");
+
+          if (typeof window !== "undefined") window.location.href = "/";
+          return;
         }
 
         return response.user;
