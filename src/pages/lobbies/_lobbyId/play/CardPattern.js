@@ -74,6 +74,7 @@ export const CardPattern = (props) => {
       {!props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
           <ButtonAnt
+            size="big"
             onClick={() => {
               props.setApagon(true);
               props.setIsVisibleModalPattern(true);
@@ -82,6 +83,7 @@ export const CardPattern = (props) => {
             Apágon
           </ButtonAnt>
           <ButtonAnt
+            size="big"
             color="default"
             onClick={() => {
               props.setApagon(false);
@@ -203,8 +205,8 @@ const PatternContainer = styled.div`
         }
 
         td {
-          width: ${(props) => (!props.user.isAdmin ? "38px" : "35px")};
-          height: ${(props) => (!props.user.isAdmin ? "38px" : "35px")};
+          width: ${(props) => (!props.user.isAdmin ? "38px" : "48px")};
+          height: ${(props) => (!props.user.isAdmin ? "38px" : "48px")};
           font-size: 26px;
           line-height: 32px;
 

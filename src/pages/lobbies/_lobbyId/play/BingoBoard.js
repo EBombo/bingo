@@ -163,7 +163,6 @@ export const BingoBoard = (props) => {
 
 const BoardContainer = styled.div`
   width: ${(props) => (props.vertical ? "325px" : "100%")};
-  max-width: 800px;
   margin: 0 auto;
 
   table {
@@ -268,7 +267,7 @@ const BoardContainer = styled.div`
           margin: 5px;
 
           .td-numbers {
-            height: 43px;
+            min-height: 56px;
             font-size: 20px;
             line-height: 26px;
           }

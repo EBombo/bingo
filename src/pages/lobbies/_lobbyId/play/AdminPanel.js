@@ -191,8 +191,10 @@ export const AdminPanel = (props) => {
                 {props.lobby.startGame ? (
                   <ButtonAnt
                     width="100%"
+                    fontSize="18px"
                     onClick={() => callNumber()}
                     margin="0 0 1rem 0"
+                    size="big"
                     disabled={
                       loading ||
                       isLoadingCalledNumber ||
@@ -215,7 +217,9 @@ export const AdminPanel = (props) => {
               <div className="controlers">
                 <ButtonAnt
                   color="default"
+                  fontSize="18px"
                   width="100%"
+                  size="big"
                   className="btn-automatic"
                   disabled={!props.lobby.startGame || isLoadingCalledNumber || props.lobby.bingo}
                   onClick={() => setIsAutomatic(!isAutomatic)}
@@ -225,7 +229,7 @@ export const AdminPanel = (props) => {
 
                 <SliderControls {...props} />
 
-                <ButtonAnt color="default" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
+                <ButtonAnt fontSize="18px" className="btn" color="default" size="big" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
                   Ver Premios
                 </ButtonAnt>
               </div>
@@ -262,6 +266,7 @@ export const AdminPanel = (props) => {
             </ButtonAnt>
             <ButtonAnt
               color="default"
+              size="big"
               width="90%"
               margin="1rem auto"
               className="btn-automatic"
@@ -279,6 +284,7 @@ export const AdminPanel = (props) => {
             <div className="btns-container">
               {props.lobby.startGame ? (
                 <ButtonAnt
+                  size="big"
                   width="90%"
                   onClick={() => callNumber()}
                   margin="1rem auto"

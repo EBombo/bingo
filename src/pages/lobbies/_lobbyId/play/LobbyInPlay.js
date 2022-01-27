@@ -353,7 +353,7 @@ const BingoGameContainer = styled.div`
     .bingo {
       padding: 0.5rem 0.5rem 2rem 0.5rem;
       display: grid;
-      grid-template-columns: 250px auto;
+      grid-template-columns: 350px auto;
       border-bottom: 10px solid ${(props) => props.theme.basic.primary};
       grid-gap: 2rem;
       overflow: auto;
@@ -381,7 +381,7 @@ const BingoGameContainer = styled.div`
           grid-template-columns: repeat(3, 1fr);
           grid-gap: 1rem;
           align-items: flex-start;
-          max-width: 800px;
+          max-width: 900px;
           margin: 1.2rem 0 1rem 0;
 
           .ball-called {
