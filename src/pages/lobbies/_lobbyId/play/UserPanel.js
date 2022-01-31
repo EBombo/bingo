@@ -42,7 +42,7 @@ export const UserPanel = (props) => {
           >
             <div className="flex flex-col items-center justify-around">
               <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} />
-              <LastPlays showMore {...props} />
+              <LastPlays {...props} />
               <div className="w-[300px] bg-secondary shadow-[0_4px_8px_rgba(0,0,0,0.25)] rounded-[4px] p-4">
                 <CardPattern caption={"Patrón a completar"} hiddenOptions key={props.lobby.pattern} {...props} />
               </div>
@@ -53,8 +53,8 @@ export const UserPanel = (props) => {
               )}
               <ButtonAnt
                 color="success"
-                width="100%"
-                padding="1.5rem 1rem"
+                width="90%"
+                padding="1rem"
                 fontSize="3rem"
                 onClick={() => props.callBingo()}
                 disabled={defaultTo(props.lobby.bannedUsersId, []).includes(authUser.id) || !props.lobby.startGame}
