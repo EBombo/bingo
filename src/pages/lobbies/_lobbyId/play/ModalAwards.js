@@ -97,7 +97,7 @@ export const ModalAwards = (props) => {
             </div>
             <div className="">
               <FileUpload
-                file={award.imageUrl ?? `${config.storageUrl}/resources/gift.png`}
+                file={award.imageUrl}
                 preview={true}
                 fileName="awardImg"
                 filePath={`awards/${award.id}`}
