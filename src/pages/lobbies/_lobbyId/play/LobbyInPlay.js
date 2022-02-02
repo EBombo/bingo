@@ -28,7 +28,7 @@ export const LobbyInPlay = (props) => {
   const [isVisibleModalAwards, setIsVisibleModalAwards] = useState(false);
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
 
-  const [toggleChat, setToggleChat] = useState(true);
+  const [toggleChat, setToggleChat] = useState(false);
 
   useEffect(() => {
     if (props.lobby.finalStage) setIsVisibleModalFinal(true);
