@@ -156,13 +156,16 @@ export const UserLayout = (props) => {
                 "Este juego esta bloqueado"
               ) : (
                 <>
-                  <span className="font-black">{props.lobby.game.name} - PIN:{props.lobby.pin} <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" /></span>
+                  <span className="font-black"> PIN:{props.lobby.pin} <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" /></span>
                 </>
               )}
             </div>
           </Tooltip>
 
         </div>
+      </div>
+      <div className="text-xl font-black text-center">
+        {props.lobby.game.name}
       </div>
         <div className="right-content">
           <Desktop>
@@ -208,7 +211,7 @@ export const UserLayout = (props) => {
 const UserLayoutCss = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   background: ${(props) => props.theme.basic.whiteDark};
   padding: 0.5rem;
@@ -220,7 +223,7 @@ const UserLayoutCss = styled.div`
     font-style: normal;
     font-weight: bold;
     font-size: 18px;
-    line-height: 22px;
+    line-height: 30px;
   }
 
   .left-content {
