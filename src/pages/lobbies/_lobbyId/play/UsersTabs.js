@@ -375,6 +375,7 @@ const TabsContainer = styled.div`
       grid-template-columns: 1fr;
       grid-gap: 0.5rem;
       padding: 0 1rem;
+      min-height: 500px;
 
       .user-card {
         display: grid;
@@ -465,6 +466,7 @@ const TabsContainer = styled.div`
       display: flex;
       flex-direction: column;
       padding: 0 1rem;
+      min-height: 500px;
 
       .user-progress {
         display: grid;
