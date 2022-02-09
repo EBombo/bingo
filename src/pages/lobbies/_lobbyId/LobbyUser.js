@@ -1,15 +1,16 @@
 import React, { useEffect, useGlobal, useRef, useState } from "reactn";
-import { config, database } from "../../../firebase";
-import { mediaQuery } from "../../../constants";
 import { useRouter } from "next/router";
 import { MoreOutlined, UserOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import { firebase } from "../../../firebase/config";
-import { useInView } from "react-intersection-observer";
-import { LobbyHeader } from "./LobbyHeader";
 import { Popover } from "antd";
 import { useMemo } from "react";
+import { useInView } from "react-intersection-observer";
+import { config, database } from "../../../firebase";
+import { mediaQuery, Tablet } from "../../../constants";
+import { firebase } from "../../../firebase/config";
+import { LobbyHeader } from "./LobbyHeader";
 import { spinLoaderMin } from "../../../components/common/loader";
+import { Image } from "../../../components/common/Image";
 
 const userListSizeRatio = 50;
 
@@ -164,9 +165,26 @@ export const LobbyUser = (props) => {
       <LobbyHeader {...props} />
 
       <div className="container-users">
-        <div className="all-users m-2 py-2 px-4">
-          {props.lobby?.countPlayers ?? 0} <UserOutlined />
-        </div>
+        <Tablet>
+          { !authUser?.isAdmin && (
+            <div className="font-bold text-white text-lg text-center my-4">
+              El administrador iniciará el juego pronto
+            </div>
+          )}
+          <div className="user-count bg-primaryDark text-white font-bold rounded m-4 py-2 px-4 self-end w-min">
+            <span className="whitespace-nowrap">
+              <span className="align-text-top">{props.lobby?.countPlayers ?? 0}</span>
+              <span className="w-[15px] inline-block"></span>
+              <Image
+                className="inline-block align-sub"
+                src={`${config.storageUrl}/resources/user.svg`}
+                height="15px"
+                width="15px"
+                size="contain"
+              />
+            </span> 
+          </div>
+        </Tablet>
 
         { !authUser?.isAdmin && (
           <div className="notification-joint-user font-bold text-white bg-green-800 text-center sm:text-lg py-2">
@@ -177,7 +195,7 @@ export const LobbyUser = (props) => {
 
         <div className="list-users  p-4">
           {users.map((user) => (
-            <div key={user.id} className="item-user">
+            <div key={user.userId} className={`item-user ${authUser.id === user.userId && 'active'}`}>
               {user.nickname}
             </div>
           ))}
@@ -267,6 +285,10 @@ const LobbyCss = styled.div`
 
         ${mediaQuery.afterTablet} {
           padding: 12px 10px;
+        }
+
+        &.active {
+          background: ${(props) => props.theme.basic.primaryDarken};
         }
       }
     }
