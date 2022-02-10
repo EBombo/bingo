@@ -12,7 +12,7 @@ import { LobbyHeader } from "./LobbyHeader";
 import { spinLoaderMin } from "../../../components/common/loader";
 import { Image } from "../../../components/common/Image";
 
-const userListSizeRatio = 50;
+const userListSizeRatio = 100;
 
 export const LobbyUser = (props) => {
   const router = useRouter();
