@@ -166,7 +166,7 @@ export const LobbyUser = (props) => {
 
       <div className="container-users">
         { !authUser?.isAdmin && (
-          <div className="notification-joint-user font-bold text-white bg-greenDark text-base sm:text-lg py-2 px-4 flex justify-between items-center min-w-[140px] border-b-[1px] border-primary">
+          <div className="notification-joint-user font-bold text-white bg-greenDark text-base sm:text-lg py-2 px-4 flex justify-between md:justify-center items-center min-w-[140px] border-b-[1px] border-primary">
             <span>Entró correctamente al juego.</span>
             <div className="inline-block bg-primary p-2 m-2 rounded shadow-xl text-center">{authUser.nickname} (Tú)</div>
           </div>
