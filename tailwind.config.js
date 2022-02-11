@@ -1,4 +1,10 @@
+const CONFIG = process.env.NEXT_PUBLIC_CONFIG ?? "";
+
+const config = JSON.parse(CONFIG);
+
+
 module.exports = {
+  mode: 'jit',
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -32,7 +38,11 @@ module.exports = {
         grayLighten: "#C4C4C4",
         gray: "#E4E4E4",
         secondGray: "#EFEFEF",
+        greenDark: "#407744",
       },
+      backgroundImage: () => ({
+        "lobby-pattern": `url('${config.storageUrl}/resources/coral-pattern.svg')`,
+      }),
     },
   },
   plugins: [],

@@ -38,7 +38,9 @@ export const CardPattern = (props) => {
 
   return (
     <PatternContainer user={authUser} isEdit={props.isEdit}>
-      <div className="caption">{props.caption}</div>
+      <div className="text-['Lato'] py-2 font-bold text-[18px] leading-[22px] text-white text-center">
+        {props.caption}
+      </div>
       <div className="table-container">
         <table>
           <thead>
@@ -72,6 +74,7 @@ export const CardPattern = (props) => {
       {!props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
           <ButtonAnt
+            size="big"
             onClick={() => {
               props.setApagon(true);
               props.setIsVisibleModalPattern(true);
@@ -80,6 +83,7 @@ export const CardPattern = (props) => {
             Apágon
           </ButtonAnt>
           <ButtonAnt
+            size="big"
             color="default"
             onClick={() => {
               props.setApagon(false);
@@ -113,19 +117,9 @@ export const CardPattern = (props) => {
 
 const PatternContainer = styled.div`
   width: 100%;
-  max-width: 220px;
-  .caption{
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 14px;
-    color: ${(props) => props.theme.basic.white};
-    text-align: center;
-  }
 
   .table-container {
-    margin: 0.5rem 0;
+    margin: 0;
     
     table {
       border-collapse: separate;
@@ -188,7 +182,6 @@ const PatternContainer = styled.div`
   }
   
   ${mediaQuery.afterTablet}{
-    max-width: 260px;
 
     .btns-container{
       flex-direction: ${(props) => (props.isEdit ? "column" : "row")};
@@ -199,32 +192,27 @@ const PatternContainer = styled.div`
       }
     }
     
-    .caption{
-      font-size: 14px;
-      line-height: 16px;
-    }
-    
     .table-container {
       
       table {
         border-spacing: 5px;
 
         th {
-          width: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
-          height: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
-          font-size: ${(props) => (!props.user.isAdmin ? "14px" : "26px;")};
-          line-height: ${(props) => (!props.user.isAdmin ? "18px" : "32px")};
+          width: ${(props) => (!props.user.isAdmin ? "38px" : "35px")};
+          height: ${(props) => (!props.user.isAdmin ? "38px" : "35px")};
+          font-size: ${(props) => (!props.user.isAdmin ? "20px" : "26px;")};
+          line-height: ${(props) => (!props.user.isAdmin ? "26px" : "32px")};
         }
 
         td {
-          width: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
-          height: ${(props) => (!props.user.isAdmin ? "25px" : "35px")};
+          width: ${(props) => (!props.user.isAdmin ? "38px" : "48px")};
+          height: ${(props) => (!props.user.isAdmin ? "38px" : "48px")};
           font-size: 26px;
           line-height: 32px;
 
           .selected {
-            width: ${(props) => (!props.user.isAdmin ? "15px" : "20px")};
-            height: ${(props) => (!props.user.isAdmin ? "15px" : "20px")};
+            width: ${(props) => (!props.user.isAdmin ? "30px" : "20px")};
+            height: ${(props) => (!props.user.isAdmin ? "30px" : "20px")};
           }
         }
       }

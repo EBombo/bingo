@@ -13,12 +13,21 @@ export const ButtonAnt = forwardRef((props, ref) => (
 
 const ButtonAntCss = styled(Button)`
   padding: ${(props) =>
-    props.size === "small" ? "10px" : props.size === "medium" ? "6px 20px" : props.size === "big" ? "10px 30px" : ""};
+    props.padding
+      ? props.padding
+      : props.size === "small"
+      ? "10px"
+      : props.size === "medium"
+      ? "6px 20px"
+      : props.size === "big"
+      ? "10px 30px"
+      : ""};
   margin: ${(props) => props.margin || 0};
   border-radius: ${(props) => (props.borderRadius ? props.borderRadius : "4px")};
   cursor: pointer;
   width: ${(props) => props.width};
   height: ${(props) => (props.height ? props.height : "auto")};
+  font-size: ${props => props.fontSize ?? "auto"};
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -253,6 +262,25 @@ const ButtonAntCss = styled(Button)`
           : theme.basic.white
       }!important;
       border: none;
+      box-shadow: 0 2px ${
+        color === "primary"
+          ? theme.basic.primaryDark
+          : color === "secondary"
+          ? theme.basic.secondaryDark
+          : color === "secondaryDark"
+          ? theme.basic.secondaryDarken
+          : color === "warning"
+          ? theme.basic.warningDark
+          : color === "danger"
+          ? theme.basic.dangerDark
+          : color === "default"
+          ? "#979797"
+          : color === "success"
+          ? theme.basic.successLighten
+          : color
+      };
+      position: relative;
+      top: 2px;
       `
         : variant === "outlined"
         ? `

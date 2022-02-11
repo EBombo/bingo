@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal, useState } from "reactn";
+import React, { useEffect, useGlobal, useState, useRef } from "reactn";
 import styled from "styled-components";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { Input, Popover } from "antd";
@@ -11,6 +11,8 @@ import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 import { UserProgress } from "./UserProgress";
 import { ButtonAnt } from "../../../../components/form";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { FixedSizeList as List } from "react-window";
 
 const TAB = {
   CARDS: "cards",
@@ -25,6 +27,8 @@ export const UsersTabs = (props) => {
   const [isVisibleModalUserCard, setIsVisibleModalUserCard] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
   const [users, setUsers] = useState([]);
+
+  const windowScrollParentRef = useRef();
 
   useEffect(() => {
     resetUsers();
@@ -194,92 +198,125 @@ export const UsersTabs = (props) => {
       </Tablet>
       {/* TODO: Consider refactoring to use mediaQuery and not use <Desktop> & <Tablet> */}
 
-      <div className={`user-tab-${tab}`}>
-        {users.map((user, index) =>
-          tab === TAB.CARDS ? (
-            <div className={`user-card ${user.progress === 100 && "winner"}`} key={`${user.nickname}-${index}`}>
-              {user.progress === 100 && "winner" && (
-                <div className="winner-img">
-                  <Image
-                    src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
-                    height="30px"
-                    width="30px"
-                    borderRadious="50%"
-                  />
-                </div>
-              )}
+      <div className={`user-tab-${tab}`} ref={windowScrollParentRef}>
+        {tab === TAB.CARDS && (
+          <AutoSizer>
+            {({ width, height }) => (
+              <List height={height} itemCount={users.length} itemSize={64} width={width}>
+                {({ index, style }) => {
+                  const user = users[index];
 
-              <div className={`name ${authUser.id === user.id && "auth-user"}`}>
-                <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
-                {user.nickname}
-              </div>
+                  return (
+                    <div style={{ ...style }} key={`user-card-${index}`}>
+                      <div className={`user-card ${user.progress === 100 && "winner"}`}>
+                        {user.progress === 100 && "winner" && (
+                          <div className="winner-img">
+                            <Image
+                              src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
+                              height="30px"
+                              width="30px"
+                              borderRadious="50%"
+                            />
+                          </div>
+                        )}
 
-              <div className="card-preview">
-                <UserProgress
-                  {...props}
-                  lobbyPattern={lobbyPattern}
-                  user={user}
-                  numberWinners={numberWinners}
-                  isCard
-                  key={user.progress}
-                />
-              </div>
+                        <div className={`name ${authUser.id === user.id && "auth-user"}`}>
+                          <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                          {user.nickname}
+                        </div>
 
-              {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
-                <div className="btn-container">
-                  <button
-                    className="btn-show-card"
-                    onClick={() => {
-                      setCurrentUser(user);
-                      setIsVisibleModalUserCard(true);
-                    }}
-                  >
-                    Ver cartilla
-                  </button>
-                </div>
-              )}
+                        <div className="card-preview">
+                          <UserProgress
+                            {...props}
+                            lobbyPattern={lobbyPattern}
+                            user={user}
+                            numberWinners={numberWinners}
+                            isCard
+                            key={user.progress}
+                          />
+                        </div>
 
-              {authUser.isAdmin && menu(user)}
-            </div>
-          ) : (
-            <div className={`user-progress ${user.progress === 100 && "winner"}`} key={`${user.nickname}-${index}`}>
-              <div className={`name ${authUser.id === user.id && "auth-user"}`}>
-                {user.avatar && (
-                  <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
-                )}
-                {user.nickname}
-              </div>
+                        {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
+                          <div className="btn-container">
+                            <button
+                              className="btn-show-card"
+                              onClick={() => {
+                                setCurrentUser(user);
+                                setIsVisibleModalUserCard(true);
+                              }}
+                            >
+                              Ver cartilla
+                            </button>
+                          </div>
+                        )}
 
-              <div className={`progress`}>
-                <UserProgress {...props} lobbyPattern={lobbyPattern} user={user} numberWinners={numberWinners} />
-              </div>
+                        {authUser.isAdmin && menu(user)}
+                      </div>
+                    </div>
+                  );
+                }}
+              </List>
+            )}
+          </AutoSizer>
+        )}
 
-              {user.progress === 100 && "winner" && (
-                <div className="winner-img">
-                  <Image
-                    src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
-                    height="30px"
-                    width="30px"
-                    borderRadious="50%"
-                  />
-                </div>
-              )}
-              <div className="options">
-                {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
-                  <button
-                    className="btn-show-card"
-                    onClick={() => {
-                      setCurrentUser(user);
-                      setIsVisibleModalUserCard(true);
-                    }}
-                  >
-                    Ver cartilla
-                  </button>
-                )}
-                {authUser.isAdmin && menu(user)}
-              </div>
-            </div>
-          )
+        {tab === TAB.TABLE && (
+          <AutoSizer>
+            {({ width, height }) => (
+              <List height={height} itemCount={users.length} itemSize={40} width={width}>
+                {({ index, style }) => {
+                  const user = users[index];
+
+                  return (
+                    <div style={{ ...style }} key={`${user.nickname}-${index}`}>
+                      <div className={`user-progress ${user.progress === 100 && "winner"}`}>
+                        <div className={`name ${authUser.id === user.id && "auth-user"}`}>
+                          {user.avatar && (
+                            <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                          )}
+                          {user.nickname}
+                        </div>
+
+                        <div className={`progress`}>
+                          <UserProgress
+                            {...props}
+                            lobbyPattern={lobbyPattern}
+                            user={user}
+                            numberWinners={numberWinners}
+                          />
+                        </div>
+
+                        {user.progress === 100 && "winner" && (
+                          <div className="winner-img">
+                            <Image
+                              src={`${config.storageUrl}/resources/balls/bingo-ball.svg`}
+                              height="30px"
+                              width="30px"
+                              borderRadious="50%"
+                            />
+                          </div>
+                        )}
+                        <div className="options">
+                          {(authUser.isAdmin || props.lobby.settings.showAllCards) && (
+                            <button
+                              className="btn-show-card"
+                              onClick={() => {
+                                setCurrentUser(user);
+                                setIsVisibleModalUserCard(true);
+                              }}
+                            >
+                              Ver cartilla
+                            </button>
+                          )}
+                          {authUser.isAdmin && menu(user)}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }}
+              </List>
+            )}
+          </AutoSizer>
         )}
       </div>
     </TabsContainer>
@@ -288,6 +325,9 @@ export const UsersTabs = (props) => {
 
 const TabsContainer = styled.div`
   width: 100%;
+  display: grid;
+  grid-template-rows: min-content auto;
+  height: calc(100% - 50px);
 
   .btn-show-card {
     cursor: pointer;
@@ -334,7 +374,8 @@ const TabsContainer = styled.div`
       display: grid;
       grid-template-columns: 1fr;
       grid-gap: 0.5rem;
-      padding: 1rem;
+      padding: 0 1rem;
+      min-height: 500px;
 
       .user-card {
         display: grid;
@@ -354,6 +395,8 @@ const TabsContainer = styled.div`
           line-height: 18px;
           display: flex;
           align-items: center;
+          justify-self: flex-start;
+          padding-left: 1rem;
 
           &.auth-user {
             color: ${(props) => props.theme.basic.primary};
@@ -422,6 +465,8 @@ const TabsContainer = styled.div`
       width: 100%;
       display: flex;
       flex-direction: column;
+      padding: 0 1rem;
+      min-height: 500px;
 
       .user-progress {
         display: grid;
@@ -490,6 +535,8 @@ const TabsContainer = styled.div`
   }
 
   ${mediaQuery.afterTablet} {
+    height: auto;
+
     .btn-show-card {
       padding: 0 20px;
       border-radius: 4px;

@@ -1,7 +1,7 @@
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { config, database, firestore, firestoreBomboGames, hostName } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
-import { mediaQuery } from "../../../constants";
+import { mediaQuery, Desktop } from "../../../constants";
 import styled from "styled-components";
 import { Popover, Slider, Tooltip } from "antd";
 import { getBingoCard } from "../../../business";
@@ -96,7 +96,7 @@ export const LobbyHeader = (props) => {
           <div
             className="label"
             onClick={() => {
-              navigator.clipboard.writeText(`${hostName}?pin=${props.lobby?.pin}`);
+              navigator.clipboard.writeText(`${hostName}/?pin=${props.lobby?.pin}`);
               props.showNotification("OK", "Link copiado!", "success");
             }}
           >
@@ -104,7 +104,7 @@ export const LobbyHeader = (props) => {
               "Este juego esta bloqueado"
             ) : (
               <>
-                Entra a <span className="font-black">ebombo.io</span>
+                Entra a <span className="font-black">ebombo.io <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" /> </span>
               </>
             )}
           </div>
@@ -268,6 +268,22 @@ export const LobbyHeader = (props) => {
           </ButtonAnt>
         </div>
       )}
+
+      <Desktop>
+        <div className="user-count bg-primaryDark text-white font-bold rounded py-2 px-4 self-end w-min">
+          <span className="whitespace-nowrap">
+            <span className="align-text-top">{props.lobby?.countPlayers ?? 0}</span>
+            <span className="w-[45px] inline-block"></span>
+            <Image
+              className="inline-block align-sub"
+              src={`${config.storageUrl}/resources/user.svg`}
+              height="15px"
+              width="15px"
+              size="contain"
+            />
+          </span> 
+        </div>
+      </Desktop>
     </LobbyHeaderStyled>
   );
 };
@@ -302,14 +318,16 @@ const LobbyHeaderStyled = styled.div`
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: 1fr auto;
-  padding: 2rem 1rem 2rem 1rem;
+  padding: 2rem 1rem 1rem 1rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
   background: ${(props) => props.theme.basic.secondary};
+  position: relative;
 
   ${mediaQuery.afterTablet} {
     grid-template-columns: 1fr auto 1fr;
     grid-template-rows: auto;
 
+    padding: 2rem 1rem 2rem 1rem;
     align-items: start;
   }
 
@@ -348,17 +366,17 @@ const LobbyHeaderStyled = styled.div`
     font-size: 21px;
     border-radius: 4px 4px 0px 0px;
     text-align: center;
-    margin: 0 0 2rem 0;
+    margin: 0;
     color: ${(props) => props.theme.basic.white};
     background: ${(props) => props.theme.basic.secondaryDarken};
     box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
 
     grid-column: 1 / 3;
-    grid-row: 1 / 2;
+    grid-row: 1 / 3;
 
     ${mediaQuery.afterTablet} {
       grid-column: 2 / 3;
-      grid-row: 1 / 2;
+      grid-row: 1 / 3;
       margin: 0;
     }
 
@@ -395,5 +413,10 @@ const LobbyHeaderStyled = styled.div`
         font-size: 5rem;
       }
     }
+  }
+
+  .user-count {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
   }
 `;

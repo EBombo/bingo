@@ -43,6 +43,11 @@ export const CreateLobby = (props) => {
   const [showAwards, setShowAwards] = useState(false);
 
   useEffect(() => {
+    router.prefetch("/");
+    router.prefetch("/login");
+  }, []);
+
+  useEffect(() => {
     if ((!tokenId && !userId) || !gameId) return;
 
     const verifyUser = async () => {
@@ -52,7 +57,9 @@ export const CreateLobby = (props) => {
 
         if (error) {
           props.showNotification("ERROR", "Error al validar la cuenta");
-          return router.push("/");
+
+          if (typeof window !== "undefined") window.location.href = "/";
+          return;
         }
 
         return response.user;
@@ -84,7 +91,10 @@ export const CreateLobby = (props) => {
           companyId: userAdmin.companyId ?? null,
         };
 
-        if (!game?.usersIds?.includes(formatUser.id)) return router.push("/login");
+        if (!game?.usersIds?.includes(formatUser.id) && typeof window !== "undefined") {
+          window.location.href = "/";
+          return;
+        };
 
         await setAuthUser(formatUser);
         setLSAuthUser(formatUser);
@@ -317,6 +327,7 @@ export const CreateLobby = (props) => {
                         ...awards,
                         {
                           name: "",
+                          id: firestore.collection("awards").doc().id,
                           order: awards.length + 1,
                         },
                       ]);

@@ -53,6 +53,8 @@ const SliderControlsCss = styled.div`
 
   .description {
     margin: auto 0;
+    font-size: 1rem;
+    font-weight: bold;
   }
 
   .slider-auto {

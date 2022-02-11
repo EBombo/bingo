@@ -25,8 +25,12 @@ export const Lobby = (props) => {
   const audioRef = useRef(null);
 
   useEffect(() => {
+    router.prefetch("/");
+  }, []);
+
+  useEffect(() => {
     // Redirect to login.
-    if (!authUser?.nickname && !authUser.isAdmin) return router.push("/");
+    if (!authUser?.nickname && !authUser.isAdmin && typeof window !== "undefined") window.location.href = "/";
   }, [authUser]);
 
   const logout = async () => {
@@ -42,7 +46,7 @@ export const Lobby = (props) => {
     await setAuthUser(userMapped);
     setAuthUserLs(userMapped);
 
-    await router.push("/");
+    if (typeof window !== "undefined") window.location.href = "/";
   };
 
   // Fetch lobby.

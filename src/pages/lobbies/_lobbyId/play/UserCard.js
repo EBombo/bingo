@@ -76,6 +76,7 @@ export const UserCard = (props) => {
 
   return (
     <CardContainer
+      full={props.full}
       backgroundColor={props.lobby.game.backgroundColor}
       backgroundImg={props.lobby.game.backgroundImg}
       titleColor={props.lobby.game.titleColor}
@@ -122,7 +123,9 @@ export const UserCard = (props) => {
 
 const CardContainer = styled.div`
   width: 100%;
-  max-width: 350px;
+  height: 100%;
+  ${(props) => (props.full && "min-width: 550px" )};
+  max-width: ${(props) => (props.full ? "100%" : "350px")};
   background: ${(props) => {
     if (props.backgroundImg) return `url(${props.backgroundImg})`;
     if (props.backgroundColor) return props.backgroundColor;
@@ -131,21 +134,24 @@ const CardContainer = styled.div`
   }};
   background-position: center;
   border-radius: 3px;
-  padding: 0.5rem;
+  padding: ${(props) => (props.full ? "1rem" : "0.5rem")};;
   margin: 0 auto;
+  display: grid;
+  grid-template-rows: 10% 85%;
+  grid-gap: 5%;
 
   .card-title {
     font-family: Lato;
-    font-style: normal;
-    font-weight: 700;
+    font-weight: bold;
     color: ${(props) => (props.titleColor ? props.titleColor : props.theme.basic.secondary)};
     text-align: center;
-    font-size: 28px;
-    line-height: 35px;
+    font-size: ${(props) => (props.full ? "55px" : "32px")};
+    line-height: ${(props) => (props.full ? "59px" : "36px")};
     padding: 1rem 0;
   }
 
   table {
+    width: 100%;
     border-collapse: separate;
     border-spacing: 5px;
     margin: 0 auto;
@@ -153,13 +159,13 @@ const CardContainer = styled.div`
     thead {
       tr {
         th {
-          height: 30px;
-          width: 30px;
+          height: 20%;
+          width: 20%;
           text-align: center;
           font-family: Lato;
           font-weight: 700;
-          font-size: 32px;
-          line-height: 36px;
+          font-size: ${(props) => (props.full ? "55px" : "32px")};
+          line-height: ${(props) => (props.full ? "59px" : "36px")};
           font-style: normal;
           color: ${(props) => (props.titleColor ? props.titleColor : props.theme.basic.secondary)};
         }
@@ -175,8 +181,8 @@ const CardContainer = styled.div`
           text-align: center;
           font-family: Lato;
           font-weight: 700;
-          font-size: 32px;
-          line-height: 36px;
+          font-size: ${(props) => (props.full ? "55px" : "32px")};
+          line-height: ${(props) => (props.full ? "59px" : "36px")};
           font-style: normal;
           color: ${(props) => (props.numberColor ? props.numberColor : props.theme.basic.white)};
           background: ${(props) => (props.blocksColor ? props.blocksColor : props.theme.basic.secondary)};
@@ -204,24 +210,5 @@ const CardContainer = styled.div`
 
   ${mediaQuery.afterTablet} {
     padding: 0.5rem 1rem;
-
-    .card-title {
-    }
-
-    table {
-      thead {
-        tr {
-          th {
-          }
-        }
-      }
-
-      tbody {
-        tr {
-          td {
-          }
-        }
-      }
-    }
   }
 `;
