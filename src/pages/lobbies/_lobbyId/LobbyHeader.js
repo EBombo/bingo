@@ -366,7 +366,7 @@ const LobbyHeaderStyled = styled.div`
     font-size: 21px;
     border-radius: 4px 4px 0px 0px;
     text-align: center;
-    margin: 0 0 0 0;
+    margin: 0;
     color: ${(props) => props.theme.basic.white};
     background: ${(props) => props.theme.basic.secondaryDarken};
     box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);
