@@ -119,7 +119,7 @@ const PatternContainer = styled.div`
   width: 100%;
 
   .table-container {
-    margin: 0;
+    margin: 0.25rem 0;
     
     table {
       border-collapse: separate;
