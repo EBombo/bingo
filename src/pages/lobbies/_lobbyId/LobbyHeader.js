@@ -318,14 +318,16 @@ const LobbyHeaderStyled = styled.div`
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: 1fr auto;
-  padding: 2rem 1rem 2rem 1rem;
+  padding: 2rem 1rem 1rem 1rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
   background: ${(props) => props.theme.basic.secondary};
+  position: relative;
 
   ${mediaQuery.afterTablet} {
     grid-template-columns: 1fr auto 1fr;
     grid-template-rows: auto;
 
+    padding: 2rem 1rem 2rem 1rem;
     align-items: start;
   }
 
@@ -364,7 +366,7 @@ const LobbyHeaderStyled = styled.div`
     font-size: 21px;
     border-radius: 4px 4px 0px 0px;
     text-align: center;
-    margin: 0 0 2rem 0;
+    margin: 0;
     color: ${(props) => props.theme.basic.white};
     background: ${(props) => props.theme.basic.secondaryDarken};
     box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.25);

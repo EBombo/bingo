@@ -166,15 +166,15 @@ export const LobbyUser = (props) => {
 
       <div className="container-users">
         { !authUser?.isAdmin && (
-          <div className="notification-joint-user font-bold text-white bg-greenDark text-center sm:text-lg py-2">
-            Entró correctamente al juego.
-            <div className="inline-block bg-primary p-2 m-2 rounded shadow-xl">{authUser.nickname} (Tú)</div>
+          <div className="notification-joint-user font-bold text-white bg-greenDark text-base sm:text-lg py-2 px-4 flex justify-between items-center min-w-[140px] border-b-[1px] border-primary">
+            <span>Entró correctamente al juego.</span>
+            <div className="inline-block bg-primary p-2 m-2 rounded shadow-xl text-center">{authUser.nickname} (Tú)</div>
           </div>
         )}
 
         <Tablet>
           { !authUser?.isAdmin && (
-            <div className="font-bold text-white text-lg text-center my-4">
+            <div className="font-bold text-white text-lg text-left my-4 px-4">
               El administrador iniciará el juego pronto
             </div>
           )}
