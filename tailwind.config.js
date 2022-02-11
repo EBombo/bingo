@@ -38,6 +38,7 @@ module.exports = {
         grayLighten: "#C4C4C4",
         gray: "#E4E4E4",
         secondGray: "#EFEFEF",
+        greenDark: "#407744",
       },
       backgroundImage: () => ({
         "lobby-pattern": `url('${config.storageUrl}/resources/coral-pattern.svg')`,

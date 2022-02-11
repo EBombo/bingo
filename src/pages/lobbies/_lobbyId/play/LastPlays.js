@@ -123,7 +123,7 @@ const Container = styled.div`
     box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.25);
     border-radius: 100px;
     padding: 5px;
-    margin: 1rem auto auto auto;
+    margin: 0.5rem auto 0.5rem auto;
     overflow: hidden;
     max-width: 200px;
   }

@@ -273,7 +273,7 @@ export const LobbyHeader = (props) => {
         <div className="user-count bg-primaryDark text-white font-bold rounded py-2 px-4 self-end w-min">
           <span className="whitespace-nowrap">
             <span className="align-text-top">{props.lobby?.countPlayers ?? 0}</span>
-            <span className="w-[15px] inline-block"></span>
+            <span className="w-[45px] inline-block"></span>
             <Image
               className="inline-block align-sub"
               src={`${config.storageUrl}/resources/user.svg`}

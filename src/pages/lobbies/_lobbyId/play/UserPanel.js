@@ -41,28 +41,28 @@ export const UserPanel = (props) => {
             className={`bg-secondaryDarken/60 p-2 grid grid-cols-[1fr_2fr] w-full max-w-screen-xl mx-auto`}
           >
             <div className="flex flex-col items-center justify-around">
-              <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} />
-              <LastPlays {...props} />
-              <div className="w-[300px] bg-secondary shadow-[0_4px_8px_rgba(0,0,0,0.25)] rounded-[4px] p-4">
+              <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} size="small" />
+              <LastPlays {...props} size="small" />
+              <div className="w-[300px] my-2 bg-secondary shadow-[0_4px_8px_rgba(0,0,0,0.25)] rounded-[4px] p-2">
                 <CardPattern caption={"Patrón a completar"} hiddenOptions key={props.lobby.pattern} {...props} />
               </div>
               {props.lobby.settings.awards?.length && (
-                <ButtonAnt color="default" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
+                <ButtonAnt color="default" width="90%" onClick={() => props.setIsVisibleModalAwards(true)}>
                   Ver premios
                 </ButtonAnt>
               )}
               <ButtonAnt
                 color="success"
                 width="90%"
-                padding="1rem"
-                fontSize="3rem"
+                padding="0.5rem"
+                fontSize="2rem"
                 onClick={() => props.callBingo()}
                 disabled={defaultTo(props.lobby.bannedUsersId, []).includes(authUser.id) || !props.lobby.startGame}
               >
                 Bingo
               </ButtonAnt>
             </div>
-            <div className="flex items-center p-8">
+            <div className="flex items-center px-8 py-4 max-w-[640px] mx-auto">
               <UserCard user={authUser} full {...props} />
             </div>
           </div>
