@@ -38,7 +38,7 @@ export const CardPattern = (props) => {
 
   return (
     <PatternContainer user={authUser} isEdit={props.isEdit}>
-      <div className="text-['Lato'] py-4 font-bold text-[18px] leading-[22px] text-white text-center">
+      <div className="text-['Lato'] py-2 font-bold text-[18px] leading-[22px] text-white text-center">
         {props.caption}
       </div>
       <div className="table-container">
@@ -119,7 +119,7 @@ const PatternContainer = styled.div`
   width: 100%;
 
   .table-container {
-    margin: 0.5rem 0;
+    margin: 0;
     
     table {
       border-collapse: separate;
