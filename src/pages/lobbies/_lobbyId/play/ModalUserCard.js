@@ -5,9 +5,10 @@ import { ButtonAnt } from "../../../../components/form";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { UserCard } from "./UserCard";
 import { BingoBoard } from "./BingoBoard";
-import { firestore } from "../../../../firebase";
+import { config, firestore } from "../../../../firebase";
 import defaultTo from "lodash/defaultTo";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
+import { Image } from "../../../../components/common/Image";
 
 export const ModalUserCard = (props) => {
   const [isVisibleAssignAward, setIsVisibleAssignAward] = useState(false);
@@ -81,7 +82,10 @@ export const ModalUserCard = (props) => {
                   <div className="subtitle">Escoge el premio</div>
                   <div className="awards">
                     {props.lobby.settings.awards.map((award, index) => (
-                      <div className="award-content" key={`${award.name}-${index}`}>
+                      <div
+                        className="bg-whiteLight shadow-[0_0_8px_rgba(0,0,0,0.17)] rounded-[10px] flex items-center justify-around my-4 h-[120px]"
+                        key={`${award.name}-${index}`}
+                      >
                         <input
                           type="checkbox"
                           name="award[1][]"
@@ -90,7 +94,16 @@ export const ModalUserCard = (props) => {
                           checked={`${award.name}-${index}` === `${awardSelected?.name}-${awardSelected?.index}`}
                           onChange={() => setAwardSelected({ ...award, index })}
                         />
-                        <label>{award.name}</label>
+                        <div>
+                          <Image
+                            src={award.imageUrl ?? `${config.storageUrl}/resources/gift.png`}
+                            height="80px"
+                            width="80px"
+                            size="contain"
+                            margin="0 auto"
+                          />
+                          <div className="text-['Lato'] text-blackDarken text-[16px] leading-[19px]">{award.name}</div>
+                        </div>
                       </div>
                     ))}
                   </div>

@@ -1,10 +1,11 @@
 import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
-import { Popover, Slider, Spin } from "antd";
-import { mediaQuery } from "../../../constants";
-import { config, firestore, firestoreBomboGames } from "../../../firebase";
+import { Popover, Slider, Spin, Tooltip } from "antd";
+import { mediaQuery, Desktop } from "../../../constants";
+import { config, firestore, firestoreBomboGames, hostName } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, MessageOutlined } from "@ant-design/icons";
+import { ButtonAnt } from "../../../components/form";
 
 export const UserLayout = (props) => {
   const [authUser] = useGlobal("user");
@@ -29,13 +30,9 @@ export const UserLayout = (props) => {
 
   return (
     <UserLayoutCss>
-      <div className="description">1-75 números</div>
-      <div className="title no-wrap">
-        {props.lobby.game.name} - PIN:{props.lobby.pin}
-      </div>
-      <div className="right-content">
-        {authUser.isAdmin ? (
-          <div className="right-container">
+      <div className="left-content">
+        { authUser?.isAdmin && (
+          <div className="left-container">
             <Popover
               trigger="click"
               content={
@@ -144,7 +141,40 @@ export const UserLayout = (props) => {
               )}
             </button>
           </div>
-        ) : (
+        )}
+        <div className="title no-wrap">
+          
+          <Tooltip placement="bottom" title="Click aquí para copiar el link de ebombo con pin">
+            <div
+              className="label"
+              onClick={() => {
+                navigator.clipboard.writeText(`${hostName}/?pin=${props.lobby?.pin}`);
+                props.showNotification("OK", "Link copiado!", "success");
+              }}
+            >
+              {props.lobby.isLocked ? (
+                "Este juego esta bloqueado"
+              ) : (
+                <>
+                  <span className="font-black"> PIN:{props.lobby.pin} <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" /></span>
+                </>
+              )}
+            </div>
+          </Tooltip>
+
+        </div>
+      </div>
+      <div className="text-xl font-black text-center">
+        {props.lobby.game.name}
+      </div>
+        <div className="right-content">
+          <Desktop>
+            <ButtonAnt
+              onClick={() => { props.setToggleChat((prevValue) => !prevValue) }}
+            ><MessageOutlined/> Chat</ButtonAnt>
+          </Desktop>
+
+          {!authUser.isAdmin && (
           <Popover
             trigger="click"
             content={
@@ -172,8 +202,8 @@ export const UserLayout = (props) => {
               <span />
             </div>
           </Popover>
-        )}
-      </div>
+          )}
+        </div>
     </UserLayoutCss>
   );
 };
@@ -181,7 +211,7 @@ export const UserLayout = (props) => {
 const UserLayoutCss = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   background: ${(props) => props.theme.basic.whiteDark};
   padding: 0.5rem;
@@ -193,7 +223,21 @@ const UserLayoutCss = styled.div`
     font-style: normal;
     font-weight: bold;
     font-size: 18px;
-    line-height: 22px;
+    line-height: 30px;
+  }
+
+  .left-content {
+    display: flex;
+
+    .title {
+      margin: 0 16px;
+    }
+  }
+
+  .left-container {
+    button {
+      margin: 0 8px;
+    }
   }
 
   .right-content {

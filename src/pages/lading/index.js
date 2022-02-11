@@ -8,7 +8,9 @@ export const Lading = () => {
 
   return (
     <LadingContainer>
-      <Anchor variant="primary" onClick={() => router.push("/login")}>
+      <Anchor variant="primary" onClick={() => {
+        if (typeof window !== "undefined") window.location.href = "/";
+      }}>
         INGREGAR
       </Anchor>
     </LadingContainer>

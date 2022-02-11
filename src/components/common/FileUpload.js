@@ -7,6 +7,7 @@ import { ButtonAnt } from "../form";
 import { useResizeImage, useUploadToStorage } from "../../hooks";
 import { Icon } from "./Icons";
 import defaultTo from "lodash/defaultTo";
+import { config } from "../../firebase";
 
 export const FileUpload = (props) => {
   const { resize } = useResizeImage();
@@ -87,9 +88,22 @@ export const FileUpload = (props) => {
   return (
     <UploadContainer>
       {previewFile ? (
-        <div className="image-container">
+        <div className="image-container" onClick={() => inputRef.current.click()}>
           {get(props, "accept", "image/*").includes("image") ? (
-            <Image src={previewFile} height="100px" width="100px" margin="0" borderRadius="5px" />
+            <div
+              className="w-[135px] h-[110px] flex items-center flex-col justify-center bg-white rounded-[10px]"
+              onClick={() => inputRef.current.click()}
+            >
+              <Image
+                src={previewFile}
+                height="50px"
+                width="50px"
+                desktopHeight="100px"
+                desktopWidth="100px"
+                margin="0 auto"
+                borderRadius="5px"
+              />
+            </div>
           ) : (
             <>
               {previewFile} <Icon type="check-circle" />
@@ -97,14 +111,21 @@ export const FileUpload = (props) => {
           )}
         </div>
       ) : (
-        <div className="dashed" onClick={() => inputRef.current.click()}>
-          <CloudUploadOutlined />
+        <div
+          className="w-[135px] h-[110px] flex items-center flex-col justify-center bg-white rounded-[10px]"
+          onClick={() => inputRef.current.click()}
+        >
+          <Image
+            src={`${config.storageUrl}/resources/gift.png`}
+            width="66px"
+            height="66px"
+            size="contain"
+            margin="0 auto"
+          />
+          <div className="text-['Lato'] font-[500] text-[13px] leading-[16px] text-primary">Agregar imagen</div>
         </div>
       )}
       <div className="input-container">
-        <ButtonAnt onClick={() => inputRef.current.click()} loading={loading} key={loading}>
-          {props.buttonLabel || "Subir Imagen"}
-        </ButtonAnt>
         <input
           type="file"
           accept={props.accept || "image/*" || "application/pdf"}
