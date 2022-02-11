@@ -165,6 +165,13 @@ export const LobbyUser = (props) => {
       <LobbyHeader {...props} />
 
       <div className="container-users">
+        { !authUser?.isAdmin && (
+          <div className="notification-joint-user font-bold text-white bg-greenDark text-center sm:text-lg py-2">
+            Entró correctamente al juego.
+            <div className="inline-block bg-primary p-2 m-2 rounded shadow-xl">{authUser.nickname} (Tú)</div>
+          </div>
+        )}
+
         <Tablet>
           { !authUser?.isAdmin && (
             <div className="font-bold text-white text-lg text-center my-4">
@@ -174,7 +181,7 @@ export const LobbyUser = (props) => {
           <div className="user-count bg-primaryDark text-white font-bold rounded m-4 py-2 px-4 self-end w-min">
             <span className="whitespace-nowrap">
               <span className="align-text-top">{props.lobby?.countPlayers ?? 0}</span>
-              <span className="w-[15px] inline-block"></span>
+              <span className="w-[45px] inline-block"></span>
               <Image
                 className="inline-block align-sub"
                 src={`${config.storageUrl}/resources/user.svg`}
@@ -185,13 +192,6 @@ export const LobbyUser = (props) => {
             </span> 
           </div>
         </Tablet>
-
-        { !authUser?.isAdmin && (
-          <div className="notification-joint-user font-bold text-white bg-green-800 text-center sm:text-lg py-2">
-            Entró correctamente al juego.
-            <div className="inline-block bg-primary p-2 m-2 rounded shadow-xl">{authUser.nickname} (Tú)</div>
-          </div>
-        )}
 
         <div className="list-users  p-4">
           {users.map((user) => (
@@ -282,13 +282,14 @@ const LobbyCss = styled.div`
         color: ${(props) => props.theme.basic.white};
         background: ${(props) => props.theme.basic.secondaryDarken};
         font-weight: bold;
+        font-size: 17px;
 
         ${mediaQuery.afterTablet} {
           padding: 12px 10px;
         }
 
         &.active {
-          background: ${(props) => props.theme.basic.primaryDarken};
+          background: ${(props) => props.theme.basic.primary};
         }
       }
     }
