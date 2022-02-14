@@ -63,7 +63,9 @@ export const CardPattern = (props) => {
                     }}
                     key={`${pattern}-${index}-${index_}`}
                   >
-                    <div className={`${value ? "selected" : "empty"}`} />
+                    <div className="square">
+                      <div className={`${value && "selected"}`} />
+                    </div>
                   </td>
                 ))}
               </tr>
@@ -117,11 +119,13 @@ export const CardPattern = (props) => {
 
 const PatternContainer = styled.div`
   width: 100%;
+  aspect-ratio: 5 / 6;
 
   .table-container {
     margin: 0.25rem 0;
     
     table {
+      width: 100%;
       border-collapse: separate;
       border-spacing: 5px;
       margin: auto;
@@ -132,8 +136,8 @@ const PatternContainer = styled.div`
         font-family: Encode Sans;
         font-style: normal;
         font-weight: bold;
-        width: 25px;
-        height: 25px;
+        width: 20%;
+        aspect-ratio: 1 / 1;
         font-size: 14px;
         line-height: 18px;
         background: transparent;
@@ -142,27 +146,32 @@ const PatternContainer = styled.div`
       }
 
       td {
-        width: 25px;
-        height: 25px;
+        width: 20%;
+        aspect-ratio: 1 / 1;
         background: ${(props) => props.theme.basic.secondaryDarken};
         border-radius: 3px;
-        position: relative;
         cursor: ${(props) => (props.isEdit ? "pointer" : "default")};
 
         .selected {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 15px;
-          height: 15px;
+          width: 80%;
+          aspect-ratio: 1 / 1;
           border-radius: 50%;
           background: ${(props) => props.theme.basic.whiteDark};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: ${(props) => props.theme.basic.blackDarken};
+          margin: 0 auto;
         }
-      }
-
-      .empty {
-        background: transparent;
+        .square {
+          cursor: pointer;
+          aspect-ratio: 1 / 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: auto;
+          text-align: center;
+        }
       }
     }
   }
@@ -182,7 +191,7 @@ const PatternContainer = styled.div`
   }
   
   ${mediaQuery.afterTablet}{
-
+    
     .btns-container{
       flex-direction: ${(props) => (props.isEdit ? "column" : "row")};
 
@@ -198,22 +207,13 @@ const PatternContainer = styled.div`
         border-spacing: 5px;
 
         th {
-          width: ${(props) => (!props.user.isAdmin ? "38px" : "35px")};
-          height: ${(props) => (!props.user.isAdmin ? "38px" : "35px")};
           font-size: ${(props) => (!props.user.isAdmin ? "20px" : "26px;")};
           line-height: ${(props) => (!props.user.isAdmin ? "26px" : "32px")};
         }
 
         td {
-          width: ${(props) => (!props.user.isAdmin ? "38px" : "48px")};
-          height: ${(props) => (!props.user.isAdmin ? "38px" : "48px")};
           font-size: 26px;
           line-height: 32px;
-
-          .selected {
-            width: ${(props) => (!props.user.isAdmin ? "30px" : "20px")};
-            height: ${(props) => (!props.user.isAdmin ? "30px" : "20px")};
-          }
         }
       }
     }
