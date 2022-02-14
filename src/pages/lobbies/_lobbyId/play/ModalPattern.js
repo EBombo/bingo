@@ -13,55 +13,16 @@ export const ModalPattern = (props) => (
     visible={props.isVisibleModalPattern}
     onCancel={() => props.setIsVisibleModalPattern(false)}
   >
-    <Content>
-      <div className="title">
+    <div className="flex items-center justify-center flex-col	">
+      <div className="text-['Lato'] text-[20px] leading-[24px] text-white text-center font-[900]">
         {!props.lobby.startGame
           ? "Por favor llene el patrón para empezar el juego"
           : "Si cambia el patrón podría ya haber un ganador"}
       </div>
-      <div className="card-container">
-        <div className="subtitle">Patrón a completar</div>
+      <div className="p-4 w-full max-w-[250px] bg-secondary shadow-[0px_4px_8px_rgba(0, 0, 0, 0.25)] rounded-[4px] my-5">
+        <div className="text-['Lato'] text-[18px] leading-[22px] text-white text-center">Patrón a completar</div>
         <CardPattern isEdit cancelAction={() => props.setIsVisibleModalPattern(false)} {...props} />
       </div>
-    </Content>
+    </div>
   </ModalContainer>
 );
-
-const Content = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-
-  .title {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: 900;
-    font-size: 20px;
-    line-height: 24px;
-    color: ${(props) => props.theme.basic.white};
-  }
-
-  .card-container {
-    padding: 1rem;
-    background: ${(props) => props.theme.basic.secondary};
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
-    border-radius: 4px;
-    margin: 1rem 0;
-
-    .subtitle {
-      font-family: Lato;
-      font-style: normal;
-      font-weight: normal;
-      font-size: 12px;
-      line-height: 14px;
-      color: ${(props) => props.theme.basic.white};
-    }
-  }
-
-  ${mediaQuery.afterTablet} {
-    font-size: 20px;
-    line-height: 24px;
-  }
-`;

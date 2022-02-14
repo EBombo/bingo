@@ -92,7 +92,7 @@ export const LobbyInPlay = (props) => {
   // TODO: Consider to refactoring, <Admin> & <User>.
   return (
     <>
-      <UserLayout {...props} setToggleChat={setToggleChat}/>
+      <UserLayout {...props} setToggleChat={setToggleChat} />
 
       <BingoGameContainer isVisibleBoard={props.lobby.settings.showBoardToUser}>
         {isVisibleModalFinal && (
@@ -146,12 +146,11 @@ export const LobbyInPlay = (props) => {
             />
           )}
 
-          { toggleChat && (
-            <div className="chat-container" >
+          {toggleChat && (
+            <div className="h-[100%] min-w-[300px]">
               <Chat title={"CHAT DEL BINGO"} />
             </div>
           )}
-          
         </Desktop>
 
         <Tablet>
@@ -196,40 +195,6 @@ const BingoGameContainer = styled.div`
   width: 100%;
   height: calc(100vh - 50px);
 
-  .top-container-user {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
-    justify-content: center;
-    margin: 1rem 0;
-    padding: 0.5rem;
-
-    .pattern {
-      background: ${(props) => props.theme.basic.secondary};
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
-      border-radius: 4px;
-      padding: 0.5rem 1rem;
-      margin: 0 auto;
-      max-width: 220px;
-    }
-  }
-
-  .bingo-card-container {
-    margin: 0 auto;
-  }
-
-  .buttons-container {
-    margin: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    align-items: center;
-
-    button {
-      width: 100%;
-    }
-  }
-
   .tablet-tabs {
     height: 32px;
     background: ${(props) => props.theme.basic.primary};
@@ -265,140 +230,11 @@ const BingoGameContainer = styled.div`
     }
   }
 
-  .bingo-board {
-    margin: 1rem auto;
-    padding: 0.5rem;
-  }
-
-  .pattern-rounds {
-    display: grid;
-    align-items: center;
-    grid-template-columns: repeat(2, 50%);
-    margin: 1rem 0;
-
-    .left-container {
-      .card-pattern-container {
-        background: ${(props) => props.theme.basic.secondary};
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
-        border-radius: 4px;
-        padding: 0.5rem 1rem;
-        margin: 0 auto;
-        max-width: 250px;
-      }
-    }
-
-    .right-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0.5rem;
-      .last-plays {
-        width: 100%;
-        max-width: 200px;
-      }
-
-      .btns-container {
-        width: 100%;
-
-        button {
-          padding: 1rem;
-        }
-      }
-    }
-  }
-
-  .options-container {
-    margin: 1rem 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .awards {
-    font-family: Lato;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 14px;
-    text-decoration: underline;
-    color: ${(props) => props.theme.basic.primaryLight};
-    cursor: pointer;
-    padding: 1rem;
-    max-width: 430px;
-    margin: 0 auto;
-  }
-
-  .chat-container {
-    height: 550px;
-  }
-
-  .last-plays-container {
-    margin: 0.5rem auto;
-    overflow: auto;
-    max-width: 430px;
-  }
-
   ${mediaQuery.afterTablet} {
     display: flex;
 
     .user-main {
       grid-template-columns: ${(props) => (props.isVisibleBoard ? "375px auto" : "1fr")};
-    }
-
-    .chat-container {
-      height: 100%;
-      min-width: 300px;
-    }
-
-    .bingo {
-      padding: 0.5rem 0.5rem 2rem 0.5rem;
-      display: grid;
-      grid-template-columns: 350px auto;
-      border-bottom: 10px solid ${(props) => props.theme.basic.primary};
-      grid-gap: 2rem;
-      overflow: auto;
-
-      .left-container {
-        .card-pattern-container {
-          background: ${(props) => props.theme.basic.secondary};
-          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
-          padding: 1rem;
-          border-radius: 4px;
-        }
-      }
-
-      .right-container {
-        .board-container {
-          margin: 0;
-        }
-
-        .awards {
-          padding: 0;
-        }
-
-        .bottom-section {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          grid-gap: 1rem;
-          align-items: flex-start;
-          max-width: 900px;
-          margin: 1.2rem 0 1rem 0;
-
-          .ball-called {
-            align-self: center;
-          }
-        }
-      }
-
-      .subtitle {
-        font-family: Lato;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 18px;
-        line-height: 22px;
-        color: ${(props) => props.theme.basic.whiteLight};
-        padding: 1rem;
-      }
     }
   }
 `;
