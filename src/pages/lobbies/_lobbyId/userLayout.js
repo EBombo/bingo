@@ -164,7 +164,7 @@ export const UserLayout = (props) => {
 
         </div>
       </div>
-      <div className="text-xl font-black text-center">
+      <div className="text-xl font-black text-center text-ellipsis overflow-hidden whitespace-nowrap">
         {props.lobby.game.name}
       </div>
         <div className="right-content">
@@ -211,7 +211,7 @@ export const UserLayout = (props) => {
 const UserLayoutCss = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   background: ${(props) => props.theme.basic.whiteDark};
   padding: 0.5rem;
