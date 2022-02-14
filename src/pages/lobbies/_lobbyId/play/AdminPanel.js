@@ -207,7 +207,7 @@ export const AdminPanel = (props) => {
                     Llamar bolilla
                   </ButtonAnt>
                 ) : (
-                  <ButtonAnt width="100%" color="success" onClick={() => startGame()} disabled={loading}>
+                  <ButtonAnt width="100%" fontSize="18px" size="big" margin="0 0 1rem 0" color="success" onClick={() => startGame()} disabled={loading}>
                     Iniciar Juego
                   </ButtonAnt>
                 )}
@@ -294,7 +294,7 @@ export const AdminPanel = (props) => {
                   Llamar bolilla
                 </ButtonAnt>
               ) : (
-                <ButtonAnt width="100%" color="success" onClick={() => startGame()} disabled={loading} margin="1rem 0">
+                <ButtonAnt width="100%" size="big" color="success" onClick={() => startGame()} disabled={loading} margin="1rem 0">
                   Iniciar Juego
                 </ButtonAnt>
               )}
