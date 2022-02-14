@@ -67,9 +67,16 @@ export const ModalUserCard = (props) => {
               <div className="first-content">
                 <div className="top-container">
                   <div className="name">{props.user.nickname}</div>
-                  <div className="btn-container">
-                    <ButtonAnt color="danger" className="disqualify" onClick={() => disqualifyUser()}>
+                  <div className="flex items-center">
+                    <ButtonAnt color="warning" className="disqualify" margin="0 5px" onClick={() => disqualifyUser()}>
                       Invalidar
+                    </ButtonAnt>
+                    <ButtonAnt
+                      color="danger"
+                      className="disqualify"
+                      onClick={() => setIsVisibleModalConfirm(true)}
+                    >
+                      Suspender
                     </ButtonAnt>
                   </div>
                 </div>
@@ -255,13 +262,6 @@ const ContentAward = styled.div`
       font-size: 14px;
       line-height: 18px;
       color: ${(props) => props.theme.basic.blackDarken};
-    }
-  }
-
-  .first-content {
-    .card-container {
-      max-width: 200px;
-      margin: 1rem auto;
     }
   }
 
