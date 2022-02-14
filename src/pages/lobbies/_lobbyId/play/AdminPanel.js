@@ -156,9 +156,9 @@ export const AdminPanel = (props) => {
       {modalConfirm()}
       {isVisibleModalPattern && modalPattern()}
       <Desktop>
-        <div className="bingo">
-          <div className="left-container">
-            <div className="card-pattern-container">
+        <div className="grid grid-cols-[250px_auto] gap-8 border-b-[10px] border-primary overflow-auto px-2 pt-8 pb-2">
+          <div>
+            <div className="bg-secondary shadow-[0px_4px_8px_rgba(0, 0, 0, 0.25)] p-4 rounded-[4px]">
               <CardPattern
                 key={props.lobby.pattern}
                 caption={"Patrón que se debe llenar"}
@@ -181,12 +181,12 @@ export const AdminPanel = (props) => {
               Reiniciar tablero
             </ButtonAnt>
           </div>
-          <div className="right-container">
-            <div className="board-container">
+          <div className="">
+            <div className="m-0">
               <BingoBoard {...props} isVisible />
             </div>
-            <div className="bottom-section">
-              <div className="ball-called">{lastBall}</div>
+            <div className="grid grid-cols-[1fr_1fr_1fr] gap-4 items-start max-w-[900px] m-4">
+              <div className="self-center">{lastBall}</div>
               <div className="middle-container">
                 {props.lobby.startGame ? (
                   <ButtonAnt
@@ -207,7 +207,15 @@ export const AdminPanel = (props) => {
                     Llamar bolilla
                   </ButtonAnt>
                 ) : (
-                  <ButtonAnt width="100%" fontSize="18px" size="big" margin="0 0 1rem 0" color="success" onClick={() => startGame()} disabled={loading}>
+                  <ButtonAnt
+                    width="100%"
+                    fontSize="18px"
+                    size="big"
+                    margin="0 0 1rem 0"
+                    color="success"
+                    onClick={() => startGame()}
+                    disabled={loading}
+                  >
                     Iniciar Juego
                   </ButtonAnt>
                 )}
@@ -229,7 +237,14 @@ export const AdminPanel = (props) => {
 
                 <SliderControls {...props} />
 
-                <ButtonAnt fontSize="18px" className="btn" color="default" size="big" width="100%" onClick={() => props.setIsVisibleModalAwards(true)}>
+                <ButtonAnt
+                  fontSize="18px"
+                  className="btn"
+                  color="default"
+                  size="big"
+                  width="100%"
+                  onClick={() => props.setIsVisibleModalAwards(true)}
+                >
                   Ver Premios
                 </ButtonAnt>
               </div>
@@ -238,12 +253,12 @@ export const AdminPanel = (props) => {
         </div>
       </Desktop>
       <Tablet>
-        <div className="bingo-board">
+        <div className="m-auto w-full p-2 overflow-auto">
           <BingoBoard {...props} isVisible />
         </div>
-        <div className="pattern-rounds">
-          <div className="left-container">
-            <div className="card-pattern-container">
+        <div className="grid items-center grid-cols-[50%_50%] my-4">
+          <div>
+            <div className="bg-secondary shadow-[0px_4px_8px_rgba(0, 0, 0, 0.25)] rounded-[4px] px-2 py-4 mx-auto max-w-[250px]">
               <CardPattern
                 key={props.lobby.pattern}
                 caption={"Patrón que se debe llenar"}
@@ -276,25 +291,30 @@ export const AdminPanel = (props) => {
               {isAutomatic ? "Detener Rep. automática" : "Reproducción automática"}
             </ButtonAnt>
           </div>
-          <div className="right-container">
+          <div className="grid gap-4">
             {lastBall}
-            <div className="last-plays">
-              <LastPlays {...props} />
-            </div>
+            <LastPlays {...props} />
             <div className="btns-container">
               {props.lobby.startGame ? (
                 <ButtonAnt
                   size="big"
                   width="90%"
+                  margin="0 auto"
                   onClick={() => callNumber()}
-                  margin="1rem auto"
                   disabled={loading || isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
                   loading={isLoadingCalledNumber}
                 >
                   Llamar bolilla
                 </ButtonAnt>
               ) : (
-                <ButtonAnt width="100%" size="big" color="success" onClick={() => startGame()} disabled={loading} margin="1rem 0">
+                <ButtonAnt
+                  width="90%"
+                  size="big"
+                  color="success"
+                  margin="0 auto"
+                  onClick={() => startGame()}
+                  disabled={loading}
+                >
                   Iniciar Juego
                 </ButtonAnt>
               )}
@@ -305,7 +325,7 @@ export const AdminPanel = (props) => {
         <ButtonAnt color="default" width="90%" margin="1rem auto" onClick={() => props.setIsVisibleModalAwards(true)}>
           Ver Premios
         </ButtonAnt>
-        <div className="chat-container">
+        <div className="h-[550px]">
           <Chat title={"CHAT DEL BINGO"} />
         </div>
       </Tablet>
