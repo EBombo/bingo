@@ -1,16 +1,18 @@
 import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import { useRouter } from "next/router";
-import { MoreOutlined, UserOutlined } from "@ant-design/icons";
+import { MoreOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { Popover } from "antd";
 import { useMemo } from "react";
 import { useInView } from "react-intersection-observer";
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { config, database } from "../../../firebase";
 import { mediaQuery, Tablet } from "../../../constants";
 import { firebase } from "../../../firebase/config";
 import { LobbyHeader } from "./LobbyHeader";
 import { spinLoaderMin } from "../../../components/common/loader";
 import { Image } from "../../../components/common/Image";
+import debounce from "lodash/debounce";
 
 const userListSizeRatio = 100;
 
@@ -45,18 +47,19 @@ export const LobbyUser = (props) => {
       .limitToLast(newUserListSizeRatio);
 
     const fetchUsers = () =>
-      UsersQueryRef.on("value", (snapshot) => {
-        let users_ = [];
+      UsersQueryRef.on("value", debounce((snapshot) => {
+          let users_ = [];
 
-        snapshot.forEach((docRef) => {
-          const user = docRef.val();
-          if (user.state.includes("online")) users_.unshift(user);
-        });
+          snapshot.forEach((docRef) => {
+            const user = docRef.val();
+            if (user.state.includes("online")) users_.unshift(user);
+          });
 
-        setUserListSize(newUserListSizeRatio);
-        setIsLoading(false);
-        setUsers(users_);
-      });
+          setUserListSize(newUserListSizeRatio);
+          setIsLoading(false);
+          setUsers(users_);
+        }, 100)
+      );
 
     const userQueryListener = fetchUsers();
 
@@ -193,12 +196,16 @@ export const LobbyUser = (props) => {
           </div>
         </Tablet>
 
-        <div className="list-users  p-4">
-          {users.map((user) => (
-            <div key={user.userId} className={`item-user ${authUser.id === user.userId && 'active'}`}>
-              {user.nickname}
-            </div>
-          ))}
+        <div>
+          <TransitionGroup className="list-users p-4">
+            {users.map((user) => (
+              <CSSTransition key={user.userId} classNames="itemfade" timeout={500} >
+                <div key={user.userId} className={`item-user ${authUser.id === user.userId && 'active'} `} >
+                  {user.nickname}
+                </div>
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
         </div>
       </div>
 
@@ -297,5 +304,23 @@ const LobbyCss = styled.div`
 
   .loading-section {
     height: 20px;
+  }
+
+  .itemfade-enter {
+    opacity: 0.01;
+  }
+
+  .itemfade-enter.itemfade-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+  }
+
+  .itemfade-leave {
+    opacity: 1;
+  }
+
+  .itemfade-leave.itemfade-leave-active {
+    opacity: 0.01;
+    transition: opacity 500ms ease-in;
   }
 `;
