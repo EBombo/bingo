@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Popover } from "antd";
 import { useMemo } from "react";
 import { useInView } from "react-intersection-observer";
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { config, database } from "../../../firebase";
 import { mediaQuery, Tablet } from "../../../constants";
 import { firebase } from "../../../firebase/config";
@@ -13,8 +13,12 @@ import { LobbyHeader } from "./LobbyHeader";
 import { spinLoaderMin } from "../../../components/common/loader";
 import { Image } from "../../../components/common/Image";
 import debounce from "lodash/debounce";
+import orderBy from "lodash/orderBy";
+import moment from "moment";
 
 const userListSizeRatio = 100;
+
+const currentTime = moment().format("x");
 
 export const LobbyUser = (props) => {
   const router = useRouter();
@@ -47,7 +51,9 @@ export const LobbyUser = (props) => {
       .limitToLast(newUserListSizeRatio);
 
     const fetchUsers = () =>
-      UsersQueryRef.on("value", debounce((snapshot) => {
+      UsersQueryRef.on(
+        "value",
+        debounce((snapshot) => {
           let users_ = [];
 
           snapshot.forEach((docRef) => {
@@ -91,7 +97,7 @@ export const LobbyUser = (props) => {
     const isOnlineForDatabase = {
       ...mappedUser,
       state: "online",
-      last_changed: firebase.database.ServerValue.TIMESTAMP,
+      last_changed: currentTime,
     };
 
     // Create reference.
@@ -168,15 +174,17 @@ export const LobbyUser = (props) => {
       <LobbyHeader {...props} />
 
       <div className="container-users">
-        { !authUser?.isAdmin && (
+        {!authUser?.isAdmin && (
           <div className="notification-joint-user font-bold text-white bg-greenDark text-base sm:text-lg py-2 px-4 flex justify-between md:justify-center items-center min-w-[140px] border-b-[1px] border-primary">
             <span>Entró correctamente al juego.</span>
-            <div className="inline-block bg-primary p-2 m-2 rounded shadow-xl text-center">{authUser.nickname} (Tú)</div>
+            <div className="inline-block bg-primary p-2 m-2 rounded shadow-xl text-center">
+              {authUser.nickname} (Tú)
+            </div>
           </div>
         )}
 
         <Tablet>
-          { !authUser?.isAdmin && (
+          {!authUser?.isAdmin && (
             <div className="font-bold text-white text-lg text-left my-4 px-4">
               El administrador iniciará el juego pronto
             </div>
@@ -184,7 +192,7 @@ export const LobbyUser = (props) => {
           <div className="user-count bg-primaryDark text-white font-bold rounded m-4 py-2 px-4 self-end w-min">
             <span className="whitespace-nowrap">
               <span className="align-text-top">{props.lobby?.countPlayers ?? 0}</span>
-              <span className="w-[45px] inline-block"></span>
+              <span className="w-[45px] inline-block" />
               <Image
                 className="inline-block align-sub"
                 src={`${config.storageUrl}/resources/user.svg`}
@@ -192,15 +200,15 @@ export const LobbyUser = (props) => {
                 width="15px"
                 size="contain"
               />
-            </span> 
+            </span>
           </div>
         </Tablet>
 
         <div>
           <TransitionGroup className="list-users p-4">
-            {users.map((user) => (
-              <CSSTransition key={user.userId} classNames="itemfade" timeout={500} >
-                <div key={user.userId} className={`item-user ${authUser.id === user.userId && 'active'} `} >
+            {orderBy(users, ["last_changed"], ["desc"]).map((user) => (
+              <CSSTransition key={user.userId} classNames="itemfade" timeout={500}>
+                <div key={user.userId} className={`item-user ${authUser.id === user.userId && "active"} `}>
                   {user.nickname}
                 </div>
               </CSSTransition>
@@ -258,7 +266,6 @@ const LobbyCss = styled.div`
   }
 
   .container-users {
-
     .all-users {
       width: fit-content;
       border-radius: 3px;
