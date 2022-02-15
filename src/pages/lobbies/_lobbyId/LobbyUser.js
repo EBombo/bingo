@@ -18,6 +18,8 @@ import moment from "moment";
 
 const userListSizeRatio = 100;
 
+const currentTime = moment().format("x");
+
 export const LobbyUser = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
@@ -95,7 +97,7 @@ export const LobbyUser = (props) => {
     const isOnlineForDatabase = {
       ...mappedUser,
       state: "online",
-      last_changed: moment().format("x"),
+      last_changed: currentTime,
     };
 
     // Create reference.
