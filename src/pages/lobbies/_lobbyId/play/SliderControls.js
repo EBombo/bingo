@@ -3,6 +3,7 @@ import { Slider } from "antd";
 import styled from "styled-components";
 import { ANIMATION, SPEED } from "../../../../business";
 import { firestore } from "../../../../firebase";
+import { mediaQuery } from "../../../../constants";
 
 export const SliderControls = (props) => {
   const [isAutomatic] = useGlobal("isAutomatic");
@@ -59,6 +60,8 @@ const SliderControlsCss = styled.div`
 
   .slider-auto {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    ${mediaQuery.afterTablet} {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 `;

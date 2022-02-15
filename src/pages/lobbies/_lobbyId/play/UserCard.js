@@ -103,13 +103,13 @@ export const UserCard = (props) => {
                     <div className={`${props.lobby.board && props.lobby.board[num] && `active`}`}>{num}</div>
                   ) : isAuthUser ? (
                     <div
-                      className={`${matrix[row][col] ? "active" : "number"} to-fill`}
+                      className={`${matrix[row][col] && "active" } number`}
                       onClick={() => !props.disableSelect && selectNumber(row, col, num)}
                     >
                       {num}
                     </div>
                   ) : (
-                    <div className={`${matrix[row][col] ? "active" : "number"}`}>{num}</div>
+                    <div className={`${matrix[row][col] && "active"} number`}>{num}</div>
                   )}
                 </td>
               ))}
@@ -123,8 +123,8 @@ export const UserCard = (props) => {
 
 const CardContainer = styled.div`
   width: 100%;
-  height: 100%;
-  ${(props) => (props.full && "min-width: 550px" )};
+  aspect-ratio: 6/ 8;
+  ${(props) => props.full && "min-width: 550px"};
   max-width: ${(props) => (props.full ? "100%" : "350px")};
   background: ${(props) => {
     if (props.backgroundImg) return `url(${props.backgroundImg})`;
@@ -134,7 +134,7 @@ const CardContainer = styled.div`
   }};
   background-position: center;
   border-radius: 3px;
-  padding: ${(props) => (props.full ? "1rem" : "0.5rem")};;
+  padding: ${(props) => (props.full ? "1rem" : "0.5rem")};
   margin: 0 auto;
   display: grid;
   grid-template-rows: 10% 85%;
@@ -147,7 +147,6 @@ const CardContainer = styled.div`
     text-align: center;
     font-size: ${(props) => (props.full ? "55px" : "32px")};
     line-height: ${(props) => (props.full ? "59px" : "36px")};
-    padding: 1rem 0;
   }
 
   table {
@@ -159,8 +158,8 @@ const CardContainer = styled.div`
     thead {
       tr {
         th {
-          height: 20%;
           width: 20%;
+          aspect-ratio: 1 / 1;
           text-align: center;
           font-family: Lato;
           font-weight: 700;
@@ -175,8 +174,8 @@ const CardContainer = styled.div`
     tbody {
       tr {
         td {
-          width: 50px;
-          height: 50px;
+          width: 20%;
+          aspect-ratio: 1 / 1;
           margin-right: 5px;
           text-align: center;
           font-family: Lato;
@@ -189,8 +188,6 @@ const CardContainer = styled.div`
           justify-content: center;
 
           .active {
-            width: 90%;
-            height: 90%;
             border-radius: 50%;
             background: ${(props) => props.theme.basic.success};
             display: flex;
@@ -200,8 +197,15 @@ const CardContainer = styled.div`
             margin: 0 auto;
           }
 
-          .to-fill {
+          .number {
             cursor: pointer;
+            width: 80%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            text-align: center;
           }
         }
       }
