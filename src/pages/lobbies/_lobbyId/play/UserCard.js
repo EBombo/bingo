@@ -206,6 +206,11 @@ const CardContainer = styled.div`
             justify-content: center;
             margin: auto;
             text-align: center;
+            font-size: 32px;
+
+            ${mediaQuery.afterTablet} {
+              font-size: 28px;
+            }
           }
         }
       }
