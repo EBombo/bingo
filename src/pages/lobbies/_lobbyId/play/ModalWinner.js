@@ -13,7 +13,7 @@ export const ModalWinner = (props) => {
 
   return (
     <ModalContainer
-      background="#FAFAFA"
+      background="#331E6C"
       footer={null}
       closable={false}
       topDesktop="20%"
@@ -22,7 +22,9 @@ export const ModalWinner = (props) => {
     >
       <WinnerContainer>
         <Ribbon title="¡BINGO!" overflowDesktopWidth={70} overflowWidth={10} />
-        <div className="name">{get(props, "winner.nickname", "")}</div>
+        <div className="font-bold text-[24px] leading-[33px] my-[30px] mx-auto text-white md:text-[36px] leading-[49px]">
+          {get(props, "winner.nickname", "")}
+        </div>
         {authUser.isAdmin ? (
           <div className="btn-container">
             <ButtonAnt
@@ -69,15 +71,6 @@ const WinnerContainer = styled.div`
     color: ${(props) => props.theme.basic.secondary};
   }
 
-  .name {
-    font-style: normal;
-    font-weight: bold;
-    font-size: 24px;
-    line-height: 33px;
-    margin: 30px auto;
-    color: ${(props) => props.theme.basic.blackDarken};
-  }
-
   .user-waiting {
     display: flex;
     align-items: center;
@@ -112,11 +105,6 @@ const WinnerContainer = styled.div`
     .title {
       font-size: 96px;
       line-height: 115px;
-    }
-
-    .name {
-      font-size: 36px;
-      line-height: 49px;
     }
   }
 `;

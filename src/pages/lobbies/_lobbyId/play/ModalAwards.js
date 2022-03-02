@@ -8,7 +8,7 @@ import { config, firestore } from "../../../../firebase";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
 import get from "lodash/get";
 import { FileUpload } from "../../../../components/common/FileUpload";
-import { Desktop, Tablet } from "../../../../constants";
+import { AfterMobile, Mobile } from "../../../../constants";
 
 export const ModalAwards = (props) => {
   const [authUser] = useGlobal("user");
@@ -74,26 +74,16 @@ export const ModalAwards = (props) => {
         <div className="title">{authUser.isAdmin ? "Editar " : ""} Premios</div>
         {defaultTo(awards, []).map((award, index) => (
           <div
-            className="relative bg-whiteLight shadow-[0_0_8px_rgba(0,0,0,0.17)] rounded-[10px] grid grid-cols-[2fr_1fr] items-center my-4 md:grid-cols-[2fr_1fr_1fr] h-[130px]"
+            className="relative bg-whiteLight shadow-[0_0_8px_rgba(0,0,0,0.17)] rounded-[10px] grid grid-cols-[2fr_1fr] items-center my-4 md:grid-cols-[2fr_1fr_1fr] h-[150px] md:h-[130px]"
             key={index}
           >
             <div className="absolute top-[10%] w-[120px] flex">
               <div className="pointer">Premio {index + 1}</div>
             </div>
-            <div className="p-2">
-              <Input
-                defaultValue={award.name}
-                onBlur={(e) => {
-                  const newAwards = [...awards];
-                  newAwards[index] = {
-                    name: e.target.value,
-                    order: index + 1,
-                  };
-                  setAwards([...newAwards]);
-                }}
-                placeholder={`Premio ${index + 1}`}
-                disabled={!authUser.isAdmin}
-              />
+            <div className="p-2 relative w-full h-full">
+              <div className="absolute bottom-[10px] bg-gray text-blackDarken w-[90%] rounded-[4px] p-2">
+                {award.name}
+              </div>
             </div>
             <div className="">
               <FileUpload
@@ -109,17 +99,16 @@ export const ModalAwards = (props) => {
                   setAwards(newAwards);
                 }}
               />
-              <Tablet>
-                <div className="p-2">
-                  {authUser.isAdmin && (
-                    <ButtonAnt color="danger" onClick={() => deleteAward(index)} padding="5px" margin="0 auto">
-                      Borrar
-                    </ButtonAnt>
-                  )}
-                </div>
-              </Tablet>
+
+              <Mobile>
+                {authUser.isAdmin && (
+                  <ButtonAnt color="danger" onClick={() => deleteAward(index)} padding="5px" margin="0 auto">
+                    Borrar
+                  </ButtonAnt>
+                )}
+              </Mobile>
             </div>
-            <Desktop>
+            <AfterMobile>
               <div className="p-2">
                 {authUser.isAdmin && (
                   <ButtonAnt color="danger" onClick={() => deleteAward(index)} size="small">
@@ -127,7 +116,7 @@ export const ModalAwards = (props) => {
                   </ButtonAnt>
                 )}
               </div>
-            </Desktop>
+            </AfterMobile>
           </div>
         ))}
         {authUser.isAdmin && (

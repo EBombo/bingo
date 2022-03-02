@@ -8,6 +8,8 @@ const Tablet = (props) => <Responsive {...props} maxWidth={breakPoints.tablet} /
 
 const Mobile = (props) => <Responsive {...props} maxWidth={breakPoints.mobile} />;
 
+const AfterMobile = (props) => <Responsive {...props} minWidth={breakPoints.mobile} />;
+
 const Kiosk = (props) => <Responsive {...props} minDeviceWidth={1080} maxDeviceWidth={1080} />;
 
-export { Desktop, Tablet, Mobile, Kiosk };
+export { Desktop, Tablet, Mobile, Kiosk, AfterMobile };

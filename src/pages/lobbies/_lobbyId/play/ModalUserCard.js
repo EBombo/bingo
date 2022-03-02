@@ -8,7 +8,6 @@ import { BingoBoard } from "./BingoBoard";
 import { config, firestore } from "../../../../firebase";
 import defaultTo from "lodash/defaultTo";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
-import { Image } from "../../../../components/common/Image";
 
 export const ModalUserCard = (props) => {
   const [isVisibleAssignAward, setIsVisibleAssignAward] = useState(false);
@@ -55,73 +54,59 @@ export const ModalUserCard = (props) => {
     if (isVisibleAssignAward && props.lobby.bingo && props.user.id === props.lobby.bingo.id) {
       return (
         <ModalContainer
-          background="#FAFAFA"
+          background="#331E6C"
           footer={null}
           closable={false}
-          topDesktop="20%"
+          topDesktop="10%"
           width="650px"
           visible={props.isVisibleModalUserCard}
         >
+          <StyledRibbon>
+            <div className="w-full text-blackDarken text-['Lato'] font-[900] text-[14px] leading-[17px] text-center">
+              {props.user.nickname}
+            </div>
+          </StyledRibbon>
           <ContentAward {...props}>
             <div className="main-content-award">
-              <div className="first-content">
-                <div className="top-container">
-                  <div className="name">{props.user.nickname}</div>
-                  <div className="flex items-center">
-                    <ButtonAnt color="warning" className="disqualify" margin="0 5px" onClick={() => disqualifyUser()}>
-                      Invalidar
-                    </ButtonAnt>
-                    <ButtonAnt
-                      color="danger"
-                      className="disqualify"
-                      onClick={() => setIsVisibleModalConfirm(true)}
-                    >
-                      Suspender
-                    </ButtonAnt>
-                  </div>
+              <div className="w-full">
+                <div className="w-full flex justify-end mb-4">
+                  <ButtonAnt color="default" margin="0 10px 0 0" onClick={() => setIsVisibleAssignAward(false)}>
+                    Volver
+                  </ButtonAnt>
                 </div>
-                <div className="card-container">
-                  <UserCard user={props.user} {...props} />
-                </div>
+                <UserCard user={props.user} {...props} />
               </div>
               {props.lobby.settings.awards && (
-                <div className="second-content">
-                  <div className="subtitle">Escoge el premio</div>
-                  <div className="awards">
+                <div className="my-4 md:my-0">
+                  <div className="text-['Lato'] font-bold text-[13px] leading-[16px] text-white">Escoge el premio</div>
+                  <div className="flex flex-col my-2">
                     {props.lobby.settings.awards.map((award, index) => (
-                      <div
-                        className="bg-whiteLight shadow-[0_0_8px_rgba(0,0,0,0.17)] rounded-[10px] flex items-center justify-around my-4 h-[120px]"
-                        key={`${award.name}-${index}`}
-                      >
+                      <div className="flex items-center my-2 " key={`${award.name}-${index}`}>
                         <input
-                          type="checkbox"
-                          name="award[1][]"
-                          className="input-checkbox"
+                          id={`radio${index}`}
+                          type="radio"
+                          className="opacity-0 absolute h-8 w-8"
                           value={index}
                           checked={`${award.name}-${index}` === `${awardSelected?.name}-${awardSelected?.index}`}
                           onChange={() => setAwardSelected({ ...award, index })}
                         />
-                        <div>
-                          <Image
-                            src={award.imageUrl ?? `${config.storageUrl}/resources/gift.png`}
-                            height="80px"
-                            width="80px"
-                            size="contain"
-                            margin="0 auto"
-                          />
-                          <div className="text-['Lato'] text-blackDarken text-[16px] leading-[19px]">{award.name}</div>
-                        </div>
+
+                        <label htmlFor={`radio${index}`} className="flex items-center cursor-pointer text-xl">
+                          <span className="w-4 h-4 inline-block mr-2 rounded-full bg-gray flex-no-shrink"></span>
+                          <div className="text-['Lato'] font-bold text-[13px] leading-[16px] text-white">
+                            {award.name}
+                          </div>
+                        </label>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
             </div>
-            <div className="btns-container">
-              <ButtonAnt color="default" onClick={() => setIsVisibleAssignAward(false)}>
-                Volver
+            <div className="flex items-center justify-center my-4">
+              <ButtonAnt color="success" onClick={() => saveBingoWinner()}>
+                Anunciar
               </ButtonAnt>
-              <ButtonAnt onClick={() => saveBingoWinner()}>Guardar y anunciar</ButtonAnt>
             </div>
           </ContentAward>
         </ModalContainer>
@@ -132,15 +117,20 @@ export const ModalUserCard = (props) => {
       case defaultTo(props.lobby?.bingo?.id, ""):
         return (
           <ModalContainer
-            background="#FAFAFA"
+            background="#331E6C"
             footer={null}
             closable={false}
             topDesktop="20%"
             padding="1rem"
             visible={props.isVisibleModalUserCard}
-            width="1100px"
+            width="1200px"
           >
-            <ContainerValidate>
+            <StyledRibbon>
+              <div className="w-full text-blackDarken text-['Lato'] font-[900] text-[14px] leading-[17px] text-center">
+                {props.user.nickname}
+              </div>
+            </StyledRibbon>
+            <div className="mt-[50px] md:grid grid-cols-[300px_auto] gap-4 items-center">
               <ModalConfirm
                 isVisibleModalConfirm={isVisibleModalConfirm}
                 setIsVisibleModalConfirm={setIsVisibleModalConfirm}
@@ -151,71 +141,52 @@ export const ModalUserCard = (props) => {
                 {...props}
               />
               <Desktop>
-                <div className="board-container">
-                  <BingoBoard {...props} isView isVisible />
-                  <div className="action-container">
-                    <div />
-                    {/* TODO: Consider remove this btn.*/}
-                    {/*
-                      <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
-                        Volver
-                      </ButtonAnt>
-                    */}
-                    <ButtonAnt onClick={() => setIsVisibleAssignAward(true)}>Bingo</ButtonAnt>
+                <UserCard user={props.user} {...props} />
+
+                <div>
+                  <div className="mb-2">
+                    <BingoBoard {...props} isView isVisible />
                   </div>
-                </div>
-                <div className="card-container">
-                  <div className="top-container">
-                    <div className="name">{props.user.nickname}</div>
-                    <div className="btns-container">
-                      <ButtonAnt
-                        color="warning"
-                        className="disqualify"
-                        margin={"0 5px"}
-                        onClick={() => disqualifyUser()}
-                      >
+                  <div className="action-container flex items-center justify-between">
+                    <ButtonAnt color="success" onClick={() => setIsVisibleAssignAward(true)}>
+                      Bingo
+                    </ButtonAnt>
+                    <div className="flex items-center">
+                      <ButtonAnt color="warning" className="disqualify" margin="0 5px" onClick={() => disqualifyUser()}>
                         Invalidar
                       </ButtonAnt>
-                      <ButtonAnt
-                        color="danger"
-                        className="disqualify"
-                        margin={"0 5px"}
-                        onClick={() => setIsVisibleModalConfirm(true)}
-                      >
+                      <ButtonAnt color="danger" className="disqualify" onClick={() => setIsVisibleModalConfirm(true)}>
                         Suspender
                       </ButtonAnt>
                     </div>
                   </div>
-                  <UserCard user={props.user} {...props} />
                 </div>
               </Desktop>
               <Tablet>
-                <div className="top-container">
-                  <div className="name">{props.user.nickname}</div>
-                  <div className="btns-container">
-                    <ButtonAnt color="warning" className="disqualify" onClick={() => disqualifyUser()}>
-                      Invalidar
-                    </ButtonAnt>
-                    <ButtonAnt color="danger" className="disqualify" onClick={() => setIsVisibleModalConfirm(true)}>
-                      Suspender
-                    </ButtonAnt>
-                  </div>
-                </div>
-                <div className="card-container">
+                <div className="mt-[50px]">
                   <UserCard user={props.user} {...props} />
                 </div>
-                <div className="board-container">
+
+                <div className="my-2">
                   <BingoBoard {...props} isView isVisible />
                 </div>
-                <div className="action-container">
-                  {/* TODO: Consider remove this btn.*/}
-                  {/*<ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
-                      Volver
-                    </ButtonAnt>*/}
-                  <ButtonAnt onClick={() => setIsVisibleAssignAward(true)}>Bingo</ButtonAnt>
+
+                <div className="my-2 flex justify-center">
+                  <ButtonAnt color="success" onClick={() => setIsVisibleAssignAward(true)}>
+                    Bingo
+                  </ButtonAnt>
+                </div>
+
+                <div className="flex items-center justify-center">
+                  <ButtonAnt color="warning" className="disqualify" margin="1rem 10px" onClick={() => disqualifyUser()}>
+                    Invalidar
+                  </ButtonAnt>
+                  <ButtonAnt color="danger" className="disqualify" onClick={() => setIsVisibleModalConfirm(true)}>
+                    Suspender
+                  </ButtonAnt>
                 </div>
               </Tablet>
-            </ContainerValidate>
+            </div>
           </ModalContainer>
         );
 
@@ -249,52 +220,18 @@ export const ModalUserCard = (props) => {
 };
 
 const ContentAward = styled.div`
-  .top-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 1rem 0;
-
-    .name {
-      font-family: Encode Sans, sans-serif;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 14px;
-      line-height: 18px;
-      color: ${(props) => props.theme.basic.blackDarken};
-    }
+  
+  input[type="radio"] + label span {
+    transition: background 0.2s, transform 0.2s;
   }
 
-  .second-content {
-    .subtitle {
-      font-family: Lato;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 14px;
-      line-height: 17px;
-      color: ${(props) => props.theme.basic.blackDarken};
-    }
+  input[type="radio"] + label span:hover,
+  input[type="radio"] + label:hover span {
+    transform: scale(1.2);
+  }
 
-    .awards {
-      display: flex;
-      flex-direction: column;
-
-      .award-content {
-        display: flex;
-        align-items: center;
-        margin: 0.5rem 0;
-
-        label {
-          color: ${(props) => props.theme.basic.blackDarken};
-          font-family: Lato;
-          font-style: normal;
-          font-weight: 500;
-          font-size: 13px;
-          line-height: 16px;
-          margin-left: 5px;
-        }
-      }
-    }
+  input[type="radio"]:checked + label span {
+    background-color: ${(props) => props.theme.basic.success};
   }
 
   ${mediaQuery.afterTablet} {
@@ -303,85 +240,6 @@ const ContentAward = styled.div`
       grid-template-columns: ${(props) => (props.lobby.settings.awards ? `2fr 1fr` : `1fr`)};
       align-items: center;
       grid-gap: 1rem;
-
-      .first-content {
-        .card-container {
-          max-width: 320px;
-          margin: 1rem auto;
-        }
-      }
-    }
-
-    .btns-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-evenly;
-      margin: 1rem 0;
-      flex-direction: row;
-    }
-  }
-`;
-
-const ContainerValidate = styled.div`
-  .top-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 1rem 0;
-
-    .btns-container {
-      display: flex;
-      align-items: center;
-
-      .disqualify {
-        font-family: Lato !important;
-        font-style: normal !important;
-        font-weight: bold !important;
-        font-size: 12px !important;
-        line-height: 14px !important;
-        padding: 5px 10px !important;
-        margin: 0 5px !important;
-      }
-    }
-
-    .name {
-      font-family: Encode Sans, sans-serif;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 14px;
-      line-height: 18px;
-      color: ${(props) => props.theme.basic.blackDarken};
-    }
-  }
-
-  .card-container {
-    margin: 1rem auto;
-  }
-
-  .board-container {
-    max-width: 100%;
-    overflow: auto;
-  }
-
-  .action-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 1rem 0;
-  }
-
-  ${mediaQuery.afterTablet} {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .card-container {
-      max-width: 320px;
-    }
-
-    .board-container {
-      width: 650px;
-      max-width: 650px;
     }
   }
 `;
@@ -417,5 +275,30 @@ const Content = styled.div`
       font-size: 30px;
       line-height: 41px;
     }
+  }
+`;
+
+const StyledRibbon = styled.div`
+  position: absolute;
+  width: 150px;
+  height: 38px;
+  background: linear-gradient(180deg, #56eea5 0%, #36c27f 100%);
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  top: 15px;
+  left: -10px;
+
+  :before {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid ${(props) => props.theme.basic.success};
+    border-top: 5px solid ${(props) => props.theme.basic.success};
+    border-bottom: 5px solid transparent;
   }
 `;
