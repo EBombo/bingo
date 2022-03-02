@@ -47,7 +47,9 @@ export const ModalWinner = (props) => {
               size="contain"
               margin="auto"
             />
-            <div className="description">Esperando que el administrador continúe el juego...</div>
+            <div className="text-['Lato'] font-bold text-[18px] leading-[22px] text-center text-white">
+              Esperando que el administrador continúe el juego...
+            </div>
           </div>
         )}
       </WinnerContainer>
@@ -76,16 +78,6 @@ const WinnerContainer = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-
-    .description {
-      font-family: Lato;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 18px;
-      line-height: 22px;
-      text-align: center;
-      color: ${(props) => props.theme.basic.blackDarken};
-    }
   }
 
   .btn-container {

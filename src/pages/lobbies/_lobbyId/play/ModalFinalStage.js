@@ -179,7 +179,9 @@ export const ModalFinalStage = (props) => {
               </AdminContent>
             ) : (
               <UserContent>
-                <div className="description">Esperando que el administrador continue el juego...</div>
+                <div className="text-['Lato'] font-bold text-[18px] leading-[22px] text-center text-white w-full">
+                  Esperando que el administrador <br /> continue el juego...
+                </div>
                 <Image
                   src={`${config.storageUrl}/resources/spinner.gif`}
                   height="85px"
@@ -305,17 +307,4 @@ const UserContent = styled.div`
   justify-content: space-evenly;
   flex-direction: column;
   height: 80%;
-
-  .description {
-    word-wrap: break-word;
-    text-align: center;
-    font-family: Encode Sans;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 20px;
-    color: ${(props) => props.theme.basic.blackDarken};
-    width: 100%;
-    max-width: 100%;
-  }
 `;

@@ -101,7 +101,7 @@ export const ModalAwards = (props) => {
               />
 
               <Mobile>
-                {authUser.isAdmin && (
+                {authUser?.isAdmin && (
                   <ButtonAnt color="danger" onClick={() => deleteAward(index)} padding="5px" margin="0 auto">
                     Borrar
                   </ButtonAnt>
@@ -110,7 +110,7 @@ export const ModalAwards = (props) => {
             </div>
             <AfterMobile>
               <div className="p-2">
-                {authUser.isAdmin && (
+                {authUser?.isAdmin && (
                   <ButtonAnt color="danger" onClick={() => deleteAward(index)} size="small">
                     Borrar
                   </ButtonAnt>

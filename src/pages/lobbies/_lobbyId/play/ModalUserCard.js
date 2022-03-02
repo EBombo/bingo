@@ -85,13 +85,16 @@ export const ModalUserCard = (props) => {
                         <input
                           id={`radio${index}`}
                           type="radio"
-                          className="opacity-0 absolute h-8 w-8"
+                          className="input-radio opacity-0 absolute h-8 w-8"
                           value={index}
                           checked={`${award.name}-${index}` === `${awardSelected?.name}-${awardSelected?.index}`}
                           onChange={() => setAwardSelected({ ...award, index })}
                         />
 
-                        <label htmlFor={`radio${index}`} className="flex items-center cursor-pointer text-xl">
+                        <label
+                          htmlFor={`radio${index}`}
+                          className="flex items-center cursor-pointer text-xl cursor-pointer"
+                        >
                           <span className="w-4 h-4 inline-block mr-2 rounded-full bg-gray flex-no-shrink"></span>
                           <div className="text-['Lato'] font-bold text-[13px] leading-[16px] text-white">
                             {award.name}
@@ -220,17 +223,16 @@ export const ModalUserCard = (props) => {
 };
 
 const ContentAward = styled.div`
-  
-  input[type="radio"] + label span {
+  .input-radio + label span {
     transition: background 0.2s, transform 0.2s;
   }
 
-  input[type="radio"] + label span:hover,
-  input[type="radio"] + label:hover span {
+  .input-radio + label span:hover,
+  .input-radio + label:hover span {
     transform: scale(1.2);
   }
 
-  input[type="radio"]:checked + label span {
+  .input-radio:checked + label span {
     background-color: ${(props) => props.theme.basic.success};
   }
 
