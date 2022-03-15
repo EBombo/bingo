@@ -13,6 +13,7 @@ import { config, firestoreEvents } from "../src/firebase";
 import { snapshotToArray } from "../src/utils";
 import Head from "next/head";
 import Script from "next/script";
+import { firestore } from "../functions/config";
 
 const MyApp = ({ Component, pageProps }) => {
   const [authUserLS] = useUser();
@@ -26,6 +27,23 @@ const MyApp = ({ Component, pageProps }) => {
     };
 
     initialize();
+  }, []);
+
+  useEffect(() => {
+    const ini = async () => {
+      const query = await firestore.collection("visitors").get();
+
+      const visitors = snapshotToArray(query);
+
+      return console.log("visitors", visitors)
+      const promises = visitors.map(async visitor => {
+        await firestore.collection("visitors").doc(visitor.id).update({ ...visitor, deleted: false });
+      });
+
+      await Promise.all(promises);
+      console.log("termino");
+    };
+    ini();
   }, []);
 
   const showNotificationAnt = (message, description, type = "error") => notification[type]({ message, description });
@@ -43,7 +61,8 @@ const MyApp = ({ Component, pageProps }) => {
         />
         <link rel="shortcut icon" href={`${config.storageUrl}/resources/icons/icon-72x72.png`} />
         <link rel="shortcut icon" href={`${config.storageUrl}/resources/icons/icon-512x512.png`} />
-        <link rel="apple-touch-icon" sizes="180x180" href={`${config.storageUrl}/resources/icons/ios-icon-512x512.png`} />
+        <link rel="apple-touch-icon" sizes="180x180"
+              href={`${config.storageUrl}/resources/icons/ios-icon-512x512.png`} />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="144x144"
@@ -71,7 +90,7 @@ const MyApp = ({ Component, pageProps }) => {
       <Script
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
-          __html: ``,
+          __html: ``
         }}
       />
       <ErrorBoundary FallbackComponent={ErrorFallback}>
