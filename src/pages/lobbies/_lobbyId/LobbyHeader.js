@@ -1,7 +1,7 @@
 import React, { useEffect, useGlobal, useState } from "reactn";
 import { config, database, firestore, firestoreBomboGames, hostName } from "../../../firebase";
 import { ButtonAnt, ButtonBingo } from "../../../components/form";
-import { mediaQuery, Desktop } from "../../../constants";
+import { Desktop, mediaQuery } from "../../../constants";
 import styled from "styled-components";
 import { Popover, Slider, Tooltip } from "antd";
 import { getBingoCard } from "../../../business";
@@ -104,7 +104,11 @@ export const LobbyHeader = (props) => {
               "Este juego esta bloqueado"
             ) : (
               <>
-                Entra a <span className="font-black">ebombo.io <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" /> </span>
+                Entra a{" "}
+                <span className="font-black">
+                  ebombo.io{" "}
+                  <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" />{" "}
+                </span>
               </>
             )}
           </div>
@@ -125,9 +129,7 @@ export const LobbyHeader = (props) => {
               />
             </ButtonBingo>
           ) : (
-            <div>
-              {props.lobby?.pin}
-            </div>
+            <div>{props.lobby?.pin}</div>
           )}
         </div>
       </div>
@@ -274,7 +276,7 @@ export const LobbyHeader = (props) => {
               width="15px"
               size="contain"
             />
-          </span> 
+          </span>
         </div>
       </Desktop>
     </LobbyHeaderStyled>

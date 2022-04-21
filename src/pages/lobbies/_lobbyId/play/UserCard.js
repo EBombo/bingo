@@ -103,7 +103,7 @@ export const UserCard = (props) => {
                     <div className={`${props.lobby.board && props.lobby.board[num] && `active`}`}>{num}</div>
                   ) : isAuthUser ? (
                     <div
-                      className={`${matrix[row][col] && "active" } number`}
+                      className={`${matrix[row][col] && "active"} number`}
                       onClick={() => !props.disableSelect && selectNumber(row, col, num)}
                     >
                       {num}
