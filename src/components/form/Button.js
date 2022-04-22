@@ -27,7 +27,7 @@ const ButtonAntCss = styled(Button)`
   cursor: pointer;
   width: ${(props) => props.width};
   height: ${(props) => (props.height ? props.height : "auto")};
-  font-size: ${props => props.fontSize ?? "auto"};
+  font-size: ${(props) => props.fontSize ?? "auto"};
   display: flex;
   align-items: center;
   justify-content: space-evenly;

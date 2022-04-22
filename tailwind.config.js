@@ -2,9 +2,8 @@ const CONFIG = process.env.NEXT_PUBLIC_CONFIG ?? "";
 
 const config = JSON.parse(CONFIG);
 
-
 module.exports = {
-  mode: 'jit',
+  mode: "jit",
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {

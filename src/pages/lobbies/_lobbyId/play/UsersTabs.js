@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal, useState, useRef } from "reactn";
+import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import styled from "styled-components";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { Input, Popover } from "antd";
@@ -272,7 +272,13 @@ export const UsersTabs = (props) => {
                       <div className={`user-progress ${user.progress === 100 && "winner"}`}>
                         <div className={`name ${authUser.id === user.id && "auth-user"}`}>
                           {user.avatar && (
-                            <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                            <Image
+                              src={user.avatar}
+                              height="25px"
+                              width="25px"
+                              borderRadious="50%"
+                              margin="0 5px 0 0 "
+                            />
                           )}
                           {user.nickname}
                         </div>
