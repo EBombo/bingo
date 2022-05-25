@@ -26,7 +26,7 @@ export const ModalFinalStage = (props) => {
 
   const endGame = async () => {
 
-    const endTime = new Date()
+    const endTime = new Date();
 
     const bingoPromise = firestore.doc(`lobbies/${props.lobby.id}`).update({
       isClosed: true,
