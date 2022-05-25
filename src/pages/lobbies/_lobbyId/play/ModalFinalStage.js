@@ -4,7 +4,7 @@ import { mediaQuery } from "../../../../constants";
 import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { UserCard } from "./UserCard";
 import { ButtonAnt } from "../../../../components/form";
-import { config, firestore } from "../../../../firebase";
+import { config, firestore, firestoreBomboGames } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { createBoard, generateMatrix, getBingoCard } from "../../../../business";
 import { ModalPattern } from "./ModalPattern";
@@ -24,11 +24,23 @@ export const ModalFinalStage = (props) => {
     props.setIsVisibleModalFinal(false);
   };
 
-  const endGame = async () =>
-    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+  const endGame = async () => {
+
+    const endTime = new Date();
+
+    const bingoPromise = firestore.doc(`lobbies/${props.lobby.id}`).update({
       isClosed: true,
-      updateAt: new Date(),
+      updateAt: endTime,
     });
+
+    const bomboGamesPromise =  firestoreBomboGames.doc(`lobbies/${props.lobby.id}`).set({
+      ...props.lobby,
+      isClosed: true,
+      updateAt: endTime,
+    }, {merge: true})
+
+    await Promise.all([bingoPromise, bomboGamesPromise])
+  }
 
   const continueGame = async () => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
