@@ -1,3 +1,5 @@
+import { config } from "../firebase";
+
 export const MAX_NUMBER_BOARD = 75;
 
 export const BOARD_PARAMS = {
@@ -77,3 +79,22 @@ export const getHead = (number) => {
 
   if (number >= BOARD_PARAMS.O.min && number <= BOARD_PARAMS.O.max) return BOARD_PARAMS.O;
 };
+
+export const reserveLobbySeat = async (Fetch, lobbyId, userId, newUser) => {
+  const GAME_NAME = "bingo";
+
+  const fetchProps = {
+    url: `${config.serverUrlBomboGames}/${GAME_NAME}/lobbies/${lobbyId}/seat`,
+    method: "PUT",
+  };
+
+  const { error, response } = await Fetch(fetchProps.url, fetchProps.method, {
+    userId,
+    newUser,
+  });
+
+  if (error) throw new Error(error?.error || error);
+
+  return response;
+};
+
