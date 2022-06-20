@@ -51,7 +51,7 @@ export const UsersTabs = (props) => {
   const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
   const removeUser = async () => {
-    // TODO refactor to use deleted or hasExited.
+    // TODO: refactor to use deleted or hasExited.
     await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(currentUser.id).delete();
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
