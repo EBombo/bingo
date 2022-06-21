@@ -90,7 +90,11 @@ export const Lobby = (props) => {
       return usersQueryRef.onSnapshot((usersRef) => {
         const users_ = snapshotToArray(usersRef);
 
-        const usersMapped = users_.reduce((usersSum, user) => ({ ...usersSum, [user.id]: user }), {});
+        const usersMapped = users_.reduce((usersSum, user) => {
+          if (user.hasExited === true) return usersSum;
+
+          return ({ ...usersSum, [user.id]: user });
+        }, {});
 
         setUsers(usersMapped);
       });

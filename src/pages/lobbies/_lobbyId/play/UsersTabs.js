@@ -5,7 +5,7 @@ import { Input, Popover } from "antd";
 import orderBy from "lodash/orderBy";
 import defaultTo from "lodash/defaultTo";
 import { ModalUserCard } from "./ModalUserCard";
-import { config, firestore } from "../../../../firebase";
+import { config, firestore, firebase } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
@@ -51,7 +51,12 @@ export const UsersTabs = (props) => {
   const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
   const removeUser = async () => {
+    // TODO: refactor to use deleted or hasExited.
     await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(currentUser.id).delete();
+
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      countPlayers: firebase.firestore.FieldValue.increment(-1),
+    });
 
     setIsVisibleModalConfirm(false);
   };

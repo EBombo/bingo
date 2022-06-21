@@ -133,6 +133,7 @@ export const CreateLobby = (props) => {
         isClosed: false,
         companyId: authUser?.companyId ?? null,
         startAt: null,
+        countPlayers: 0,
         settings: {
           userIdentity,
           showAllCards,
