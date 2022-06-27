@@ -10,11 +10,14 @@ import { config, database } from "../../../firebase";
 import { mediaQuery, Tablet } from "../../../constants";
 import { firebase } from "../../../firebase/config";
 import { LobbyHeader } from "./LobbyHeader";
-import { spinLoaderMin } from "../../../components/common/loader";
+import { spinLoader, spinLoaderMin } from "../../../components/common/loader";
 import { Image } from "../../../components/common/Image";
 import debounce from "lodash/debounce";
 import orderBy from "lodash/orderBy";
 import moment from "moment";
+import { reserveLobbySeat } from "../../../business";
+import { useSendError } from "../../../hooks";
+import { useFetch } from "../../../hooks/useFetch";
 
 const userListSizeRatio = 100;
 
@@ -24,9 +27,13 @@ export const LobbyUser = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
 
+  const { sendError } = useSendError();
+  const { Fetch } = useFetch();
+
   const [authUser] = useGlobal("user");
 
   const [users, setUsers] = useState([]);
+  const [isPageLoading, setIsPageLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userListSize, setUserListSize] = useState(0);
   const { ref: scrollTriggerRef, inView } = useInView({ threshold: 0 });
@@ -112,14 +119,33 @@ export const LobbyUser = (props) => {
 
         // Reference: https://firebase.google.com/docs/reference/node/firebase.database.OnDisconnect
         await userRef.current.onDisconnect().set(isOfflineForDatabase);
+        
+        // Verifies if lobby can let user in.
+        const verifyLobbyAvailability = async () => {
+          setIsPageLoading(true);
 
-        userRef.current.set(isOnlineForDatabase);
+          try {
+            await reserveLobbySeat(Fetch, props.lobby.id, authUser.id, null);
+
+            await userRef.current.set(isOnlineForDatabase);
+          } catch (error) {
+            sendError(error, "verifyLobbyAvailability");
+
+            props.showNotification("No es posible unirse a lobby.", error?.message);
+
+            props.logout();
+          }
+
+          setIsPageLoading(false);
+        };
+
+        verifyLobbyAvailability();
       });
 
     unSub.current = createPresence();
 
     return () => userRef.current?.off("value", unSub.current);
-  }, [authUser]);
+  }, [authUser?.id]);
 
   // Disconnect presence.
   useEffect(() => {
@@ -162,6 +188,8 @@ export const LobbyUser = (props) => {
       </Popover>
     );
   }, [authUser]);
+
+  if (isPageLoading) return spinLoader();
 
   return (
     <LobbyCss {...props}>

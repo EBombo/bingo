@@ -4,11 +4,7 @@ import { colorBlack, colorPrimary, mediaQuery } from "../../../../constants";
 
 export const Ribbon = (props) => (
   <RibbonCss {...props}>
-    <div className="ribbon-front">
-      <div className="upper-line" />
-      {props.title}
-      <div className="lower-line" />
-    </div>
+    <div className="ribbon-front">{props.title}</div>
     <div className="ribbon-edge-topleft" />
     <div className="ribbon-edge-topright" />
     <div className="ribbon-edge-bottomleft" />

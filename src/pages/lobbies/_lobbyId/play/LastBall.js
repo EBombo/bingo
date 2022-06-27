@@ -65,11 +65,8 @@ const slideOutDownAnimation = keyframes`${fadeOutDownBig}`;
 
 const LastBallContainer = styled.div`
   width: ${(props) => (props.vertical ? "125px" : "200px")};
-  height: ${(props) => (
-    props.size === 'small'
-    ? props.vertical ? "150px" : "100px"
-    : props.vertical ? "190px" : "130px"
-  )};
+  height: ${(props) =>
+    props.size === "small" ? (props.vertical ? "150px" : "100px") : props.vertical ? "190px" : "130px"};
   background: #221545;
   box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.25);
   border-radius: 100px;
@@ -79,16 +76,8 @@ const LastBallContainer = styled.div`
   clip-path: ${(props) => (props.vertical ? "ellipse(62% 51% at 50% 50%)" : "ellipse(50% 60% at 50% 50%)")};
 
   .ball-container {
-    width: ${(props) => (
-      props.size === 'small'
-      ? "90px"
-      : "120px"
-    )};
-    height: ${(props) => (
-      props.size === 'small'
-      ? "90px"
-      : "120px"
-    )};
+    width: ${(props) => (props.size === "small" ? "90px" : "120px")};
+    height: ${(props) => (props.size === "small" ? "90px" : "120px")};
     border-radius: 50%;
     background: ${(props) =>
       props.number < 16

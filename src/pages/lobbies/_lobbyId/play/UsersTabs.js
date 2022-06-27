@@ -1,11 +1,11 @@
-import React, { useEffect, useGlobal, useState, useRef } from "reactn";
+import React, { useEffect, useGlobal, useRef, useState } from "reactn";
 import styled from "styled-components";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { Input, Popover } from "antd";
 import orderBy from "lodash/orderBy";
 import defaultTo from "lodash/defaultTo";
 import { ModalUserCard } from "./ModalUserCard";
-import { config, firestore } from "../../../../firebase";
+import { config, firestore, firebase } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
@@ -51,7 +51,12 @@ export const UsersTabs = (props) => {
   const lobbyPattern = JSON.parse(props.lobby.pattern ?? "[]");
 
   const removeUser = async () => {
+    // TODO: refactor to use deleted or hasExited.
     await firestore.collection("lobbies").doc(props.lobby.id).collection("users").doc(currentUser.id).delete();
+
+    await firestore.doc(`lobbies/${props.lobby.id}`).update({
+      countPlayers: firebase.firestore.FieldValue.increment(-1),
+    });
 
     setIsVisibleModalConfirm(false);
   };
@@ -272,7 +277,13 @@ export const UsersTabs = (props) => {
                       <div className={`user-progress ${user.progress === 100 && "winner"}`}>
                         <div className={`name ${authUser.id === user.id && "auth-user"}`}>
                           {user.avatar && (
-                            <Image src={user.avatar} height="25px" width="25px" borderRadious="50%" margin="0 5px 0 0 " />
+                            <Image
+                              src={user.avatar}
+                              height="25px"
+                              width="25px"
+                              borderRadious="50%"
+                              margin="0 5px 0 0 "
+                            />
                           )}
                           {user.nickname}
                         </div>

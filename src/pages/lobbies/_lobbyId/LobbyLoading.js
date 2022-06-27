@@ -56,7 +56,9 @@ export const LobbyLoading = (props) => {
       ) : (
         <>
           <div className="step-one-tablet">
-            <div className="step-one-tablet-title">¡Prepárate!</div>
+            <div className="step-one-tablet-title">
+              <Image src={`${config.storageUrl}/resources/ready.svg`} height="150px" size="contain" />
+            </div>
 
             <Image
               src={`${config.storageUrl}/resources/white_spinner.gif`}

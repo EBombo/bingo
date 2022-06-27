@@ -94,7 +94,7 @@ export const CreateLobby = (props) => {
         if (!game?.usersIds?.includes(formatUser.id) && typeof window !== "undefined") {
           window.location.href = "/";
           return;
-        };
+        }
 
         await setAuthUser(formatUser);
         setLSAuthUser(formatUser);
@@ -133,6 +133,7 @@ export const CreateLobby = (props) => {
         isClosed: false,
         companyId: authUser?.companyId ?? null,
         startAt: null,
+        countPlayers: 0,
         settings: {
           userIdentity,
           showAllCards,

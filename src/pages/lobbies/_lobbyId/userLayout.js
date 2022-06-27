@@ -1,8 +1,8 @@
 import React, { useGlobal, useState } from "reactn";
 import styled from "styled-components";
 import { Popover, Slider, Spin, Tooltip } from "antd";
-import { mediaQuery, Desktop } from "../../../constants";
-import { config, firestore, firestoreBomboGames, hostName } from "../../../firebase";
+import { Desktop, mediaQuery } from "../../../constants";
+import { config, firebase, firestore, firestoreBomboGames, hostName } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
 import { LoadingOutlined, MessageOutlined } from "@ant-design/icons";
 import { ButtonAnt } from "../../../components/form";
@@ -31,7 +31,7 @@ export const UserLayout = (props) => {
   return (
     <UserLayoutCss>
       <div className="left-content">
-        { authUser?.isAdmin && (
+        {authUser?.isAdmin && (
           <div className="left-container">
             <Popover
               trigger="click"
@@ -143,7 +143,6 @@ export const UserLayout = (props) => {
           </div>
         )}
         <div className="title no-wrap">
-          
           <Tooltip placement="bottom" title="Click aquí para copiar el link de ebombo con pin">
             <div
               className="label"
@@ -156,38 +155,53 @@ export const UserLayout = (props) => {
                 "Este juego esta bloqueado"
               ) : (
                 <>
-                  <span className="font-black"> PIN:{props.lobby.pin} <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" /></span>
+                  <span className="font-black">
+                    {" "}
+                    PIN:{props.lobby.pin}{" "}
+                    <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" />
+                  </span>
                 </>
               )}
             </div>
           </Tooltip>
-
         </div>
       </div>
       <div className="text-xl font-black text-center text-ellipsis overflow-hidden whitespace-nowrap">
         {props.lobby.game.name}
       </div>
-        <div className="right-content">
-          <Desktop>
-            <ButtonAnt
-              onClick={() => { props.setToggleChat((prevValue) => !prevValue) }}
-            ><MessageOutlined/> Chat</ButtonAnt>
-          </Desktop>
+      <div className="right-content">
+        <Desktop>
+          <ButtonAnt
+            onClick={() => {
+              props.setToggleChat((prevValue) => !prevValue);
+            }}
+          >
+            <MessageOutlined /> Chat
+          </ButtonAnt>
+        </Desktop>
 
-          {!authUser.isAdmin && (
+        {!authUser.isAdmin && (
           <Popover
             trigger="click"
             content={
               <div>
                 <div
                   onClick={async () => {
+                    if (props.lobby?.isPlaying) await firestore
+                        .collection("lobbies")
+                        .doc(props.lobby.id)
+                        .collection("users")
+                        .doc(authUser.id)
+                        .update({ hasExited: true });
+
+                    // Reducing counter -1 if is a player.
+                    if (!authUser.isAdmin && props.lobby?.isPlaying) {
+                      await firestore.doc(`lobbies/${props.lobby.id}`).update({
+                        countPlayers: firebase.firestore.FieldValue.increment(-1),
+                      });
+                    }
+
                     props.logout();
-                    await firestore
-                      .collection("lobbies")
-                      .doc(props.lobby.id)
-                      .collection("users")
-                      .doc(authUser.id)
-                      .delete();
                   }}
                   style={{ cursor: "pointer" }}
                 >
@@ -202,8 +216,8 @@ export const UserLayout = (props) => {
               <span />
             </div>
           </Popover>
-          )}
-        </div>
+        )}
+      </div>
     </UserLayoutCss>
   );
 };

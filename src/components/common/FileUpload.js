@@ -112,13 +112,15 @@ export const FileUpload = (props) => {
         </div>
       ) : (
         <div
-          className="w-[135px] h-[110px] flex items-center flex-col justify-center bg-white rounded-[10px]"
+          className="w-[120px] h-[80px] md:w-[135px] md:h-[110px] flex items-center flex-col justify-center bg-white rounded-[10px]"
           onClick={() => inputRef.current.click()}
         >
           <Image
             src={`${config.storageUrl}/resources/gift.png`}
-            width="66px"
-            height="66px"
+            width="36px"
+            height="36px"
+            desktopWidth="66px"
+            desktopHeight="66px"
             size="contain"
             margin="0 auto"
           />
