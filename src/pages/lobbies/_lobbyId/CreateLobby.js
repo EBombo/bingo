@@ -134,6 +134,7 @@ export const CreateLobby = (props) => {
         companyId: authUser?.companyId ?? null,
         startAt: null,
         countPlayers: 0,
+        deleted: false,
         settings: {
           userIdentity,
           showAllCards,
