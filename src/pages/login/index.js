@@ -5,7 +5,7 @@ import { snapshotToArray } from "../../utils";
 import { EmailStep } from "./EmailStep";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { useUser } from "../../hooks";
+import { useTranslation, useUser } from "../../hooks";
 import { PinStep } from "./PinStep";
 import { avatars } from "../../components/common/DataList";
 import { Anchor } from "../../components/form";
@@ -21,6 +21,9 @@ const Login = (props) => {
   const { pin } = router.query;
 
   const { Fetch } = useFetch();
+
+  const { t, SwitchTranslation } = useTranslation("login");
+
   const [, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
 
@@ -52,7 +55,7 @@ const Login = (props) => {
           nickname: authUser.nickname || null,
         });
 
-        throw Error("Esta sala ha concluido");
+        throw Error(t("room-is-over"));
       }
 
       const isAdmin = !!currentLobby?.game?.usersIds?.includes(authUser.id);
@@ -146,7 +149,7 @@ const Login = (props) => {
         const promiseMetric = firestore.doc(`games/${lobby?.game?.id}`).update({
           countPlayers: firebase.firestore.FieldValue.increment(1),
         });
-        
+
         // Register user as a member in company.
         const promiseMember = saveMembers(authUser.lobby, [newUser]);
 
@@ -215,7 +218,7 @@ const Login = (props) => {
             });
           }}
         >
-          Volver
+          {t("back")}
         </Anchor>
       </div>
     ),
@@ -224,10 +227,15 @@ const Login = (props) => {
 
   return (
     <LoginContainer storageUrl={config.storageUrl}>
+      <div className="absolute top-4 right-4 lg:top-10 lg:right-10">
+        <SwitchTranslation />
+      </div>
+
       <div className="main-container">
         {!authUser?.lobby && (
           <>
             <PinStep isLoading={isLoading} setIsLoading={setIsLoading} fetchLobby={fetchLobby} {...props} />
+
             {authUser?.email && authUser?.nickname && (
               <div className="back">
                 <Tooltip title={`email: ${authUser.email} nickname: ${authUser.nickname}`} placement="bottom">
@@ -251,7 +259,7 @@ const Login = (props) => {
                       });
                     }}
                   >
-                    Remover email y nickname
+                    {t("remove-info")}
                   </Anchor>
                 </Tooltip>
               </div>
