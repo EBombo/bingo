@@ -97,4 +97,3 @@ export const reserveLobbySeat = async (Fetch, lobbyId, userId, newUser) => {
 
   return response;
 };
-
