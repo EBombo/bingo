@@ -187,7 +187,8 @@ export const UserLayout = (props) => {
               <div>
                 <div
                   onClick={async () => {
-                    if (props.lobby?.isPlaying) await firestore
+                    if (props.lobby?.isPlaying)
+                      await firestore
                         .collection("lobbies")
                         .doc(props.lobby.id)
                         .collection("users")
