@@ -119,7 +119,7 @@ export const LobbyUser = (props) => {
 
         // Reference: https://firebase.google.com/docs/reference/node/firebase.database.OnDisconnect
         await userRef.current.onDisconnect().set(isOfflineForDatabase);
-        
+
         // Verifies if lobby can let user in.
         const verifyLobbyAvailability = async () => {
           setIsPageLoading(true);
@@ -169,7 +169,6 @@ export const LobbyUser = (props) => {
 
   const btnExit = useMemo(() => {
     if (!authUser) return null;
-    if (authUser.isAdmin) return null;
 
     return (
       <Popover
