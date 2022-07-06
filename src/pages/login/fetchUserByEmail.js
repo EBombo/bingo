@@ -14,5 +14,13 @@ export const fetchUserByEmail = async (email, lobbyId) => {
   // Prevent currentUser is undefined.
   if (!currentUser) return;
 
+  // Rollback hasExited.
+  await firestore
+    .collection("lobbies")
+    .doc(lobbyId)
+    .collection("users")
+    .doc(currentUser.id)
+    .update({ hasExited: false });
+
   return currentUser;
 };
