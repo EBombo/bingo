@@ -187,13 +187,18 @@ export const UserLayout = (props) => {
               <div>
                 <div
                   onClick={async () => {
-                    if (props.lobby?.isPlaying)
+                    if (authUser.isAdmin) {
+                      return await props.logout();
+                    }
+
+                    if (props.lobby?.isPlaying) {
                       await firestore
                         .collection("lobbies")
                         .doc(props.lobby.id)
                         .collection("users")
                         .doc(authUser.id)
                         .update({ hasExited: true });
+                    }
 
                     // Reducing counter -1 if is a player.
                     if (!authUser.isAdmin && props.lobby?.isPlaying) {
@@ -202,7 +207,7 @@ export const UserLayout = (props) => {
                       });
                     }
 
-                    props.logout();
+                    await props.logout();
                   }}
                   style={{ cursor: "pointer" }}
                 >
