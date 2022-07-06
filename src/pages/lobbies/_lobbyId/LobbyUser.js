@@ -85,7 +85,7 @@ export const LobbyUser = (props) => {
 
     if (!authUser) return;
     if (!authUser.lobby) return;
-    if (authUser.isAdmin) return;
+    if (authUser.isAdmin) return setIsPageLoading(false);;
 
     const mappedUser = {
       email: authUser?.email ?? null,
