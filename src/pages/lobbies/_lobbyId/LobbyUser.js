@@ -33,7 +33,7 @@ export const LobbyUser = (props) => {
   const [authUser] = useGlobal("user");
 
   const [users, setUsers] = useState([]);
-  const [isPageLoading, setIsPageLoading] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [userListSize, setUserListSize] = useState(0);
   const { ref: scrollTriggerRef, inView } = useInView({ threshold: 0 });
@@ -129,11 +129,12 @@ export const LobbyUser = (props) => {
 
             await userRef.current.set(isOnlineForDatabase);
           } catch (error) {
-            sendError(error, "verifyLobbyAvailability");
+            console.error(error);
+            await sendError(error, "verifyLobbyAvailability");
 
             props.showNotification("No es posible unirse a lobby.", error?.message);
 
-            props.logout();
+            await props.logout();
           }
 
           setIsPageLoading(false);
