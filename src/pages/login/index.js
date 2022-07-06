@@ -52,7 +52,7 @@ const Login = (props) => {
           lobby: null,
           isAdmin: false,
           email: authUser.email || null,
-          nickname: authUser.nickname || null
+          nickname: authUser.nickname || null,
         });
 
         throw Error(t("room-is-over"));
@@ -89,7 +89,7 @@ const Login = (props) => {
             lobby: null,
             isAdmin: false,
             email: authUser.email,
-            nickname: authUser.nickname
+            nickname: authUser.nickname,
           });
         }
 
@@ -110,12 +110,6 @@ const Login = (props) => {
           return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
         }
 
-        // Redirect if the lobby is loading to start.
-        if (!!lobby?.startAt) return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
-
-        // Redirect if the lobby is playing.
-        if (lobby?.isPlaying) return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
-
         // Else if lobby is playing then register user in firestore. This skips
         // Realtime Database registration flow
         const userId = authUser?.id ?? firestore.collection("users").doc().id;
@@ -129,14 +123,14 @@ const Login = (props) => {
           avatar: authUser?.avatar ?? null,
           card: JSON.stringify(userCard),
           lobbyId: lobby.id,
-          lobby
+          lobby,
         };
 
         await reserveLobbySeat(Fetch, authUser.lobby.id, userId, newUser);
 
         // Update metrics.
         const promiseMetric = firestore.doc(`games/${lobby?.game?.id}`).update({
-          countPlayers: firebase.firestore.FieldValue.increment(1)
+          countPlayers: firebase.firestore.FieldValue.increment(1),
         });
 
         // Register user as a member in company.
@@ -159,7 +153,7 @@ const Login = (props) => {
           lobby: null,
           isAdmin: false,
           email: authUser.email,
-          nickname: authUser.nickname
+          nickname: authUser.nickname,
         });
       }
     };
@@ -199,13 +193,13 @@ const Login = (props) => {
               ...authUser,
               email: null,
               nickname: null,
-              lobby: null
+              lobby: null,
             });
             setAuthUserLs({
               ...authUser,
               email: null,
               nickname: null,
-              lobby: null
+              lobby: null,
             });
           }}
         >
@@ -240,13 +234,13 @@ const Login = (props) => {
                         ...authUser,
                         email: null,
                         nickname: null,
-                        lobby: null
+                        lobby: null,
                       });
                       setAuthUserLs({
                         ...authUser,
                         email: null,
                         nickname: null,
-                        lobby: null
+                        lobby: null,
                       });
                     }}
                   >
