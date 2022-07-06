@@ -93,7 +93,7 @@ export const Chat = (props) => {
           ) : (
             messages.map((message, index) => (
               <ChatMessage
-                key={message.id}
+                key={`messages-${message.id}`}
                 message={message}
                 previousMessage={index > 1 ? messages[index - 1] : null}
                 index={index}
