@@ -180,7 +180,7 @@ export const UserLayout = (props) => {
           </ButtonAnt>
         </Desktop>
 
-        {!authUser.isAdmin && (
+        {(!authUser.isAdmin || !Object.values(props.lobby?.users ?? []).length) && (
           <Popover
             trigger="click"
             content={
