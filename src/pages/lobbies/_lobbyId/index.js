@@ -39,7 +39,7 @@ export const Lobby = (props) => {
     // Prevent multiple run.
     if (isClose) return;
 
-    console.log("close");
+    console.log("logout");
     setIsClose(true);
 
     const userId = firestore.collection("users").doc().id;
