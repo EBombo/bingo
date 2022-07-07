@@ -5,7 +5,7 @@ import { snapshotToArray } from "../../utils";
 import { EmailStep } from "./EmailStep";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { useTranslation, useUser } from "../../hooks";
+import { useSendError, useTranslation, useUser } from "../../hooks";
 import { PinStep } from "./PinStep";
 import { avatars } from "../../components/common/DataList";
 import { Anchor } from "../../components/form";
@@ -21,6 +21,8 @@ const Login = (props) => {
   const { pin } = router.query;
 
   const { Fetch } = useFetch();
+
+  const { sendError } = useSendError();
 
   const { t, SwitchTranslation } = useTranslation("login");
 
