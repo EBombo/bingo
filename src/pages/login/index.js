@@ -5,7 +5,7 @@ import { snapshotToArray } from "../../utils";
 import { EmailStep } from "./EmailStep";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { useUser } from "../../hooks";
+import { useTranslation, useUser } from "../../hooks";
 import { PinStep } from "./PinStep";
 import { avatars } from "../../components/common/DataList";
 import { Anchor } from "../../components/form";
@@ -21,6 +21,9 @@ const Login = (props) => {
   const { pin } = router.query;
 
   const { Fetch } = useFetch();
+
+  const { t, SwitchTranslation } = useTranslation("login");
+
   const [, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
 
@@ -52,7 +55,7 @@ const Login = (props) => {
           nickname: authUser.nickname || null,
         });
 
-        throw Error("Esta sala ha concluido");
+        throw Error(t("room-is-over"));
       }
 
       const isAdmin = !!currentLobby?.game?.usersIds?.includes(authUser.id);
@@ -73,80 +76,63 @@ const Login = (props) => {
 
     // Determine is necessary create a user.
     const initialize = async () => {
-      // Fetch lobby.
-      const lobbyRef = await firestore.doc(`lobbies/${authUser.lobby.id}`).get();
-      const lobby = lobbyRef.data();
+      try {
+        // Fetch lobby.
+        const lobbyRef = await firestore.doc(`lobbies/${authUser.lobby.id}`).get();
+        const lobby = lobbyRef.data();
 
-      if (lobby?.isClosed) {
-        return setAuthUser({
-          id: firestore.collection("users").doc().id,
-          lobby: null,
-          isAdmin: false,
-          email: authUser.email,
-          nickname: authUser.nickname,
-        });
-      }
-
-      // AuthUser is admin.
-      if (authUser.lobby?.game?.usersIds?.includes(authUser.id))
-        return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
-
-      // Replace "newUser" if user has already logged in before with the same email.
-      const user_ = authUser?.email ? await fetchUserByEmail(authUser.email, authUser.lobby.id) : null;
-
-      // If user has already logged then redirect.
-      if (user_) {
-        if (user_.id !== authUser.id) {
-          await setAuthUser(user_);
-          setAuthUserLs(user_);
-
-          return;
-        }
-
-        try {
-          await reserveLobbySeat(Fetch, authUser.lobby.id, user_.id, user_);
-
-          return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
-        } catch (error) {
-          props.showNotification("No es posible unirse a lobby.", error?.message);
+        if (lobby?.isClosed) {
+          props.showNotification("UPS", "El juego esta cerrado");
 
           return setAuthUser({
-            id: authUser.id || firestore.collection("users").doc().id,
+            id: firestore.collection("users").doc().id,
             lobby: null,
             isAdmin: false,
             email: authUser.email,
             nickname: authUser.nickname,
           });
         }
-      }
 
-      // If lobby is awaiting for players then redirect to lobby.
-      if (!(!!lobby?.startAt || lobby?.isPlaying)) return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
+        // AuthUser is admin.
+        if (authUser.lobby?.game?.usersIds?.includes(authUser.id))
+          return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
 
-      // Else if lobby is playing then register user in firestore. This skips
-      // Realtime Database registration flow
-      const userId = authUser?.id ?? firestore.collection("users").doc().id;
-      const userCard = getBingoCard();
+        // Replace "newUser" if user has already logged in before with the same email.
+        const user_ = authUser?.email ? await fetchUserByEmail(authUser.email, authUser.lobby.id) : null;
 
-      let newUser = {
-        id: userId,
-        userId,
-        email: authUser?.email ?? null,
-        nickname: authUser.nickname,
-        avatar: authUser?.avatar ?? null,
-        card: JSON.stringify(userCard),
-        lobbyId: lobby.id,
-        lobby,
-      };
+        // If user has already logged then redirect.
+        if (user_) {
+          await reserveLobbySeat(Fetch, authUser.lobby.id, user_.id, user_);
 
-      try {
+          await setAuthUser(user_);
+          setAuthUserLs(user_);
+
+          return router.push(`/bingo/lobbies/${authUser.lobby.id}`);
+        }
+
+        // Else if lobby is playing then register user in firestore. This skips
+        // Realtime Database registration flow
+        const userId = authUser?.id ?? firestore.collection("users").doc().id;
+        const userCard = getBingoCard();
+
+        let newUser = {
+          id: userId,
+          userId,
+          email: authUser?.email ?? null,
+          nickname: authUser.nickname,
+          avatar: authUser?.avatar ?? null,
+          card: JSON.stringify(userCard),
+          lobbyId: lobby.id,
+          lobby,
+        };
+
         await reserveLobbySeat(Fetch, authUser.lobby.id, userId, newUser);
 
         // Update metrics.
         const promiseMetric = firestore.doc(`games/${lobby?.game?.id}`).update({
           countPlayers: firebase.firestore.FieldValue.increment(1),
         });
-        
+
         // Register user as a member in company.
         const promiseMember = saveMembers(authUser.lobby, [newUser]);
 
@@ -158,6 +144,8 @@ const Login = (props) => {
         // Redirect to lobby.
         await router.push(`/bingo/lobbies/${authUser.lobby.id}`);
       } catch (error) {
+        console.error(error);
+        sendError(error, "initialize");
         props.showNotification("No es posible unirse a lobby.", error?.message);
 
         return setAuthUser({
@@ -215,7 +203,7 @@ const Login = (props) => {
             });
           }}
         >
-          Volver
+          {t("back")}
         </Anchor>
       </div>
     ),
@@ -224,10 +212,15 @@ const Login = (props) => {
 
   return (
     <LoginContainer storageUrl={config.storageUrl}>
+      <div className="absolute top-4 right-4 lg:top-10 lg:right-10">
+        <SwitchTranslation />
+      </div>
+
       <div className="main-container">
         {!authUser?.lobby && (
           <>
             <PinStep isLoading={isLoading} setIsLoading={setIsLoading} fetchLobby={fetchLobby} {...props} />
+
             {authUser?.email && authUser?.nickname && (
               <div className="back">
                 <Tooltip title={`email: ${authUser.email} nickname: ${authUser.nickname}`} placement="bottom">
@@ -251,7 +244,7 @@ const Login = (props) => {
                       });
                     }}
                   >
-                    Remover email y nickname
+                    {t("remove-info")}
                   </Anchor>
                 </Tooltip>
               </div>

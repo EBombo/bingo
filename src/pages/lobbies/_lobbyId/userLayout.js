@@ -180,19 +180,27 @@ export const UserLayout = (props) => {
           </ButtonAnt>
         </Desktop>
 
-        {!authUser.isAdmin && (
+        {(!authUser.isAdmin || !Object.values(props.lobby?.users ?? []).length) && (
           <Popover
             trigger="click"
             content={
               <div>
                 <div
-                  onClick={async () => {
-                    if (props.lobby?.isPlaying) await firestore
+                  onClick={async (e) => {
+                    e.preventDefault();
+
+                    if (authUser.isAdmin) {
+                      return await props.logout();
+                    }
+
+                    if (props.lobby?.isPlaying) {
+                      await firestore
                         .collection("lobbies")
                         .doc(props.lobby.id)
                         .collection("users")
                         .doc(authUser.id)
                         .update({ hasExited: true });
+                    }
 
                     // Reducing counter -1 if is a player.
                     if (!authUser.isAdmin && props.lobby?.isPlaying) {
@@ -201,7 +209,7 @@ export const UserLayout = (props) => {
                       });
                     }
 
-                    props.logout();
+                    await props.logout();
                   }}
                   style={{ cursor: "pointer" }}
                 >

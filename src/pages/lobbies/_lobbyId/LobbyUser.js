@@ -33,7 +33,7 @@ export const LobbyUser = (props) => {
   const [authUser] = useGlobal("user");
 
   const [users, setUsers] = useState([]);
-  const [isPageLoading, setIsPageLoading] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [userListSize, setUserListSize] = useState(0);
   const { ref: scrollTriggerRef, inView } = useInView({ threshold: 0 });
@@ -85,7 +85,7 @@ export const LobbyUser = (props) => {
 
     if (!authUser) return;
     if (!authUser.lobby) return;
-    if (authUser.isAdmin) return;
+    if (authUser.isAdmin) return setIsPageLoading(false);
 
     const mappedUser = {
       email: authUser?.email ?? null,
@@ -119,7 +119,7 @@ export const LobbyUser = (props) => {
 
         // Reference: https://firebase.google.com/docs/reference/node/firebase.database.OnDisconnect
         await userRef.current.onDisconnect().set(isOfflineForDatabase);
-        
+
         // Verifies if lobby can let user in.
         const verifyLobbyAvailability = async () => {
           setIsPageLoading(true);
@@ -129,11 +129,12 @@ export const LobbyUser = (props) => {
 
             await userRef.current.set(isOnlineForDatabase);
           } catch (error) {
-            sendError(error, "verifyLobbyAvailability");
+            console.error(error);
+            await sendError(error, "verifyLobbyAvailability");
 
             props.showNotification("No es posible unirse a lobby.", error?.message);
 
-            props.logout();
+            await props.logout();
           }
 
           setIsPageLoading(false);
@@ -169,14 +170,19 @@ export const LobbyUser = (props) => {
 
   const btnExit = useMemo(() => {
     if (!authUser) return null;
-    if (authUser.isAdmin) return null;
 
     return (
       <Popover
         trigger="click"
         content={
           <div>
-            <div onClick={async () => props.logout()} style={{ cursor: "pointer" }}>
+            <div
+              onClick={async (e) => {
+                e.preventDefault();
+                props.logout();
+              }}
+              style={{ cursor: "pointer" }}
+            >
               Salir
             </div>
           </div>
@@ -233,10 +239,15 @@ export const LobbyUser = (props) => {
         </Tablet>
 
         <div>
-          <TransitionGroup className="list-users p-4">
+          <TransitionGroup className="grid grid-cols-[1fr_1fr_1fr] max-w-[1000px] gap-[4px] mx-auto md:grid-cols-[1fr_1fr_1fr_1fr_1fr] md:gap-[10px] my-4">
             {orderBy(users, ["last_changed"], ["desc"]).map((user) => (
               <CSSTransition key={user.userId} classNames="itemfade" timeout={500}>
-                <div key={user.userId} className={`item-user ${authUser.id === user.userId && "active"} `}>
+                <div
+                  key={user.userId}
+                  className={`px-[10px] py-[8px] md:text-lg text-base text-center rounded-[5px] text-white font-bold md:py-[12px] px-[10px] overflow-hidden text-ellipsis ${
+                    authUser.id === user.userId ? "bg-primary" : "bg-secondaryDarken"
+                  }`}
+                >
                   {user.nickname}
                 </div>
               </CSSTransition>
@@ -304,35 +315,6 @@ const LobbyCss = styled.div`
 
       span {
         vertical-align: baseline;
-      }
-    }
-
-    .list-users {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 4px;
-
-      ${mediaQuery.afterTablet} {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-        grid-gap: 10px;
-      }
-
-      .item-user {
-        padding: 8px 10px;
-        text-align: center;
-        border-radius: 5px;
-        color: ${(props) => props.theme.basic.white};
-        background: ${(props) => props.theme.basic.secondaryDarken};
-        font-weight: bold;
-        font-size: 17px;
-
-        ${mediaQuery.afterTablet} {
-          padding: 12px 10px;
-        }
-
-        &.active {
-          background: ${(props) => props.theme.basic.primary};
-        }
       }
     }
   }

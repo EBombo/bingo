@@ -25,7 +25,6 @@ export const ModalFinalStage = (props) => {
   };
 
   const endGame = async () => {
-
     const endTime = new Date();
 
     const bingoPromise = firestore.doc(`lobbies/${props.lobby.id}`).update({
@@ -33,14 +32,17 @@ export const ModalFinalStage = (props) => {
       updateAt: endTime,
     });
 
-    const bomboGamesPromise =  firestoreBomboGames.doc(`lobbies/${props.lobby.id}`).set({
-      ...props.lobby,
-      isClosed: true,
-      updateAt: endTime,
-    }, {merge: true})
+    const bomboGamesPromise = firestoreBomboGames.doc(`lobbies/${props.lobby.id}`).set(
+      {
+        ...props.lobby,
+        isClosed: true,
+        updateAt: endTime,
+      },
+      { merge: true }
+    );
 
-    await Promise.all([bingoPromise, bomboGamesPromise])
-  }
+    await Promise.all([bingoPromise, bomboGamesPromise]);
+  };
 
   const continueGame = async () => {
     await firestore.doc(`lobbies/${props.lobby.id}`).update({

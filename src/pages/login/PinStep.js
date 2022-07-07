@@ -1,5 +1,4 @@
 import React, { useGlobal, useState } from "reactn";
-import styled from "styled-components";
 import { config } from "../../firebase";
 import { Image } from "../../components/common/Image";
 import { ButtonBingo, InputBingo } from "../../components/form";
@@ -8,8 +7,11 @@ import { useForm } from "react-hook-form";
 import { Carousel } from "../../components/common/Carousel";
 import { avatars } from "../../components/common/DataList";
 import { darkTheme } from "../../theme";
+import { useTranslation } from "../../hooks";
 
 export const PinStep = (props) => {
+  const { t } = useTranslation("login");
+
   const [authUser] = useGlobal("user");
 
   const [avatarIdx, setAvatarIdx] = useState(0);
@@ -63,10 +65,10 @@ export const PinStep = (props) => {
           margin="10px auto"
           defaultValue={authUser?.lobby?.pin ?? null}
           disabled={props.isLoading}
-          placeholder="Pin del juego"
+          placeholder={t("game-pin")}
         />
         <ButtonBingo width="100%" disabled={props.isLoading} loading={props.isLoading} htmlType="submit">
-          Ingresar
+          {t("get-in")}
         </ButtonBingo>
       </div>
     </form>
