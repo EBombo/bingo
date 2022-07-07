@@ -22,6 +22,7 @@ export const Lobby = (props) => {
   const [lobby, setLobby] = useState(null);
   const [users, setUsers] = useState({});
   const [isLoading, setLoading] = useState(true);
+  const [isClose, setIsClose] = useState(false);
 
   const audioRef = useRef(null);
 
@@ -35,6 +36,12 @@ export const Lobby = (props) => {
   }, [authUser]);
 
   const logout = async () => {
+    // Prevent multiple run.
+    if (isClose) return;
+
+    console.log("close");
+    setIsClose(true);
+
     const userId = firestore.collection("users").doc().id;
 
     const userMapped = {
