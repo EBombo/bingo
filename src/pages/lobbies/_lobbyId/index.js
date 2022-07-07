@@ -9,6 +9,7 @@ import { useUser } from "../../../hooks";
 import { LobbyClosed } from "./closed/LobbyClosed";
 import { snapshotToArray } from "../../../utils";
 import { useMemo } from "react";
+import { timeoutPromise } from "../../../utils/promised";
 
 export const Lobby = (props) => {
   const router = useRouter();
@@ -46,7 +47,10 @@ export const Lobby = (props) => {
     await setAuthUser(userMapped);
     setAuthUserLs(userMapped);
 
-    if (typeof window !== "undefined") window.location.href = "/";
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+      await timeoutPromise(5000);
+    }
   };
 
   // Fetch lobby.
@@ -60,11 +64,14 @@ export const Lobby = (props) => {
         // Lobby not found.
         if (!currentLobby) {
           props.showNotification("UPS", "No encontramos tu sala, intenta nuevamente", "warning");
-          logout();
+          await logout();
         }
 
         // If the game is closed logout user.
-        if (currentLobby?.isClosed && !authUser?.isAdmin) return logout();
+        if (currentLobby?.isClosed && !authUser?.isAdmin) {
+          await logout();
+          return;
+        }
 
         setAuthUserLs({ ...authUser, lobby: currentLobby });
         await setAuthUser({ ...authUser, lobby: currentLobby });
@@ -93,7 +100,7 @@ export const Lobby = (props) => {
         const usersMapped = users_.reduce((usersSum, user) => {
           if (user.hasExited === true) return usersSum;
 
-          return ({ ...usersSum, [user.id]: user });
+          return { ...usersSum, [user.id]: user };
         }, {});
 
         setUsers(usersMapped);

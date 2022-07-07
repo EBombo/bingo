@@ -85,7 +85,7 @@ export const LobbyUser = (props) => {
 
     if (!authUser) return;
     if (!authUser.lobby) return;
-    if (authUser.isAdmin) return setIsPageLoading(false);;
+    if (authUser.isAdmin) return setIsPageLoading(false);
 
     const mappedUser = {
       email: authUser?.email ?? null,
@@ -176,7 +176,13 @@ export const LobbyUser = (props) => {
         trigger="click"
         content={
           <div>
-            <div onClick={async () => props.logout()} style={{ cursor: "pointer" }}>
+            <div
+              onClick={async (e) => {
+                e.preventDefault();
+                props.logout();
+              }}
+              style={{ cursor: "pointer" }}
+            >
               Salir
             </div>
           </div>
@@ -236,7 +242,8 @@ export const LobbyUser = (props) => {
           <TransitionGroup className="grid grid-cols-[1fr_1fr_1fr] max-w-[1000px] gap-[4px] mx-auto md:grid-cols-[1fr_1fr_1fr_1fr_1fr] md:gap-[10px] my-4">
             {orderBy(users, ["last_changed"], ["desc"]).map((user) => (
               <CSSTransition key={user.userId} classNames="itemfade" timeout={500}>
-                <div key={user.userId}
+                <div
+                  key={user.userId}
                   className={`px-[10px] py-[8px] md:text-lg text-base text-center rounded-[5px] text-white font-bold md:py-[12px] px-[10px] overflow-hidden text-ellipsis ${
                     authUser.id === user.userId ? "bg-primary" : "bg-secondaryDarken"
                   }`}
