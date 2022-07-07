@@ -9,6 +9,7 @@ import { useUser } from "../../../hooks";
 import { LobbyClosed } from "./closed/LobbyClosed";
 import { snapshotToArray } from "../../../utils";
 import { useMemo } from "react";
+import UrlAssembler from "url-assembler";
 
 export const Lobby = (props) => {
   const router = useRouter();
@@ -33,20 +34,29 @@ export const Lobby = (props) => {
     if (!authUser?.nickname && !authUser.isAdmin && typeof window !== "undefined") window.location.href = "/";
   }, [authUser]);
 
-  const logout = async () => {
-    const userId = firestore.collection("users").doc().id;
+  const logout = async (isClosed = false, _lobby = null) => {
+    let feedbackUrl = null;
+
+    if (isClosed && _lobby)
+      feedbackUrl = UrlAssembler(bomboGamesDomain)
+        .template("/lobbies/:lobbyId/users/:userId")
+        .param("lobbyId", _lobby.id)
+        .param("userId", authUser.id)
+        .toString();
 
     const userMapped = {
-      id: userId,
-      email: authUserLs.email,
-      avatar: authUserLs.avatar,
-      nickname: authUserLs.nickname,
+      id: firestore.collection("users").doc().id,
+      email: authUserLs?.email,
+      avatar: authUserLs?.avatar,
+      nickname: authUserLs?.nickname,
     };
 
     await setAuthUser(userMapped);
     setAuthUserLs(userMapped);
 
-    if (typeof window !== "undefined") window.location.href = "/";
+    if (feedbackUrl && typeof window !== "undefined") return (window.location = feedbackUrl);
+
+    if (typeof window !== "undefined" && !isClosed) return (window.location.href = "/");
   };
 
   // Fetch lobby.
@@ -64,7 +74,7 @@ export const Lobby = (props) => {
         }
 
         // If the game is closed logout user.
-        if (currentLobby?.isClosed && !authUser?.isAdmin) return logout();
+        if (currentLobby?.isClosed && !authUser?.isAdmin) return logout(true, currentLobby);
 
         setAuthUserLs({ ...authUser, lobby: currentLobby });
         await setAuthUser({ ...authUser, lobby: currentLobby });
@@ -93,7 +103,7 @@ export const Lobby = (props) => {
         const usersMapped = users_.reduce((usersSum, user) => {
           if (user.hasExited === true) return usersSum;
 
-          return ({ ...usersSum, [user.id]: user });
+          return { ...usersSum, [user.id]: user };
         }, {});
 
         setUsers(usersMapped);
