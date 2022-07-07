@@ -150,9 +150,14 @@ export const ModalFinalStage = (props) => {
         <div className="main-container">
           <div className="left-container">
             <div className="card-container">
-              <UserCard winner={props.lobby.winners[props.lobby.winners.length - 1]} {...props} />
+              <UserCard
+                winner={props.lobby.winners[props.lobby.winners.length - 1]}
+                user={props.lobby.winners[props.lobby.winners.length - 1]}
+                {...props}
+              />
             </div>
           </div>
+
           <div className="right-container">
             {props.lobby.winners[props.lobby.winners.length - 1].award && (
               <div className="flex flex-col">
