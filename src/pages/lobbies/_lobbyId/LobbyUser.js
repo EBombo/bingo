@@ -125,7 +125,7 @@ export const LobbyUser = (props) => {
 
         setIsPageLoading(false);
 
-        /*
+        /**
         // Verifies if lobby can let user in.
         const verifyLobbyAvailability = async () => {
           setIsPageLoading(true);
@@ -147,7 +147,7 @@ export const LobbyUser = (props) => {
         };
 
         verifyLobbyAvailability();
-        */
+        **/
       });
 
     unSub.current = createPresence();
