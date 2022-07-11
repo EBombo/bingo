@@ -15,7 +15,6 @@ import { Image } from "../../../components/common/Image";
 import debounce from "lodash/debounce";
 import orderBy from "lodash/orderBy";
 import moment from "moment";
-import { reserveLobbySeat } from "../../../business";
 import { useSendError } from "../../../hooks";
 import { useFetch } from "../../../hooks/useFetch";
 
@@ -120,6 +119,13 @@ export const LobbyUser = (props) => {
         // Reference: https://firebase.google.com/docs/reference/node/firebase.database.OnDisconnect
         await userRef.current.onDisconnect().set(isOfflineForDatabase);
 
+        setIsPageLoading(true);
+
+        await userRef.current.set(isOnlineForDatabase);
+
+        setIsPageLoading(false);
+
+        /*
         // Verifies if lobby can let user in.
         const verifyLobbyAvailability = async () => {
           setIsPageLoading(true);
@@ -141,6 +147,7 @@ export const LobbyUser = (props) => {
         };
 
         verifyLobbyAvailability();
+        */
       });
 
     unSub.current = createPresence();
