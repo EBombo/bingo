@@ -94,6 +94,7 @@ export const UserCard = (props) => {
             <th>{props.lobby?.game?.letters?.o}</th>
           </tr>
         </thead>
+
         <tbody className="tbody" key={matrix}>
           {JSON.parse(props.winner?.card || props.lobby.users[userId]?.card || "[]").map((arrNums, row) => (
             <tr key={`key-${row}`}>
@@ -103,13 +104,13 @@ export const UserCard = (props) => {
                     <div className={`${props.lobby.board && props.lobby.board[num] && `active`}`}>{num}</div>
                   ) : isAuthUser ? (
                     <div
-                      className={`${matrix[row][col] && "active"} number`}
+                      className={`${matrix[row][col] ? "active" : ""} number`}
                       onClick={() => !props.disableSelect && selectNumber(row, col, num)}
                     >
                       {num}
                     </div>
                   ) : (
-                    <div className={`${matrix[row][col] && "active"} number`}>{num}</div>
+                    <div className={`${matrix[row][col] ? "active" : ""} number`}>{num}</div>
                   )}
                 </td>
               ))}

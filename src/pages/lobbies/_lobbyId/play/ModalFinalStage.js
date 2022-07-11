@@ -150,9 +150,14 @@ export const ModalFinalStage = (props) => {
         <div className="main-container">
           <div className="left-container">
             <div className="card-container">
-              <UserCard winner={props.lobby.winners[props.lobby.winners.length - 1]} {...props} />
+              <UserCard
+                winner={props.lobby.winners[props.lobby.winners.length - 1]}
+                user={props.lobby.winners[props.lobby.winners.length - 1]}
+                {...props}
+              />
             </div>
           </div>
+
           <div className="right-container">
             {props.lobby.winners[props.lobby.winners.length - 1].award && (
               <div className="flex flex-col">
@@ -184,7 +189,10 @@ export const ModalFinalStage = (props) => {
                 <ButtonAnt className="btn" color="default" onClick={() => newCards()}>
                   Continuar con cartillas nuevas
                 </ButtonAnt>
-                <ButtonAnt className="btn" color="default" onClick={() => newGame()}>
+                <ButtonAnt className="btn" color="default" onClick={() => {
+                  // TODO: Volver el valor de "myWinningCard" a un array vacio [para todos los usuarios].
+                  newGame();
+                }}>
                   Juego nuevo
                 </ButtonAnt>
                 <ButtonAnt className="btn" color="danger" onClick={() => endGame()}>

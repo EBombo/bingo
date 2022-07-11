@@ -186,7 +186,9 @@ export const UserLayout = (props) => {
             content={
               <div>
                 <div
-                  onClick={async () => {
+                  onClick={async (e) => {
+                    e.preventDefault();
+
                     if (authUser.isAdmin) {
                       return await props.logout();
                     }

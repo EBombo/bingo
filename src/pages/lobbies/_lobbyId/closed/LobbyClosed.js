@@ -138,7 +138,8 @@ export const LobbyClosed = (props) => {
           color="primary"
           margin="20px auto"
           width="80%"
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             props.logout();
           }}
         >

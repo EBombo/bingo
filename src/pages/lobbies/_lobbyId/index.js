@@ -9,6 +9,7 @@ import { useUser } from "../../../hooks";
 import { LobbyClosed } from "./closed/LobbyClosed";
 import { snapshotToArray } from "../../../utils";
 import { useMemo } from "react";
+import { timeoutPromise } from "../../../utils/promised";
 import UrlAssembler from "url-assembler";
 
 export const Lobby = (props) => {
@@ -22,6 +23,7 @@ export const Lobby = (props) => {
   const [lobby, setLobby] = useState(null);
   const [users, setUsers] = useState({});
   const [isLoading, setLoading] = useState(true);
+  const [isClose, setIsClose] = useState(false);
 
   const audioRef = useRef(null);
 
@@ -34,18 +36,17 @@ export const Lobby = (props) => {
     if (!authUser?.nickname && !authUser.isAdmin && typeof window !== "undefined") window.location.href = "/";
   }, [authUser]);
 
-  const logout = async (isClosed = false, _lobby = null) => {
-    let feedbackUrl = null;
+  const logout = async () => {
+    // Prevent multiple run.
+    if (isClose) return;
 
-    if (isClosed && _lobby)
-      feedbackUrl = UrlAssembler(bomboGamesDomain)
-        .template("/lobbies/:lobbyId/users/:userId")
-        .param("lobbyId", _lobby.id)
-        .param("userId", authUser.id)
-        .toString();
+    console.log("logout");
+    setIsClose(true);
+
+    const userId = firestore.collection("users").doc().id;
 
     const userMapped = {
-      id: firestore.collection("users").doc().id,
+      id: userId,
       email: authUserLs?.email,
       avatar: authUserLs?.avatar,
       nickname: authUserLs?.nickname,
@@ -54,9 +55,10 @@ export const Lobby = (props) => {
     await setAuthUser(userMapped);
     setAuthUserLs(userMapped);
 
-    if (feedbackUrl && typeof window !== "undefined") return (window.location = feedbackUrl);
-
-    if (typeof window !== "undefined" && !isClosed) return (window.location.href = "/");
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+      await timeoutPromise(5000);
+    }
   };
 
   // Fetch lobby.
@@ -70,11 +72,14 @@ export const Lobby = (props) => {
         // Lobby not found.
         if (!currentLobby) {
           props.showNotification("UPS", "No encontramos tu sala, intenta nuevamente", "warning");
-          logout();
+          await logout();
         }
 
         // If the game is closed logout user.
-        if (currentLobby?.isClosed && !authUser?.isAdmin) return logout(true, currentLobby);
+        if (currentLobby?.isClosed && !authUser?.isAdmin) {
+          await logout();
+          return;
+        }
 
         setAuthUserLs({ ...authUser, lobby: currentLobby });
         await setAuthUser({ ...authUser, lobby: currentLobby });
