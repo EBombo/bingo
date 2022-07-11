@@ -189,7 +189,10 @@ export const ModalFinalStage = (props) => {
                 <ButtonAnt className="btn" color="default" onClick={() => newCards()}>
                   Continuar con cartillas nuevas
                 </ButtonAnt>
-                <ButtonAnt className="btn" color="default" onClick={() => newGame()}>
+                <ButtonAnt className="btn" color="default" onClick={() => {
+                  // TODO: Volver el valor de "myWinningCard" a un array vacio [para todos los usuarios].
+                  newGame();
+                }}>
                   Juego nuevo
                 </ButtonAnt>
                 <ButtonAnt className="btn" color="danger" onClick={() => endGame()}>
