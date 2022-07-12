@@ -1,6 +1,6 @@
 import get from "lodash/get";
 import { useRouter } from "next/router";
-import { useCallback, useRef } from "reactn";
+import { useCallback } from "reactn";
 import { Switch } from "../components/form/SwitchLan";
 
 import en from "../../public/locales/en.json";
@@ -16,8 +16,6 @@ const TRANSLATIONS = {
 export const useTranslation = (path) => {
   const router = useRouter();
   const { locale, asPath } = router;
-
-  const inputRef = useRef(null);
 
   // Current languages.
   const locales = Object.keys(TRANSLATIONS);
