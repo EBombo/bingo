@@ -36,17 +36,23 @@ export const Lobby = (props) => {
     if (!authUser?.nickname && !authUser.isAdmin && typeof window !== "undefined") window.location.href = "/";
   }, [authUser]);
 
-  const logout = async () => {
-    // Prevent multiple run.
+  const logout = async (isClosed = false, _lobby = null) => {
+    //Prevent multiple runs
     if (isClose) return;
-
-    console.log("logout");
     setIsClose(true);
 
-    const userId = firestore.collection("users").doc().id;
+    let feedbackUrl;
+
+    if (isClosed && _lobby) {
+      feedbackUrl = UrlAssembler(bomboGamesDomain)
+        .template("/lobbies/:lobbyId/users/:userId")
+        .param("lobbyId", _lobby.id)
+        .param("userId", authUser.id)
+        .toString();
+    }
 
     const userMapped = {
-      id: userId,
+      id: firestore.collection("users").doc().id,
       email: authUserLs?.email,
       avatar: authUserLs?.avatar,
       nickname: authUserLs?.nickname,
@@ -56,7 +62,7 @@ export const Lobby = (props) => {
     setAuthUserLs(userMapped);
 
     if (typeof window !== "undefined") {
-      window.location.href = "/";
+      window.location.href = feedbackUrl ?? "/";
       await timeoutPromise(5000);
     }
   };
@@ -76,10 +82,7 @@ export const Lobby = (props) => {
         }
 
         // If the game is closed logout user.
-        if (currentLobby?.isClosed && !authUser?.isAdmin) {
-          await logout();
-          return;
-        }
+        if (currentLobby?.isClosed && !authUser?.isAdmin) return await logout(true, currentLobby);
 
         setAuthUserLs({ ...authUser, lobby: currentLobby });
         await setAuthUser({ ...authUser, lobby: currentLobby });
