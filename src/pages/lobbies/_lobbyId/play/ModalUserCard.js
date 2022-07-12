@@ -47,6 +47,42 @@ export const ModalUserCard = (props) => {
       updateAt: new Date(),
     });
 
+    const roundsRef = firestore.collection("lobbies").doc(props.lobby?.id).collection("rounds");
+
+    const newRoundId = roundsRef.doc().id;
+
+    const _lobby = props.lobby;
+
+    delete _lobby.settings;
+    delete _lobby.game;
+    delete _lobby.finalStage;
+    delete _lobby.bingo;
+    delete _lobby.createAt;
+    delete _lobby.startAt;
+
+    await roundsRef.doc(newRoundId).set(
+      {
+        ...props.lobby,
+        endGame: new Date(),
+        round: winners?.length,
+        id: newRoundId,
+      },
+      { merge: true }
+    );
+
+    const promiseUsers = Object.values(props.lobby.users).map(async (user) => {
+      await firestore
+        .collection("lobbies")
+        .doc(props.lobby?.id)
+        .collection("users")
+        .doc(user.id)
+        .update({
+          rounds: [...defaultTo(user.rounds, []), { myWinningCard: user.myWinningCard, card: user.card }],
+        });
+    });
+
+    await Promise.all(promiseUsers);
+
     props.setIsVisibleModalUserCard(false);
   };
 
