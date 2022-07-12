@@ -19,6 +19,7 @@ export const ModalFinalStage = (props) => {
       pattern: JSON.stringify(generateMatrix(true)),
       finalStage: false,
       updateAt: new Date(),
+      startGame: new Date(),
     });
 
     props.setIsVisibleModalFinal(false);
@@ -90,6 +91,7 @@ export const ModalFinalStage = (props) => {
       lastPlays: [],
       finalStage: false,
       updateAt: new Date(),
+      startGame: new Date(),
     });
 
     // Update users.
@@ -109,7 +111,7 @@ export const ModalFinalStage = (props) => {
     Object.values(props.lobby.users).reduce((usersSum, user) => {
       const card = getBingoCard();
       const newUser = { ...user, card: JSON.stringify(card) };
-      return { ...usersSum, [newUser.id]: newUser };
+      return { ...usersSum, [newUser.id]: newUser, myWinningCard: [] };
     }, {});
 
   const removeUsersCards = () =>
@@ -189,10 +191,7 @@ export const ModalFinalStage = (props) => {
                 <ButtonAnt className="btn" color="default" onClick={() => newCards()}>
                   Continuar con cartillas nuevas
                 </ButtonAnt>
-                <ButtonAnt className="btn" color="default" onClick={() => {
-                  // TODO: Volver el valor de "myWinningCard" a un array vacio [para todos los usuarios].
-                  newGame();
-                }}>
+                <ButtonAnt className="btn" color="default" onClick={() => newGame()}>
                   Juego nuevo
                 </ButtonAnt>
                 <ButtonAnt className="btn" color="danger" onClick={() => endGame()}>

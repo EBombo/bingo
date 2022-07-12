@@ -37,7 +37,7 @@ export const Lobby = (props) => {
   }, [authUser]);
 
   const logout = async (isClosed = false, _lobby = null) => {
-    //Prevent multiple runs
+    // Prevent multiple runs
     if (isClose) return;
     setIsClose(true);
 
