@@ -147,6 +147,7 @@ const Login = (props) => {
           card: JSON.stringify(userCard),
           lobbyId: lobby.id,
           lobby,
+          hasExited: false,
         };
 
         // Update metrics.
@@ -154,7 +155,6 @@ const Login = (props) => {
           countPlayers: firebase.firestore.FieldValue.increment(1),
         });
 
-        // TODO: Validate limit.
         // Register user in lobby.
         const promiseUser = firestore
           .collection("lobbies")
