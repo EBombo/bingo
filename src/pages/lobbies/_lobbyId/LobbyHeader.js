@@ -31,9 +31,7 @@ export const LobbyHeader = (props) => {
 
     const currentAudioToPlay = props.lobby.game?.audio?.audioUrl ?? audios[0]?.audioUrl;
 
-    const currentAudio = props.audioRef.current ?? new Audio(currentAudioToPlay);
-
-    props.audioRef.current = currentAudio;
+    props.audioRef.current = props.audioRef.current ?? new Audio(currentAudioToPlay);
     props.audioRef.current.play();
   }, []);
 
@@ -73,7 +71,13 @@ export const LobbyHeader = (props) => {
 
       // Save users in sub collection.
       const promisesUsers = Object.values(users).map(
-        async (user) => await firestore.collection("lobbies").doc(lobbyId).collection("users").doc(user.id).set(user)
+        async (user) =>
+          await firestore
+            .collection("lobbies")
+            .doc(lobbyId)
+            .collection("users")
+            .doc(user.id)
+            .set({ ...user, hasExited: false })
       );
 
       await Promise.all(promisesUsers);
