@@ -130,7 +130,6 @@ export const LobbyUser = (props) => {
         await userRef.current.set(isOnlineForDatabase);
 
         setIsPageLoading(false);
-
       });
 
     unSub.current = createPresence();
