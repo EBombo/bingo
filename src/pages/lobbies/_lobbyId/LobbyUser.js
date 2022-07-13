@@ -121,33 +121,15 @@ export const LobbyUser = (props) => {
 
         setIsPageLoading(true);
 
+        if (props.lobby.countPlayers >= props.lobby.limitByPlan) {
+          props.showNotification("La sala llego a su limite permitido por su PLAN.");
+          await props.logout();
+          return;
+        }
+
         await userRef.current.set(isOnlineForDatabase);
 
         setIsPageLoading(false);
-
-        /**
-        // Verifies if lobby can let user in.
-        const verifyLobbyAvailability = async () => {
-          setIsPageLoading(true);
-
-          try {
-            await reserveLobbySeat(Fetch, props.lobby.id, authUser.id, null);
-
-            await userRef.current.set(isOnlineForDatabase);
-          } catch (error) {
-            console.error(error);
-            await sendError(error, "verifyLobbyAvailability");
-
-            props.showNotification("No es posible unirse a lobby.", error?.message);
-
-            await props.logout();
-          }
-
-          setIsPageLoading(false);
-        };
-
-        verifyLobbyAvailability();
-        **/
       });
 
     unSub.current = createPresence();

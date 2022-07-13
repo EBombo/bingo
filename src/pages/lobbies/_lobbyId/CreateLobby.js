@@ -13,12 +13,14 @@ import { Collapse } from "antd";
 
 const { Panel } = Collapse;
 
-export const CreateLobby = (props) => {
-  const { sendError } = useSendError();
-  const { Fetch } = useFetch();
+const defaultLimitByPlan = 10;
 
+export const CreateLobby = (props) => {
   const router = useRouter();
   const { userId, tokenId, gameId } = router.query;
+
+  const { Fetch } = useFetch();
+  const { sendError } = useSendError();
 
   const [, setLSAuthUser] = useUser();
 
@@ -109,6 +111,23 @@ export const CreateLobby = (props) => {
     fetchUserByToken();
   }, [tokenId, gameId]);
 
+  const fetchLimitByPlan = async (companyId) => {
+    if (!companyId) return defaultLimitByPlan;
+
+    try {
+      const { response, error } = await Fetch(`${config.serverUrlBomboGames}/companies/${companyId}`);
+
+      if (error) {
+        throw Error(error);
+      }
+
+      return +response.limitUsersBySubscription ?? defaultLimitByPlan;
+    } catch (error) {
+      console.error(error);
+    }
+    return defaultLimitByPlan;
+  };
+
   const createLobby = async (typeOfGame) => {
     setIsLoadingSave(true);
     try {
@@ -117,6 +136,9 @@ export const CreateLobby = (props) => {
       // References.
       const lobbiesRef = firestore.collection("lobbies");
       const lobbiesBomboGamesRef = firestoreBomboGames.collection("lobbies");
+
+      /** Fetch limit by plan. **/
+      const limitByPlan = await fetchLimitByPlan(game?.user?.companyId);
 
       // New lobby id.
       const lobbyId = lobbiesRef.doc().id;
@@ -127,6 +149,7 @@ export const CreateLobby = (props) => {
         game,
         typeOfGame,
         id: lobbyId,
+        limitByPlan,
         updateAt: new Date(),
         createAt: new Date(),
         isLocked: false,
