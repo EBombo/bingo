@@ -1,5 +1,5 @@
 import React, { useEffect, useGlobal, useMemo, useState } from "reactn";
-import { config, firestore } from "../../firebase";
+import { config, firebase, firestore } from "../../firebase";
 import { NicknameStep } from "./NicknameStep";
 import { snapshotToArray } from "../../utils";
 import { EmailStep } from "./EmailStep";
@@ -10,7 +10,6 @@ import { PinStep } from "./PinStep";
 import { avatars } from "../../components/common/DataList";
 import { Anchor } from "../../components/form";
 import { getBingoCard } from "../../business";
-import { firebase } from "../../firebase/config";
 import { saveMembers } from "../../constants/saveMembers";
 import { fetchUserByEmail } from "./fetchUserByEmail";
 import { Tooltip } from "antd";
@@ -155,6 +154,11 @@ const Login = (props) => {
           countPlayers: firebase.firestore.FieldValue.increment(1),
         });
 
+        // Update metrics for lobby.
+        const promiseLobby = firestore.doc(`lobbies/${lobby?.id}`).update({
+          countPlayers: firebase.firestore.FieldValue.increment(1),
+        });
+
         // Register user in lobby.
         const promiseUser = firestore
           .collection("lobbies")
@@ -166,7 +170,7 @@ const Login = (props) => {
         // Register user as a member in company.
         const promiseMember = saveMembers(authUser.lobby, [newUser]);
 
-        await Promise.all([promiseMetric, promiseMember]);
+        await Promise.all([promiseMetric, promiseUser, promiseMember, promiseLobby]);
 
         await setAuthUser(newUser);
         setAuthUserLs(newUser);
