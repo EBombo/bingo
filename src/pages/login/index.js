@@ -251,6 +251,8 @@ const Login = (props) => {
         <SwitchTranslation />
       </div>
 
+      {isLoadingLobby ? spinLoader() : null}
+
       <div className="main-container">
         {!authUser?.lobby && (
           <>
