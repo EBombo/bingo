@@ -55,5 +55,9 @@
     "user-not-exist": "Este usuario no existe",
     "chat": "CHAT DEL BINGO",
     "participants": "Participantes"
+  },
+  "user-layout":{
+    "this-game-is-blocked": "Este juego esta bloqueado",
+    "exit": "Salir"
   }
 }
