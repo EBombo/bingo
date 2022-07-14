@@ -12,6 +12,7 @@ import { AdminPanel } from "./AdminPanel";
 import { UserPanel } from "./UserPanel";
 import { ModalFinalStage } from "./ModalFinalStage";
 import { ModalUserCard } from "./ModalUserCard";
+import { useTranslation } from "../../../../hooks";
 
 const TABS = {
   BINGO: { value: "bingo" },
@@ -19,6 +20,8 @@ const TABS = {
 };
 
 export const LobbyInPlay = (props) => {
+  const { t } = useTranslation("lobby-play");
+
   const [authUser] = useGlobal("user");
   const [tabletTab, setTabletTab] = useState("bingo");
 
@@ -67,7 +70,7 @@ export const LobbyInPlay = (props) => {
     const _users = Object.values(props.lobby.users);
     const bingoUser = _users.find((user) => user.id === authUser.id);
 
-    if (!bingoUser) return props.showNotification("Ups", "Este usuario no existe");
+    if (!bingoUser) return props.showNotification("Ups", t("user-not-exist"));
 
     // Lobby Ref.
     const lobbyRef = firestore.doc(`lobbies/${props.lobby.id}`);
@@ -148,7 +151,7 @@ export const LobbyInPlay = (props) => {
 
           {toggleChat && (
             <div className="h-[100%] min-w-[300px]">
-              <Chat title={"CHAT DEL BINGO"} />
+              <Chat title={t("chat")} />
             </div>
           )}
         </Desktop>
@@ -166,7 +169,7 @@ export const LobbyInPlay = (props) => {
                 className={`tab ${tabletTab === TABS.USERS.value && "active"}`}
                 onClick={() => setTabletTab(TABS.USERS.value)}
               >
-                Participantes
+                {t("participants")}
               </div>
             </div>
           )}

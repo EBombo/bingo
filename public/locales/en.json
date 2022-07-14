@@ -52,5 +52,10 @@
     "enter-to": "Enter to",
     "game-pin":"Game pin",
     "start": "Start"
+  },
+  "lobby-play": {
+    "user-not-exist": "This user does not exist",
+    "chat": "BINGO CHAT",
+    "participants": "Participants"
   }
 }

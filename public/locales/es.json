@@ -50,5 +50,10 @@
     "enter-to": "Entra a",
     "game-pin":"Pin del juego",
     "start": "Empezar"
+  },
+  "lobby-play": {
+    "user-not-exist": "Este usuario no existe",
+    "chat": "CHAT DEL BINGO",
+    "participants": "Participantes"
   }
 }
