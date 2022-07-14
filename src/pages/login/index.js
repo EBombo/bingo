@@ -13,18 +13,15 @@ import { getBingoCard } from "../../business";
 import { saveMembers } from "../../constants/saveMembers";
 import { fetchUserByEmail } from "./fetchUserByEmail";
 import { Tooltip } from "antd";
-import { useFetch } from "../../hooks/useFetch";
 import { spinLoader } from "../../components/common/loader";
 
 const Login = (props) => {
   const router = useRouter();
   const { pin } = router.query;
 
-  const { Fetch } = useFetch();
-
   const { sendError } = useSendError();
 
-  const { t, SwitchTranslation } = useTranslation("login");
+  const { t, SwitchTranslation, locale } = useTranslation("login");
 
   const [, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
@@ -260,7 +257,7 @@ const Login = (props) => {
             <PinStep isLoading={isLoading} setIsLoading={setIsLoading} fetchLobby={fetchLobby} {...props} />
 
             {authUser?.email && authUser?.nickname && (
-              <div className="back">
+              <div className="back" key={locale}>
                 <Tooltip title={`email: ${authUser.email} nickname: ${authUser.nickname}`} placement="bottom">
                   <Anchor
                     underlined
