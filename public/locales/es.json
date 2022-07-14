@@ -4,7 +4,8 @@
     "game-closed": "El juego está cerrado",
     "cant-find-room": "No encontramos tu sala, intenta nuevamente",
     "something-went-wrong": "Algo salio mal, intentalo nuevamente",
-    "link-copied": "Link copiado!"
+    "link-copied": "Link copiado!",
+    "enter-to": "Entra a"
   },
   "login": {
     "game-pin": "Pin del juego",
