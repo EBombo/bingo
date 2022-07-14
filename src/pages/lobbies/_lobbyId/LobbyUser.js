@@ -15,8 +15,7 @@ import { Image } from "../../../components/common/Image";
 import debounce from "lodash/debounce";
 import orderBy from "lodash/orderBy";
 import moment from "moment";
-import { useSendError } from "../../../hooks";
-import { useFetch } from "../../../hooks/useFetch";
+import { useTranslation } from "../../../hooks";
 
 const userListSizeRatio = 100;
 
@@ -26,8 +25,7 @@ export const LobbyUser = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
 
-  const { sendError } = useSendError();
-  const { Fetch } = useFetch();
+  const { t: tCommon } = useTranslation("common");
 
   const [authUser] = useGlobal("user");
 
@@ -122,7 +120,7 @@ export const LobbyUser = (props) => {
         setIsPageLoading(true);
 
         if (props.lobby.countPlayers >= props.lobby.limitByPlan) {
-          props.showNotification("La sala llego a su limite permitido por su PLAN.");
+          props.showNotification(tCommon("limit-by-plan"));
           await props.logout();
           return;
         }

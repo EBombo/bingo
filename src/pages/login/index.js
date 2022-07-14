@@ -22,6 +22,7 @@ const Login = (props) => {
   const { sendError } = useSendError();
 
   const { t, SwitchTranslation, locale } = useTranslation("login");
+  const { t: tCommon } = useTranslation("common");
 
   const [, setAuthUserLs] = useUser();
   const [authUser, setAuthUser] = useGlobal("user");
@@ -40,11 +41,11 @@ const Login = (props) => {
       // Fetch lobby.
       const lobbyRef = await firestore.collection("lobbies").where("pin", "==", pin.toString()).limit(1).get();
 
-      if (lobbyRef.empty) throw Error("No encontramos tu sala, intenta nuevamente");
+      if (lobbyRef.empty) throw Error(tCommon("cant-find-room"));
 
       const currentLobby = snapshotToArray(lobbyRef)[0];
 
-      if (currentLobby?.isLocked) throw Error("Este juego esta cerrado");
+      if (currentLobby?.isLocked) throw Error(tCommon("game-closed"));
 
       if (currentLobby?.isClosed) {
         await setAuthUser({
@@ -83,7 +84,7 @@ const Login = (props) => {
         const lobby = lobbyRef.data();
 
         if (lobby?.isClosed) {
-          props.showNotification("UPS", "El juego esta cerrado");
+          props.showNotification("UPS", tCommon("game-closed"));
 
           await setAuthUser({
             id: firestore.collection("users").doc().id,
@@ -103,7 +104,7 @@ const Login = (props) => {
 
         /** Game is full. **/
         if (lobby?.countPlayers >= lobby?.limitByPlan) {
-          props.showNotification("La sala llego a su limite permitido por su PLAN.");
+          props.showNotification(tCommon("limit-by-plan"));
 
           await setAuthUser({
             id: firestore.collection("users").doc().id,
@@ -178,7 +179,7 @@ const Login = (props) => {
       } catch (error) {
         console.error(error);
         sendError(error, "initialize");
-        props.showNotification("No es posible unirse a lobby.", error?.message);
+        props.showNotification(tCommon("something-went-wrong"), error?.message);
 
         return setAuthUser({
           id: authUser.id || firestore.collection("users").doc().id,

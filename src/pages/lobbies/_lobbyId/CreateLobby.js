@@ -22,6 +22,7 @@ export const CreateLobby = (props) => {
   const { Fetch } = useFetch();
   const { sendError } = useSendError();
   const { t } = useTranslation("create-lobby");
+  const { t: tCommon } = useTranslation("common");
 
   const [, setLSAuthUser] = useUser();
 
@@ -105,7 +106,7 @@ export const CreateLobby = (props) => {
         setIsLoading(false);
       } catch (error) {
         console.error(error);
-        props.showNotification("ERROR", t("something-went-wrong"));
+        props.showNotification("ERROR", tCommon("something-went-wrong"));
       }
     };
 
@@ -183,7 +184,7 @@ export const CreateLobby = (props) => {
     } catch (error) {
       console.error(error);
       await sendError(error, "createLobby");
-      props.showNotification("ERROR", t("something-went-wrong"));
+      props.showNotification("ERROR", tCommon("something-went-wrong"));
     }
 
     setIsLoadingSave(false);
