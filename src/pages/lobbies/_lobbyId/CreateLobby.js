@@ -6,7 +6,7 @@ import defaultTo from "lodash/defaultTo";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { ButtonAnt, Input, Select, Switch } from "../../../components/form";
-import { useSendError, useUser } from "../../../hooks";
+import { useSendError, useTranslation, useUser } from "../../../hooks";
 import { Image } from "../../../components/common/Image";
 import { mediaQuery } from "../../../constants";
 import { Collapse } from "antd";
@@ -21,6 +21,7 @@ export const CreateLobby = (props) => {
 
   const { Fetch } = useFetch();
   const { sendError } = useSendError();
+  const { t } = useTranslation("create-lobby");
 
   const [, setLSAuthUser] = useUser();
 
@@ -104,7 +105,7 @@ export const CreateLobby = (props) => {
         setIsLoading(false);
       } catch (error) {
         console.error(error);
-        props.showNotification("ERROR", "Algo salio mal, intentalo nuevamente");
+        props.showNotification("ERROR", t("something-went-wrong"));
       }
     };
 
@@ -182,7 +183,7 @@ export const CreateLobby = (props) => {
     } catch (error) {
       console.error(error);
       await sendError(error, "createLobby");
-      props.showNotification("ERROR", "Algo salio mal al crear el lobby, intetalo nuevamente.");
+      props.showNotification("ERROR", t("something-went-wrong"));
     }
 
     setIsLoadingSave(false);
@@ -210,8 +211,8 @@ export const CreateLobby = (props) => {
         <div className="title">{game.name}</div>
         <div className="container-game">
           <div className="item">
-            <div>Jugadores vs Jugadores</div>
-            <div>1:1 dispositivos</div>
+            <div>{t("players-vs-players")}</div>
+            <div>{t("1-1-devices")}</div>
             <ButtonAnt
               className="btn-play"
               color="success"
@@ -220,48 +221,49 @@ export const CreateLobby = (props) => {
               disabled={isLoadingSave}
               onClick={() => createLobby("individual")}
             >
-              Jugar
+              {t("play")}
             </ButtonAnt>
           </div>
+
           <div className="item">
-            <div>Equipos vs Equipos</div>
-            <div>1 dispositivo</div>
+            <div>{t("teams-vs-teams")}</div>
+            <div>{t("1-device")}</div>
             <ButtonAnt
               color="primary"
               margin="auto"
               disabled={isLoadingSave || true}
               onClick={() => createLobby("team")}
             >
-              Modo equipo
+              {t("team-mode")}
             </ButtonAnt>
           </div>
         </div>
         <Collapse defaultActiveKey={["1"]} accordion>
-          <Panel header="Opciones del juego" key="1">
+          <Panel header={t("game-options")} key="1">
             <div className="options">
-              <div className="title">Recomendado</div>
+              <div className="title">{t("recommended")}</div>
 
               <div className="option">
                 <div>
-                  <div className="title-opt">Identificador de jugador</div>
-                  <span>Conoce el nombre de la persona atrás del nickname</span>
+                  <div className="title-opt">{t("player-identifier")}</div>
+                  <span>{t("know-name")}</span>
                 </div>
                 <Switch defaultChecked={userIdentity} onChange={() => setUserIdentity(!userIdentity)} />
               </div>
 
-              <div className="title">General</div>
+              <div className="title">{t("general")}</div>
 
               <div className="option">
                 <div>
-                  <div className="title-opt">Mostrar tablero principal y bolas en dispositivos de jug. </div>
-                  <span>Para videoconferencias y mejorar accesibilidad</span>
+                  <div className="title-opt">{t("show-main-board-and-ball")}</div>
+                  <span>{t("for-video-conf")}</span>
                 </div>
                 <Switch defaultChecked={showBoardToUser} onChange={() => setShowBoardToUser(!showBoardToUser)} />
               </div>
 
               <div className="option with-select">
                 <div>
-                  <div className="title-opt">Música en el Lobby</div>
+                  <div className="title-opt">{t("music-lobby")}</div>
                 </div>
                 <Select
                   defaultValue={game?.audio?.id ?? audios[0]?.id}
@@ -277,8 +279,8 @@ export const CreateLobby = (props) => {
 
               <div className="option">
                 <div>
-                  <div className="title-opt">El jug. tiene que llenar su cartilla manualmente</div>
-                  <span>Los jugadores tienen que estar atentos al juego</span>
+                  <div className="title-opt">{t("fill-manually")}</div>
+                  <span>{t("players-pay-attention")}</span>
                 </div>
                 <Switch defaultChecked={!cardAutofill} onChange={() => setCardAutofill(!cardAutofill)} />
               </div>
@@ -303,7 +305,7 @@ export const CreateLobby = (props) => {
 
               <div className="option">
                 <div>
-                  <div className="title-opt">Premio</div>
+                  <div className="title-opt">{t("reward")}</div>
                 </div>
                 <Switch defaultChecked={showAwards} onChange={() => setShowAwards(!showAwards)} />
               </div>
@@ -321,7 +323,7 @@ export const CreateLobby = (props) => {
                           newAwards[index].name = e.target.value;
                           setAwards([...newAwards]);
                         }}
-                        placeholder={`Premio ${index + 1}`}
+                        placeholder={`${t("reward")} ${index + 1}`}
                         className={"input-award"}
                         key={`award-${index}-${award.order}`}
                       />
@@ -358,7 +360,7 @@ export const CreateLobby = (props) => {
                       ]);
                     }}
                   >
-                    Agregar
+                    {t("add")}
                   </ButtonAnt>
                 </div>
               )}

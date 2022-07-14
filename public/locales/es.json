@@ -14,5 +14,26 @@
     "cant-find-room": "No encontramos tu sala, intenta nuevamente",
     "back": "Volver",
     "nickname": "Apodo"
+  },
+  "create-lobby": {
+    "something-went-wrong": "Algo salio mal, intentalo nuevamente",
+    "play": "Jugar",
+    "players-vs-players": "Jugadores vs Jugadores",
+    "1-1-devices": "1:1 dispositivos",
+    "teams-vs-teams": "Equipos vs Equipos",
+    "1-device": "1 dispositivo",
+    "team-mode": "Modo equipo",
+    "recommended": "Recomendado",
+    "game-options": "Opciones del juego",
+    "player-identifier": "Identificador de jugador",
+    "know-name": "Conoce el nombre de la persona detrás del nickname",
+    "general": "General",
+    "show-main-board-and-ball": "Mostrar tablero principal y bolas en dispositivos de jug. ",
+    "for-video-conf": "Para videoconferencias y mejorar accesibilidad",
+    "music-lobby": "Música en el Lobby",
+    "fill-manually": "El jug. tiene que llenar su cartilla manualmente",
+    "players-pay-attention": "Los jugadores tienen que estar atentos al juego",
+    "reward": "Premio",
+    "add": "Agregar"
   }
 }
