@@ -3,7 +3,8 @@
     "limit-by-plan": "La sala llegó a su límite permitido por su PLAN.",
     "game-closed": "El juego está cerrado",
     "cant-find-room": "No encontramos tu sala, intenta nuevamente",
-    "something-went-wrong": "Algo salio mal, intentalo nuevamente"
+    "something-went-wrong": "Algo salio mal, intentalo nuevamente",
+    "link-copied": "Link copiado!"
   },
   "login": {
     "game-pin": "Pin del juego",
@@ -38,5 +39,15 @@
     "players-pay-attention": "Los jugadores tienen que estar atentos al juego",
     "reward": "Premio",
     "add": "Agregar"
+  },
+  "lobby-user": {
+    "exit": "Salir",
+    "joined-game": "Entró correctamente al juego.",
+    "will-start-game": "El administrador iniciará el juego pronto",
+    "you": "(tú)",
+    "this-game-is-blocked": "Este juego esta bloqueado",
+    "enter-to": "Entra a",
+    "game-pin":"Pin del juego",
+    "start": "Empezar"
   }
 }

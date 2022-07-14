@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Popover, Slider, Tooltip } from "antd";
 import { getBingoCard } from "../../../business";
 import { Image } from "../../../components/common/Image";
-import { useSendError } from "../../../hooks";
+import { useSendError, useTranslation } from "../../../hooks";
 import { saveMembers } from "../../../constants/saveMembers";
 import { useRouter } from "next/router";
 
@@ -15,6 +15,9 @@ export const LobbyHeader = (props) => {
 
   const router = useRouter();
   const { lobbyId } = router.query;
+
+  const { t } = useTranslation("lobby-user");
+  const { t: tCommon } = useTranslation("coomon");
 
   const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
@@ -101,14 +104,14 @@ export const LobbyHeader = (props) => {
             className="label"
             onClick={() => {
               navigator.clipboard.writeText(`${hostName}/?pin=${props.lobby?.pin}`);
-              props.showNotification("OK", "Link copiado!", "success");
+              props.showNotification("OK", tCommon("link-copied"), "success");
             }}
           >
             {props.lobby.isLocked ? (
-              "Este juego esta bloqueado"
+              t("this-game-is-blocked")
             ) : (
               <>
-                Entra a{" "}
+                {t("enter-to")}{" "}
                 <span className="font-black">
                   ebombo.io{" "}
                   <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" />{" "}
@@ -118,7 +121,7 @@ export const LobbyHeader = (props) => {
           </div>
         </Tooltip>
 
-        <div className="pin-label">Pin del juego:</div>
+        <div className="pin-label">{t("game-pin")}:</div>
 
         <div className="pin">
           {props.lobby.isLocked ? (
@@ -263,7 +266,7 @@ export const LobbyHeader = (props) => {
               await updateLobby(false, new Date());
             }}
           >
-            Empezar
+            {t("start")}
           </ButtonAnt>
         </div>
       )}

@@ -25,6 +25,7 @@ export const LobbyUser = (props) => {
   const router = useRouter();
   const { lobbyId } = router.query;
 
+  const { t } = useTranslation("lobby-user");
   const { t: tCommon } = useTranslation("common");
 
   const [authUser] = useGlobal("user");
@@ -170,7 +171,7 @@ export const LobbyUser = (props) => {
               }}
               style={{ cursor: "pointer" }}
             >
-              Salir
+              {t("exit")}
             </div>
           </div>
         }
@@ -197,18 +198,16 @@ export const LobbyUser = (props) => {
       <div className="container-users">
         {!authUser?.isAdmin && (
           <div className="notification-joint-user font-bold text-white bg-greenDark text-base sm:text-lg py-2 px-4 flex justify-between md:justify-center items-center min-w-[140px] border-b-[1px] border-primary">
-            <span>Entró correctamente al juego.</span>
+            <span>{t("joined-game")}</span>
             <div className="inline-block bg-primary p-2 m-2 rounded shadow-xl text-center">
-              {authUser.nickname} (Tú)
+              {authUser.nickname} {t("you")}
             </div>
           </div>
         )}
 
         <Tablet>
           {!authUser?.isAdmin && (
-            <div className="font-bold text-white text-lg text-left my-4 px-4">
-              El administrador iniciará el juego pronto
-            </div>
+            <div className="font-bold text-white text-lg text-left my-4 px-4">{t("will-start-game")}</div>
           )}
           <div className="user-count bg-primaryDark text-white font-bold rounded m-4 py-2 px-4 self-end w-min">
             <span className="whitespace-nowrap">
