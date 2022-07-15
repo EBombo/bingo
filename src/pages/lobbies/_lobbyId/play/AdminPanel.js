@@ -305,7 +305,13 @@ export const AdminPanel = (props) => {
                   width="90%"
                   margin="0 auto"
                   onClick={() => callNumber()}
-                  disabled={loading || isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
+                  disabled={
+                    loading ||
+                    isLoadingCalledNumber ||
+                    isAutomatic ||
+                    props.lobby.bingo ||
+                    Object.values(props.lobby.board ?? {}).every((num) => num)
+                  }
                   loading={isLoadingCalledNumber}
                 >
                   {t("call-ball")}
