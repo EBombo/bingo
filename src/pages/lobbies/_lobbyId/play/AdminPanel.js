@@ -54,7 +54,8 @@ export const AdminPanel = (props) => {
   };
 
   const callNumber = async () => {
-    if (!props.lobby || !props.lobby.board) return;
+    if (!props.lobby) return;
+    if (!props.lobby.board) return;
 
     setIsLoadingCalledNumber(true);
 

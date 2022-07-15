@@ -32,7 +32,6 @@ export const CardPattern = (props) => {
 
     await firestore.doc(`lobbies/${props.lobby.id}`).update({
       pattern: JSON.stringify(pattern),
-      startGame: props.continueGame ? new Date() : props.lobby.startGame,
       updateAt: new Date(),
     });
 
