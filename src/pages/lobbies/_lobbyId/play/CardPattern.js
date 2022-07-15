@@ -5,11 +5,15 @@ import { ButtonAnt } from "../../../../components/form";
 import { mediaQuery } from "../../../../constants";
 import { firestore } from "../../../../firebase";
 import { generateMatrix } from "../../../../business";
+import { useTranslation } from "../../../../hooks";
 
 export const CardPattern = (props) => {
+  const { t } = useTranslation("lobby-play");
+
+  const [authUser] = useGlobal("user");
+
   const [isLoading, setIsLoading] = useState(false);
   const [pattern, setPattern] = useState(generateMatrix());
-  const [authUser] = useGlobal("user");
 
   useEffect(() => {
     if (props.apagon) return setPattern(generateMatrix(true));
@@ -83,7 +87,7 @@ export const CardPattern = (props) => {
               props.setIsVisibleModalPattern(true);
             }}
           >
-            Apágon
+            {t("blackout")}
           </ButtonAnt>
           <ButtonAnt
             size="big"
@@ -93,14 +97,14 @@ export const CardPattern = (props) => {
               props.setIsVisibleModalPattern(true);
             }}
           >
-            Editar
+            {t("edit")}
           </ButtonAnt>
         </div>
       )}
       {props.isEdit && !props.hiddenOptions && (
         <div className="btns-container">
           <ButtonAnt color="success" loading={isLoading} onClick={() => savePattern()}>
-            Guardar
+            {t("save")}
           </ButtonAnt>
           <ButtonAnt
             color="default"
@@ -110,7 +114,7 @@ export const CardPattern = (props) => {
               props.cancelAction();
             }}
           >
-            Cancelar
+            {t("cancel")}
           </ButtonAnt>
         </div>
       )}

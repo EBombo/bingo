@@ -7,8 +7,11 @@ import { mediaQuery } from "../../../../constants";
 import { config } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { Ribbon } from "./Ribbon";
+import { useTranslation } from "../../../../hooks";
 
 export const ModalWinner = (props) => {
+  const { t } = useTranslation("lobby-play");
+
   const [authUser] = useGlobal("user");
 
   return (
@@ -35,7 +38,7 @@ export const ModalWinner = (props) => {
                 props.setIsVisibleModalWinner(false);
               }}
             >
-              Ver cartilla
+              {t("see-primer")}
             </ButtonAnt>
           </div>
         ) : (
@@ -48,7 +51,7 @@ export const ModalWinner = (props) => {
               margin="auto"
             />
             <div className="text-['Lato'] font-bold text-[18px] leading-[22px] text-center text-white">
-              Esperando que el administrador continúe el juego...
+              {t("wait-admin")} {t("continue-game-")}...
             </div>
           </div>
         )}

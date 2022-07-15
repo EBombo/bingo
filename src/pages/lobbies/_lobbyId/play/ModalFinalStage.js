@@ -9,8 +9,11 @@ import { Image } from "../../../../components/common/Image";
 import { createBoard, generateMatrix, getBingoCard } from "../../../../business";
 import { ModalPattern } from "./ModalPattern";
 import { Ribbon } from "./Ribbon";
+import { useTranslation } from "../../../../hooks";
 
 export const ModalFinalStage = (props) => {
+  const { t } = useTranslation("lobby-play");
+
   const [authUser] = useGlobal("user");
   const [isVisibleModalPattern, setIsVisibleModalPattern] = useState(false);
 
@@ -143,7 +146,7 @@ export const ModalFinalStage = (props) => {
       )}
       <Content>
         <Ribbon
-          title={`¡Ganador ${props.lobby.winners[props.lobby.winners.length - 1].nickname}!`}
+          title={`¡${t("Winner")} ${props.lobby.winners[props.lobby.winners.length - 1].nickname}!`}
           overflowDesktopWidth={80}
           overflowWidth={40}
           fontSize={"35px"}
@@ -163,7 +166,7 @@ export const ModalFinalStage = (props) => {
           <div className="right-container">
             {props.lobby.winners[props.lobby.winners.length - 1].award && (
               <div className="flex flex-col">
-                <div className="text-['Lato'] text-[17px] text-center leading-[20px] text-white">Premio</div>
+                <div className="text-['Lato'] text-[17px] text-center leading-[20px] text-white">{t("reward")}</div>
                 <div className="text-['Lato'] text-[17px] text-center font-bold leading-[20px] text-white my-2">
                   {props.lobby.winners[props.lobby.winners.length - 1].award.name}
                 </div>
@@ -183,25 +186,25 @@ export const ModalFinalStage = (props) => {
             {authUser.isAdmin ? (
               <AdminContent>
                 <ButtonAnt className="btn" color="default" onClick={() => setIsVisibleModalPattern(true)}>
-                  Continuar juego
+                  {t("continue-game")}
                 </ButtonAnt>
                 <ButtonAnt className="btn" color="default" onClick={() => blackout()}>
-                  Apagón
+                  {t("blackout")}
                 </ButtonAnt>
                 <ButtonAnt className="btn" color="default" onClick={() => newCards()}>
-                  Continuar con cartillas nuevas
+                  {t("continue-new-card")}
                 </ButtonAnt>
                 <ButtonAnt className="btn" color="default" onClick={() => newGame()}>
-                  Juego nuevo
+                  {t("new-game")}
                 </ButtonAnt>
                 <ButtonAnt className="btn" color="danger" onClick={() => endGame()}>
-                  Finalizar juego
+                  {t("end-game")}
                 </ButtonAnt>
               </AdminContent>
             ) : (
               <UserContent>
                 <div className="text-['Lato'] font-bold text-[18px] leading-[22px] text-center text-white w-full">
-                  Esperando que el administrador <br /> continue el juego...
+                  {t("wait-admin")} <br /> {t("continue-game-")}
                 </div>
                 <Image
                   src={`${config.storageUrl}/resources/spinner.gif`}

@@ -18,8 +18,11 @@ import { ModalPattern } from "./ModalPattern";
 import { darkTheme } from "../../../../theme";
 import { useMemo } from "react";
 import { UsersTabs } from "./UsersTabs";
+import { useTranslation } from "../../../../hooks";
 
 export const AdminPanel = (props) => {
+  const { t } = useTranslation("lobby-play");
+
   const [reproductionSpeed] = useGlobal("reproductionSpeed");
   const [animationSpeed] = useGlobal("animationSpeed");
   const [isAutomatic, setIsAutomatic] = useGlobal("isAutomatic");
@@ -110,14 +113,14 @@ export const AdminPanel = (props) => {
       visible={isVisibleModalConfirm}
     >
       <ContentModal>
-        <div className="title">¿Seguro que quieres reiniciar el tablero?</div>
-        <div className="description">Si lo reinicias, no podrás deshacerlo.</div>
+        <div className="title">{t("are-you-sure-restart")}</div>
+        <div className="description">{t("if-you-restart")}</div>
         <div className="btns-container">
           <ButtonAnt color="default" disabled={loading} onClick={() => setIsVisibleModalConfirm(false)}>
-            Cancelar
+            {t("cancel")}
           </ButtonAnt>
           <ButtonAnt color="danger" loading={loading} onClick={() => startGame(setIsVisibleModalConfirm)}>
-            Reiniciar
+            {t("restart")}
           </ButtonAnt>
         </div>
       </ContentModal>
@@ -155,13 +158,14 @@ export const AdminPanel = (props) => {
     <div className="grid grid-rows-[min-content_auto] bg-lobby-pattern w-full">
       {modalConfirm()}
       {isVisibleModalPattern && modalPattern()}
+
       <Desktop>
         <div className="grid grid-cols-[250px_auto] gap-8 border-b-[10px] border-primary overflow-auto px-2 pt-8 pb-2">
           <div>
             <div className="bg-secondary shadow-[0px_4px_8px_rgba(0, 0, 0, 0.25)] p-4 rounded-[4px]">
               <CardPattern
                 key={props.lobby.pattern}
-                caption={"Patrón que se debe llenar"}
+                caption={t("pattern-to-fill")}
                 apagon={apagon}
                 setApagon={setApagon}
                 isVisibleModalPattern={isVisibleModalPattern}
@@ -178,7 +182,7 @@ export const AdminPanel = (props) => {
               disabled={isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
               onClick={() => setIsVisibleModalConfirm(true)}
             >
-              Reiniciar tablero
+              {t("reset-board")}
             </ButtonAnt>
           </div>
           <div className="">
@@ -204,7 +208,7 @@ export const AdminPanel = (props) => {
                     }
                     loading={isLoadingCalledNumber}
                   >
-                    Llamar bolilla
+                    {t("call-ball")}
                   </ButtonAnt>
                 ) : (
                   <ButtonAnt
@@ -216,7 +220,7 @@ export const AdminPanel = (props) => {
                     onClick={() => startGame()}
                     disabled={loading}
                   >
-                    Iniciar Juego
+                    {t("start-game")}
                   </ButtonAnt>
                 )}
 
@@ -232,7 +236,7 @@ export const AdminPanel = (props) => {
                   disabled={!props.lobby.startGame || isLoadingCalledNumber || props.lobby.bingo}
                   onClick={() => setIsAutomatic(!isAutomatic)}
                 >
-                  {isAutomatic ? "Detener Rep. automática" : "Reproducción automática"}
+                  {isAutomatic ? t("stop-auto-play") : t("autoplay")}
                 </ButtonAnt>
 
                 <SliderControls {...props} />
@@ -245,7 +249,7 @@ export const AdminPanel = (props) => {
                   width="100%"
                   onClick={() => props.setIsVisibleModalAwards(true)}
                 >
-                  Ver Premios
+                  {t("see-award")}
                 </ButtonAnt>
               </div>
             </div>
@@ -261,7 +265,7 @@ export const AdminPanel = (props) => {
             <div className="bg-secondary shadow-[0px_4px_8px_rgba(0, 0, 0, 0.25)] rounded-[4px] px-2 py-4 mx-auto max-w-[250px]">
               <CardPattern
                 key={props.lobby.pattern}
-                caption={"Patrón que se debe llenar"}
+                caption={t("pattern-to-fill")}
                 apagon={apagon}
                 setApagon={setApagon}
                 isVisibleModalPattern={isVisibleModalPattern}
@@ -277,7 +281,7 @@ export const AdminPanel = (props) => {
               disabled={isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
               onClick={() => setIsVisibleModalConfirm(true)}
             >
-              Reiniciar tablero
+              {t("reset-board")}
             </ButtonAnt>
             <ButtonAnt
               color="default"
@@ -288,7 +292,7 @@ export const AdminPanel = (props) => {
               disabled={!props.lobby.startGame || isLoadingCalledNumber || props.lobby.bingo}
               onClick={() => setIsAutomatic(!isAutomatic)}
             >
-              {isAutomatic ? "Detener Rep. automática" : "Reproducción automática"}
+              {isAutomatic ? t("stop-auto-play") : t("autoplay")}
             </ButtonAnt>
           </div>
           <div className="grid gap-4">
@@ -304,7 +308,7 @@ export const AdminPanel = (props) => {
                   disabled={loading || isLoadingCalledNumber || isAutomatic || props.lobby.bingo}
                   loading={isLoadingCalledNumber}
                 >
-                  Llamar bolilla
+                  {t("call-ball")}
                 </ButtonAnt>
               ) : (
                 <ButtonAnt
@@ -315,7 +319,7 @@ export const AdminPanel = (props) => {
                   onClick={() => startGame()}
                   disabled={loading}
                 >
-                  Iniciar Juego
+                  {t("start-game")}
                 </ButtonAnt>
               )}
             </div>
@@ -323,10 +327,10 @@ export const AdminPanel = (props) => {
           </div>
         </div>
         <ButtonAnt color="default" width="90%" margin="1rem auto" onClick={() => props.setIsVisibleModalAwards(true)}>
-          Ver Premios
+          {t("see-award")}
         </ButtonAnt>
         <div className="h-[550px]">
-          <Chat title={"CHAT DEL BINGO"} />
+          <Chat title={t("chat")} />
         </div>
       </Tablet>
       <UsersTabs {...props} />
