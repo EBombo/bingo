@@ -39,7 +39,7 @@ export const LobbyLoading = (props) => {
               margin="0 auto"
               className="step-one-logo"
             />
-            <div className="step-one-description">{tCommon("enter-to")} ebombo.io</div>
+            <div className="step-one-description">{tCommon("get-into")} ebombo.io</div>
           </div>
           <div className="step-two">
             <div className="step-two-name">{get(props, "lobby.game.name", "")}</div>

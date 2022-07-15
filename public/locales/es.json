@@ -5,7 +5,7 @@
     "cant-find-room": "No encontramos tu sala, intenta nuevamente",
     "something-went-wrong": "Algo salio mal, intentalo nuevamente",
     "link-copied": "Link copiado!",
-    "enter-to": "Entra a"
+    "get-into": "Entra a"
   },
   "login": {
     "game-pin": "Pin del juego",
@@ -47,7 +47,7 @@
     "will-start-game": "El administrador iniciará el juego pronto",
     "you": "(tú)",
     "this-game-is-blocked": "Este juego esta bloqueado",
-    "enter-to": "Entra a",
+    "get-into": "Entra a",
     "game-pin":"Pin del juego",
     "start": "Empezar"
   },

@@ -111,7 +111,7 @@ export const LobbyHeader = (props) => {
               t("this-game-is-blocked")
             ) : (
               <>
-                {t("enter-to")}{" "}
+                {t("get-into")}{" "}
                 <span className="font-black">
                   ebombo.io{" "}
                   <Image className="inline-block" src={`${config.storageUrl}/resources/link.svg`} width="18px" />{" "}

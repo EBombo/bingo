@@ -5,7 +5,7 @@
     "cant-find-room": "We can't find your room, please try again",
     "something-went-wrong": "Something went wrong, try again",
     "link-copied": "Link copied!",
-    "enter-to": "Entra a"
+    "get-into": "Visit"
   },
   "login": {
     "game-pin": "Game pin",
@@ -49,7 +49,7 @@
     "will-start-game": "The admin will start the game soon",
     "you": "(you)",
     "this-game-is-blocked": "This game is blocked",
-    "enter-to": "Enter to",
+    "get-into": "Visit",
     "game-pin":"Game pin",
     "start": "Start"
   },
