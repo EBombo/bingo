@@ -4,14 +4,17 @@ import { ModalContainer } from "../../../../components/common/ModalContainer";
 import { ButtonAnt } from "../../../../components/form";
 import { Input } from "antd";
 import defaultTo from "lodash/defaultTo";
-import { config, firestore } from "../../../../firebase";
+import { firestore } from "../../../../firebase";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
-import get from "lodash/get";
 import { FileUpload } from "../../../../components/common/FileUpload";
 import { AfterMobile, Mobile } from "../../../../constants";
+import { useTranslation } from "../../../../hooks";
 
 export const ModalAwards = (props) => {
+  const { t } = useTranslation("lobby-play");
+
   const [authUser] = useGlobal("user");
+
   const [isSaving, setIsSaving] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
@@ -71,14 +74,18 @@ export const ModalAwards = (props) => {
       )}
 
       <AwardsContainer key={props.lobby.settings}>
-        <div className="title">{authUser.isAdmin ? "Editar " : ""} Premios</div>
+        <div className="title">
+          {authUser.isAdmin ? t("edit") : ""} {t("rewards")}
+        </div>
         {defaultTo(awards, []).map((award, index) => (
           <div
             className="relative bg-whiteLight shadow-[0_0_8px_rgba(0,0,0,0.17)] rounded-[10px] grid grid-cols-[2fr_1fr] items-center my-4 md:grid-cols-[2fr_1fr_1fr] h-[150px] md:h-[130px]"
             key={index}
           >
             <div className="absolute top-[10%] w-[120px] flex">
-              <div className="pointer">Premio {index + 1}</div>
+              <div className="pointer">
+                {t("reward")} {index + 1}
+              </div>
             </div>
             <div className="p-2 relative w-full h-full">
               <div className="absolute bottom-[10px] bg-gray text-blackDarken w-[90%] rounded-[4px] p-2">
@@ -103,7 +110,7 @@ export const ModalAwards = (props) => {
               <Mobile>
                 {authUser?.isAdmin && (
                   <ButtonAnt color="danger" onClick={() => deleteAward(index)} padding="5px" margin="0 auto">
-                    Borrar
+                    {t("delete")}
                   </ButtonAnt>
                 )}
               </Mobile>
@@ -112,7 +119,7 @@ export const ModalAwards = (props) => {
               <div className="p-2">
                 {authUser?.isAdmin && (
                   <ButtonAnt color="danger" onClick={() => deleteAward(index)} size="small">
-                    Borrar
+                    {t("delete")}
                   </ButtonAnt>
                 )}
               </div>
@@ -123,13 +130,13 @@ export const ModalAwards = (props) => {
           <>
             <div className="relative bg-whiteLight shadow-[0_0_8px_rgba(0,0,0,0.17)] rounded-[10px] grid items-center my-4 grid-cols-[2fr_1fr] h-[120px]">
               <div className="absolute top-[10%] w-[120px] flex">
-                <div className="pointer">Agregar premio</div>
+                <div className="pointer">{t("add-reward")}</div>
               </div>
 
               <div className="p-2">
                 <form>
                   <Input
-                    placeholder="Premio"
+                    placeholder={t("reward")}
                     name="award"
                     value={award.name}
                     onChange={(event) => {
@@ -143,7 +150,7 @@ export const ModalAwards = (props) => {
                 </form>
               </div>
               <ButtonAnt color="secondary" margin="0 auto" padding="5px" onClick={() => addAward()}>
-                Agregar
+                {t("add")}
               </ButtonAnt>
             </div>
             <div className="btns-container">
@@ -151,10 +158,10 @@ export const ModalAwards = (props) => {
                 color="default"
                 onClick={() => (isUpdating ? setIsVisibleModalConfirm(true) : props.setIsVisibleModalAwards(false))}
               >
-                Cancelar
+                {t("cancel")}
               </ButtonAnt>
               <ButtonAnt loading={isSaving} onClick={() => saveAwards()}>
-                Guardar
+                {t("save")}
               </ButtonAnt>
             </div>
           </>

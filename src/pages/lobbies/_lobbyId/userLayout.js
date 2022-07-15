@@ -6,8 +6,11 @@ import { config, firebase, firestore, firestoreBomboGames, hostName } from "../.
 import { Image } from "../../../components/common/Image";
 import { LoadingOutlined, MessageOutlined } from "@ant-design/icons";
 import { ButtonAnt } from "../../../components/form";
+import { useTranslation } from "../../../hooks";
 
 export const UserLayout = (props) => {
+  const { t } = useTranslation("user-layout");
+
   const [authUser] = useGlobal("user");
   const [audios] = useGlobal("audios");
 
@@ -152,7 +155,7 @@ export const UserLayout = (props) => {
               }}
             >
               {props.lobby.isLocked ? (
-                "Este juego esta bloqueado"
+                t("this-game-is-blocked")
               ) : (
                 <>
                   <span className="font-black">
@@ -210,7 +213,7 @@ export const UserLayout = (props) => {
                   }}
                   style={{ cursor: "pointer" }}
                 >
-                  Salir
+                  {t("exit")}
                 </div>
               </div>
             }

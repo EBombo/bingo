@@ -5,7 +5,7 @@ import { Input, Popover } from "antd";
 import orderBy from "lodash/orderBy";
 import defaultTo from "lodash/defaultTo";
 import { ModalUserCard } from "./ModalUserCard";
-import { config, firestore, firebase } from "../../../../firebase";
+import { config, firebase, firestore } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
 import { getNumberBoard } from "../../../../business";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
@@ -13,6 +13,7 @@ import { UserProgress } from "./UserProgress";
 import { ButtonAnt } from "../../../../components/form";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
+import { useTranslation } from "../../../../hooks";
 
 const TAB = {
   CARDS: "cards",
@@ -20,6 +21,8 @@ const TAB = {
 };
 
 export const UsersTabs = (props) => {
+  const { t } = useTranslation("lobby-play");
+
   const [authUser] = useGlobal("user");
 
   const [tab, setTab] = useState(TAB.CARDS);
@@ -118,7 +121,7 @@ export const UsersTabs = (props) => {
               margin: "auto",
             }}
           >
-            Remover jugador
+            {t("remover-player")}
           </div>
         </div>
       }
@@ -155,7 +158,9 @@ export const UsersTabs = (props) => {
       {/* TODO: Consider refactoring to use mediaQuery and not use <Desktop> & <Tablet> */}
       <Desktop>
         <div className="tabs-container-desktop">
-          <div className="left-side">Participantes ({Object.keys(props.lobby.users).length})</div>
+          <div className="left-side">
+            {t("participants")} ({Object.keys(props.lobby.users).length})
+          </div>
           <div className="right-side">
             <ButtonAnt
               className={`btn-tab ${tab === TAB.CARDS ? "active" : ""}`}
@@ -163,7 +168,7 @@ export const UsersTabs = (props) => {
               margin="0 0.5rem"
               onClick={() => setTab(TAB.CARDS)}
             >
-              Cuadrícula
+              {t("grid")}
             </ButtonAnt>
             <ButtonAnt
               className={`btn-tab ${tab === TAB.TABLE ? "active" : ""}`}
@@ -171,7 +176,7 @@ export const UsersTabs = (props) => {
               margin="0 0.5rem"
               onClick={() => setTab(TAB.TABLE)}
             >
-              Tabla
+              {t("table")}
             </ButtonAnt>
             <Input.Search
               className="input-search"
@@ -189,7 +194,7 @@ export const UsersTabs = (props) => {
             margin="0 0.5rem"
             onClick={() => setTab(TAB.CARDS)}
           >
-            Cuadrícula
+            {t("grid")}
           </ButtonAnt>
           <ButtonAnt
             className={`btn-tab ${tab === TAB.TABLE ? "active" : ""}`}
@@ -197,7 +202,7 @@ export const UsersTabs = (props) => {
             margin="0 0.5rem"
             onClick={() => setTab(TAB.TABLE)}
           >
-            Tabla
+            {t("table")}
           </ButtonAnt>
         </div>
       </Tablet>
@@ -250,7 +255,7 @@ export const UsersTabs = (props) => {
                                 setIsVisibleModalUserCard(true);
                               }}
                             >
-                              Ver cartilla
+                              {t("see-primer")}
                             </button>
                           </div>
                         )}
@@ -316,7 +321,7 @@ export const UsersTabs = (props) => {
                                 setIsVisibleModalUserCard(true);
                               }}
                             >
-                              Ver cartilla
+                              {t("see-primer")}
                             </button>
                           )}
                           {authUser.isAdmin && menu(user)}
