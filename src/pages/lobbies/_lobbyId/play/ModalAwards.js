@@ -75,7 +75,7 @@ export const ModalAwards = (props) => {
 
       <AwardsContainer key={props.lobby.settings}>
         <div className="title">
-          {authUser.isAdmin ? "Editar " : ""} {t("rewards")}
+          {authUser.isAdmin ? t("edit") : ""} {t("rewards")}
         </div>
         {defaultTo(awards, []).map((award, index) => (
           <div
