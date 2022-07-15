@@ -241,7 +241,7 @@ const Login = (props) => {
         </Anchor>
       </div>
     ),
-    []
+    [locale]
   );
 
   return (
