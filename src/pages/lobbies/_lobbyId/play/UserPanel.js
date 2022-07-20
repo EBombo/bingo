@@ -8,9 +8,11 @@ import React, { useGlobal, useMemo } from "reactn";
 import defaultTo from "lodash/defaultTo";
 import { Chat } from "../../../../components/chat";
 import { Desktop, Tablet } from "../../../../constants";
+import { useTranslation } from "../../../../hooks";
 
 export const UserPanel = (props) => {
   const [authUser] = useGlobal("user");
+  const { t } = useTranslation("lobby-play.modals");
 
   // Use useMemo to prevent re render unnecessary.
   const lastBall = useMemo(() => {
@@ -42,7 +44,7 @@ export const UserPanel = (props) => {
               <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} size="small" />
               <LastPlays {...props} size="small" />
               <div className="w-[250px] my-2 bg-secondary shadow-[0_4px_8px_rgba(0,0,0,0.25)] rounded-[4px] p-2">
-                <CardPattern caption={"Patrón a completar"} hiddenOptions key={props.lobby.pattern} {...props} />
+                <CardPattern caption={t("pattern-complete")} hiddenOptions key={props.lobby.pattern} {...props} />
               </div>
               {props.lobby.settings.awards?.length && (
                 <ButtonAnt
