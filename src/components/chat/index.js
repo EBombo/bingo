@@ -92,7 +92,7 @@ export const Chat = (props) => {
           {loading ? (
             <div className="spin-loading">{spinLoader()}</div>
           ) : isEmpty(messages) ? (
-            <div className="chat-empty">Comienza a chatear</div>
+            <div className="chat-empty">{t("start-chatting")}</div>
           ) : (
             messages.map((message, index) => (
               <ChatMessage

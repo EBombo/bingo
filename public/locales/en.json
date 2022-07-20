@@ -96,6 +96,7 @@
     "pattern-to-fill": "Pattern to be filled",
     "send": "Send",
     "write-your-message": "Write your message here",
+    "start-chatting": "Start chatting",
     "modals": {
       "fill-patter": "Please fill in the pattern to start the game",
       "patter-changes": "If the pattern changes there could already be a winner",
