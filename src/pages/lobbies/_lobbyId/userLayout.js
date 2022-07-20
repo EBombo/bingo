@@ -196,6 +196,8 @@ export const UserLayout = (props) => {
                       return await props.logout();
                     }
 
+                    if (!props.lobby?.isPlaying) return await props.logout();
+
                     const promiseUser = firestore
                       .collection("lobbies")
                       .doc(props.lobby.id)
@@ -204,7 +206,7 @@ export const UserLayout = (props) => {
                       .update({ hasExited: true });
 
                     const promiseLobby = firestore.doc(`lobbies/${props.lobby.id}`).update({
-                      countPlayers: firebase.firestore.FieldValue.increment(1),
+                      countPlayers: firebase.firestore.FieldValue.increment(-1),
                     });
 
                     await Promise.all([promiseUser, promiseLobby]);
