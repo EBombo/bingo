@@ -94,6 +94,8 @@
     "are-you-sure-restart": "Are you sure you want to reset the board?",
     "if-you-restart": "If you restart it, you won't be able to undo it.",
     "pattern-to-fill": "Pattern to be filled",
+    "send": "Send",
+    "write-your-message": "Write your message here",
     "modals": {
       "fill-patter": "Please fill in the pattern to start the game",
       "patter-changes": "If the pattern changes there could already be a winner",

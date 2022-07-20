@@ -92,6 +92,8 @@
     "are-you-sure-restart": "¿Seguro que quieres reiniciar el tablero?",
     "if-you-restart": "Si lo reinicias, no podrás deshacerlo.",
     "pattern-to-fill": "Patrón que se debe llenar",
+    "send": "Enviar",
+    "write-your-message": "Escribe tu mensaje aquí",
     "modals": {
       "fill-patter": "Por favor llene el patrón para empezar el juego",
       "patter-changes": "Si cambia el patrón podría ya haber un ganador",
