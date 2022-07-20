@@ -62,6 +62,7 @@ export const ModalUserCard = (props) => {
     delete _lobby.bingo;
     delete _lobby.createAt;
     delete _lobby.startAt;
+    delete _lobby.users;
 
     await roundsRef.doc(newRoundId).set(
       {
