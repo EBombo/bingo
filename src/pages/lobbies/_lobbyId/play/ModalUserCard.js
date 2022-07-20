@@ -54,7 +54,7 @@ export const ModalUserCard = (props) => {
 
     const newRoundId = roundsRef.doc().id;
 
-    const _lobby = props.lobby;
+    const _lobby = { ...props.lobby };
 
     delete _lobby.settings;
     delete _lobby.game;
@@ -66,7 +66,7 @@ export const ModalUserCard = (props) => {
 
     await roundsRef.doc(newRoundId).set(
       {
-        ...props.lobby,
+        ..._lobby,
         endGame: new Date(),
         round: winners?.length,
         id: newRoundId,
