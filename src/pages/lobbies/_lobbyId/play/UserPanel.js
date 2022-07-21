@@ -44,7 +44,7 @@ export const UserPanel = (props) => {
               <LastBall lastPlays={props.lobby?.lastPlays} animationSpeed={props.lobby?.animationSpeed} size="small" />
               <LastPlays {...props} size="small" />
               <div className="w-[250px] my-2 bg-secondary shadow-[0_4px_8px_rgba(0,0,0,0.25)] rounded-[4px] p-2">
-                <CardPattern caption={t("pattern-complete")} hiddenOptions key={props.lobby.pattern} {...props} />
+                <CardPattern caption={t("pattern-complete-")} hiddenOptions key={props.lobby.pattern} {...props} />
               </div>
               {props.lobby.settings.awards?.length && (
                 <ButtonAnt
@@ -53,7 +53,7 @@ export const UserPanel = (props) => {
                   margin="0 auto"
                   onClick={() => props.setIsVisibleModalAwards(true)}
                 >
-                  Ver premios
+                  {t("see-award")}
                 </ButtonAnt>
               )}
               <ButtonAnt
@@ -78,7 +78,7 @@ export const UserPanel = (props) => {
         <div className="grid grid-cols-[50%_50%] items-center justify-center my-4 p-2">
           <div className="left-side">
             <div className="bg-secondary shadow-[0_4px_8px_rgba(0,0,0,0.25) rounded-[4px] px-2 py-4 mx-auto max-w-[225px]">
-              <CardPattern key={props.lobby.pattern} caption={t("pattern-to-fill")} hiddenOptions {...props} />
+              <CardPattern key={props.lobby.pattern} caption={t("pattern-complete-")} hiddenOptions {...props} />
             </div>
           </div>
           <div className="grid gap-4">
@@ -100,7 +100,7 @@ export const UserPanel = (props) => {
           </ButtonAnt>
           {props.lobby.settings.awards?.length && (
             <ButtonAnt color="default" margin={"0 0 0 1rem"} onClick={() => props.setIsVisibleModalAwards(true)}>
-              Ver premios
+              {t("see-award")}
             </ButtonAnt>
           )}
         </div>

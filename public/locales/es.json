@@ -96,7 +96,7 @@
     "write-your-message": "Escribe tu mensaje aquí",
     "start-chatting": "Comienza a chatear",
     "modals": {
-      "pattern-to-fill": "Patrón que se debe llenar",
+      "see-award": "Ver premios",
       "fill-patter": "Por favor llene el patrón para empezar el juego",
       "patter-changes": "Si cambia el patrón podría ya haber un ganador",
       "pattern-complete": "Patrón a completar"
