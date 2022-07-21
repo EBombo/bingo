@@ -127,7 +127,7 @@ export const LobbyClosed = (props) => {
             e.preventDefault();
             if (typeof window === "undefined") return;
 
-            window.open(eventsDomain, "_blank");
+            window.open(`${eventsDomain}/reports`, "_blank");
           }}
         >
           {t("see-full-report")}
