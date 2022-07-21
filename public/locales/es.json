@@ -101,6 +101,18 @@
       "pattern-complete": "Patrón a completar"
     }
   },
+  "lobby-closed": {
+    "attendees": "Asistentes",
+    "had-fun": "¿Se divirtieron?",
+    "play-again": "Jugar de nuevo",
+    "messages": "Mensages",
+    "see-full-report": "Ver reporte completo",
+    "back-to-home": "Volver al inicio",
+    "exit": "Salir",
+    "back-to-podium": "Volver al podio",
+    "next": "Siguiente",
+    "see-all-positions": "Ver todas las posiciones"
+  },
   "user-layout":{
     "this-game-is-blocked": "Este juego esta bloqueado",
     "exit": "Salir"

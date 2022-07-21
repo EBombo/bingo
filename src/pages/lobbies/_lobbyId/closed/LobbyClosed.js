@@ -12,10 +12,13 @@ import {
   fadeOutRightBig,
   fadeOutUpBig,
 } from "react-animations";
-import { config } from "../../../../firebase";
+import { config, eventsDomain } from "../../../../firebase";
 import { Image } from "../../../../components/common/Image";
+import { useTranslation } from "../../../../hooks";
 
 export const LobbyClosed = (props) => {
+  const { t } = useTranslation("lobby-closed");
+
   const [authUser] = useGlobal("user");
 
   const [isVisibleTitle, setIsVisibleTitle] = useState(true);
@@ -66,7 +69,7 @@ export const LobbyClosed = (props) => {
           <Image src={`${config.storageUrl}/resources/attendees.png`} width="55px" desktopWidth="75px" />
           <div>
             <div className="number">{Object.keys(props.lobby.users)?.length ?? 0}</div>
-            <div className="label">asistentes</div>
+            <div className="label">{t("attendees")}</div>
           </div>
         </div>
       </div>
@@ -78,7 +81,7 @@ export const LobbyClosed = (props) => {
     () => (
       <div className="item flex">
         <div className="content-center">
-          ¿Se divirtieron?
+          {t("had-fun")}
           <ButtonAnt
             variant="contained"
             color="success"
@@ -89,7 +92,7 @@ export const LobbyClosed = (props) => {
               window.open(redirectUrl, "_blank");
             }}
           >
-            Jugar de nuevo
+            {t("play-again")}
           </ButtonAnt>
         </div>
       </div>
@@ -104,7 +107,7 @@ export const LobbyClosed = (props) => {
           <Image src={`${config.storageUrl}/resources/messages.png`} width="55px" desktopWidth="75px" />
           <div>
             <div className="number">{props.lobby.totalMessages ?? 0}</div>
-            <div className="label">mensages</div>
+            <div className="label">{t("messages")}</div>
           </div>
         </div>
       </div>
@@ -120,9 +123,14 @@ export const LobbyClosed = (props) => {
           color="primary"
           margin="20px auto"
           width="80%"
-          onClick={initializeTransitionToListWinners}
+          onClick={(e) => {
+            e.preventDefault();
+            if (typeof window !== "undefined") return;
+
+            window.open(eventsDomain, "_blank");
+          }}
         >
-          Ver reporte completo
+          {t("see-full-report")}
         </ButtonAnt>
         <ButtonAnt
           variant="contained"
@@ -131,7 +139,7 @@ export const LobbyClosed = (props) => {
           width="80%"
           onClick={initializeTransitionToWinners}
         >
-          Volver al inicio
+          {t("back-to-home")}
         </ButtonAnt>
         <ButtonAnt
           variant="contained"
@@ -143,7 +151,7 @@ export const LobbyClosed = (props) => {
             props.logout();
           }}
         >
-          Salir
+          {t("exit")}
         </ButtonAnt>
       </div>
     ),
@@ -154,7 +162,7 @@ export const LobbyClosed = (props) => {
     return (
       <LobbyWinnersCss>
         <div className="anchor-link" onClick={() => setShowWinners(false)}>
-          Volver al podio
+          {t("back-to-podium")}
         </div>
         <div className="list">
           {props.lobby.winners.map((winner, index) => (
@@ -181,7 +189,7 @@ export const LobbyClosed = (props) => {
             margin="auto auto 15px auto"
             onClick={initializeTransitionToWinners}
           >
-            Volver al podio
+            {t("back-to-podium")}
           </ButtonAnt>
         </div>
         <div className="child">
@@ -211,7 +219,7 @@ export const LobbyClosed = (props) => {
       <div className="header">
         {!isVisibleTitle && (
           <ButtonBingo variant="primary" margin="10px 10px auto auto" onClick={initializeTransitionToResume}>
-            Siguiente
+            {t("next")}
           </ButtonBingo>
         )}
       </div>
@@ -228,7 +236,7 @@ export const LobbyClosed = (props) => {
       {!isVisibleTitle && (
         <div className="footer">
           <div className="anchor-link" onClick={initializeTransitionToListWinners}>
-            Ver todas las posiciones
+            {t("see-all-positions")}
           </div>
         </div>
       )}

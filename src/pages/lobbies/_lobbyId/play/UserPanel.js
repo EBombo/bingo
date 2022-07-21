@@ -78,7 +78,7 @@ export const UserPanel = (props) => {
         <div className="grid grid-cols-[50%_50%] items-center justify-center my-4 p-2">
           <div className="left-side">
             <div className="bg-secondary shadow-[0_4px_8px_rgba(0,0,0,0.25) rounded-[4px] px-2 py-4 mx-auto max-w-[225px]">
-              <CardPattern key={props.lobby.pattern} caption={"Patrón que se debe llenar"} hiddenOptions {...props} />
+              <CardPattern key={props.lobby.pattern} caption={t("pattern-to-fill")} hiddenOptions {...props} />
             </div>
           </div>
           <div className="grid gap-4">
