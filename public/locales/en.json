@@ -103,6 +103,18 @@
       "pattern-complete": "Pattern to complete"
     }
   },
+  "lobby-closed": {
+    "attendees": "Attendees",
+    "had-fun": "Had fun?",
+    "play-again": "Play again",
+    "messages": "Messages",
+    "see-full-report": "See full report",
+    "back-to-home": "BacK to home",
+    "exit": "Exit",
+    "back-to-podium": "Back to the podium",
+    "next": "Next",
+    "see-all-positions": "See all positions"
+  },
   "user-layout": {
     "exit": "Exit",
     "this-game-is-blocked": "This game is blocked"
