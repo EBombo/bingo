@@ -125,7 +125,7 @@ export const LobbyClosed = (props) => {
           width="80%"
           onClick={(e) => {
             e.preventDefault();
-            if (typeof window !== "undefined") return;
+            if (typeof window === "undefined") return;
 
             window.open(eventsDomain, "_blank");
           }}
