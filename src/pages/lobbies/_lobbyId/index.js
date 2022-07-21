@@ -1,5 +1,5 @@
 import React, { useEffect, useGlobal, useRef, useState } from "reactn";
-import { firestore } from "../../../firebase";
+import { bomboGamesDomain, firestore } from "../../../firebase";
 import { useRouter } from "next/router";
 import { spinLoaderMin } from "../../../components/common/loader";
 import { LobbyUser } from "./LobbyUser";

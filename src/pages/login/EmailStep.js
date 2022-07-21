@@ -13,6 +13,7 @@ export const EmailStep = (props) => {
   const { sendError } = useSendError();
 
   const { t } = useTranslation("login");
+  const { t: tCommon } = useTranslation("common");
 
   const [, setAuthUserLs] = useUser();
 
@@ -45,7 +46,7 @@ export const EmailStep = (props) => {
 
       setEmail(data.email.toLowerCase());
     } catch (error) {
-      props.showNotification("UPS", t("something-went-wrong"), "error");
+      props.showNotification("UPS", tCommon("something-went-wrong"), "error");
       await sendError(error, "emailVerification");
     }
     setLoading(true);

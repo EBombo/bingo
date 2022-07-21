@@ -5,7 +5,7 @@ import isEmpty from "lodash/isEmpty";
 import { snapshotToArray } from "../../utils";
 import { spinLoader } from "../common/loader";
 import { useFetch } from "../../hooks/useFetch";
-import { useSendError } from "../../hooks";
+import { useSendError, useTranslation } from "../../hooks";
 import { mediaQuery } from "../../constants";
 import { ButtonAnt, Input } from "../form";
 import { useRouter } from "next/router";
@@ -15,8 +15,11 @@ import { useForm } from "react-hook-form";
 
 export const Chat = (props) => {
   const router = useRouter();
-  const chatRef = useRef(null);
   const { lobbyId } = router.query;
+
+  const chatRef = useRef(null);
+
+  const { t } = useTranslation("lobby-play");
 
   const [authUser] = useGlobal("user");
   const [message, setMessage] = useState("");
@@ -82,14 +85,14 @@ export const Chat = (props) => {
   return (
     <Container>
       <div className="title" key={`key-title1-${lobbyId}`}>
-        Chat del Bingo
+        Chat Bingo
       </div>
       <Content>
         <div className="chat-body" ref={chatRef}>
           {loading ? (
             <div className="spin-loading">{spinLoader()}</div>
           ) : isEmpty(messages) ? (
-            <div className="chat-empty">Comienza a chatear</div>
+            <div className="chat-empty">{t("start-chatting")}</div>
           ) : (
             messages.map((message, index) => (
               <ChatMessage
@@ -105,7 +108,7 @@ export const Chat = (props) => {
       <div className="footer">
         <form className="send-message" onSubmit={handleSubmit(sendMessage)}>
           <Input
-            placeholder="Escribe tu mensaje aqui"
+            placeholder={t("write-your-message")}
             autoComplete="off"
             className="input-message"
             name="message"
@@ -121,7 +124,7 @@ export const Chat = (props) => {
             className="btn-submit"
             color="secondary"
           >
-            Enviar
+            {t("send")}
           </ButtonAnt>
         </form>
       </div>

@@ -4,9 +4,12 @@ import { mediaQuery } from "../../../constants";
 import React, { useEffect, useGlobal } from "reactn";
 import { config, firestore } from "../../../firebase";
 import { Image } from "../../../components/common/Image";
+import { useTranslation } from "../../../hooks";
 
 export const LobbyLoading = (props) => {
   const [authUser] = useGlobal("user");
+
+  const { t: tCommon, locale } = useTranslation("common");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -36,7 +39,7 @@ export const LobbyLoading = (props) => {
               margin="0 auto"
               className="step-one-logo"
             />
-            <div className="step-one-description">Entra a ebombo.io</div>
+            <div className="step-one-description">{tCommon("get-into")} ebombo.io</div>
           </div>
           <div className="step-two">
             <div className="step-two-name">{get(props, "lobby.game.name", "")}</div>
@@ -57,7 +60,12 @@ export const LobbyLoading = (props) => {
         <>
           <div className="step-one-tablet">
             <div className="step-one-tablet-title">
-              <Image src={`${config.storageUrl}/resources/ready.svg`} height="150px" size="contain" />
+              <Image
+                src={`${config.storageUrl}/resources/ready-${locale}.svg`}
+                desktopHeight="150px"
+                width="90%"
+                size="contain"
+              />
             </div>
 
             <Image

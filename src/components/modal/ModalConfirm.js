@@ -3,31 +3,36 @@ import { ModalContainer } from "../common/ModalContainer";
 import React from "reactn";
 import styled from "styled-components";
 import { mediaQuery } from "../../constants";
+import { useTranslation } from "../../hooks";
 
-export const ModalConfirm = (props) => (
-  <ModalContainer
-    background="#FAFAFA"
-    footer={null}
-    closable={false}
-    padding="1rem"
-    width="440px"
-    topDesktop="30%"
-    visible={props.isVisibleModalConfirm}
-  >
-    <ContentModal>
-      <div className="title">{props.title}</div>
-      <div className="description">{props.description}</div>
-      <div className="btns-container">
-        <ButtonAnt color="default" onClick={() => props.setIsVisibleModalConfirm(false)}>
-          Cancelar
-        </ButtonAnt>
-        <ButtonAnt color="danger" onClick={props.action}>
-          {props.buttonName || "Continuar"}
-        </ButtonAnt>
-      </div>
-    </ContentModal>
-  </ModalContainer>
-);
+export const ModalConfirm = (props) => {
+  const { t } = useTranslation("lobby-play");
+
+  return (
+    <ModalContainer
+      background="#FAFAFA"
+      footer={null}
+      closable={false}
+      padding="1rem"
+      width="440px"
+      topDesktop="30%"
+      visible={props.isVisibleModalConfirm}
+    >
+      <ContentModal>
+        <div className="title">{props.title}</div>
+        <div className="description">{props.description}</div>
+        <div className="btns-container">
+          <ButtonAnt color="default" onClick={() => props.setIsVisibleModalConfirm(false)}>
+            {t("cancel")}
+          </ButtonAnt>
+          <ButtonAnt color="danger" onClick={props.action}>
+            {props.buttonName || t("continue")}
+          </ButtonAnt>
+        </div>
+      </ContentModal>
+    </ModalContainer>
+  );
+};
 
 const ContentModal = styled.div`
   width: 100%;

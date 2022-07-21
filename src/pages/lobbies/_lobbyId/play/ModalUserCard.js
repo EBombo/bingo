@@ -5,11 +5,14 @@ import { ButtonAnt } from "../../../../components/form";
 import { Desktop, mediaQuery, Tablet } from "../../../../constants";
 import { UserCard } from "./UserCard";
 import { BingoBoard } from "./BingoBoard";
-import { config, firestore } from "../../../../firebase";
+import { firestore } from "../../../../firebase";
 import defaultTo from "lodash/defaultTo";
 import { ModalConfirm } from "../../../../components/modal/ModalConfirm";
+import { useTranslation } from "../../../../hooks";
 
 export const ModalUserCard = (props) => {
+  const { t } = useTranslation("lobby-play");
+
   const [isVisibleAssignAward, setIsVisibleAssignAward] = useState(false);
   const [awardSelected, setAwardSelected] = useState(null);
   const [isVisibleModalConfirm, setIsVisibleModalConfirm] = useState(false);
@@ -51,7 +54,7 @@ export const ModalUserCard = (props) => {
 
     const newRoundId = roundsRef.doc().id;
 
-    const _lobby = props.lobby;
+    const _lobby = { ...props.lobby };
 
     delete _lobby.settings;
     delete _lobby.game;
@@ -59,10 +62,11 @@ export const ModalUserCard = (props) => {
     delete _lobby.bingo;
     delete _lobby.createAt;
     delete _lobby.startAt;
+    delete _lobby.users;
 
     await roundsRef.doc(newRoundId).set(
       {
-        ...props.lobby,
+        ..._lobby,
         endGame: new Date(),
         round: winners?.length,
         id: newRoundId,
@@ -107,14 +111,16 @@ export const ModalUserCard = (props) => {
               <div className="w-full">
                 <div className="w-full flex justify-end mb-4">
                   <ButtonAnt color="default" margin="0 10px 0 0" onClick={() => setIsVisibleAssignAward(false)}>
-                    Volver
+                    {t("back")}
                   </ButtonAnt>
                 </div>
                 <UserCard user={props.user} {...props} />
               </div>
               {props.lobby.settings.awards && (
                 <div className="my-4 md:my-0">
-                  <div className="text-['Lato'] font-bold text-[13px] leading-[16px] text-white">Escoge el premio</div>
+                  <div className="text-['Lato'] font-bold text-[13px] leading-[16px] text-white">
+                    {t("choose-prize")}
+                  </div>
                   <div className="flex flex-col my-2">
                     {props.lobby.settings.awards.map((award, index) => (
                       <div className="flex items-center my-2 " key={`${award.name}-${index}`}>
@@ -144,7 +150,7 @@ export const ModalUserCard = (props) => {
             </div>
             <div className="flex items-center justify-center my-4">
               <ButtonAnt color="success" onClick={() => saveBingoWinner()}>
-                Anunciar
+                {t("announce")}
               </ButtonAnt>
             </div>
           </ContentAward>
@@ -192,10 +198,10 @@ export const ModalUserCard = (props) => {
                     </ButtonAnt>
                     <div className="flex items-center">
                       <ButtonAnt color="warning" className="disqualify" margin="0 5px" onClick={() => disqualifyUser()}>
-                        Invalidar
+                        {t("invalidate")}
                       </ButtonAnt>
                       <ButtonAnt color="danger" className="disqualify" onClick={() => setIsVisibleModalConfirm(true)}>
-                        Suspender
+                        {t("suspend")}
                       </ButtonAnt>
                     </div>
                   </div>
@@ -218,10 +224,10 @@ export const ModalUserCard = (props) => {
 
                 <div className="flex items-center justify-center">
                   <ButtonAnt color="warning" className="disqualify" margin="1rem 10px" onClick={() => disqualifyUser()}>
-                    Invalidar
+                    {t("invalidate")}
                   </ButtonAnt>
                   <ButtonAnt color="danger" className="disqualify" onClick={() => setIsVisibleModalConfirm(true)}>
-                    Suspender
+                    {t("suspend")}
                   </ButtonAnt>
                 </div>
               </Tablet>
@@ -246,7 +252,7 @@ export const ModalUserCard = (props) => {
               </div>
               <div className="btn-container">
                 <ButtonAnt color="default" onClick={() => props.setIsVisibleModalUserCard(false)}>
-                  Cerrar
+                  {t("close")}
                 </ButtonAnt>
               </div>
             </Content>

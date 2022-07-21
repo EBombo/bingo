@@ -23,10 +23,17 @@ const config = JSON.parse(CONFIG);
 
 const hostName = typeof window === "undefined" ? DOMAIN : window.location.host;
 
+let bomboGamesDomain;
+let eventsDomain;
+
 if (DOMAIN?.includes("local") || DOMAIN?.includes("red") || DOMAIN?.includes("dev") || DOMAIN?.includes("shell")) {
   console.log("dev", version);
+  bomboGamesDomain = "https://red.ebombo.io";
+  eventsDomain = "https://red.ebombo.com";
 } else {
   console.log("prod", version);
+  bomboGamesDomain = "https://ebombo.io";
+  eventsDomain = "https://ebombo.com";
 }
 
 let firestore;
@@ -94,9 +101,11 @@ if (DOMAIN?.includes("localhost")) {
 
 export {
   firestoreBomboGames,
+  bomboGamesDomain,
   analyticsEvents,
   firestoreEvents,
   storageEvents,
+  eventsDomain,
   authEvents,
   firestore,
   analytics,
