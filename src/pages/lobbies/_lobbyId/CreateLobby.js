@@ -115,7 +115,7 @@ export const CreateLobby = (props) => {
 
   const fetchLimitByPlan = async (companyId) => {
     /** TODO: Consider remove [start]. **/
-    const maxLimit = 1000;
+    const maxLimit = 3000;
     const usersWithoutLimit = ["tech@ebombo.com", "hello@ebombo.com"];
 
     if (usersWithoutLimit.includes(authUser.email)) return maxLimit;
